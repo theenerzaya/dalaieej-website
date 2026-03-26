@@ -34,8 +34,9 @@ This project is a luxury hotel landing page for the Dalai Eej Resort, built with
 - **Navigation**: Simplified Navbar with hover dropdowns and a full-screen curtain navigation overlay. All navigation links are visible as text, with horizontal scrolling on mobile.
 - **Homepage Structure ("Luxury Editorial")**: Features a full-screen video hero, an editorial intro, a 4-quadrant `SiloGrid` (stacks on mobile), offers carousel, tabbed journey experiences, and an interactive resort map.
 - **Gallery**: Masonry grid with category filtering.
-- **Booking Flow**: Multi-room booking with a cart model, capacity validation, automatic guest distribution, and a two-step checkout process (guest info + add-ons, then payment).
+- **Booking Flow**: Multi-room booking with a cart model, capacity validation, automatic guest distribution, and a three-step checkout process (guest info + add-ons → payment → confirmation).
 - **Payment UI**: Auto-generates QR/payment options on page load without manual button clicks in the checkout flow.
+- **Confirmation Page** (`/[locale]/booking/confirmation`): Unified post-payment landing page. Handles both the custom Next.js checkout flow (redirected from payment page with `bookingId`, `guestName`, `nights`, `amount` params) and Cloudbeds-native booking engine redirects (with `reservation_id` param). Confirms reservation in Cloudbeds for Stripe payments. Displays booking reference, guest summary, and "What to Expect" section. Fully localized in EN and MN. URL for Cloudbeds "Redirect on confirmation page" setting: `/en/booking/confirmation`.
 - **SEO**: JSON-LD Schema markup (type: Resort) in the root layout.
 
 ### Key Features

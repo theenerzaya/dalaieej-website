@@ -553,5 +553,20 @@
     "downloadHeading": "Archival Print Edition",
     "downloadSubtext": "Download the full 2026 catalogue in high-resolution PDF format.",
     "downloadButton": "Request Digital Copy"
+  },
+  "confirmation": {
+    "title": "Your Stay is Confirmed",
+    "subtitle": "Thank you for choosing Dalai Eej Resort. We look forward to welcoming you.",
+    "bookingReference": "Booking Reference",
+    "guest": "Guest",
+    "dates": "Dates",
+    "duration": "Duration",
+    "nights": "nights",
+    "night": "night",
+    "totalPaid": "Total Paid",
+    "whatNext": "What to Expect",
+    "emailNote": "A confirmation email with your reservation details will be sent to you shortly.",
+    "locationNote": "Dalai Eej Resort is located on the western shore of Lake Khuvsgul. Detailed arrival instructions will be included in your confirmation email.",
+    "backToHome": "Back to Home"
   }
 }
