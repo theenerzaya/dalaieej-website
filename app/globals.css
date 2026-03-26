@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "!./.local/**";
 
 @font-face {
   font-family: 'Sloops';
