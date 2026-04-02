@@ -27,7 +27,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-lake-blue text-warm-beige">
+    <footer className="bg-ink text-main">
       <div className="max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-32 md:pb-36">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
 
@@ -40,7 +40,7 @@ export default function Footer() {
                 className="h-12 w-auto"
               />
             </Link>
-            <p className="mt-4 font-body text-sm text-warm-beige/70 leading-relaxed max-w-xs">
+            <p className="mt-4 font-body text-sm text-main/70 leading-relaxed max-w-xs">
               {t("bio")}
             </p>
             <div className="mt-6">
@@ -50,7 +50,7 @@ export default function Footer() {
 
           {/* Column 2: Experience */}
           <div>
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-warm-beige/50 mb-6">
+            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-6">
               {t("experience")}
             </h4>
             <ul className="space-y-3">
@@ -58,7 +58,7 @@ export default function Footer() {
                 <li key={item.key}>
                   <Link
                     href="#"
-                    className="font-body text-sm text-warm-beige/80 hover:text-white transition-colors"
+                    className="font-body text-sm text-main/80 hover:text-white transition-colors"
                   >
                     {t(item.key)}
                   </Link>
@@ -69,7 +69,7 @@ export default function Footer() {
 
           {/* Column 3: Resort */}
           <div>
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-warm-beige/50 mb-6">
+            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-6">
               {t("resort")}
             </h4>
             <ul className="space-y-3">
@@ -77,7 +77,7 @@ export default function Footer() {
                 <li key={item.key}>
                   <Link
                     href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
-                    className="font-body text-sm text-warm-beige/80 hover:text-white transition-colors"
+                    className="font-body text-sm text-main/80 hover:text-white transition-colors"
                   >
                     {t(item.key)}
                   </Link>
@@ -88,31 +88,31 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div>
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-warm-beige/50 mb-6">
+            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-6">
               {t("contact")}
             </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-warm-beige/50 mt-0.5 flex-shrink-0" />
-                <span className="font-body text-sm text-warm-beige/80">
+                <MapPin className="w-4 h-4 text-main/50 mt-0.5 flex-shrink-0" />
+                <span className="font-body text-sm text-main/80">
                   {t("address")}
                 </span>
               </li>
               <li>
                 <a 
                   href="tel:+97695005595" 
-                  className="flex items-center gap-3 font-body text-sm text-warm-beige/80 hover:text-white transition-colors"
+                  className="flex items-center gap-3 font-body text-sm text-main/80 hover:text-white transition-colors"
                 >
-                  <Phone className="w-4 h-4 text-warm-beige/50 flex-shrink-0" />
+                  <Phone className="w-4 h-4 text-main/50 flex-shrink-0" />
                   +976 9500 5595
                 </a>
               </li>
               <li>
                 <a 
                   href="mailto:hello@dalaieej.com" 
-                  className="flex items-center gap-3 font-body text-sm text-warm-beige/80 hover:text-white transition-colors"
+                  className="flex items-center gap-3 font-body text-sm text-main/80 hover:text-white transition-colors"
                 >
-                  <Mail className="w-4 h-4 text-warm-beige/50 flex-shrink-0" />
+                  <Mail className="w-4 h-4 text-main/50 flex-shrink-0" />
                   hello@dalaieej.com
                 </a>
               </li>
@@ -121,7 +121,7 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR: Copyright & Agency Credits */}
-        <div className="mt-12 pt-8 border-t border-warm-beige/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-warm-beige/40">
+        <div className="mt-12 pt-8 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-main/40">
           <p>
             &copy; 2026 Dalai Eej Resort. {t("rights")}
           </p>

@@ -10,14 +10,14 @@ export default function EditorialIntro() {
   const localePrefix = locale === 'mn' ? '/mn' : '';
 
   return (
-    <section className="py-24 md:py-32 px-6 bg-warm-beige">
+    <section className="py-24 md:py-32 px-6 bg-surface">
       <div className="max-w-4xl mx-auto text-center">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="font-body text-lake-blue/60 text-sm tracking-[0.3em] uppercase mb-8"
+          className="font-body text-water-deep/60 text-sm tracking-[0.3em] uppercase mb-8"
         >
           {locale === 'mn' ? "Монголын хойд хэсэгт" : "In the far north of Mongolia"}
         </motion.p>
@@ -27,7 +27,7 @@ export default function EditorialIntro() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-serif text-3xl md:text-4xl lg:text-5xl text-lake-blue leading-relaxed mb-8"
+          className="font-serif text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed mb-8"
         >
           {locale === 'mn' 
             ? "Дэлхийн захад байрлах хоргодох газар. Тайга ой хөх сувдтай уулзах газар."
@@ -42,9 +42,9 @@ export default function EditorialIntro() {
         >
           <Link
             href=/*{`${localePrefix}/about`}*/{`${localePrefix}/#`}
-            className="inline-flex items-center gap-2 font-body text-lake-blue font-medium hover:gap-4 transition-all group"
+            className="inline-flex items-center gap-2 font-body text-water-deep font-medium hover:gap-4 transition-all group"
           >
-            <span className="border-b border-lake-blue/30 group-hover:border-lake-blue transition-colors">
+            <span className="border-b border-ink/30 group-hover:border-ink transition-colors">
               {locale === 'mn' ? "Бидний түүхийг олж мэд" : "Discover Our Story"}
             </span>
             <ArrowRight className="w-4 h-4" />

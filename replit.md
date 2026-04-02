@@ -23,14 +23,12 @@ This project is a luxury hotel landing page for the Dalai Eej Resort, built with
 - **i18n**: next-intl for English/Mongolian support
 
 ### UI/UX and Design Decisions
-- **Design System (Semantic Tokens in `app/globals.css`)**: All colors use semantic Tailwind tokens — no arbitrary hex values in components.
-  - `brand-green` (#1A3C34) — Deep Taiga Green (primary backgrounds, buttons)
-  - `brand-cream` (#F5F5DC) — Warm Cream (text on dark, booking accents)
-  - `brand-parchment` (#fdfbf7) — DÔEN Off-White (global body background)
-  - `brand-charcoal` (#2c3327) — Deep Olive (global body text)
-  - `brand-olive` (#3A4D3F) — Muted Green (editorial/carousel accents)
-  - `brand-taiga` (#1A2C22) — Dark Forest (gradient overlays)
-  - Legacy tokens also available: `forest-green`, `cream`, `lake-blue`, `pine-green`, `warm-beige`, `charcoal`
+- **Design System — Nature-Inspired Semantic Tokens (in `app/globals.css`)**: All colors use semantic Tailwind tokens — no arbitrary hex values in components.
+  - **Backgrounds**: `main` (#FFFFFF, body), `surface` (#F7FAFC, cards/sections), `surface-alt` (#ECF5FB, booking accents), `muted` (#E5E8EB, borders/dividers)
+  - **Text**: `ink` (#0D0F1C, primary text & dark backgrounds), `ink-secondary` (#131D2F, subtle dark)
+  - **Accents**: `leaf` (#58725E, accent green for buttons/dark sections), `bark` (#95794E, warm gold), `earth` (#A65C3A, terracotta), `sun` (#96964E, olive gold)
+  - **Water**: `water` (#419CDB, links/highlights), `water-deep` (#0F6AA9, strong blue CTA)
+  - **IMPORTANT**: Tailwind v4 source scanning uses `@import "tailwindcss" source(none)` with explicit `@source` directives for `app/` and `messages/` only — NEVER revert to `@source "!../.local/**"` (it resolves to wrong path and crashes Tailwind)
 - **Navigation**: Simplified Navbar with hover dropdowns and a full-screen curtain navigation overlay. All navigation links are visible as text, with horizontal scrolling on mobile.
 - **Homepage Structure ("Luxury Editorial")**: Features a full-screen video hero, an editorial intro, a 4-quadrant `SiloGrid` (stacks on mobile), offers carousel, tabbed journey experiences, and an interactive resort map.
 - **Gallery**: Masonry grid with category filtering.

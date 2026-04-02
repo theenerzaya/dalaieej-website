@@ -27,14 +27,14 @@ export default function RestaurantPage() {
             alt="Restaurant"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-green/60 via-forest-green/40 to-forest-green/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-leaf/60 via-leaf/40 to-leaf/80" />
         </div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-cream mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Амтлаг Аялал" : "A Taste of the North"}
           </motion.h1>
@@ -42,7 +42,7 @@ export default function RestaurantPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-cream/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Монголын уламжлалт амтыг орчин үеийн хоол хийхтэй хослуулсан"
@@ -51,7 +51,7 @@ export default function RestaurantPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-20 px-4 bg-surface-alt">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,10 +59,10 @@ export default function RestaurantPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl md:text-5xl text-forest-green mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl text-leaf mb-6">
               {locale === 'mn' ? "Хоолны туршлага" : "A Culinary Journey"}
             </h2>
-            <p className="font-body text-forest-green/70 text-lg max-w-3xl mx-auto">
+            <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Манай ресторан нь Хөвсгөлийн байгалийн бүтээгдэхүүнийг ашиглан дэлхийн түвшний хоол бэлтгэдэг."
                 : "Our restaurant celebrates the bounty of Lake Khuvsgul, crafting memorable dishes from the freshest local ingredients."}
@@ -79,9 +79,9 @@ export default function RestaurantPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
-                <feature.icon className="w-10 h-10 text-forest-green mb-4" />
-                <h3 className="font-serif text-xl text-forest-green mb-2">{feature.title}</h3>
-                <p className="font-body text-forest-green/60">{feature.desc}</p>
+                <feature.icon className="w-10 h-10 text-leaf mb-4" />
+                <h3 className="font-serif text-xl text-leaf mb-2">{feature.title}</h3>
+                <p className="font-body text-leaf/60">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -92,18 +92,18 @@ export default function RestaurantPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h3 className="font-serif text-3xl text-forest-green mb-6">
+              <h3 className="font-serif text-3xl text-leaf mb-6">
                 {locale === 'mn' ? "Өглөөний цай" : "Breakfast"}
               </h3>
-              <p className="font-body text-forest-green/70 mb-4">
+              <p className="font-body text-leaf/70 mb-4">
                 {locale === 'mn' 
                   ? "7:00 - 10:30. Шинэхэн бэлтгэсэн өглөөний хоол, орон нутгийн сүү, тараг, талх"
                   : "7:00am - 10:30am. Start your day with freshly prepared dishes, local dairy, and artisan breads."}
               </p>
-              <h3 className="font-serif text-3xl text-forest-green mb-6 mt-8">
+              <h3 className="font-serif text-3xl text-leaf mb-6 mt-8">
                 {locale === 'mn' ? "Оройн хоол" : "Dinner"}
               </h3>
-              <p className="font-body text-forest-green/70">
+              <p className="font-body text-leaf/70">
                 {locale === 'mn' 
                   ? "18:00 - 22:00. Олон үеийн хоол, дарсны хослол, нуурын харагдац"
                   : "6:00pm - 10:00pm. Multi-course dining experience with wine pairings and lake views."}
@@ -118,14 +118,14 @@ export default function RestaurantPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-forest-green">
+      <section className="py-16 px-4 bg-leaf">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Ширээ захиалах" : "Reserve a Table"}
           </h2>
           <a
             href={`${localePrefix}/booking`}
-            className="inline-block px-8 py-4 bg-cream text-forest-green font-body text-lg hover:bg-white transition-colors rounded"
+            className="inline-block px-8 py-4 bg-surface-alt text-leaf font-body text-lg hover:bg-white transition-colors rounded"
           >
             {locale === 'mn' ? "Захиалах" : "Make Reservation"}
           </a>

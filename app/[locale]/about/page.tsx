@@ -69,7 +69,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-warm-beige">
+    <main className="min-h-screen bg-surface">
       <section 
         ref={heroRef}
         className="relative h-screen flex items-center justify-center overflow-hidden"
@@ -80,7 +80,7 @@ export default function AboutPage() {
             alt="Lake Khuvsgul"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-lake-blue/40 via-lake-blue/30 to-lake-blue/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/30 to-ink/60" />
         </div>
         
         <motion.div
@@ -91,7 +91,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-body text-warm-beige/80 text-sm tracking-[0.3em] uppercase mb-8"
+            className="font-body text-main/80 text-sm tracking-[0.3em] uppercase mb-8"
           >
             {locale === 'mn' ? "Далай Ээж Resort" : "Dalai Eej Resort"}
           </motion.p>
@@ -109,7 +109,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="font-body text-warm-beige/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+            className="font-body text-main/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
           >
             {locale === 'mn' 
               ? "Түүх модны бүх давхаргад суусан... Нэгэн цагт эзэн хаадын сонгосон, одоо чимээгүй байдлыг хайгчдад хадгалагдсан газар нутаг."
@@ -123,17 +123,17 @@ export default function AboutPage() {
           transition={{ delay: 1, duration: 1 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
-          <div className="w-6 h-10 border-2 border-warm-beige/50 rounded-full flex justify-center pt-2">
+          <div className="w-6 h-10 border-2 border-surface/50 rounded-full flex justify-center pt-2">
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-warm-beige rounded-full"
+              className="w-1.5 h-1.5 bg-surface rounded-full"
             />
           </div>
         </motion.div>
       </section>
 
-      <section className="py-24 md:py-32 px-6 bg-warm-beige">
+      <section className="py-24 md:py-32 px-6 bg-surface">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <motion.div
@@ -150,7 +150,7 @@ export default function AboutPage() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-pine-green/20 rounded-lg -z-10" />
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-leaf/20 rounded-lg -z-10" />
             </motion.div>
             
             <motion.div
@@ -160,19 +160,19 @@ export default function AboutPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="lg:pl-8"
             >
-              <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-4">
+              <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-4">
                 {locale === 'mn' ? "Архитектур" : "Architecture"}
               </p>
-              <h2 className="font-serif text-4xl md:text-5xl text-charcoal mb-6 leading-tight">
+              <h2 className="font-serif text-4xl md:text-5xl text-ink mb-6 leading-tight">
                 {locale === 'mn' ? "Хөндийн нугас" : "The Fold of the Valley"}
               </h2>
-              <div className="w-16 h-0.5 bg-pine-green mb-8" />
-              <p className="font-body text-charcoal/70 text-lg leading-relaxed mb-6">
+              <div className="w-16 h-0.5 bg-leaf mb-8" />
+              <p className="font-body text-ink/70 text-lg leading-relaxed mb-6">
                 {locale === 'mn'
                   ? "Хатгалын хил хязгаараас өнгөрөхөд та мэддэг ертөнцийг орхидог..."
                   : "Once past the edge of Khatgal, you leave the known world..."}
               </p>
-              <p className="font-body text-charcoal/70 text-lg leading-relaxed">
+              <p className="font-body text-ink/70 text-lg leading-relaxed">
                 {locale === 'mn'
                   ? "Байшин нь зочид буудал биш харин түүхэн ариун газар болж харагддаг."
                   : "The lodge reveals itself not as a hotel, but as a historic sanctuary."}
@@ -182,7 +182,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section ref={peninsulaRef} className="py-24 md:py-32 px-6 bg-lake-blue overflow-hidden">
+      <section ref={peninsulaRef} className="py-24 md:py-32 px-6 bg-ink overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -190,10 +190,10 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-body text-warm-beige/60 text-sm tracking-[0.2em] uppercase mb-4">
+            <p className="font-body text-main/60 text-sm tracking-[0.2em] uppercase mb-4">
               {locale === 'mn' ? "Нууцлал" : "Privacy"}
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl text-warm-beige mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl text-main mb-6">
               {locale === 'mn' ? "Усны захад амьдрал" : "Life on the Water's Edge"}
             </h2>
           </motion.div>
@@ -214,7 +214,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="font-body text-warm-beige/80 text-lg md:text-xl text-center max-w-3xl mx-auto mt-12 leading-relaxed"
+            className="font-body text-main/80 text-lg md:text-xl text-center max-w-3xl mx-auto mt-12 leading-relaxed"
           >
             {locale === 'mn'
               ? "Гурван талаараа нуурт хүрээлэгдсэн... Хамгийн ховор тансаг: тасралтгүй хүрээ."
@@ -223,7 +223,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 px-6 bg-warm-beige">
+      <section className="py-24 md:py-32 px-6 bg-surface">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -231,13 +231,13 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-4">
+            <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-4">
               {locale === 'mn' ? "Түүх" : "History"}
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl text-charcoal mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl text-ink mb-6">
               {locale === 'mn' ? "Удирдагчдын чимээгүй сонголт" : "The Quiet Choice of Leaders"}
             </h2>
-            <p className="font-body text-charcoal/70 text-lg max-w-2xl mx-auto">
+            <p className="font-body text-ink/70 text-lg max-w-2xl mx-auto">
               {locale === 'mn'
                 ? "Хойморь нь удаан хугацаанд итгэмжит хоргодох газар байсан. Кувейтийн Шейхээс Монголын Ерөнхийлөгч нар хүртэл бид амар амгаланг хайгчдын айлчлалыг хамгаалдаг."
                 : "The peninsula has long been a trusted refuge. From the Sheikh of Kuwait to Mongolia's Presidents, we shield the visits of those who seek peace."}
@@ -275,23 +275,23 @@ export default function AboutPage() {
             >
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
                 <div className="flex items-center gap-1">
-                  <div className="w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-charcoal" />
-                  <div className="w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-charcoal" />
+                  <div className="w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-ink-secondary" />
+                  <div className="w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-ink-secondary" />
                 </div>
               </div>
             </div>
             
-            <div className="absolute bottom-4 left-4 bg-charcoal/80 text-warm-beige px-3 py-1.5 rounded text-sm font-body">
+            <div className="absolute bottom-4 left-4 bg-ink-secondary/80 text-main px-3 py-1.5 rounded text-sm font-body">
               {locale === 'mn' ? "1960-аад он" : "1960s"}
             </div>
-            <div className="absolute bottom-4 right-4 bg-warm-beige/90 text-charcoal px-3 py-1.5 rounded text-sm font-body">
+            <div className="absolute bottom-4 right-4 bg-surface/90 text-ink px-3 py-1.5 rounded text-sm font-body">
               {locale === 'mn' ? "Өнөөдөр" : "Today"}
             </div>
           </motion.div>
         </div>
       </section>
 
-      <section id="history" className="py-24 md:py-32 px-6 bg-pine-green/5">
+      <section id="history" className="py-24 md:py-32 px-6 bg-leaf/5">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -299,10 +299,10 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-4">
+            <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-4">
               {locale === 'mn' ? "Үнэт зүйлс" : "Values"}
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl text-charcoal">
+            <h2 className="font-serif text-4xl md:text-5xl text-ink">
               {locale === 'mn' ? "Манай ёс зүй" : "The Ethos"}
             </h2>
           </motion.div>
@@ -319,20 +319,20 @@ export default function AboutPage() {
                 onMouseLeave={() => setHoveredCard(null)}
                 className={`p-8 md:p-10 rounded-lg transition-all duration-300 cursor-default ${
                   hoveredCard === index 
-                    ? 'bg-pine-green text-warm-beige shadow-xl scale-[1.02]' 
-                    : 'bg-white text-charcoal shadow-md'
+                    ? 'bg-leaf text-main shadow-xl scale-[1.02]' 
+                    : 'bg-white text-ink shadow-md'
                 }`}
               >
                 <value.icon className={`w-10 h-10 mb-6 transition-colors duration-300 ${
-                  hoveredCard === index ? 'text-warm-beige' : 'text-pine-green'
+                  hoveredCard === index ? 'text-main' : 'text-leaf'
                 }`} />
                 <h3 className={`font-serif text-2xl mb-4 transition-colors duration-300 ${
-                  hoveredCard === index ? 'text-warm-beige' : 'text-charcoal'
+                  hoveredCard === index ? 'text-main' : 'text-ink'
                 }`}>
                   {value.title}
                 </h3>
                 <p className={`font-body leading-relaxed transition-colors duration-300 ${
-                  hoveredCard === index ? 'text-warm-beige/80' : 'text-charcoal/70'
+                  hoveredCard === index ? 'text-main/80' : 'text-ink/70'
                 }`}>
                   {value.description}
                 </p>
@@ -348,12 +348,12 @@ export default function AboutPage() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center py-12 bg-warm-beige"
+          className="text-center py-12 bg-surface"
         >
-          <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-4">
+          <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-4">
             {locale === 'mn' ? "Байршил" : "Location"}
           </p>
-          <h2 className="font-serif text-4xl md:text-5xl text-charcoal">
+          <h2 className="font-serif text-4xl md:text-5xl text-ink">
             {locale === 'mn' ? "Биднийг олоорой" : "Find Us"}
           </h2>
         </motion.div>
@@ -373,7 +373,7 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               href={`${localePrefix}/contact`}
-              className="inline-block px-8 py-3 bg-warm-beige text-lake-blue font-body font-medium text-sm tracking-wide hover:bg-white transition-colors rounded shadow-lg"
+              className="inline-block px-8 py-3 bg-surface text-water-deep font-body font-medium text-sm tracking-wide hover:bg-white transition-colors rounded shadow-lg"
             >
               {locale === 'mn' ? "Чиглэлийг харах" : "View Directions"}
             </motion.a>
@@ -381,31 +381,31 @@ export default function AboutPage() {
         </div>
         
         {/* Trust Badge - Mobile: Below Map */}
-        <div className="md:hidden px-6 py-8 bg-pine-green/5">
+        <div className="md:hidden px-6 py-8 bg-leaf/5">
           <div className="max-w-sm mx-auto">
             <TrustBadge locale={locale} />
           </div>
         </div>
       </section>
 
-      <section className="py-24 px-6 bg-lake-blue">
+      <section className="py-24 px-6 bg-ink">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-serif text-3xl md:text-4xl text-warm-beige mb-6">
+            <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
               {locale === 'mn' ? "Өөрийн аялалаа эхлүүлээрэй" : "Begin Your Journey"}
             </h2>
-            <p className="font-body text-warm-beige/70 mb-10 max-w-xl mx-auto">
+            <p className="font-body text-main/70 mb-10 max-w-xl mx-auto">
               {locale === 'mn'
                 ? "Хөвсгөл нуурын эргэнд тантай уулзахыг хүлээж байна"
                 : "We await your arrival on the shores of Lake Khuvsgul"}
             </p>
             <a
               href={`${localePrefix}/booking`}
-              className="inline-block px-10 py-4 bg-warm-beige text-lake-blue font-body font-semibold tracking-wide hover:bg-white transition-colors rounded"
+              className="inline-block px-10 py-4 bg-surface text-water-deep font-body font-semibold tracking-wide hover:bg-white transition-colors rounded"
             >
               {locale === 'mn' ? "Захиалга хийх" : "Reserve Your Stay"}
             </a>
@@ -413,10 +413,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <footer className="bg-charcoal py-12 px-6">
+      <footer className="bg-ink-secondary py-12 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="font-serif text-2xl text-warm-beige mb-4">Dalai Eej</p>
-          <p className="font-body text-warm-beige/50 text-sm">
+          <p className="font-serif text-2xl text-main mb-4">Dalai Eej</p>
+          <p className="font-body text-main/50 text-sm">
             &copy; {new Date().getFullYear()} Dalai Eej Resort. {locale === 'mn' ? "Бүх эрх хуулиар хамгаалагдсан." : "All rights reserved."}
           </p>
         </div>

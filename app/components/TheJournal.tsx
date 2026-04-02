@@ -38,7 +38,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
   ];
 
   return (
-    <section className="bg-pine-green/5 py-20 md:py-32">
+    <section className="bg-leaf/5 py-20 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div
@@ -47,10 +47,10 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
           viewport={{ once: true }}
           className="text-center mb-16 md:mb-20"
         >
-          <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-4">
+          <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-4">
             {isMn ? "Манай тосгон" : "Our Village"}
           </p>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink">
             {isMn ? "Нуурын хүмүүс." : "People of the Lake."}
           </h2>
         </motion.div>
@@ -73,20 +73,20 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
                   alt={profile.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-secondary/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 {/* Hover Arrow */}
-                <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-warm-beige flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                  <ArrowRight className="w-4 h-4 text-charcoal" />
+                <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-surface flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                  <ArrowRight className="w-4 h-4 text-ink" />
                 </div>
               </div>
 
               {/* Text Content */}
               <div className="px-2">
-                <h3 className="font-serif text-2xl text-charcoal mb-3 group-hover:text-pine-green transition-colors">
+                <h3 className="font-serif text-2xl text-ink mb-3 group-hover:text-leaf transition-colors">
                   {profile.title}
                 </h3>
-                <p className="font-body text-charcoal/60 italic leading-relaxed">
+                <p className="font-body text-ink/60 italic leading-relaxed">
                   "{profile.quote}"
                 </p>
               </div>
@@ -104,9 +104,9 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
         >
           <a
             href={isMn ? "/mn/stories" : "/stories"}
-            className="inline-flex items-center gap-2 font-body text-pine-green hover:text-lake-blue transition-colors group"
+            className="inline-flex items-center gap-2 font-body text-leaf hover:text-water-deep transition-colors group"
           >
-            <span className="border-b border-pine-green/30 group-hover:border-lake-blue pb-1">
+            <span className="border-b border-leaf/30 group-hover:border-ink pb-1">
               {isMn ? "Бүх түүхийг унших" : "Read All Stories"}
             </span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

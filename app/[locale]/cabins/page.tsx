@@ -27,14 +27,14 @@ export default function CabinsPage() {
             alt="Forest Cabin"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-green/60 via-forest-green/40 to-forest-green/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-leaf/60 via-leaf/40 to-leaf/80" />
         </div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-cream mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Модон байшингууд" : "Forest Cabins"}
           </motion.h1>
@@ -42,7 +42,7 @@ export default function CabinsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-cream/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Байгалийн гоо үзэсгэлэнтэй хамт орчин үеийн тохилогтой модон байшингууд"
@@ -51,7 +51,7 @@ export default function CabinsPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-20 px-4 bg-surface-alt">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,10 +59,10 @@ export default function CabinsPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl md:text-5xl text-forest-green mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl text-leaf mb-6">
               {locale === 'mn' ? "Таны хоёр дахь гэр" : "Your Home in the Wilderness"}
             </h2>
-            <p className="font-body text-forest-green/70 text-lg max-w-3xl mx-auto">
+            <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Манай модон байшингууд нь уламжлалт Монгол гар урлалыг орчин үеийн тохитой хослуулсан болно."
                 : "Each cabin is a sanctuary of warmth and tranquility, where traditional Mongolian craftsmanship meets contemporary luxury."}
@@ -79,9 +79,9 @@ export default function CabinsPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
-                <feature.icon className="w-10 h-10 text-forest-green mb-4" />
-                <h3 className="font-serif text-xl text-forest-green mb-2">{feature.title}</h3>
-                <p className="font-body text-forest-green/60">{feature.desc}</p>
+                <feature.icon className="w-10 h-10 text-leaf mb-4" />
+                <h3 className="font-serif text-xl text-leaf mb-2">{feature.title}</h3>
+                <p className="font-body text-leaf/60">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -105,14 +105,14 @@ export default function CabinsPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-forest-green">
+      <section className="py-16 px-4 bg-leaf">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Өрөө захиалах" : "Reserve Your Cabin"}
           </h2>
           <a
             href={`${localePrefix}/booking`}
-            className="inline-block px-8 py-4 bg-cream text-forest-green font-body text-lg hover:bg-white transition-colors rounded"
+            className="inline-block px-8 py-4 bg-surface-alt text-leaf font-body text-lg hover:bg-white transition-colors rounded"
           >
             {locale === 'mn' ? "Захиалга хийх" : "Book Now"}
           </a>

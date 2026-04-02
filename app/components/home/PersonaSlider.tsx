@@ -148,11 +148,11 @@ export default function PersonaSlider() {
   const content = locale === 'mn' ? currentPersona.mn : currentPersona.en;
 
   return (
-    <section className="py-16 md:py-24 bg-lake-blue relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-ink relative overflow-hidden">
       <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <p className="text-center font-body text-warm-beige/60 text-xs tracking-[0.3em] uppercase mb-8">
+        <p className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-8">
           {locale === 'mn' ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
         </p>
 
@@ -181,7 +181,7 @@ export default function PersonaSlider() {
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-taiga/90 via-brand-taiga/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent" />
               </motion.div>
             </AnimatePresence>
 
@@ -208,11 +208,11 @@ export default function PersonaSlider() {
           <div className="mt-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="font-body text-warm-beige/50 text-sm">
+                <span className="font-body text-main/50 text-sm">
                   0{activeIndex + 1}
                 </span>
-                <div className="h-[1px] w-12 bg-warm-beige/20" />
-                <span className="font-body text-warm-beige/50 text-sm">
+                <div className="h-[1px] w-12 bg-surface/20" />
+                <span className="font-body text-main/50 text-sm">
                   0{visiblePersonas.length}
                 </span>
               </div>
@@ -226,10 +226,10 @@ export default function PersonaSlider() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-warm-beige mb-3 tracking-wide">
+                  <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide">
                     {content.title}
                   </h3>
-                  <p className="font-body text-warm-beige/70 max-w-xl text-lg font-light leading-relaxed">
+                  <p className="font-body text-main/70 max-w-xl text-lg font-light leading-relaxed">
                     {content.description}
                   </p>
                 </motion.div>
@@ -238,7 +238,7 @@ export default function PersonaSlider() {
 
             <Link
               href={`${localePrefix}${content.href}`}
-              className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-warm-beige hover:text-white transition-colors border border-warm-beige/30 px-6 py-3 rounded-full hover:bg-white/5"
+              className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-main hover:text-white transition-colors border border-surface/30 px-6 py-3 rounded-full hover:bg-white/5"
             >
               <span>{locale === 'mn' ? "Дэлгэрэнгүй" : "Explore"}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -261,9 +261,9 @@ export default function PersonaSlider() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-warm-beige/10 flex flex-col md:flex-row items-center justify-center gap-4 text-center">
-            <ShieldCheck className="w-5 h-5 text-warm-beige/40" />
-            <p className="font-body text-warm-beige/40 text-sm tracking-wide">
+        <div className="mt-16 pt-8 border-t border-surface/10 flex flex-col md:flex-row items-center justify-center gap-4 text-center">
+            <ShieldCheck className="w-5 h-5 text-main/40" />
+            <p className="font-body text-main/40 text-sm tracking-wide">
               {locale === 'mn' 
                 ? "1998 оноос хойш төр, нийгмийн зүтгэлтнүүд болон гэр бүлүүдийн итгэлийг хүлээсэн." 
                 : "Trusted by leaders, executives, and families since 1998."

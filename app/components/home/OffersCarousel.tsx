@@ -125,7 +125,7 @@ export default function OffersCarousel() {
   const content = locale === 'mn' ? currentOffer.mn : currentOffer.en;
 
   return (
-    <section className="bg-brand-parchment py-0">
+    <section className="bg-main py-0">
       <div 
         className="max-w-7xl mx-auto"
         onMouseEnter={handleMouseEnter}
@@ -162,21 +162,21 @@ export default function OffersCarousel() {
                 transition={{ duration: 0.4, delay: 0.1 }}
                 className="flex flex-col items-center"
               >
-                <p className="text-xs tracking-[0.3em] uppercase text-brand-olive/70 mb-6">
+                <p className="text-xs tracking-[0.3em] uppercase text-leaf/70 mb-6">
                   {content.tag}
                 </p>
 
-                <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-olive mb-6 font-light leading-tight">
+                <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl text-leaf mb-6 font-light leading-tight">
                   {content.title}
                 </h3>
 
-                <p className="font-body text-brand-olive/60 text-base mb-10 max-w-md mx-auto">
+                <p className="font-body text-leaf/60 text-base mb-10 max-w-md mx-auto">
                   {content.description}
                 </p>
 
                 <Link
                   href=/*{`${localePrefix}/offers`}*/{`${localePrefix}/#`}
-                  className="group inline-flex items-center gap-2 text-sm tracking-widest uppercase text-brand-olive border-b border-brand-olive/30 pb-1 hover:text-brand-olive/70 hover:border-brand-olive/70 transition-all duration-300"
+                  className="group inline-flex items-center gap-2 text-sm tracking-widest uppercase text-leaf border-b border-leaf/30 pb-1 hover:text-leaf/70 hover:border-leaf/70 transition-all duration-300"
                 >
                   <span>{locale === 'mn' ? "Дэлгэрэнгүй" : "View Offer"}</span>
                   <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -192,8 +192,8 @@ export default function OffersCarousel() {
                   onClick={() => handleDotClick(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     index === activeIndex 
-                      ? "bg-brand-olive w-6" 
-                      : "bg-brand-olive/20 hover:bg-brand-olive/40"
+                      ? "bg-leaf w-6" 
+                      : "bg-leaf/20 hover:bg-leaf/40"
                   }`}
                   aria-label={`Go to offer ${index + 1}`}
                 />

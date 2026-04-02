@@ -39,7 +39,7 @@ export default function TheHistory({ locale = 'en' }: TheHistoryProps) {
   };
 
   return (
-    <section className="bg-warm-beige py-20 md:py-32">
+    <section className="bg-surface py-20 md:py-32">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <motion.div
@@ -48,14 +48,14 @@ export default function TheHistory({ locale = 'en' }: TheHistoryProps) {
           viewport={{ once: true }}
           className="text-center mb-12 md:mb-16 max-w-3xl mx-auto"
         >
-          <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-4">
+          <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-4">
             {isMn ? "Түүх" : "History"}
           </p>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal mb-8">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink mb-8">
             {isMn ? "Инээдний уламжлал." : "A Legacy of Laughter."}
           </h2>
-          <div className="w-16 h-0.5 bg-pine-green mx-auto mb-8" />
-          <p className="font-body text-charcoal/70 text-lg md:text-xl leading-relaxed">
+          <div className="w-16 h-0.5 bg-leaf mx-auto mb-8" />
+          <p className="font-body text-ink/70 text-lg md:text-xl leading-relaxed">
             {isMn 
               ? "Олон арван жилийн турш энэ бол хүүхдүүд байгаль дэлхийг хайрлаж сурсан газар байсан. Бид энэ газрыг музей биш, амьд дурсамж болгон хадгалсан. Тэдгээр зунуудын баяр баясгалан хөрсөнд хэвээр байна."
               : "For decades, this was a place where children learned to love nature. We preserved the site not as a museum, but as a living memory. The joy of those summers is still in the soil."}
@@ -103,21 +103,21 @@ export default function TheHistory({ locale = 'en' }: TheHistoryProps) {
             className="absolute top-0 bottom-0 w-1 bg-white/90 shadow-lg cursor-ew-resize z-10"
             style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
           >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center border-2 border-pine-green/20">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center border-2 border-leaf/20">
               <div className="flex items-center gap-1.5">
-                <div className="w-0 h-0 border-t-[6px] border-b-[6px] border-r-[6px] border-transparent border-r-pine-green" />
-                <div className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[6px] border-transparent border-l-pine-green" />
+                <div className="w-0 h-0 border-t-[6px] border-b-[6px] border-r-[6px] border-transparent border-r-leaf" />
+                <div className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[6px] border-transparent border-l-leaf" />
               </div>
             </div>
           </div>
           
           {/* Labels */}
-          <div className="absolute bottom-6 left-6 bg-charcoal/80 backdrop-blur-sm text-warm-beige px-4 py-2 rounded-lg text-sm font-body z-20">
+          <div className="absolute bottom-6 left-6 bg-ink-secondary/80 backdrop-blur-sm text-main px-4 py-2 rounded-lg text-sm font-body z-20">
             <span className="opacity-70">{isMn ? "Өчигдөр" : "Then"}</span>
             <span className="mx-2 opacity-40">|</span>
             <span>{isMn ? "1960-аад он" : "1960s"}</span>
           </div>
-          <div className="absolute bottom-6 right-6 bg-warm-beige/90 backdrop-blur-sm text-charcoal px-4 py-2 rounded-lg text-sm font-body z-20">
+          <div className="absolute bottom-6 right-6 bg-surface/90 backdrop-blur-sm text-ink px-4 py-2 rounded-lg text-sm font-body z-20">
             <span className="opacity-70">{isMn ? "Өнөөдөр" : "Now"}</span>
             <span className="mx-2 opacity-40">|</span>
             <span>{isMn ? "2024" : "2024"}</span>
@@ -128,7 +128,7 @@ export default function TheHistory({ locale = 'en' }: TheHistoryProps) {
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{ delay: 3, duration: 1 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-charcoal/70 backdrop-blur-sm text-warm-beige px-6 py-3 rounded-full text-sm font-body pointer-events-none z-30"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ink-secondary/70 backdrop-blur-sm text-main px-6 py-3 rounded-full text-sm font-body pointer-events-none z-30"
           >
             {isMn ? "Чирж харьцуулах" : "Drag to compare"}
           </motion.div>
@@ -142,10 +142,10 @@ export default function TheHistory({ locale = 'en' }: TheHistoryProps) {
           transition={{ delay: 0.3 }}
           className="text-center mt-12"
         >
-          <p className="font-serif text-2xl md:text-3xl text-charcoal/80 italic">
+          <p className="font-serif text-2xl md:text-3xl text-ink/80 italic">
             "{isMn ? "Аз жаргалтай сүнснүүд" : "Happy Ghosts"}"
           </p>
-          <p className="font-body text-charcoal/50 text-sm mt-3">
+          <p className="font-body text-ink/50 text-sm mt-3">
             {isMn ? "Өнгөрсөн үеийн хүүхдүүдийн инээд энд хэвээр байна" : "The laughter of generations past still echoes here"}
           </p>
         </motion.div>

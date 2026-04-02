@@ -124,19 +124,19 @@ export default function OffersPage() {
           ))}
         </div>
 
-        <div className="mt-16 bg-forest-green rounded-2xl p-8 md:p-12 text-center">
-          <p className="text-xs uppercase tracking-[0.3em] text-cream/50 mb-4 font-sans">
+        <div className="mt-16 bg-leaf rounded-2xl p-8 md:p-12 text-center">
+          <p className="text-xs uppercase tracking-[0.3em] text-main/50 mb-4 font-sans">
             {t('offers.tourOperators.label')}
           </p>
-          <h2 className="font-heading text-2xl md:text-3xl text-cream mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl text-main mb-4">
             {t('offers.tourOperators.title')}
           </h2>
-          <p className="font-body text-cream/70 max-w-2xl mx-auto mb-8">
+          <p className="font-body text-main/70 max-w-2xl mx-auto mb-8">
             {t('offers.tourOperators.desc')}
           </p>
           <a
             href={`${localePrefix}/fam-tour-application`}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-cream text-forest-green font-body font-semibold rounded-lg hover:bg-white transition-colors duration-300"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-surface-alt text-leaf font-body font-semibold rounded-lg hover:bg-white transition-colors duration-300"
           >
             {t('offers.tourOperators.button')}
           </a>

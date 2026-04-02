@@ -25,14 +25,14 @@ export default function TheFamilyPage() {
             alt="The Family"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-green/60 via-forest-green/40 to-forest-green/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-leaf/60 via-leaf/40 to-leaf/80" />
         </div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-cream mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Манай гэр бүл" : "The Family"}
           </motion.h1>
@@ -40,7 +40,7 @@ export default function TheFamilyPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-cream/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Гурван үеийн өв уламжлал, нэг алсын хараа"
@@ -49,7 +49,7 @@ export default function TheFamilyPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-20 px-4 bg-surface-alt">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
             <motion.div
@@ -57,15 +57,15 @@ export default function TheFamilyPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="font-serif text-4xl text-forest-green mb-6">
+              <h2 className="font-serif text-4xl text-leaf mb-6">
                 {locale === 'mn' ? "Бидний түүх" : "Our Story"}
               </h2>
-              <p className="font-body text-forest-green/70 mb-4">
+              <p className="font-body text-leaf/70 mb-4">
                 {locale === 'mn'
                   ? "Далай Ээж Resort нь гэр бүлийн мөрөөдлөөс эхэлсэн. Манай өвөг дээдэс энэ газарт олон үеийн турш амьдарч, нутгийн үзэсгэлэнг хамгаалж ирсэн."
                   : "Dalai Eej Resort began as a family dream. For generations, our ancestors called these shores home, guardians of this pristine wilderness."}
               </p>
-              <p className="font-body text-forest-green/70">
+              <p className="font-body text-leaf/70">
                 {locale === 'mn'
                   ? "Өнөөдөр бид энэхүү өв уламжлалыг дэлхийн аялагчидтай хуваалцахаар зорьж байна—орчин үеийн тохитой, уламжлалт зочломтгой байдлаар."
                   : "Today, we continue this legacy by welcoming travelers from around the world, offering modern comforts while honoring the traditions that make this place special."}
@@ -91,9 +91,9 @@ export default function TheFamilyPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white p-6 rounded-lg shadow-sm text-center"
               >
-                <value.icon className="w-10 h-10 text-forest-green mx-auto mb-4" />
-                <h3 className="font-serif text-lg text-forest-green mb-2">{value.title}</h3>
-                <p className="font-body text-forest-green/60 text-sm">{value.desc}</p>
+                <value.icon className="w-10 h-10 text-leaf mx-auto mb-4" />
+                <h3 className="font-serif text-lg text-leaf mb-2">{value.title}</h3>
+                <p className="font-body text-leaf/60 text-sm">{value.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -106,26 +106,26 @@ export default function TheFamilyPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-serif text-2xl md:text-3xl text-forest-green italic mb-8"
+            className="font-serif text-2xl md:text-3xl text-leaf italic mb-8"
           >
             {locale === 'mn'
               ? '"Бид зочдоо гэр бүлийнхээ гишүүн шиг хүлээн авдаг. Энэ бол манай уламжлал."'
               : '"We welcome every guest as we would family. This is our tradition, our way of life."'}
           </motion.blockquote>
-          <p className="font-body text-forest-green/60">
+          <p className="font-body text-leaf/60">
             {locale === 'mn' ? "— Үндэсний гэр бүл" : "— The Founding Family"}
           </p>
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-forest-green">
+      <section className="py-16 px-4 bg-leaf">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Бидэнтэй нэгдээрэй" : "Join Our Family"}
           </h2>
           <a
             href={`${localePrefix}/booking`}
-            className="inline-block px-8 py-4 bg-cream text-forest-green font-body text-lg hover:bg-white transition-colors rounded"
+            className="inline-block px-8 py-4 bg-surface-alt text-leaf font-body text-lg hover:bg-white transition-colors rounded"
           >
             {locale === 'mn' ? "Захиалга хийх" : "Book Your Stay"}
           </a>

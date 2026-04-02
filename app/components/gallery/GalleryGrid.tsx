@@ -46,12 +46,12 @@ export default function GalleryGrid() {
 
   return (
     <main className="min-h-screen bg-white pt-24 md:pt-16">
-      <section className="py-12 px-4 bg-lake-blue">
+      <section className="py-12 px-4 bg-ink">
         <div className="max-w-6xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-serif text-4xl md:text-5xl text-warm-beige mb-4"
+            className="font-serif text-4xl md:text-5xl text-main mb-4"
           >
             {locale === 'mn' ? "Дурсамж Гэрэл Зурагт" : "Visual Journey"}
           </motion.h1>
@@ -59,7 +59,7 @@ export default function GalleryGrid() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="font-body text-warm-beige/70 max-w-2xl mx-auto"
+            className="font-body text-main/70 max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Хөвсгөлийн хэмнэлд автаарай"
@@ -68,7 +68,7 @@ export default function GalleryGrid() {
         </div>
       </section>
 
-      <section className="py-8 px-4 bg-warm-beige sticky top-16 z-40">
+      <section className="py-8 px-4 bg-surface sticky top-16 z-40">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap justify-center gap-3">
             {filters.map((filter) => (
@@ -77,8 +77,8 @@ export default function GalleryGrid() {
                 onClick={() => setActiveFilter(filter.id)}
                 className={`px-5 py-2 font-body text-sm rounded-full transition-all ${
                   activeFilter === filter.id
-                    ? "bg-lake-blue text-warm-beige"
-                    : "bg-white text-lake-blue hover:bg-lake-blue/10"
+                    ? "bg-ink text-main"
+                    : "bg-white text-water-deep hover:bg-ink/10"
                 }`}
               >
                 {filter.label}
@@ -114,7 +114,7 @@ export default function GalleryGrid() {
                         index % 3 === 0 ? "h-80" : index % 3 === 1 ? "h-64" : "h-72"
                       }`}
                     />
-                    <div className="absolute inset-0 bg-lake-blue/0 group-hover:bg-lake-blue/20 transition-colors" />
+                    <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/20 transition-colors" />
                   </div>
                 </motion.div>
               ))}

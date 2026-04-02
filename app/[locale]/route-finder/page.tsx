@@ -62,7 +62,7 @@ export default function RouteFinderPage() {
   ];
 
   return (
-    <main className="bg-white min-h-screen text-charcoal font-sans">
+    <main className="bg-white min-h-screen text-ink font-sans">
 
       {/* 1. HERO SECTION */}
       <section className="relative h-[50vh] flex items-center justify-center mb-16">
@@ -166,7 +166,7 @@ export default function RouteFinderPage() {
       </section>
 
       {/* 7. FOOTER / CONTACT */}
-      <footer className="py-20 px-6 bg-brand-parchment text-center">
+      <footer className="py-20 px-6 bg-main text-center">
         <div className="max-w-3xl mx-auto space-y-4 text-stone-800">
           <h2 className="text-3xl font-serif mb-8">Contact Us</h2>
           <p><strong>Address:</strong> Mergen’s Point, Khatgal Village, Khövsgöl Province, Mongolia</p>

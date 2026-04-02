@@ -37,7 +37,7 @@ export default function TheJourney({ locale = 'en' }: TheJourneyProps) {
   ];
 
   return (
-    <section className="bg-warm-beige py-20 md:py-32">
+    <section className="bg-surface py-20 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left Column - The Remote Reality Warning */}
@@ -48,19 +48,19 @@ export default function TheJourney({ locale = 'en' }: TheJourneyProps) {
             transition={{ duration: 0.8 }}
             className="flex flex-col justify-center"
           >
-            <p className="font-body text-pine-green text-sm tracking-[0.2em] uppercase mb-6">
+            <p className="font-body text-leaf text-sm tracking-[0.2em] uppercase mb-6">
               {isMn ? "Аяллын мэдээлэл" : "The Journey"}
             </p>
             
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-charcoal mb-8 leading-tight">
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink mb-8 leading-tight">
               {isMn 
                 ? "Дэлхийн захад тав тух." 
                 : "Comfort at the Edge of the World."}
             </h2>
             
-            <div className="w-16 h-0.5 bg-pine-green mb-8" />
+            <div className="w-16 h-0.5 bg-leaf mb-8" />
             
-            <div className="space-y-6 font-body text-charcoal/70 text-lg leading-relaxed">
+            <div className="space-y-6 font-body text-ink/70 text-lg leading-relaxed">
               <p>
                 {isMn 
                   ? "Хөх сувдын ойролцоо байх нь эрхэм боловч удаан хурдыг шаарддаг. Бид энгийн загвараар тохижуулсан ариун газрыг санал болгодог."
@@ -71,7 +71,7 @@ export default function TheJourney({ locale = 'en' }: TheJourneyProps) {
                   ? "Та энд орчин үеийн хүрэлцээг олох болно... гэхдээ хотын хүлээлтээ асфальт дээр үлдээнэ үү. Энд wifi үүлс шиг хөвөрч магадгүй..."
                   : "You will find modern touches here... but please leave your city expectations at the tarmac. Here, the wifi may drift like the clouds..."}
               </p>
-              <p className="italic text-pine-green">
+              <p className="italic text-leaf">
                 {isMn 
                   ? "Бид танд хэрэгтэй бүхнийг санал болгож, үзэмжээс анхаарлыг сарниулах юмгүй."
                   : "We offer everything you need, and nothing that distracts from the view."}
@@ -103,19 +103,19 @@ export default function TheJourney({ locale = 'en' }: TheJourneyProps) {
                   transition={{ delay: 0.3 + index * 0.1 }}
                   className="text-center p-4"
                 >
-                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-lake-blue/10 flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-lake-blue" />
+                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-ink/10 flex items-center justify-center">
+                    <item.icon className="w-5 h-5 text-water-deep" />
                   </div>
-                  <h4 className="font-serif text-lg text-charcoal mb-2">{item.title}</h4>
+                  <h4 className="font-serif text-lg text-ink mb-2">{item.title}</h4>
                   {item.isLink ? (
                     <a 
                       href="#partners" 
-                      className="font-body text-sm text-charcoal/50 hover:text-pine-green transition-colors underline underline-offset-2"
+                      className="font-body text-sm text-ink/50 hover:text-leaf transition-colors underline underline-offset-2"
                     >
                       {item.description}
                     </a>
                   ) : (
-                    <p className="font-body text-sm text-charcoal/60">{item.description}</p>
+                    <p className="font-body text-sm text-ink/60">{item.description}</p>
                   )}
                 </motion.div>
               ))}

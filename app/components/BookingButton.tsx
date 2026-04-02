@@ -11,7 +11,7 @@ export default function BookingButton({
   label = "View Rooms",
   onClick
 }: BookingButtonProps) {
-  const baseClasses = "bg-brand-cream text-brand-green font-serif uppercase tracking-widest hover:bg-white transition-all cursor-pointer";
+  const baseClasses = "bg-surface-alt text-leaf font-serif uppercase tracking-widest hover:bg-white transition-all cursor-pointer";
   
   const variantClasses = variant === "primary" 
     ? "px-8 py-3" 

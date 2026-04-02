@@ -12,14 +12,14 @@ export default function EssenceTagline({ locale = 'en' }: EssenceTaglineProps) {
   const localePrefix = isMn ? '/mn' : '';
 
   return (
-    <section className="bg-warm-beige py-20 md:py-28">
+    <section className="bg-surface py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-lake-blue text-3xl md:text-4xl lg:text-5xl font-serif uppercase tracking-wider leading-tight mb-8"
+          className="text-water-deep text-3xl md:text-4xl lg:text-5xl font-serif uppercase tracking-wider leading-tight mb-8"
         >
           {isMn ? (
             <>
@@ -42,7 +42,7 @@ export default function EssenceTagline({ locale = 'en' }: EssenceTaglineProps) {
         >
           <Link
             href={`${localePrefix}/about`}
-            className="text-lake-blue font-serif uppercase text-sm inline-block border-b border-lake-blue pb-1 hover:opacity-75 transition-opacity tracking-wide"
+            className="text-water-deep font-serif uppercase text-sm inline-block border-b border-ink pb-1 hover:opacity-75 transition-opacity tracking-wide"
           >
             {isMn ? "Дэлгэрэнгүй" : "Discover More"}
           </Link>

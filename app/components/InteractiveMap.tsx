@@ -55,7 +55,7 @@ export default function InteractiveMap() {
   };
 
   return (
-    <section className="bg-cream py-20 px-8">
+    <section className="bg-surface-alt py-20 px-8">
       {/* Hidden Preloader for Hotspot Images */}
       <div className="hidden">
         {locations.map((loc) => (
@@ -65,23 +65,23 @@ export default function InteractiveMap() {
 
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="font-heading text-4xl md:text-5xl text-forest-green mb-4">
+          <h2 className="font-heading text-4xl md:text-5xl text-leaf mb-4">
             {t('map.title')}
           </h2>
-          <p className="font-body text-forest-green/80 max-w-2xl mx-auto text-lg">
+          <p className="font-body text-leaf/80 max-w-2xl mx-auto text-lg">
             {t('map.subtitle')}
           </p>
         </div>
 
         <div className="flex justify-center mb-6">
           {/* ... [Tabs Logic - Unchanged] ... */}
-          <div className="inline-flex bg-forest-green/10 rounded-full p-1">
+          <div className="inline-flex bg-leaf/10 rounded-full p-1">
             <button
               onClick={() => handleTabChange("accommodation")}
               className={`px-4 py-2 rounded-full text-sm font-body transition-all duration-300 ${
                 activeTab === "accommodation"
-                  ? "bg-forest-green text-cream shadow-md"
-                  : "text-forest-green hover:bg-forest-green/10"
+                  ? "bg-leaf text-main shadow-md"
+                  : "text-leaf hover:bg-leaf/10"
               }`}
             >
               {t('map.tabs.accommodation')}
@@ -90,8 +90,8 @@ export default function InteractiveMap() {
               onClick={() => handleTabChange("activities")}
               className={`px-4 py-2 rounded-full text-sm font-body transition-all duration-300 ${
                 activeTab === "activities"
-                  ? "bg-forest-green text-cream shadow-md"
-                  : "text-forest-green hover:bg-forest-green/10"
+                  ? "bg-leaf text-main shadow-md"
+                  : "text-leaf hover:bg-leaf/10"
               }`}
             >
               {t('map.tabs.activities')}
@@ -137,13 +137,13 @@ export default function InteractiveMap() {
                       isArrowMarker(location.id)
                         ? `w-8 h-8 rounded-md ${
                             activeHotspot === location.id
-                              ? "bg-cream text-forest-green scale-110"
-                              : "bg-forest-green/80 text-cream hover:bg-forest-green hover:scale-110"
+                              ? "bg-surface-alt text-leaf scale-110"
+                              : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
                           }`
                         : `w-10 h-10 rounded-full ${
                             activeHotspot === location.id
-                              ? "bg-cream text-forest-green scale-110"
-                              : "bg-forest-green/80 text-cream hover:bg-forest-green hover:scale-110"
+                              ? "bg-surface-alt text-leaf scale-110"
+                              : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
                           }`
                     }`}
                   >
@@ -153,7 +153,7 @@ export default function InteractiveMap() {
                       <span className="text-2xl font-light">+</span>
                     )}
                     {!isArrowMarker(location.id) && (
-                      <span className="absolute w-full h-full rounded-full bg-forest-green/30 animate-ping" />
+                      <span className="absolute w-full h-full rounded-full bg-leaf/30 animate-ping" />
                     )}
                   </button>
 
@@ -169,7 +169,7 @@ export default function InteractiveMap() {
                       >
                         <button
                           onClick={() => setActiveHotspot(null)}
-                          className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-forest-green/70 hover:text-forest-green hover:bg-white transition-colors"
+                          className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-leaf/70 hover:text-leaf hover:bg-white transition-colors"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -185,10 +185,10 @@ export default function InteractiveMap() {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-heading text-lg text-forest-green mb-2">
+                          <h3 className="font-heading text-lg text-leaf mb-2">
                             {t(`map.${location.id}.title`)}
                           </h3>
-                          <p className="font-body text-sm text-forest-green/70">
+                          <p className="font-body text-sm text-leaf/70">
                             {t(`map.${location.id}.desc`)}
                           </p>
                         </div>
@@ -201,7 +201,7 @@ export default function InteractiveMap() {
           </AnimatePresence>
         </div>
 
-        <p className="text-center font-body text-forest-green/60 text-sm mt-4">
+        <p className="text-center font-body text-leaf/60 text-sm mt-4">
           {t('map.hint')}
         </p>
       </div>

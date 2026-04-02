@@ -27,14 +27,14 @@ export default function WellnessPage() {
             alt="Wellness Spa"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-green/60 via-forest-green/40 to-forest-green/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-leaf/60 via-leaf/40 to-leaf/80" />
         </div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-cream mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Байгальд Уусах" : "Restore Your Rhythm"}
           </motion.h1>
@@ -42,7 +42,7 @@ export default function WellnessPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-cream/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Байгалийн тайван орчинд бие сэтгэлийг сэргээх"
@@ -51,7 +51,7 @@ export default function WellnessPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-20 px-4 bg-surface-alt">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,10 +59,10 @@ export default function WellnessPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl md:text-5xl text-forest-green mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl text-leaf mb-6">
               {locale === 'mn' ? "Спа үйлчилгээ" : "Spa Treatments"}
             </h2>
-            <p className="font-body text-forest-green/70 text-lg max-w-3xl mx-auto">
+            <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Уламжлалт Монгол болон орчин үеийн эрүүл мэндийн үйлчилгээнүүд."
                 : "Drawing from traditional Mongolian healing practices and modern wellness techniques."}
@@ -79,9 +79,9 @@ export default function WellnessPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center"
               >
-                <treatment.icon className="w-12 h-12 text-forest-green mx-auto mb-4" />
-                <h3 className="font-serif text-xl text-forest-green mb-2">{treatment.title}</h3>
-                <p className="font-body text-forest-green/60">{treatment.desc}</p>
+                <treatment.icon className="w-12 h-12 text-leaf mx-auto mb-4" />
+                <h3 className="font-serif text-xl text-leaf mb-2">{treatment.title}</h3>
+                <p className="font-body text-leaf/60">{treatment.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -97,15 +97,15 @@ export default function WellnessPage() {
               className="w-full h-96 object-cover rounded-lg"
             />
             <div>
-              <h3 className="font-serif text-3xl text-forest-green mb-6">
+              <h3 className="font-serif text-3xl text-leaf mb-6">
                 {locale === 'mn' ? "Байгалийн эмчилгээ" : "Nature's Healing Power"}
               </h3>
-              <p className="font-body text-forest-green/70 mb-6">
+              <p className="font-body text-leaf/70 mb-6">
                 {locale === 'mn' 
                   ? "Хөвсгөл нуурын цэвэр агаар, тайван орчин нь таны эрүүл мэндэд эерэг нөлөө үзүүлнэ. Манай спа нь энэхүү байгалийн гоо сайханыг ашигладаг."
                   : "The pristine air and serene environment of Lake Khuvsgul naturally promotes healing and renewal. Our spa harnesses this natural beauty to enhance every treatment."}
               </p>
-              <p className="font-body text-forest-green/70">
+              <p className="font-body text-leaf/70">
                 {locale === 'mn' 
                   ? "Бүх эмчилгээ нь орон нутгийн ургамал, эрдэс бодисыг ашигладаг."
                   : "All treatments incorporate locally sourced herbs, minerals, and therapeutic elements."}
@@ -115,14 +115,14 @@ export default function WellnessPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-forest-green">
+      <section className="py-16 px-4 bg-leaf">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Цаг захиалах" : "Book a Treatment"}
           </h2>
           <a
             href={`${localePrefix}/booking`}
-            className="inline-block px-8 py-4 bg-cream text-forest-green font-body text-lg hover:bg-white transition-colors rounded"
+            className="inline-block px-8 py-4 bg-surface-alt text-leaf font-body text-lg hover:bg-white transition-colors rounded"
           >
             {locale === 'mn' ? "Захиалах" : "Reserve Now"}
           </a>

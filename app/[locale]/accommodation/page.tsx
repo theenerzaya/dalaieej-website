@@ -33,8 +33,8 @@ export default function AccommodationPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-warm-beige pt-24 md:pt-16">
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-lake-blue">
+    <main className="min-h-screen bg-surface pt-24 md:pt-16">
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-ink">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&auto=format&fit=crop&q=80"
@@ -47,7 +47,7 @@ export default function AccommodationPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-body text-warm-beige/70 text-sm tracking-[0.3em] uppercase mb-6"
+            className="font-body text-main/70 text-sm tracking-[0.3em] uppercase mb-6"
           >
             {locale === 'mn' ? "Байрлах сонголтууд" : "Accommodation"}
           </motion.p>
@@ -55,7 +55,7 @@ export default function AccommodationPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-warm-beige mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Тухтай Амрах" : "Find Your Sanctuary"}
           </motion.h1>
@@ -63,7 +63,7 @@ export default function AccommodationPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-warm-beige/80 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/80 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Хөвсгөл нуурын эргэнд байгалийн гоо үзэсгэлэнгийн дунд амрах"
@@ -91,20 +91,20 @@ export default function AccommodationPage() {
                     alt={accommodation.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute top-4 right-4 bg-warm-beige/90 text-lake-blue px-4 py-2 rounded font-body text-sm">
+                  <div className="absolute top-4 right-4 bg-surface/90 text-water-deep px-4 py-2 rounded font-body text-sm">
                     {accommodation.capacity}
                   </div>
                 </div>
-                <p className="font-body text-pine-green text-sm tracking-[0.15em] uppercase mb-2">
+                <p className="font-body text-leaf text-sm tracking-[0.15em] uppercase mb-2">
                   {accommodation.subtitle}
                 </p>
-                <h2 className="font-serif text-3xl text-charcoal mb-4 group-hover:text-lake-blue transition-colors">
+                <h2 className="font-serif text-3xl text-ink mb-4 group-hover:text-water-deep transition-colors">
                   {accommodation.title}
                 </h2>
-                <p className="font-body text-charcoal/70 mb-4 leading-relaxed">
+                <p className="font-body text-ink/70 mb-4 leading-relaxed">
                   {accommodation.description}
                 </p>
-                <span className="inline-flex items-center gap-2 font-body text-lake-blue font-medium group-hover:gap-4 transition-all">
+                <span className="inline-flex items-center gap-2 font-body text-water-deep font-medium group-hover:gap-4 transition-all">
                   {locale === 'mn' ? "Дэлгэрэнгүй үзэх" : "View Details"}
                   <ArrowRight className="w-4 h-4" />
                 </span>
@@ -114,7 +114,7 @@ export default function AccommodationPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-pine-green/10">
+      <section className="py-16 px-4 bg-leaf/10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -122,7 +122,7 @@ export default function AccommodationPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">
+            <h2 className="font-serif text-3xl md:text-4xl text-ink mb-4">
               {locale === 'mn' ? "Таны хүлээж байгаа зүйлс" : "What Awaits You"}
             </h2>
           </motion.div>
@@ -141,7 +141,7 @@ export default function AccommodationPage() {
                 transition={{ delay: index * 0.1 }}
                 className="p-6 bg-white rounded-lg shadow-sm"
               >
-                <p className="font-body text-charcoal font-medium">
+                <p className="font-body text-ink font-medium">
                   {locale === 'mn' ? amenity.mn : amenity.en}
                 </p>
               </motion.div>
@@ -150,19 +150,19 @@ export default function AccommodationPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-lake-blue">
+      <section className="py-20 px-4 bg-ink">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-warm-beige mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Захиалга хийх" : "Reserve Your Stay"}
           </h2>
-          <p className="font-body text-warm-beige/70 mb-10">
+          <p className="font-body text-main/70 mb-10">
             {locale === 'mn' 
               ? "Хөвсгөл нуурын эргэнд тантай уулзахыг хүлээж байна"
               : "Experience the tranquility of Lake Khuvsgul"}
           </p>
           <a
             href={`${localePrefix}/booking`}
-            className="inline-block px-10 py-4 bg-warm-beige text-lake-blue font-body font-semibold tracking-wide hover:bg-white transition-colors rounded"
+            className="inline-block px-10 py-4 bg-surface text-water-deep font-body font-semibold tracking-wide hover:bg-white transition-colors rounded"
           >
             {locale === 'mn' ? "Захиалах" : "Book Now"}
           </a>

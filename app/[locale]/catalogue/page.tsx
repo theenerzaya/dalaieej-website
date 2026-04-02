@@ -4,7 +4,7 @@ export default function CataloguePage() {
   const t = useTranslations('catalogue');
 
   return (
-    <main className="bg-brand-parchment min-h-screen">
+    <main className="bg-main min-h-screen">
       {/* --- HERO: The "Number One Candidate" Headline --- */}
       <section className="pt-32 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">

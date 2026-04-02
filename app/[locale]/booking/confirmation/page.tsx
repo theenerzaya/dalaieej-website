@@ -65,8 +65,8 @@ function ConfirmationContent() {
   };
 
   return (
-    <main className="min-h-screen bg-brand-green relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-brand-taiga/50 to-brand-green pointer-events-none" />
+    <main className="min-h-screen bg-ink relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/80 to-leaf/60 pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16 pt-24 md:pt-16">
         <motion.div
@@ -84,10 +84,10 @@ function ConfirmationContent() {
               <CheckCircle className="w-20 h-20 text-green-400 mx-auto mb-6" strokeWidth={1.5} />
             </motion.div>
 
-            <h1 className="font-serif text-4xl md:text-5xl text-brand-cream mb-4">
+            <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">
               {t("title")}
             </h1>
-            <p className="font-sans text-brand-cream/70 text-lg max-w-md mx-auto">
+            <p className="font-sans text-main/70 text-lg max-w-md mx-auto">
               {t("subtitle")}
             </p>
           </div>
@@ -96,14 +96,14 @@ function ConfirmationContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl border border-brand-cream/20 overflow-hidden"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl border border-main/20 overflow-hidden"
           >
             {bookingId && (
-              <div className="bg-white/5 px-8 py-6 border-b border-brand-cream/10 text-center">
-                <p className="text-brand-cream/50 text-xs uppercase tracking-widest font-sans mb-2">
+              <div className="bg-white/5 px-8 py-6 border-b border-main/10 text-center">
+                <p className="text-main/50 text-xs uppercase tracking-widest font-sans mb-2">
                   {t("bookingReference")}
                 </p>
-                <p className="font-serif text-3xl text-brand-cream tracking-wide">
+                <p className="font-serif text-3xl text-main tracking-wide">
                   {bookingId}
                 </p>
               </div>
@@ -112,17 +112,17 @@ function ConfirmationContent() {
             <div className="px-8 py-6 space-y-4">
               {guestName && (
                 <div className="flex items-center gap-3">
-                  <Users className="w-4 h-4 text-brand-cream/40 flex-shrink-0" />
-                  <span className="text-brand-cream/50 text-sm font-sans">{t("guest")}</span>
-                  <span className="text-brand-cream font-medium ml-auto">{guestName}</span>
+                  <Users className="w-4 h-4 text-main/40 flex-shrink-0" />
+                  <span className="text-main/50 text-sm font-sans">{t("guest")}</span>
+                  <span className="text-main font-medium ml-auto">{guestName}</span>
                 </div>
               )}
 
               {(checkin || checkout) && (
                 <div className="flex items-center gap-3">
-                  <Calendar className="w-4 h-4 text-brand-cream/40 flex-shrink-0" />
-                  <span className="text-brand-cream/50 text-sm font-sans">{t("dates")}</span>
-                  <span className="text-brand-cream font-medium ml-auto">
+                  <Calendar className="w-4 h-4 text-main/40 flex-shrink-0" />
+                  <span className="text-main/50 text-sm font-sans">{t("dates")}</span>
+                  <span className="text-main font-medium ml-auto">
                     {checkin && formatDate(checkin)}
                     {checkin && checkout && " — "}
                     {checkout && formatDate(checkout)}
@@ -132,18 +132,18 @@ function ConfirmationContent() {
 
               {nights && (
                 <div className="flex items-center gap-3">
-                  <Moon className="w-4 h-4 text-brand-cream/40 flex-shrink-0" />
-                  <span className="text-brand-cream/50 text-sm font-sans">{t("duration")}</span>
-                  <span className="text-brand-cream font-medium ml-auto">
+                  <Moon className="w-4 h-4 text-main/40 flex-shrink-0" />
+                  <span className="text-main/50 text-sm font-sans">{t("duration")}</span>
+                  <span className="text-main font-medium ml-auto">
                     {nights} {parseInt(nights) !== 1 ? t("nights") : t("night")}
                   </span>
                 </div>
               )}
 
               {formattedAmount && (
-                <div className="flex items-center gap-3 pt-3 border-t border-brand-cream/10">
-                  <span className="text-brand-cream/50 text-sm font-sans">{t("totalPaid")}</span>
-                  <span className="text-brand-cream font-serif text-xl ml-auto">
+                <div className="flex items-center gap-3 pt-3 border-t border-main/10">
+                  <span className="text-main/50 text-sm font-sans">{t("totalPaid")}</span>
+                  <span className="text-main font-serif text-xl ml-auto">
                     {formattedAmount} MNT
                   </span>
                 </div>
@@ -155,17 +155,17 @@ function ConfirmationContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
-            className="mt-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-brand-cream/10 px-8 py-6"
+            className="mt-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-main/10 px-8 py-6"
           >
-            <h2 className="font-serif text-lg text-brand-cream mb-4">{t("whatNext")}</h2>
+            <h2 className="font-serif text-lg text-main mb-4">{t("whatNext")}</h2>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-brand-cream/40 mt-1 flex-shrink-0" />
-                <p className="text-brand-cream/70 text-sm font-sans">{t("emailNote")}</p>
+                <Mail className="w-4 h-4 text-main/40 mt-1 flex-shrink-0" />
+                <p className="text-main/70 text-sm font-sans">{t("emailNote")}</p>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-brand-cream/40 mt-1 flex-shrink-0" />
-                <p className="text-brand-cream/70 text-sm font-sans">{t("locationNote")}</p>
+                <MapPin className="w-4 h-4 text-main/40 mt-1 flex-shrink-0" />
+                <p className="text-main/70 text-sm font-sans">{t("locationNote")}</p>
               </li>
             </ul>
           </motion.div>
@@ -178,7 +178,7 @@ function ConfirmationContent() {
           >
             <a
               href={localePrefix || "/"}
-              className="inline-block px-10 py-4 bg-brand-cream text-brand-green font-serif uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+              className="inline-block px-10 py-4 bg-surface-alt text-leaf font-serif uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
             >
               {t("backToHome")}
             </a>
@@ -195,8 +195,8 @@ export default function ConfirmationPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-brand-green flex items-center justify-center">
-          <p className="text-brand-cream">{t("loading")}</p>
+        <main className="min-h-screen bg-ink flex items-center justify-center">
+          <p className="text-main">{t("loading")}</p>
         </main>
       }
     >

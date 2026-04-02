@@ -56,13 +56,13 @@ export default function StoriesPage() {
 
   return (
     <main className="min-h-screen bg-white pt-24 md:pt-16">
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-forest-green">
+      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-leaf">
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto py-20">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-cream mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Далай Ээж Stories" : "Dalai Eej Stories"}
           </motion.h1>
@@ -70,7 +70,7 @@ export default function StoriesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-cream/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Хөвсгөлийн түүх, соёл, байгалийн тухай өгүүлэл"
@@ -79,7 +79,7 @@ export default function StoriesPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-20 px-4 bg-surface-alt">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {stories.map((story, index) => (
@@ -97,22 +97,22 @@ export default function StoriesPage() {
                     alt={story.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <span className="absolute top-4 left-4 bg-forest-green text-cream text-xs font-body px-3 py-1 rounded-full">
+                  <span className="absolute top-4 left-4 bg-leaf text-main text-xs font-body px-3 py-1 rounded-full">
                     {story.category}
                   </span>
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center gap-2 text-forest-green/50 text-sm mb-3">
+                  <div className="flex items-center gap-2 text-leaf/50 text-sm mb-3">
                     <Calendar className="w-4 h-4" />
                     <span className="font-body">{story.date}</span>
                   </div>
-                  <h3 className="font-serif text-xl text-forest-green mb-3 group-hover:text-forest-green/80 transition-colors">
+                  <h3 className="font-serif text-xl text-leaf mb-3 group-hover:text-leaf/80 transition-colors">
                     {story.title}
                   </h3>
-                  <p className="font-body text-forest-green/60 text-sm mb-4">
+                  <p className="font-body text-leaf/60 text-sm mb-4">
                     {story.excerpt}
                   </p>
-                  <span className="inline-flex items-center gap-2 font-body text-sm text-forest-green group-hover:gap-3 transition-all">
+                  <span className="inline-flex items-center gap-2 font-body text-sm text-leaf group-hover:gap-3 transition-all">
                     {locale === 'mn' ? "Дэлгэрэнгүй" : "Read More"}
                     <ArrowRight className="w-4 h-4" />
                   </span>
@@ -123,12 +123,12 @@ export default function StoriesPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-forest-green">
+      <section className="py-16 px-4 bg-leaf">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Цахим шуудан бүртгүүлэх" : "Subscribe to Our Newsletter"}
           </h2>
-          <p className="font-body text-cream/70 mb-8">
+          <p className="font-body text-main/70 mb-8">
             {locale === 'mn' 
               ? "Шинэ мэдээ, онцгой санал авах"
               : "Stay updated with our latest stories and exclusive offers"}
@@ -137,9 +137,9 @@ export default function StoriesPage() {
             <input
               type="email"
               placeholder={locale === 'mn' ? "Имэйл хаяг" : "Your email address"}
-              className="flex-1 px-4 py-3 rounded font-body text-forest-green focus:outline-none focus:ring-2 focus:ring-cream"
+              className="flex-1 px-4 py-3 rounded font-body text-leaf focus:outline-none focus:ring-2 focus:ring-surface-alt"
             />
-            <button className="px-6 py-3 bg-cream text-forest-green font-body hover:bg-white transition-colors rounded">
+            <button className="px-6 py-3 bg-surface-alt text-leaf font-body hover:bg-white transition-colors rounded">
               {locale === 'mn' ? "Бүртгүүлэх" : "Subscribe"}
             </button>
           </div>

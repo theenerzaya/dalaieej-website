@@ -57,14 +57,14 @@ export default function ExperiencesPage() {
             alt="Experiences"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-green/60 via-forest-green/40 to-forest-green/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-leaf/60 via-leaf/40 to-leaf/80" />
         </div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-cream mb-6"
+            className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
             {locale === 'mn' ? "Дурсамж Бүтээх" : "Roam the Wilds"}
           </motion.h1>
@@ -72,7 +72,7 @@ export default function ExperiencesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-cream/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
               ? "Хөвсгөлийн байгаль, соёлын онцгой туршлагууд"
@@ -81,7 +81,7 @@ export default function ExperiencesPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-20 px-4 bg-surface-alt">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -89,10 +89,10 @@ export default function ExperiencesPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl md:text-5xl text-forest-green mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl text-leaf mb-6">
               {locale === 'mn' ? "Онцгой адал явдал" : "Signature Adventures"}
             </h2>
-            <p className="font-body text-forest-green/70 text-lg max-w-3xl mx-auto">
+            <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Манай туршлагатай хөтчүүд таныг Хөвсгөлийн нууц газруудаар хөтөлнө."
                 : "Our expert guides lead you through unforgettable journeys across land, water, and culture."}
@@ -117,9 +117,9 @@ export default function ExperiencesPage() {
                   />
                 </div>
                 <div className="p-6">
-                  <exp.icon className="w-8 h-8 text-forest-green mb-3" />
-                  <h3 className="font-serif text-xl text-forest-green mb-2">{exp.title}</h3>
-                  <p className="font-body text-forest-green/60">{exp.desc}</p>
+                  <exp.icon className="w-8 h-8 text-leaf mb-3" />
+                  <h3 className="font-serif text-xl text-leaf mb-2">{exp.title}</h3>
+                  <p className="font-body text-leaf/60">{exp.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -127,19 +127,19 @@ export default function ExperiencesPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-forest-green">
+      <section className="py-16 px-4 bg-leaf">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
             {locale === 'mn' ? "Тусгай хөтөлбөр" : "Custom Itineraries"}
           </h2>
-          <p className="font-body text-cream/70 mb-8">
+          <p className="font-body text-main/70 mb-8">
             {locale === 'mn' 
               ? "Таны сонирхолд нийцсэн хувийн хөтөлбөр боловсруулна"
               : "Let us craft a personalized adventure tailored to your interests"}
           </p>
           <a
             href={`${localePrefix}/booking`}
-            className="inline-block px-8 py-4 bg-cream text-forest-green font-body text-lg hover:bg-white transition-colors rounded"
+            className="inline-block px-8 py-4 bg-surface-alt text-leaf font-body text-lg hover:bg-white transition-colors rounded"
           >
             {locale === 'mn' ? "Холбогдох" : "Plan Your Adventure"}
           </a>

@@ -30,7 +30,7 @@ export default function VideoHero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-lake-blue">
+      <div className="absolute inset-0 bg-ink">
         <Video
           src={resortAerial}
           autoPlay
@@ -41,7 +41,7 @@ export default function VideoHero() {
           className="w-full h-full object-cover opacity-80"
           style={{ '--media-object-fit': 'cover', '--media-object-position': 'center' } as Record<string, string>}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-lake-blue/40 via-transparent to-lake-blue/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-transparent to-ink/60" />
       </div>
       
       <div className="relative z-10 text-center px-6">
