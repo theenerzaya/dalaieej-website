@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
+import { Cloud } from "lucide-react";
 
 interface WeatherData {
   tempC: number;
@@ -8,6 +10,7 @@ interface WeatherData {
 }
 
 export default function WeatherWidget() {
+  const t = useTranslations("footer");
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -31,33 +34,26 @@ export default function WeatherWidget() {
   }, []);
 
   const displayTemp = () => {
-    if (loading) return "Loading...";
-    if (error || !weather) return "-5.0°C | 23.0°F";
+    if (loading) return "—";
+    if (error || !weather) return "—";
     return `${weather.tempC.toFixed(1)}°C | ${weather.tempF.toFixed(1)}°F`;
   };
 
   return (
-    <div className="text-center md:text-left py-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-main/50 mb-2 font-sans">
-        Weather Conditions
-      </p>
+    <div className="rounded-xl bg-white/5 border border-white/10 px-5 py-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Cloud className="w-4 h-4 text-water" />
+        <p className="text-xs uppercase tracking-[0.2em] text-main/50 font-sans">
+          {t("weather")}
+        </p>
+      </div>
       
-      <p className="font-heading text-2xl md:text-3xl text-main">
+      <p className="font-heading text-2xl text-main">
         {displayTemp()}
       </p>
 
-      <div className="mt-3">
-        <a
-          href="#"
-          className="text-xs font-bold uppercase tracking-widest border-b border-main/40 pb-1 hover:border-main transition-colors text-main/70 hover:text-main"
-        >
-          Webcam
-        </a>
-      </div>
-
       <p className="text-[9px] text-main/30 mt-3 leading-relaxed">
-        Weather data provided by OpenWeatherMap.<br />
-        © OpenWeather Ltd, Open License.
+        {t("weatherAttribution")}
       </p>
     </div>
   );

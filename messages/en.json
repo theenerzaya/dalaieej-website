@@ -177,6 +177,8 @@
   },
   "footer": {
     "bio": "A refuge at the edge of the world. On the shores of Lake Khuvsgul.",
+    "weather": "Weather Conditions",
+    "weatherAttribution": "Weather data provided by OpenWeatherMap.",
     "experience": "Experience",
     "stay": "Stay",
     "dining": "Dining",

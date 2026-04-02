@@ -82,7 +82,7 @@ export default function VideoHero() {
             className="absolute inset-0 w-full h-full object-cover opacity-80"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-transparent to-ink/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/20 to-ink/70" />
       </div>
       
       <div className="relative z-10 text-center px-6">
@@ -90,7 +90,7 @@ export default function VideoHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-6 drop-shadow-lg"
+          className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-6 text-hero-glow"
         >
           Dalai Eej
         </motion.h1>
@@ -98,7 +98,7 @@ export default function VideoHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6 }}
-          className="font-body text-base md:text-lg text-white tracking-[0.2em] uppercase drop-shadow-md"
+          className="font-body text-base md:text-lg text-white tracking-[0.2em] uppercase text-overlay-glow"
         >
           {locale === 'mn' ? "Хөвсгөл нуурын эрэг дээр" : "On the shores of Lake Khuvsgul"}
         </motion.p>

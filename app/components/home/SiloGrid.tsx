@@ -79,12 +79,12 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
           style={{ y }} 
           className="absolute inset-0 flex flex-col items-center justify-center p-4 z-10 pointer-events-none"
         >
-          <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl md:text-6xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg`}>
+          <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl md:text-6xl text-white text-center tracking-wider leading-none mb-6 text-hero-glow`}>
             {isMongolian ? silo.mn : silo.en}
           </h3>
 
           <div className="mt-2 border-b border-white/60 pb-1">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-white font-medium drop-shadow-md">
+            <span className="text-[10px] tracking-[0.4em] uppercase text-white font-medium text-overlay-glow">
               {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
             </span>
           </div>
@@ -126,12 +126,12 @@ export default function SiloGrid() {
                 alt={isMongolian ? silo.mn : silo.en}
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-500" />
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
               <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl lg:text-8xl text-white text-center tracking-wider drop-shadow-lg`}>
+                <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl lg:text-8xl text-white text-center tracking-wider text-hero-glow`}>
                   {isMongolian ? silo.mn : silo.en}
                 </h3>
-                <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
+                <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 text-overlay-glow">
                   {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
                 </span>
               </div>
