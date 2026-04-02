@@ -1,5 +1,6 @@
-@import "tailwindcss";
-@source "!../.local/**";
+@import "tailwindcss" source(none);
+@source "../app/**/*.{ts,tsx,js,jsx,mdx}";
+@source "../messages/**/*.json";
 
 @font-face {
   font-family: 'Sloops';
