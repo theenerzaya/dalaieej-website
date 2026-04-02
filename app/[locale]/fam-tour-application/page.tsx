@@ -209,7 +209,7 @@ export default function FamTourApplicationPage() {
       <footer className="bg-leaf py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <p className="font-body text-main/50 text-sm">
-            &copy; {new Date().getFullYear()} {t('hero.title')}. {t('footer.rights')}
+            &copy; 2026 {t('hero.title')}. {t('footer.rights')}
           </p>
         </div>
       </footer>

@@ -260,7 +260,11 @@ function BookingContent() {
     window.location.href = `${localePrefix}/checkout?${checkoutParams.toString()}`;
   };
 
-  const minDate = new Date().toISOString().split("T")[0];
+  const [minDate, setMinDate] = useState("");
+
+  useEffect(() => {
+    setMinDate(new Date().toISOString().split("T")[0]);
+  }, []);
   const placeholderImages = [
     "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&auto=format&fit=crop&q=80",

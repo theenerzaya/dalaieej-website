@@ -417,7 +417,7 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto text-center">
           <p className="font-serif text-2xl text-main mb-4">Dalai Eej</p>
           <p className="font-body text-main/50 text-sm">
-            &copy; {new Date().getFullYear()} Dalai Eej Resort. {locale === 'mn' ? "Бүх эрх хуулиар хамгаалагдсан." : "All rights reserved."}
+            &copy; 2026 Dalai Eej Resort. {locale === 'mn' ? "Бүх эрх хуулиар хамгаалагдсан." : "All rights reserved."}
           </p>
         </div>
       </footer>

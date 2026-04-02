@@ -138,7 +138,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className={`${playfair.variable} ${lato.variable} ${pinyonScript.variable} ${merriweather.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <NavbarWrapper />
-          <main>{children}</main>
+          {children}
           <Footer />
         </NextIntlClientProvider>
       </body>
