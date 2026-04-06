@@ -102,7 +102,7 @@ function StripePaymentForm({
       <button
         type="submit"
         disabled={!stripe || loading}
-        className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-surface-alt text-leaf hover:bg-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark/80 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
@@ -423,7 +423,7 @@ function PaymentContent() {
 
   if (autoGenerating || (currentLocale === 'mn' && fromCheckout && loading && !qrCode)) {
     return (
-      <main className="min-h-screen bg-leaf pt-24 md:pt-16 py-8 px-4">
+      <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
@@ -448,7 +448,7 @@ function PaymentContent() {
   if (currentLocale === 'en' && fromCheckout) {
     if (stripeLoading) {
       return (
-        <main className="min-h-screen bg-leaf pt-24 md:pt-16 py-8 px-4">
+        <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
@@ -472,7 +472,7 @@ function PaymentContent() {
 
     if (error && !clientSecret) {
       return (
-        <main className="min-h-screen bg-leaf pt-24 md:pt-16 py-8 px-4">
+        <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
@@ -486,7 +486,7 @@ function PaymentContent() {
               </div>
               <button
                 onClick={fetchStripeClientSecret}
-                className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-surface-alt text-leaf hover:bg-white cursor-pointer"
+                className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark/80 cursor-pointer"
               >
                 Try Again
               </button>
@@ -498,7 +498,7 @@ function PaymentContent() {
 
     if (clientSecret) {
       return (
-        <main className="min-h-screen bg-leaf pt-24 md:pt-16 py-8 px-4">
+        <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
@@ -517,7 +517,7 @@ function PaymentContent() {
                   appearance: {
                     theme: "stripe",
                     variables: {
-                      colorPrimary: "#1A3C34",
+                      colorPrimary: "#95794E",
                       borderRadius: "8px",
                     },
                   },
@@ -548,7 +548,7 @@ function PaymentContent() {
   }
 
   return (
-    <main className="min-h-screen bg-leaf pt-24 md:pt-16 py-8 px-4">
+    <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
@@ -568,7 +568,7 @@ function PaymentContent() {
                 </div>
                 <button
                   onClick={() => generateQPayQR(bookingId, amount)}
-                  className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-surface-alt text-leaf hover:bg-white cursor-pointer"
+                  className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark/80 cursor-pointer"
                 >
                   {currentLocale === 'mn' ? 'Дахин оролдох' : 'Try Again'}
                 </button>
@@ -628,8 +628,8 @@ function PaymentContent() {
                   disabled={loading || !termsAccepted}
                   className={`w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold ${
                     termsAccepted 
-                      ? 'bg-surface-alt text-leaf hover:bg-white cursor-pointer' 
-                      : 'bg-surface-alt/30 text-leaf/50 cursor-not-allowed'
+                      ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' 
+                      : 'bg-bark/30 text-main/50 cursor-not-allowed'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {loading ? t('generating') : t('generatePayment')}
@@ -758,7 +758,7 @@ function PaymentContent() {
                           title="Copy account number"
                         >
                           {copied ? (
-                            <Check className="w-4 h-4 text-green-400" />
+                            <Check className="w-4 h-4 text-bark" />
                           ) : (
                             <Copy className="w-4 h-4 text-main/70" />
                           )}
@@ -833,7 +833,7 @@ export default function PaymentPage() {
   
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-leaf py-12 px-4 flex items-center justify-center">
+      <main className="min-h-screen bg-ink py-12 px-4 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-main animate-spin" />
       </main>
     }>

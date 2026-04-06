@@ -66,7 +66,7 @@ function ConfirmationContent() {
 
   return (
     <main className="min-h-screen bg-ink relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/80 to-leaf/60 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/80 to-ink/40 pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16 pt-24 md:pt-16">
         <motion.div
@@ -81,7 +81,7 @@ function ConfirmationContent() {
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring", stiffness: 200, damping: 15 }}
             >
-              <CheckCircle className="w-20 h-20 text-green-400 mx-auto mb-6" strokeWidth={1.5} />
+              <CheckCircle className="w-20 h-20 text-bark mx-auto mb-6" strokeWidth={1.5} />
             </motion.div>
 
             <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">
@@ -178,7 +178,7 @@ function ConfirmationContent() {
           >
             <a
               href={localePrefix || "/"}
-              className="inline-block px-10 py-4 bg-surface-alt text-leaf font-serif uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+              className="inline-block px-10 py-4 bg-bark text-white font-serif uppercase tracking-widest rounded-lg hover:bg-bark/80 transition-colors"
             >
               {t("backToHome")}
             </a>

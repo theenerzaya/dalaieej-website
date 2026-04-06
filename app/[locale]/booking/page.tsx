@@ -273,7 +273,7 @@ function BookingContent() {
 
   return (
     <main className="min-h-screen bg-surface-alt pt-24 md:pt-16 pb-32">
-      <div className="bg-leaf py-12 px-4">
+      <div className="bg-ink py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">{t('findRoom')}</h1>
           <p className="font-sans text-main/70 mb-8">{t('selectDates')}</p>
@@ -306,7 +306,7 @@ function BookingContent() {
               </div>
             </div>
 
-            <button onClick={handleSearch} disabled={loading} className="mt-6 sm:mt-6 px-8 py-3 bg-surface-alt text-leaf font-serif uppercase tracking-widest hover:bg-white transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50">
+            <button onClick={handleSearch} disabled={loading} className="mt-6 sm:mt-6 px-8 py-3 bg-bark text-white font-serif uppercase tracking-widest hover:bg-bark/80 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50">
               {loading ? t('loading') : t('searchRooms')}
             </button>
           </div>
@@ -323,7 +323,7 @@ function BookingContent() {
           </div>
           {appliedPromo && (
             <div className="mt-3 text-center">
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/20 text-green-300 text-sm rounded-full">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-bark/20 text-bark text-sm rounded-full">
                 <Check className="w-4 h-4" />
                 {t('promoApplied')} ({appliedPromo})
               </span>
@@ -336,15 +336,15 @@ function BookingContent() {
       <div className="max-w-6xl mx-auto py-12 px-4">
         {loading && (
           <div className="text-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto text-leaf" />
-            <p className="text-leaf/70 mt-4">{t('loading')}</p>
+            <Loader2 className="w-8 h-8 animate-spin mx-auto text-bark" />
+            <p className="text-ink/70 mt-4">{t('loading')}</p>
           </div>
         )}
 
         {!loading && searched && rooms.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-leaf/70 text-lg">{t('noRooms')}</p>
-            <p className="text-leaf/50 mt-2">{t('tryDifferent')}</p>
+            <p className="text-ink/70 text-lg">{t('noRooms')}</p>
+            <p className="text-ink/50 mt-2">{t('tryDifferent')}</p>
           </div>
         )}
 
@@ -363,7 +363,7 @@ function BookingContent() {
                 const maxGuests = room.maxGuests || 2;
 
                 return (
-                  <div key={room.roomTypeID || index} className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all ${isSelected ? 'ring-2 ring-green-500' : ''}`}>
+                  <div key={room.roomTypeID || index} className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all ${isSelected ? 'ring-2 ring-bark' : ''}`}>
                     <div className="relative h-48 overflow-hidden">
                       <img src={photos[0] || placeholderImages[index % placeholderImages.length]} alt={room.roomTypeName || "Room"} className="w-full h-full object-cover" />
                       {room.roomsAvailable && room.roomsAvailable <= 3 && (
@@ -372,7 +372,7 @@ function BookingContent() {
                         </div>
                       )}
                       {isSelected && (
-                        <div className="absolute top-3 left-3 bg-green-500 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium">
+                        <div className="absolute top-3 left-3 bg-bark text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium">
                           <Check className="w-3.5 h-3.5" />
                           {currentLocale === 'mn' ? 'Сонгосон' : 'Selected'}
                         </div>
@@ -380,18 +380,18 @@ function BookingContent() {
                     </div>
 
                     <div className="p-5">
-                      <h3 className="font-serif text-xl text-leaf mb-2">
-                        <Link href={getRoomDetailPath(room.roomTypeName)} className="hover:text-leaf/70 underline underline-offset-4 decoration-leaf/30 hover:decoration-leaf/60 transition-colors">
+                      <h3 className="font-serif text-xl text-ink mb-2">
+                        <Link href={getRoomDetailPath(room.roomTypeName)} className="hover:text-ink/70 underline underline-offset-4 decoration-ink/30 hover:decoration-ink/60 transition-colors">
                           {room.roomTypeName || "Room"}
                         </Link>
                       </h3>
 
                       <div 
-                        className="text-leaf/60 text-sm mb-4 line-clamp-2"
+                        className="text-ink/60 text-sm mb-4 line-clamp-2"
                         dangerouslySetInnerHTML={{ __html: room.description || "Luxurious accommodation" }}
                       />
 
-                      <div className="flex items-center gap-4 mb-4 text-sm text-leaf/70">
+                      <div className="flex items-center gap-4 mb-4 text-sm text-ink/70">
                         <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
                           <span>{currentLocale === 'mn' ? `${maxGuests} хүн хүртэл` : `Up to ${maxGuests} guests`}</span>
@@ -401,52 +401,51 @@ function BookingContent() {
                       {features.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mb-4">
                           {features.slice(0, 3).map((feature, idx) => (
-                            <span key={idx} className="flex items-center gap-1 text-xs text-leaf/60 bg-surface-alt px-2 py-1 rounded">
+                            <span key={idx} className="flex items-center gap-1 text-xs text-ink/60 bg-surface-alt px-2 py-1 rounded">
                               <Check className="w-3 h-3" />{feature}
                             </span>
                           ))}
                         </div>
                       )}
 
-                      <div className="pt-4 border-t border-leaf/10">
+                      <div className="pt-4 border-t border-ink/10">
                         {hasPrice ? (
                           <>
                             <div className="flex items-center justify-between mb-4">
                               <div>
                                 {/* FIX: Display the API returned rate directly without frontend multiplication */}
-                                <p className="font-serif text-2xl text-leaf font-bold">{perNightRate.toLocaleString()}</p>
-                                <p className="text-leaf/50 text-xs">{room.currency || "MNT"} / {t('perNight')}</p>
+                                <p className="font-serif text-2xl text-ink font-bold">{perNightRate.toLocaleString()}</p>
+                                <p className="text-ink/50 text-xs">{room.currency || "MNT"} / {t('perNight')}</p>
                               </div>
                               {numberOfNights > 1 && (
                                 <div className="text-right">
-                                  <p className="text-sm text-leaf/70">{numberOfNights} {t('nights')}</p>
-                                  {/* FIX: Only multiply by nights. Cloudbeds already handled the guest multiplier in perNightRate */}
-                                  <p className="font-semibold text-leaf">{(perNightRate * numberOfNights).toLocaleString()} {room.currency}</p>
+                                  <p className="text-sm text-ink/70">{numberOfNights} {t('nights')}</p>
+                                  <p className="font-semibold text-ink">{(perNightRate * numberOfNights).toLocaleString()} {room.currency}</p>
                                 </div>
                               )}
                             </div>
                             {isSelected ? (
                               <div className="space-y-3">
                                 <div className="flex items-center justify-between bg-surface-alt rounded-lg p-3">
-                                  <span className="text-sm text-leaf">{currentLocale === 'mn' ? 'Тоо хэмжээ' : 'Quantity'}</span>
+                                  <span className="text-sm text-ink">{currentLocale === 'mn' ? 'Тоо хэмжээ' : 'Quantity'}</span>
                                   <div className="flex items-center gap-3">
-                                    <button onClick={() => updateRoomQuantity(room.roomTypeID, -1)} className="w-8 h-8 border border-leaf/20 rounded-full flex items-center justify-center hover:bg-white transition-colors"><Minus className="w-4 h-4" /></button>
-                                    <span className="w-8 text-center font-semibold text-leaf">{cartItem.quantity}</span>
-                                    <button onClick={() => updateRoomQuantity(room.roomTypeID, 1)} disabled={cartItem.quantity >= room.roomsAvailable} className="w-8 h-8 border border-leaf/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-4 h-4" /></button>
+                                    <button onClick={() => updateRoomQuantity(room.roomTypeID, -1)} className="w-8 h-8 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors"><Minus className="w-4 h-4" /></button>
+                                    <span className="w-8 text-center font-semibold text-ink">{cartItem.quantity}</span>
+                                    <button onClick={() => updateRoomQuantity(room.roomTypeID, 1)} disabled={cartItem.quantity >= room.roomsAvailable} className="w-8 h-8 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-4 h-4" /></button>
                                   </div>
                                 </div>
-                                <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
+                                <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-medium rounded-lg hover:bg-bark/80 transition-colors flex items-center justify-center gap-2">
                                   <Check className="w-5 h-5" />{currentLocale === 'mn' ? 'Сонгосон' : 'Selected'}
                                 </button>
                               </div>
                             ) : (
-                              <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-leaf text-white font-medium rounded-lg hover:bg-leaf/90 transition-colors">
+                              <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-medium rounded-lg hover:bg-bark/80 transition-colors">
                                 {currentLocale === 'mn' ? 'Сонгох' : 'Select Room'}
                               </button>
                             )}
                           </>
                         ) : (
-                          <div className="text-center"><p className="font-serif text-lg text-leaf/50">{t('contactUs')}</p></div>
+                          <div className="text-center"><p className="font-serif text-lg text-ink/50">{t('contactUs')}</p></div>
                         )}
                       </div>
                     </div>
@@ -455,15 +454,15 @@ function BookingContent() {
               })}
           </div>
         )}
-        {!searched && !loading && <div className="text-center py-12"><p className="text-leaf/50 text-lg">{t('selectDatesPrompt')}</p></div>}
+        {!searched && !loading && <div className="text-center py-12"><p className="text-ink/50 text-lg">{t('selectDatesPrompt')}</p></div>}
       </div>
 
       <div className="py-8 text-center">
-        <a href={localePrefix || "/"} className="text-leaf/50 text-sm hover:text-leaf transition-colors">&larr; {t('backToHome')}</a>
+        <a href={localePrefix || "/"} className="text-ink/50 text-sm hover:text-ink transition-colors">&larr; {t('backToHome')}</a>
       </div>
 
       {cart.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-leaf/10 shadow-2xl z-50">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-ink/10 shadow-2xl z-50">
           <div className="max-w-6xl mx-auto px-4 py-4">
             {capacityError && (
               <div className="mb-3 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-2">
@@ -472,16 +471,16 @@ function BookingContent() {
               </div>
             )}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3 text-sm text-leaf">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-ink">
                 <span className="font-medium">{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
-                <span className="text-leaf/30">•</span>
+                <span className="text-ink/30">•</span>
                 <span>{totalGuests} {currentLocale === 'mn' ? 'зочин' : 'Guests'}</span>
-                <span className="text-leaf/30">•</span>
+                <span className="text-ink/30">•</span>
                 <span>{numberOfNights} {currentLocale === 'mn' ? 'шөнө' : 'Night(s)'}</span>
-                <span className="text-leaf/30">•</span>
+                <span className="text-ink/30">•</span>
                 <span className="font-serif text-xl font-bold">{cartTotal.toLocaleString()} MNT</span>
               </div>
-              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-8 py-3 font-serif uppercase tracking-widest text-sm rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-leaf text-white hover:bg-leaf/90 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-8 py-3 font-serif uppercase tracking-widest text-sm rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
                 {currentLocale === 'mn' ? 'Захиалга үргэлжлүүлэх' : 'Complete Reservation'}
               </button>
             </div>
@@ -495,7 +494,7 @@ function BookingContent() {
 export default function BookingPage() {
   const t = useTranslations('common');
   return (
-    <Suspense fallback={<main className="min-h-screen bg-surface-alt flex items-center justify-center"><p className="text-leaf">{t('loading')}</p></main>}>
+    <Suspense fallback={<main className="min-h-screen bg-surface-alt flex items-center justify-center"><p className="text-ink">{t('loading')}</p></main>}>
       <BookingContent />
     </Suspense>
   );
