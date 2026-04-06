@@ -140,7 +140,7 @@ export default function InteractiveMap() {
                               ? "bg-surface-alt text-leaf scale-110"
                               : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
                           }`
-                        : `w-[38px] h-[38px] rounded-full ${
+                        : `w-[38px] h-[37.5px] rounded-full ${
                             activeHotspot === location.id
                               ? "bg-surface-alt text-leaf scale-110"
                               : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
