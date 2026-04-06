@@ -230,7 +230,7 @@ function CheckoutContent() {
           <h1 className="font-serif text-3xl md:text-4xl text-main mb-2">
             {t('title')}
           </h1>
-          <p className="font-sans text-main/70 text-sm">
+          <p className="font-body text-main/70 text-sm">
             {t('subtitle')}
           </p>
         </div>
@@ -250,24 +250,24 @@ function CheckoutContent() {
               </h2>
 
               {cartRooms.length === 0 ? (
-                <p className="text-ink/50">{currentLocale === 'mn' ? 'Өрөө сонгоогүй байна' : 'No rooms selected'}</p>
+                <p className="text-ink/50 font-body">{currentLocale === 'mn' ? 'Өрөө сонгоогүй байна' : 'No rooms selected'}</p>
               ) : (
                 <div className="space-y-4">
                   {cartRooms.map((room, index) => (
                     <div key={`${room.roomTypeID}-${index}`} className="border border-ink-secondary/10 rounded-lg p-4">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-medium text-ink">{room.roomTypeName}</h3>
-                          <p className="text-sm text-ink/60">
+                          <h3 className="font-serif font-medium text-ink">{room.roomTypeName}</h3>
+                          <p className="text-sm text-ink/60 font-body">
                             {room.adults} {currentLocale === 'mn' ? 'насанд хүрэгч' : 'adult'}{room.adults > 1 ? 's' : ''}
                             {room.children > 0 && `, ${room.children} ${currentLocale === 'mn' ? 'хүүхэд' : 'child'}${room.children > 1 ? 'ren' : ''}`}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-ink">
+                          <p className="font-serif font-semibold text-ink">
                             {(room.pricePerNight * room.quantity * nights).toLocaleString()} {room.currency}
                           </p>
-                          <p className="text-xs text-ink/50">
+                          <p className="text-xs text-ink/50 font-body">
                             {room.pricePerNight.toLocaleString()} × {nights} {currentLocale === 'mn' ? 'шөнө' : 'nights'}
                           </p>
                         </div>
@@ -291,7 +291,7 @@ function CheckoutContent() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-ink/70 text-sm mb-1">
+                  <label className="block text-ink/70 text-sm mb-1 font-body">
                     {t('firstName')} <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -299,11 +299,11 @@ function CheckoutContent() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder={t('firstNamePlaceholder')}
-                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors"
+                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors font-body"
                   />
                 </div>
                 <div>
-                  <label className="block text-ink/70 text-sm mb-1">
+                  <label className="block text-ink/70 text-sm mb-1 font-body">
                     {t('lastName')} <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -311,11 +311,11 @@ function CheckoutContent() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder={t('lastNamePlaceholder')}
-                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors"
+                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors font-body"
                   />
                 </div>
                 <div>
-                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1">
+                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1 font-body">
                     <Mail className="w-4 h-4" />
                     {t('email')} <span className="text-red-500">*</span>
                   </label>
@@ -324,11 +324,11 @@ function CheckoutContent() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t('emailPlaceholder')}
-                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors"
+                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors font-body"
                   />
                 </div>
                 <div>
-                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1">
+                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1 font-body">
                     <Phone className="w-4 h-4" />
                     {t('phone')}
                   </label>
@@ -337,18 +337,18 @@ function CheckoutContent() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder={t('phonePlaceholder')}
-                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors"
+                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors font-body"
                   />
                 </div>
                 <div>
-                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1">
+                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1 font-body">
                     <Globe className="w-4 h-4" />
                     {t('country')}
                   </label>
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors bg-white"
+                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors bg-white font-body"
                   >
                     <option value="MN">{currentLocale === 'mn' ? 'Монгол' : 'Mongolia'}</option>
                     <option value="US">{currentLocale === 'mn' ? 'АНУ' : 'USA'}</option>
@@ -363,7 +363,7 @@ function CheckoutContent() {
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1">
+                  <label className="block text-ink/70 text-sm mb-1 flex items-center gap-1 font-body">
                     <MessageSquare className="w-4 h-4" />
                     {t('specialRequests')}
                   </label>
@@ -372,7 +372,7 @@ function CheckoutContent() {
                     onChange={(e) => setSpecialRequests(e.target.value)}
                     placeholder={t('specialRequestsPlaceholder')}
                     rows={3}
-                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors resize-none"
+                    className="w-full px-4 py-3 border border-ink-secondary/20 rounded-lg focus:outline-none focus:border-ink transition-colors resize-none font-body"
                   />
                 </div>
               </div>
@@ -434,17 +434,17 @@ function CheckoutContent() {
                                     }`}>
                                       {isSelected && <Check className="w-3 h-3 text-white" />}
                                     </div>
-                                    <h4 className="font-medium text-ink">{addon.name}</h4>
+                                    <h4 className="font-serif font-medium text-ink">{addon.name}</h4>
                                   </div>
                                   {addon.description && (
-                                    <p className="text-sm text-ink/60 mt-1 ml-7">{addon.description}</p>
+                                    <p className="text-sm text-ink/60 mt-1 ml-7 font-body">{addon.description}</p>
                                   )}
                                 </div>
                                 <div className="text-right">
-                                  <p className="font-semibold text-ink">
+                                  <p className="font-serif font-semibold text-ink">
                                     {addon.price.toLocaleString()} {addon.currency}
                                   </p>
-                                  <p className="text-xs text-ink/50">
+                                  <p className="text-xs text-ink/50 font-body">
                                     {addon.priceType === "per_night" ? t('perNight') : t('oneTime')}
                                   </p>
                                 </div>
@@ -453,7 +453,7 @@ function CheckoutContent() {
 
                             {isSelected && selectedAddon && (
                               <div className="mt-3 ml-7 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-                                <span className="text-sm text-ink/70">{t('quantity')}:</span>
+                                <span className="text-sm text-ink/70 font-body">{t('quantity')}:</span>
                                 <button
                                   onClick={() => updateAddonQuantity(addon.id, -1)}
                                   className="w-7 h-7 border border-ink-secondary/20 rounded flex items-center justify-center hover:bg-surface"
@@ -490,7 +490,7 @@ function CheckoutContent() {
                 {t('summary')}
               </h2>
 
-              <div className="space-y-3 text-sm">
+              <div className="space-y-3 text-sm font-body">
                 <div>
                   <p className="text-ink/50 text-xs uppercase">{currentLocale === 'mn' ? 'Огноо' : 'Dates'}</p>
                   <p className="text-ink">{formatDate(checkin)} - {formatDate(checkout)}</p>
@@ -538,7 +538,7 @@ function CheckoutContent() {
               {error && (
                 <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
                   <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-red-700 text-sm">{error}</p>
+                  <p className="text-red-700 text-sm font-body">{error}</p>
                 </div>
               )}
 
@@ -551,7 +551,7 @@ function CheckoutContent() {
                       onChange={(e) => setTermsAccepted(e.target.checked)}
                       className="mt-1 w-4 h-4 text-water-deep border-ink-secondary/30 rounded focus:ring-ink"
                     />
-                    <span className="text-sm text-ink/70">
+                    <span className="text-sm text-ink/70 font-body">
                       {t('agreeToTerms')}{' '}
                       <a href="#" className="text-water-deep underline">{t('termsLink')}</a>
                       {' '}{currentLocale === 'mn' ? 'болон' : 'and'}{' '}
@@ -565,7 +565,7 @@ function CheckoutContent() {
                   disabled={loading || !termsAccepted}
                   className={`w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold flex items-center justify-center gap-2 ${
                     termsAccepted && !loading
-                      ? 'bg-ink text-white hover:bg-ink/90 cursor-pointer'
+                      ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
                 >
@@ -580,7 +580,7 @@ function CheckoutContent() {
         <div className="mt-8 text-center">
           <a
             href={`${localePrefix}/booking?checkin=${checkin}&checkout=${checkout}`}
-            className="text-ink/50 text-sm hover:text-ink transition-colors"
+            className="text-ink/50 text-sm hover:text-ink transition-colors font-body"
           >
             &larr; {t('backToRooms')}
           </a>

@@ -87,7 +87,7 @@ function ConfirmationContent() {
             <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">
               {t("title")}
             </h1>
-            <p className="font-sans text-main/70 text-lg max-w-md mx-auto">
+            <p className="font-body text-main/70 text-lg max-w-md mx-auto">
               {t("subtitle")}
             </p>
           </div>
@@ -100,7 +100,7 @@ function ConfirmationContent() {
           >
             {bookingId && (
               <div className="bg-white/5 px-8 py-6 border-b border-main/10 text-center">
-                <p className="text-main/50 text-xs uppercase tracking-widest font-sans mb-2">
+                <p className="text-main/50 text-xs uppercase tracking-widest font-body mb-2">
                   {t("bookingReference")}
                 </p>
                 <p className="font-serif text-3xl text-main tracking-wide">
@@ -113,16 +113,16 @@ function ConfirmationContent() {
               {guestName && (
                 <div className="flex items-center gap-3">
                   <Users className="w-4 h-4 text-main/40 flex-shrink-0" />
-                  <span className="text-main/50 text-sm font-sans">{t("guest")}</span>
-                  <span className="text-main font-medium ml-auto">{guestName}</span>
+                  <span className="text-main/50 text-sm font-body">{t("guest")}</span>
+                  <span className="text-main font-medium font-body ml-auto">{guestName}</span>
                 </div>
               )}
 
               {(checkin || checkout) && (
                 <div className="flex items-center gap-3">
                   <Calendar className="w-4 h-4 text-main/40 flex-shrink-0" />
-                  <span className="text-main/50 text-sm font-sans">{t("dates")}</span>
-                  <span className="text-main font-medium ml-auto">
+                  <span className="text-main/50 text-sm font-body">{t("dates")}</span>
+                  <span className="text-main font-medium font-body ml-auto">
                     {checkin && formatDate(checkin)}
                     {checkin && checkout && " — "}
                     {checkout && formatDate(checkout)}
@@ -133,8 +133,8 @@ function ConfirmationContent() {
               {nights && (
                 <div className="flex items-center gap-3">
                   <Moon className="w-4 h-4 text-main/40 flex-shrink-0" />
-                  <span className="text-main/50 text-sm font-sans">{t("duration")}</span>
-                  <span className="text-main font-medium ml-auto">
+                  <span className="text-main/50 text-sm font-body">{t("duration")}</span>
+                  <span className="text-main font-medium font-body ml-auto">
                     {nights} {parseInt(nights) !== 1 ? t("nights") : t("night")}
                   </span>
                 </div>
@@ -142,7 +142,7 @@ function ConfirmationContent() {
 
               {formattedAmount && (
                 <div className="flex items-center gap-3 pt-3 border-t border-main/10">
-                  <span className="text-main/50 text-sm font-sans">{t("totalPaid")}</span>
+                  <span className="text-main/50 text-sm font-body">{t("totalPaid")}</span>
                   <span className="text-main font-serif text-xl ml-auto">
                     {formattedAmount} MNT
                   </span>
@@ -161,11 +161,11 @@ function ConfirmationContent() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-main/40 mt-1 flex-shrink-0" />
-                <p className="text-main/70 text-sm font-sans">{t("emailNote")}</p>
+                <p className="text-main/70 text-sm font-body">{t("emailNote")}</p>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-main/40 mt-1 flex-shrink-0" />
-                <p className="text-main/70 text-sm font-sans">{t("locationNote")}</p>
+                <p className="text-main/70 text-sm font-body">{t("locationNote")}</p>
               </li>
             </ul>
           </motion.div>
@@ -196,7 +196,7 @@ export default function ConfirmationPage() {
     <Suspense
       fallback={
         <main className="min-h-screen bg-ink flex items-center justify-center">
-          <p className="text-main">{t("loading")}</p>
+          <p className="text-main font-body">{t("loading")}</p>
         </main>
       }
     >

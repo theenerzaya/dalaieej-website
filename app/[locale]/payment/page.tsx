@@ -70,17 +70,17 @@ function StripePaymentForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-surface-alt/10 rounded-xl p-4 space-y-3">
         <div className="flex justify-between">
-          <span className="text-main/60 text-sm">Booking Reference</span>
-          <span className="text-main font-medium">{bookingId}</span>
+          <span className="text-main/60 text-sm font-body">Booking Reference</span>
+          <span className="text-main font-medium font-body">{bookingId}</span>
         </div>
         {guestName && (
           <div className="flex justify-between">
-            <span className="text-main/60 text-sm">Guest Name</span>
-            <span className="text-main font-medium">{guestName}</span>
+            <span className="text-main/60 text-sm font-body">Guest Name</span>
+            <span className="text-main font-medium font-body">{guestName}</span>
           </div>
         )}
         <div className="flex justify-between">
-          <span className="text-main/60 text-sm">{nights} {parseInt(nights) !== 1 ? 'nights' : 'night'}</span>
+          <span className="text-main/60 text-sm font-body">{nights} {parseInt(nights) !== 1 ? 'nights' : 'night'}</span>
           <span className="text-main font-serif text-xl">{formattedAmount} MNT</span>
         </div>
       </div>
@@ -95,7 +95,7 @@ function StripePaymentForm({
 
       {error && (
         <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4">
-          <p className="text-red-300 text-sm text-center">{error}</p>
+          <p className="text-red-300 text-sm text-center font-body">{error}</p>
         </div>
       )}
 
@@ -436,7 +436,7 @@ function PaymentContent() {
             <p className="text-main font-serif text-xl mb-2">
               Төлбөрийн QR үүсгэж байна...
             </p>
-            <p className="text-main/60 text-sm">
+            <p className="text-main/60 text-sm font-body">
               Түр хүлээнэ үү
             </p>
           </div>
@@ -461,7 +461,7 @@ function PaymentContent() {
               <p className="text-main font-serif text-xl mb-2">
                 Initializing Payment...
               </p>
-              <p className="text-main/60 text-sm">
+              <p className="text-main/60 text-sm font-body">
                 Please wait a moment
               </p>
             </div>
@@ -482,7 +482,7 @@ function PaymentContent() {
             
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-main/20">
               <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4 mb-6">
-                <p className="text-red-300 text-sm text-center">{error}</p>
+                <p className="text-red-300 text-sm text-center font-body">{error}</p>
               </div>
               <button
                 onClick={fetchStripeClientSecret}
@@ -504,7 +504,7 @@ function PaymentContent() {
               <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
                 Secure Payment
               </h1>
-              <p className="font-sans text-main/70 text-sm">
+              <p className="font-body text-main/70 text-sm">
                 Complete your booking with a secure card payment
               </p>
             </div>
@@ -536,7 +536,7 @@ function PaymentContent() {
             <div className="mt-8 text-center">
               <a
                 href={localePrefix || "/"}
-                className="text-main/50 text-sm hover:text-main transition-colors"
+                className="text-main/50 text-sm hover:text-main transition-colors font-body"
               >
                 &larr; {tBooking('backToHome')}
               </a>
@@ -554,7 +554,7 @@ function PaymentContent() {
           <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
             {t('title')}
           </h1>
-          <p className="font-sans text-main/70 text-sm">
+          <p className="font-body text-main/70 text-sm">
             {t('subtitle')}
           </p>
         </div>
@@ -564,7 +564,7 @@ function PaymentContent() {
             {fromCheckout && error ? (
               <div className="space-y-5">
                 <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4">
-                  <p className="text-red-300 text-sm text-center">{error}</p>
+                  <p className="text-red-300 text-sm text-center font-body">{error}</p>
                 </div>
                 <button
                   onClick={() => generateQPayQR(bookingId, amount)}
@@ -576,7 +576,7 @@ function PaymentContent() {
             ) : (
               <div className="space-y-5">
                 <div>
-                  <label className="block text-main/70 text-sm uppercase tracking-wider mb-2 font-sans">
+                  <label className="block text-main/70 text-sm uppercase tracking-wider mb-2 font-body">
                     {t('bookingRef')}
                   </label>
                   <input
@@ -584,12 +584,12 @@ function PaymentContent() {
                     value={bookingId}
                     onChange={(e) => setBookingId(e.target.value)}
                     placeholder={t('enterBookingId')}
-                    className="w-full px-4 py-3 bg-transparent border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30"
+                    className="w-full px-4 py-3 bg-transparent border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 font-body"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-main/70 text-sm uppercase tracking-wider mb-2 font-sans">
+                  <label className="block text-main/70 text-sm uppercase tracking-wider mb-2 font-body">
                     {t('amount')}
                   </label>
                   <input
@@ -597,12 +597,12 @@ function PaymentContent() {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder={t('enterAmount')}
-                    className="w-full px-4 py-3 bg-transparent border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30"
+                    className="w-full px-4 py-3 bg-transparent border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 font-body"
                   />
                 </div>
 
                 {error && (
-                  <div className="text-red-400 text-sm text-center py-2">
+                  <div className="text-red-400 text-sm text-center py-2 font-body">
                     {error}
                   </div>
                 )}
@@ -615,7 +615,7 @@ function PaymentContent() {
                     onChange={(e) => setTermsAccepted(e.target.checked)}
                     className="w-5 h-5 mt-0.5 rounded border-main/50 bg-transparent text-main focus:ring-surface-alt focus:ring-offset-0 cursor-pointer accent-surface-alt"
                   />
-                  <label htmlFor="terms" className="text-main/80 text-sm font-sans cursor-pointer leading-relaxed">
+                  <label htmlFor="terms" className="text-main/80 text-sm font-body cursor-pointer leading-relaxed">
                     {currentLocale === 'mn' 
                       ? <>Би <a href={`${localePrefix}/terms`} className="underline hover:text-white transition-colors">Үйлчилгээний нөхцөл</a> болон <a href={`${localePrefix}/terms`} className="underline hover:text-white transition-colors">Цуцлалтын бодлого</a>-г зөвшөөрч байна</>
                       : <>I agree to the <a href={`${localePrefix}/terms`} className="underline hover:text-white transition-colors">Terms & Conditions</a> and <a href={`${localePrefix}/terms`} className="underline hover:text-white transition-colors">Cancellation Policy</a></>
@@ -640,18 +640,18 @@ function PaymentContent() {
         ) : loading ? (
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-main/20 text-center">
             <Loader2 className="w-8 h-8 text-main animate-spin mx-auto mb-3" />
-            <p className="text-main">{t('generating')}</p>
+            <p className="text-main font-body">{t('generating')}</p>
           </div>
         ) : (
           <>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-main/20 mb-4">
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <p className="text-main/70 text-xs">{t('bookingRef')}</p>
+                  <p className="text-main/70 text-xs font-body">{t('bookingRef')}</p>
                   <p className="text-main font-serif">{bookingId}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-main/70 text-xs">{nights} {parseInt(nights) !== 1 ? tBooking('nights') : tBooking('night')}</p>
+                  <p className="text-main/70 text-xs font-body">{nights} {parseInt(nights) !== 1 ? tBooking('nights') : tBooking('night')}</p>
                   <p className="text-main font-serif text-xl">{formattedAmount} MNT</p>
                 </div>
               </div>
@@ -663,7 +663,7 @@ function PaymentContent() {
                   <Smartphone className="w-5 h-5 text-main" />
                   <h2 className="font-serif text-lg text-main">{t('payWithApp')}</h2>
                 </div>
-                <p className="text-main/60 text-sm mb-4">
+                <p className="text-main/60 text-sm mb-4 font-body">
                   {t('tapBank')}
                 </p>
                 
@@ -687,7 +687,7 @@ function PaymentContent() {
                           </span>
                         </div>
                       )}
-                      <span className="text-main text-xs text-center font-medium line-clamp-2">
+                      <span className="text-main text-xs text-center font-medium line-clamp-2 font-body">
                         {bank.name}
                       </span>
                     </a>
@@ -701,10 +701,10 @@ function PaymentContent() {
                 <QrCode className="w-5 h-5 text-main" />
                 <h2 className="font-serif text-lg text-main">{t('scanQR')}</h2>
               </div>
-              <p className="text-main/60 text-sm mb-4 text-center hidden md:block">
+              <p className="text-main/60 text-sm mb-4 text-center hidden md:block font-body">
                 {t('scanWithApp')}
               </p>
-              <p className="text-main/60 text-sm mb-4 text-center md:hidden">
+              <p className="text-main/60 text-sm mb-4 text-center md:hidden font-body">
                 {t('scanOtherDevice')}
               </p>
               
@@ -719,7 +719,7 @@ function PaymentContent() {
               </div>
 
               {invoiceId && (
-                <p className="text-main/40 text-xs text-center mt-3">
+                <p className="text-main/40 text-xs text-center mt-3 font-body">
                   Invoice: {invoiceId}
                 </p>
               )}
@@ -732,7 +732,7 @@ function PaymentContent() {
               >
                 <div>
                   <h2 className="font-serif text-lg text-main">{t('manualTransfer')}</h2>
-                  <p className="text-main/60 text-sm">{t('alternativePayment')}</p>
+                  <p className="text-main/60 text-sm font-body">{t('alternativePayment')}</p>
                 </div>
                 {manualExpanded ? (
                   <ChevronUp className="w-5 h-5 text-main/70" />
@@ -745,11 +745,11 @@ function PaymentContent() {
                 <div className="px-5 pb-5 space-y-4">
                   <div className="bg-surface-alt/10 rounded-xl p-4 space-y-3">
                     <div>
-                      <p className="text-main/60 text-xs uppercase tracking-wider">{t('bank')}</p>
-                      <p className="text-main font-medium">Khan Bank</p>
+                      <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('bank')}</p>
+                      <p className="text-main font-medium font-body">Khan Bank</p>
                     </div>
                     <div>
-                      <p className="text-main/60 text-xs uppercase tracking-wider">{t('accountNumber')}</p>
+                      <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('accountNumber')}</p>
                       <div className="flex items-center gap-2">
                         <p className="text-main font-mono text-lg">5765050027</p>
                         <button
@@ -766,17 +766,17 @@ function PaymentContent() {
                       </div>
                     </div>
                     <div>
-                      <p className="text-main/60 text-xs uppercase tracking-wider">{t('accountName')}</p>
-                      <p className="text-main font-medium">Dalai Eej Resort</p>
+                      <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('accountName')}</p>
+                      <p className="text-main font-medium font-body">Dalai Eej Resort</p>
                     </div>
                     <div>
-                      <p className="text-main/60 text-xs uppercase tracking-wider">{t('amount')}</p>
+                      <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('amount')}</p>
                       <p className="text-main font-serif text-xl">{formattedAmount} MNT</p>
                     </div>
                   </div>
                   
                   <div className="bg-amber-500/20 border border-amber-500/30 rounded-xl p-4">
-                    <p className="text-amber-200 text-sm">
+                    <p className="text-amber-200 text-sm font-body">
                       <strong>Important:</strong> {t('importantMemo')}: {bookingId}
                     </p>
                   </div>
@@ -794,7 +794,7 @@ function PaymentContent() {
               </button>
 
               {paymentStatus && (
-                <div className="text-main/70 text-sm text-center py-2">
+                <div className="text-main/70 text-sm text-center py-2 font-body">
                   {paymentStatus}
                 </div>
               )}
@@ -807,7 +807,7 @@ function PaymentContent() {
                   setPaymentStatus("");
                   hasAutoGenerated.current = false;
                 }}
-                className="w-full text-main/50 text-sm hover:text-main transition-colors py-2"
+                className="w-full text-main/50 text-sm hover:text-main transition-colors py-2 font-body"
               >
                 {t('generateNew')}
               </button>
@@ -818,7 +818,7 @@ function PaymentContent() {
         <div className="mt-8 text-center">
           <a
             href={localePrefix || "/"}
-            className="text-main/50 text-sm hover:text-main transition-colors"
+            className="text-main/50 text-sm hover:text-main transition-colors font-body"
           >
             &larr; {tBooking('backToHome')}
           </a>

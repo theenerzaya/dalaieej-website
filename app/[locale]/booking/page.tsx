@@ -276,32 +276,32 @@ function BookingContent() {
       <div className="bg-ink py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">{t('findRoom')}</h1>
-          <p className="font-sans text-main/70 mb-8">{t('selectDates')}</p>
+          <p className="font-body text-main/70 mb-8">{t('selectDates')}</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-4xl mx-auto flex-wrap">
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-sans text-left">{t('checkIn')}</label>
-              <input type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors" />
+              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkIn')}</label>
+              <input type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
             </div>
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-sans text-left">{t('checkOut')}</label>
-              <input type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors" />
+              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkOut')}</label>
+              <input type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-sans text-left">{currentLocale === 'mn' ? 'Насанд хүрэгчид' : 'Adults'}</label>
+              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Насанд хүрэгчид' : 'Adults'}</label>
               <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2">
                 <button onClick={() => setTotalAdults(Math.max(1, totalAdults - 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="w-8 text-center text-main font-semibold">{totalAdults}</span>
+                <span className="w-8 text-center text-main font-semibold font-body">{totalAdults}</span>
                 <button onClick={() => setTotalAdults(Math.min(20, totalAdults + 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
             </div>
 
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-sans text-left">{currentLocale === 'mn' ? 'Хүүхдүүд' : 'Children'}</label>
+              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Хүүхдүүд' : 'Children'}</label>
               <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2">
                 <button onClick={() => setTotalChildren(Math.max(0, totalChildren - 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="w-8 text-center text-main font-semibold">{totalChildren}</span>
+                <span className="w-8 text-center text-main font-semibold font-body">{totalChildren}</span>
                 <button onClick={() => setTotalChildren(Math.min(10, totalChildren + 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
             </div>
@@ -314,22 +314,22 @@ function BookingContent() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4 max-w-md mx-auto">
             <div className="flex items-center gap-2 flex-1 w-full sm:w-auto">
               <Tag className="w-4 h-4 text-main/70" />
-              <input type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} placeholder={t('enterPromo')} className="flex-1 px-3 py-2 bg-white/10 border border-main/30 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 text-sm uppercase tracking-wider" />
+              <input type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} placeholder={t('enterPromo')} className="flex-1 px-3 py-2 bg-white/10 border border-main/30 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 text-sm uppercase tracking-wider font-body" />
             </div>
-            <button onClick={handleApplyPromo} disabled={promoLoading || !promoCode.trim()} className="px-4 py-2 bg-surface-alt/20 text-main text-sm uppercase tracking-wider hover:bg-surface-alt/30 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            <button onClick={handleApplyPromo} disabled={promoLoading || !promoCode.trim()} className="px-4 py-2 bg-surface-alt/20 text-main text-sm uppercase tracking-wider hover:bg-surface-alt/30 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-body">
               {promoLoading && <Loader2 className="w-4 h-4 animate-spin" />}
               {t('apply')}
             </button>
           </div>
           {appliedPromo && (
             <div className="mt-3 text-center">
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-bark/20 text-bark text-sm rounded-full">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-bark/20 text-bark text-sm rounded-full font-body">
                 <Check className="w-4 h-4" />
                 {t('promoApplied')} ({appliedPromo})
               </span>
             </div>
           )}
-          {error && <div className="mt-4 text-red-300 text-sm">{error}</div>}
+          {error && <div className="mt-4 text-red-300 text-sm font-body">{error}</div>}
         </div>
       </div>
 
@@ -337,14 +337,14 @@ function BookingContent() {
         {loading && (
           <div className="text-center py-12">
             <Loader2 className="w-8 h-8 animate-spin mx-auto text-bark" />
-            <p className="text-ink/70 mt-4">{t('loading')}</p>
+            <p className="text-ink/70 mt-4 font-body">{t('loading')}</p>
           </div>
         )}
 
         {!loading && searched && rooms.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-ink/70 text-lg">{t('noRooms')}</p>
-            <p className="text-ink/50 mt-2">{t('tryDifferent')}</p>
+            <p className="text-ink/70 text-lg font-body">{t('noRooms')}</p>
+            <p className="text-ink/50 mt-2 font-body">{t('tryDifferent')}</p>
           </div>
         )}
 
@@ -367,12 +367,12 @@ function BookingContent() {
                     <div className="relative h-48 overflow-hidden">
                       <img src={photos[0] || placeholderImages[index % placeholderImages.length]} alt={room.roomTypeName || "Room"} className="w-full h-full object-cover" />
                       {room.roomsAvailable && room.roomsAvailable <= 3 && (
-                        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded font-body">
                           {t('onlyLeft', { count: room.roomsAvailable })}
                         </div>
                       )}
                       {isSelected && (
-                        <div className="absolute top-3 left-3 bg-bark text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium">
+                        <div className="absolute top-3 left-3 bg-bark text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium font-body">
                           <Check className="w-3.5 h-3.5" />
                           {currentLocale === 'mn' ? 'Сонгосон' : 'Selected'}
                         </div>
@@ -387,11 +387,11 @@ function BookingContent() {
                       </h3>
 
                       <div 
-                        className="text-ink/60 text-sm mb-4 line-clamp-2"
+                        className="text-ink/60 text-sm mb-4 line-clamp-2 font-body"
                         dangerouslySetInnerHTML={{ __html: room.description || "Luxurious accommodation" }}
                       />
 
-                      <div className="flex items-center gap-4 mb-4 text-sm text-ink/70">
+                      <div className="flex items-center gap-4 mb-4 text-sm text-ink/70 font-body">
                         <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
                           <span>{currentLocale === 'mn' ? `${maxGuests} хүн хүртэл` : `Up to ${maxGuests} guests`}</span>
@@ -401,7 +401,7 @@ function BookingContent() {
                       {features.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mb-4">
                           {features.slice(0, 3).map((feature, idx) => (
-                            <span key={idx} className="flex items-center gap-1 text-xs text-ink/60 bg-surface-alt px-2 py-1 rounded">
+                            <span key={idx} className="flex items-center gap-1 text-xs text-ink/60 bg-surface-alt px-2 py-1 rounded font-body">
                               <Check className="w-3 h-3" />{feature}
                             </span>
                           ))}
@@ -415,31 +415,31 @@ function BookingContent() {
                               <div>
                                 {/* FIX: Display the API returned rate directly without frontend multiplication */}
                                 <p className="font-serif text-2xl text-ink font-bold">{perNightRate.toLocaleString()}</p>
-                                <p className="text-ink/50 text-xs">{room.currency || "MNT"} / {t('perNight')}</p>
+                                <p className="text-ink/50 text-xs font-body">{room.currency || "MNT"} / {t('perNight')}</p>
                               </div>
                               {numberOfNights > 1 && (
                                 <div className="text-right">
-                                  <p className="text-sm text-ink/70">{numberOfNights} {t('nights')}</p>
-                                  <p className="font-semibold text-ink">{(perNightRate * numberOfNights).toLocaleString()} {room.currency}</p>
+                                  <p className="text-sm text-ink/70 font-body">{numberOfNights} {t('nights')}</p>
+                                  <p className="font-semibold text-ink font-serif">{(perNightRate * numberOfNights).toLocaleString()} {room.currency}</p>
                                 </div>
                               )}
                             </div>
                             {isSelected ? (
                               <div className="space-y-3">
                                 <div className="flex items-center justify-between bg-surface-alt rounded-lg p-3">
-                                  <span className="text-sm text-ink">{currentLocale === 'mn' ? 'Тоо хэмжээ' : 'Quantity'}</span>
+                                  <span className="text-sm text-ink font-body">{currentLocale === 'mn' ? 'Тоо хэмжээ' : 'Quantity'}</span>
                                   <div className="flex items-center gap-3">
                                     <button onClick={() => updateRoomQuantity(room.roomTypeID, -1)} className="w-8 h-8 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors"><Minus className="w-4 h-4" /></button>
-                                    <span className="w-8 text-center font-semibold text-ink">{cartItem.quantity}</span>
+                                    <span className="w-8 text-center font-semibold text-ink font-body">{cartItem.quantity}</span>
                                     <button onClick={() => updateRoomQuantity(room.roomTypeID, 1)} disabled={cartItem.quantity >= room.roomsAvailable} className="w-8 h-8 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-4 h-4" /></button>
                                   </div>
                                 </div>
-                                <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-medium rounded-lg hover:bg-bark/80 transition-colors flex items-center justify-center gap-2">
+                                <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors flex items-center justify-center gap-2">
                                   <Check className="w-5 h-5" />{currentLocale === 'mn' ? 'Сонгосон' : 'Selected'}
                                 </button>
                               </div>
                             ) : (
-                              <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-medium rounded-lg hover:bg-bark/80 transition-colors">
+                              <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors">
                                 {currentLocale === 'mn' ? 'Сонгох' : 'Select Room'}
                               </button>
                             )}
@@ -454,11 +454,11 @@ function BookingContent() {
               })}
           </div>
         )}
-        {!searched && !loading && <div className="text-center py-12"><p className="text-ink/50 text-lg">{t('selectDatesPrompt')}</p></div>}
+        {!searched && !loading && <div className="text-center py-12"><p className="text-ink/50 text-lg font-body">{t('selectDatesPrompt')}</p></div>}
       </div>
 
       <div className="py-8 text-center">
-        <a href={localePrefix || "/"} className="text-ink/50 text-sm hover:text-ink transition-colors">&larr; {t('backToHome')}</a>
+        <a href={localePrefix || "/"} className="text-ink/50 text-sm hover:text-ink transition-colors font-body">&larr; {t('backToHome')}</a>
       </div>
 
       {cart.length > 0 && (
@@ -467,11 +467,11 @@ function BookingContent() {
             {capacityError && (
               <div className="mb-3 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <p className="text-orange-700 text-sm">{capacityError}</p>
+                <p className="text-orange-700 text-sm font-body">{capacityError}</p>
               </div>
             )}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3 text-sm text-ink">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-ink font-body">
                 <span className="font-medium">{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
                 <span className="text-ink/30">•</span>
                 <span>{totalGuests} {currentLocale === 'mn' ? 'зочин' : 'Guests'}</span>
