@@ -38,10 +38,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-        scrolled 
-          ? 'bg-ink/95 backdrop-blur-md shadow-lg' 
-          : 'bg-transparent'
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 bg-ink ${
+        scrolled ? 'shadow-lg' : ''
       }`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-20">
@@ -64,7 +62,7 @@ export default function Navbar() {
                 alt="Dalai Eej Resort"
                 width={180}
                 height={50}
-                className="h-10 md:h-12 w-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
+                className="h-10 md:h-12 w-auto"
                 priority
               />
             </Link>
