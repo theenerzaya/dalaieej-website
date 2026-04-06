@@ -70,7 +70,7 @@ export default function AvailabilityBar() {
         
         <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4">
           <div className="flex flex-col">
-            <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-sans">
+            <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-body">
               {t('checkIn')}
             </label>
             <input
@@ -83,7 +83,7 @@ export default function AvailabilityBar() {
           </div>
           
           <div className="flex flex-col">
-            <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-sans">
+            <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-body">
               {t('checkOut')}
             </label>
             <input

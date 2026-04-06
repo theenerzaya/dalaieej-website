@@ -167,7 +167,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
               <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-6 mb-8 md:mb-0">
                 {secondaryNavItems.map((item, i) => {
                   const Icon = item.icon;
-                  const linkClass = "group flex items-center gap-2 font-sans text-xs md:text-sm tracking-[0.2em] uppercase text-main/80 hover:text-white transition-colors";
+                  const linkClass = "group flex items-center gap-2 font-body text-xs md:text-sm tracking-[0.2em] uppercase text-main/80 hover:text-white transition-colors";
                   return (
                     <motion.div
                       key={item.label}
@@ -210,7 +210,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
               >
                 <button
                   onClick={toggleLanguage}
-                  className="font-sans text-xs tracking-[0.2em] font-medium text-main/70 hover:text-white transition-colors uppercase py-3 px-6 border border-white/10 rounded-full hover:border-white/30"
+                  className="font-body text-xs tracking-[0.2em] font-medium text-main/70 hover:text-white transition-colors uppercase py-3 px-6 border border-white/10 rounded-full hover:border-white/30"
                 >
                   <span className={!isMongolian ? "text-white" : ""}>EN</span>
                   <span className="mx-3 opacity-50">|</span>

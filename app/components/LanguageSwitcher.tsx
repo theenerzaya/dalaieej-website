@@ -25,7 +25,7 @@ export default function LanguageSwitcher() {
   return (
     <div className="flex items-center gap-2">
       <Globe className="w-4 h-4 text-main/70" />
-      <div className="flex items-center gap-1 text-sm font-sans">
+      <div className="flex items-center gap-1 text-sm font-body">
         <Link
           href={pathWithoutLocale}
           locale="en"

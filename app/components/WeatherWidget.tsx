@@ -43,12 +43,12 @@ export default function WeatherWidget() {
     <div className="rounded-xl bg-white/5 border border-white/10 px-5 py-4">
       <div className="flex items-center gap-2 mb-3">
         <Cloud className="w-4 h-4 text-water" />
-        <p className="text-xs uppercase tracking-[0.2em] text-main/50 font-sans">
+        <p className="text-xs uppercase tracking-[0.2em] text-main/50 font-body">
           {t("weather")}
         </p>
       </div>
       
-      <p className="font-heading text-2xl text-main">
+      <p className="font-serif text-2xl text-main">
         {displayTemp()}
       </p>
 

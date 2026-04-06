@@ -166,7 +166,7 @@ export default function OffersCarousel() {
                   {content.tag}
                 </p>
 
-                <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl text-leaf mb-6 font-light leading-tight">
+                <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-leaf mb-6 font-light leading-tight">
                   {content.title}
                 </h3>
 
