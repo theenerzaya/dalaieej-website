@@ -64,7 +64,7 @@ export default function Navbar() {
                 alt="Dalai Eej Resort"
                 width={180}
                 height={50}
-                className="h-10 md:h-12 w-auto"
+                className="h-10 md:h-12 w-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
                 priority
               />
             </Link>
