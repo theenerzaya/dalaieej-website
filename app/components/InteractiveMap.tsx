@@ -135,12 +135,12 @@ export default function InteractiveMap() {
                     onClick={(e) => handleHotspotClick(e, location.id)}
                     className={`relative flex items-center justify-center transition-all duration-300 ${
                       isArrowMarker(location.id)
-                        ? `w-8 h-8 rounded-md ${
+                        ? `w-[30.5px] h-[30.5px] rounded-md ${
                             activeHotspot === location.id
                               ? "bg-surface-alt text-leaf scale-110"
                               : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
                           }`
-                        : `w-10 h-10 rounded-full ${
+                        : `w-[38.5px] h-[38.5px] rounded-full ${
                             activeHotspot === location.id
                               ? "bg-surface-alt text-leaf scale-110"
                               : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
