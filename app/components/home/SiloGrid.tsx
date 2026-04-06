@@ -83,11 +83,9 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
             {isMongolian ? silo.mn : silo.en}
           </h3>
 
-          <div className="mt-2 border-b border-white/60 pb-1">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-white font-medium text-overlay-glow">
-              {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
-            </span>
-          </div>
+          <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 drop-shadow-md">
+            {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
+          </span>
         </motion.div>
       </Link>
     </div>
@@ -128,10 +126,10 @@ export default function SiloGrid() {
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
               <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-7xl md:text-8xl text-white text-center tracking-wider drop-shadow-lg`}>
+                <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl lg:text-8xl text-white text-center tracking-wider drop-shadow-lg`}>
                   {isMongolian ? silo.mn : silo.en}
                 </h3>
-                <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 text-overlay-glow">
+                <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
                   {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
                 </span>
               </div>
