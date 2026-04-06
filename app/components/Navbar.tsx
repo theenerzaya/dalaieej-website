@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,8 +12,11 @@ import NavigationOverlay from "./layout/NavigationOverlay";
 export default function Navbar() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const isBookingPage = pathname.includes('/booking') || pathname.includes('/checkout') || pathname.includes('/payment');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +43,7 @@ export default function Navbar() {
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-        scrolled ? 'bg-ink shadow-lg' : 'bg-transparent'
+        isBookingPage || scrolled ? 'bg-ink shadow-lg' : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-20">
