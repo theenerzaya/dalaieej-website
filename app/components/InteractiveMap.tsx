@@ -65,23 +65,23 @@ export default function InteractiveMap() {
 
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="font-heading text-4xl md:text-5xl text-leaf mb-4">
+          <h2 className="font-serif text-4xl md:text-5xl text-ink mb-4">
             {t('map.title')}
           </h2>
-          <p className="font-body text-leaf/80 max-w-2xl mx-auto text-lg">
+          <p className="font-body text-ink/70 max-w-2xl mx-auto text-lg">
             {t('map.subtitle')}
           </p>
         </div>
 
         <div className="flex justify-center mb-6">
           {/* ... [Tabs Logic - Unchanged] ... */}
-          <div className="inline-flex bg-leaf/10 rounded-full p-1">
+          <div className="inline-flex bg-ink/10 rounded-full p-1">
             <button
               onClick={() => handleTabChange("accommodation")}
               className={`px-4 py-2 rounded-full text-sm font-body transition-all duration-300 ${
                 activeTab === "accommodation"
-                  ? "bg-leaf text-main shadow-md"
-                  : "text-leaf hover:bg-leaf/10"
+                  ? "bg-ink text-main shadow-md"
+                  : "text-ink hover:bg-ink/10"
               }`}
             >
               {t('map.tabs.accommodation')}
@@ -90,8 +90,8 @@ export default function InteractiveMap() {
               onClick={() => handleTabChange("activities")}
               className={`px-4 py-2 rounded-full text-sm font-body transition-all duration-300 ${
                 activeTab === "activities"
-                  ? "bg-leaf text-main shadow-md"
-                  : "text-leaf hover:bg-leaf/10"
+                  ? "bg-ink text-main shadow-md"
+                  : "text-ink hover:bg-ink/10"
               }`}
             >
               {t('map.tabs.activities')}
@@ -169,7 +169,7 @@ export default function InteractiveMap() {
                       >
                         <button
                           onClick={() => setActiveHotspot(null)}
-                          className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-leaf/70 hover:text-leaf hover:bg-white transition-colors"
+                          className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -185,10 +185,10 @@ export default function InteractiveMap() {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-heading text-lg text-leaf mb-2">
+                          <h3 className="font-serif text-lg text-ink mb-2">
                             {t(`map.${location.id}.title`)}
                           </h3>
-                          <p className="font-body text-sm text-leaf/70">
+                          <p className="font-body text-sm text-ink/70">
                             {t(`map.${location.id}.desc`)}
                           </p>
                         </div>
@@ -201,7 +201,7 @@ export default function InteractiveMap() {
           </AnimatePresence>
         </div>
 
-        <p className="text-center font-body text-leaf/60 text-sm mt-4">
+        <p className="text-center font-body text-ink/50 text-sm mt-4">
           {t('map.hint')}
         </p>
       </div>
