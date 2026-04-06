@@ -206,10 +206,6 @@
     "title": "Explore the Peninsula",
     "subtitle": "Discover the heritage landmarks of our shoreline",
     "hint": "Click the + icons to learn more about each area",
-    "tabs": {
-      "accommodation": "Buildings & Accommodation",
-      "activities": "Facilities & Activities"
-    },
     "reception": {
       "title": "Reception & Restaurant",
       "desc": "The main lodge featuring our lakefront dining hall and lounge bar."
@@ -242,13 +238,9 @@
       "title": "The Pier",
       "desc": "Main boat landing, transfer point, and kayak launch."
     },
-    "basketball": {
-      "title": "Basketball Court",
-      "desc": "Sports court and location for morning yoga."
-    },
-    "volleyball": {
-      "title": "Volleyball Court",
-      "desc": "Natural-surface court for recreation."
+    "courts": {
+      "title": "Volleyball & Basketball Courts",
+      "desc": "Sports courts for recreation and morning yoga."
     },
     "entrance": {
       "title": "Grounds Entrance",
