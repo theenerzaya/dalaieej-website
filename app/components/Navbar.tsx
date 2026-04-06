@@ -57,13 +57,10 @@ export default function Navbar() {
               href={localePrefix || "/"}
               className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity"
             >
-              <Image
-                src="/images/logo-white.png"
+              <img
+                src="/images/DalaiEej_Established1998.svg"
                 alt="Dalai Eej Resort"
-                width={180}
-                height={50}
-                className="h-10 md:h-12 w-auto brightness-0"
-                priority
+                className="h-10 md:h-12 w-auto"
               />
             </Link>
 
