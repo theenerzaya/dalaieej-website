@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Phone, MapPin, LayoutGrid } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -34,7 +35,7 @@ const mainNavItems = [
     href: "/experiences", 
     label: "Adventures", 
     mn: "Адал явдал",
-    image: "images/nav-overlay/adventure.jpg"
+    image: "/images/nav-overlay/adventure.jpg"
   },
   { 
     id: "about",
@@ -93,6 +94,20 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
   };
 
   return (
+    <>
+      {/* Preload nav images so they're cached before the overlay opens */}
+      <div className="hidden" aria-hidden="true">
+        {mainNavItems.map((item) => (
+          <Image
+            key={item.id}
+            src={item.image}
+            alt=""
+            width={1}
+            height={1}
+            sizes="(min-width: 768px) 33vw, 0px"
+          />
+        ))}
+      </div>
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -235,10 +250,13 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     transition={{ duration: 0.4 }}
                     className="absolute inset-0"
                   >
-                    <img
-                      src={activeImage}
+                    <Image
+                      src={activeImage!}
                       alt="Menu preview"
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(min-width: 768px) 33vw, 0px"
+                      className="object-cover"
+                      priority
                     />
                     <div className="absolute inset-0 bg-black/10" />
                   </motion.div>
@@ -250,5 +268,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
         </motion.div>
       )}
     </AnimatePresence>
+    </>
   );
 }
