@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cloudbedsGet } from "@/app/lib/cloudbeds";
+import { cloudbedsGet } from "@/lib/cloudbeds";
 
 interface RateRestriction {
   closedToArrival: boolean;

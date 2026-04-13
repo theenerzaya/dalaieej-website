@@ -49,9 +49,9 @@ const content = {
 };
 
 const scrapbookImages = [
-  { src: "/images/deer-1.png", alt: "Khuvsgul Lake", rotate: "rotate-2", size: "w-64 h-80" },
-  { src: "/images/water-1.png", alt: "Wooden cabin", rotate: "-rotate-3", size: "w-56 h-72" },
-  { src: "/images/gramps.jpg", alt: "Forest path", rotate: "rotate-1", size: "w-52 h-64" },
+  { src: "/images/about-scrapbook-deer.png", alt: "Khuvsgul Lake", rotate: "rotate-2", size: "w-64 h-80" },
+  { src: "/images/about-scrapbook-lake.png", alt: "Wooden cabin", rotate: "-rotate-3", size: "w-56 h-72" },
+  { src: "/images/about-scrapbook-founder.jpg", alt: "Forest path", rotate: "rotate-1", size: "w-52 h-64" },
 ];
 
 function AccordionItem({ title, body, isOpen, onToggle }: { title: string; body: string; isOpen: boolean; onToggle: () => void }) {
@@ -106,7 +106,7 @@ export default function AboutUsPage() {
           >
             <div className="relative overflow-hidden rounded-sm border border-ink/10 shadow-lg">
               <img
-                src="/images/hero-neighbourhood-guide.webp"
+                src="/images/about-hero.webp"
                 alt="Illustrated map of Khuvsgul region"
                 className="w-full h-[300px] md:h-[500px] object-cover"
               />

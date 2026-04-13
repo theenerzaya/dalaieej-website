@@ -23,7 +23,7 @@ const locations: Location[] = [
   { id: 'bathhouse', left: 69.01, top: 71.3, image: '/images/map/bathhouse.jpg' },
   { id: 'sauna', left: 95.43, top: 75.53, image: '/images/map/sauna.jpg' },
   { id: 'pier', left: 93.37, top: 66.03, image: '/images/map/pier.jpg' },
-  { id: 'courts', left: 74.38, top: 63.2, image: '/images/map/basketball.jpg' },
+  { id: 'courts', left: 74.38, top: 63.2, image: '/images/map/courts.jpg' },
   { id: 'entrance', left: 34.1, top: 51.3, noImage: true },
   { id: 'overland', left: 19.43, top: 99.7, image: '/images/map/overland.jpg' },
   { id: 'parking', left: 0.03, top: 58.1, noImage: true }

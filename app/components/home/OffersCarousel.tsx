@@ -25,7 +25,7 @@ const offers = [
       title: "Эрдэнэт 50 Жил", 
       description: "Эрдэнэт хотын оршин суугчдад зориулсан баярын тусгай хөнгөлөлт." 
     },
-  image: "/images/specialoffers/2022-1.jpg"
+  image: "/images/specialoffers/erdenet-jubilee.jpg"
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ const offers = [
       title: "Гэр Бүлийн Аялал", 
       description: "Гэр бүлийн том байшин + хүүхдийн тоглоомын хөтөлбөр." 
     },
-    image: "images/specialoffers/families.jpg"
+    image: "/images/specialoffers/family-getaway.jpg"
   },
   {
     id: 4,
@@ -67,7 +67,7 @@ const offers = [
       title: "Намуухан Нуурын Эрэгт", 
       description: "7-р сарын их хөл хөдөлгөөнөөс урьтаж тухлан амраарай." 
     },
-  image: "/images/specialoffers/couples-package.jpg"
+  image: "/images/specialoffers/shoulder-season.jpg"
   }
 ];
 

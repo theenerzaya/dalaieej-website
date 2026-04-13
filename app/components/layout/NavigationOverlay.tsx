@@ -14,7 +14,7 @@ const mainNavItems = [
     href: "/accommodation", 
     label: "Stay", 
     mn: "Өргөө",
-    image: "/images/nav-overlay/accommodation.jpg"
+    image: "/images/nav-overlay/stay.jpg"
   },
   { 
     id: "dining",
@@ -42,7 +42,7 @@ const mainNavItems = [
     href: "/about", 
     label: "Our Story", 
     mn: "Бидний тухай",
-    image: "/images/nav-overlay/about.jpg"
+    image: "/images/nav-overlay/our-story.jpg"
   },
 ];
 
