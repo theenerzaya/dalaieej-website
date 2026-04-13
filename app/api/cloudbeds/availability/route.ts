@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cloudbedsGet, AvailabilityResponse } from "@/app/lib/cloudbeds";
+import { cloudbedsGet } from "@/app/lib/cloudbeds";
+
+interface RateRestriction {
+  closedToArrival: boolean;
+  closedToDeparture: boolean;
+  minLos: number;
+  maxLos: number;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,6 +30,8 @@ export async function GET(request: NextRequest) {
     }
 
     const promo = searchParams.get("promo");
+    const adults = searchParams.get("adults");
+    const children = searchParams.get("children");
     
     const params: Record<string, string> = {
       startDate: checkin,
@@ -33,10 +42,61 @@ export async function GET(request: NextRequest) {
       params.promoCode = promo;
       console.log("Applying promo code:", promo);
     }
+    if (adults) params.adults = adults;
+    if (children) params.children = children;
 
-    const availabilityData = await cloudbedsGet<any>("/getAvailableRoomTypes", params);
+    const [availabilityData, ratePlansData] = await Promise.all([
+      cloudbedsGet<any>("/getAvailableRoomTypes", params),
+      cloudbedsGet<any>("/getRatePlans", { ...params, detailedRates: "true" }).catch((err) => {
+        console.error("Failed to fetch rate plan restrictions:", err);
+        return null;
+      }),
+    ]);
 
     console.log("Cloudbeds availability response:", JSON.stringify(availabilityData, null, 2));
+    console.log("Cloudbeds ratePlans response:", JSON.stringify(ratePlansData, null, 2));
+
+    const restrictionByRateID = new Map<string, RateRestriction>();
+    const baseRestrictionByRoomType = new Map<string, RateRestriction>();
+
+    if (ratePlansData?.data) {
+      for (const rate of ratePlansData.data) {
+        const detailed: any[] = rate.roomRateDetailed || [];
+        if (detailed.length === 0) continue;
+
+        const checkinDay = detailed[0];
+        const lastDay = detailed[detailed.length - 1];
+
+        const restriction: RateRestriction = {
+          closedToArrival: !!checkinDay?.closedToArrival,
+          closedToDeparture: !!lastDay?.closedToDeparture,
+          minLos: checkinDay?.minLos || 0,
+          maxLos: checkinDay?.maxLos || 0,
+        };
+
+        restrictionByRateID.set(String(rate.rateID), restriction);
+
+        if (!rate.isDerived && rate.roomTypeID) {
+          baseRestrictionByRoomType.set(String(rate.roomTypeID), restriction);
+        }
+      }
+    }
+
+    function mergeRestrictions(rateID: string, roomTypeID: string): RateRestriction | null {
+      const derived = restrictionByRateID.get(rateID);
+      const base = baseRestrictionByRoomType.get(roomTypeID);
+      if (!derived && !base) return null;
+      if (!base) return derived!;
+      if (!derived) return base;
+      return {
+        closedToArrival: derived.closedToArrival || base.closedToArrival,
+        closedToDeparture: derived.closedToDeparture || base.closedToDeparture,
+        minLos: Math.max(derived.minLos, base.minLos),
+        maxLos: derived.maxLos > 0 && base.maxLos > 0
+          ? Math.min(derived.maxLos, base.maxLos)
+          : derived.maxLos || base.maxLos,
+      };
+    }
 
     const propertyData = availabilityData?.data?.[0];
     if (!propertyData || !propertyData.propertyRooms) {
@@ -77,6 +137,8 @@ export async function GET(request: NextRequest) {
         }
       }
 
+      const mergedRestriction = mergeRestrictions(String(room.roomRateID), String(room.roomTypeID));
+
       return {
         roomTypeID: room.roomTypeID,
         roomTypeName: room.roomTypeName,
@@ -90,6 +152,7 @@ export async function GET(request: NextRequest) {
         maxGuests: parseInt(room.maxGuests) || 2,
         photos: photos,
         features: room.roomTypeFeatures || [],
+        restrictions: mergedRestriction,
       };
     });
 

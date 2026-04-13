@@ -7,6 +7,13 @@ import { Suspense } from "react";
 import { Users, Check, Tag, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
+interface RoomRestrictions {
+  closedToArrival: boolean;
+  closedToDeparture: boolean;
+  minLos: number;
+  maxLos: number;
+}
+
 interface Room {
   roomTypeID: string;
   roomTypeName: string;
@@ -20,6 +27,7 @@ interface Room {
   maxGuests: number;
   photos: string[];
   features: string[];
+  restrictions?: RoomRestrictions | null;
 }
 
 interface RoomTypeGroup {
@@ -334,22 +342,69 @@ function BookingContent() {
     "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&auto=format&fit=crop&q=80",
   ];
 
+  const getRestrictionMessages = (restrictions: RoomRestrictions | null | undefined): string[] => {
+    if (!restrictions) return [];
+    const msgs: string[] = [];
+    if (restrictions.closedToArrival) {
+      msgs.push(currentLocale === 'mn'
+        ? `${formatDate(checkin)} өдөр бүртгүүлэх боломжгүй`
+        : `Check-in not available on ${formatDate(checkin)}`);
+    }
+    if (restrictions.closedToDeparture) {
+      msgs.push(currentLocale === 'mn'
+        ? `${formatDate(checkout)} өдөр гарах боломжгүй`
+        : `Check-out not available on ${formatDate(checkout)}`);
+    }
+    if (restrictions.minLos > 0 && restrictions.minLos > numberOfNights) {
+      msgs.push(currentLocale === 'mn'
+        ? `Хамгийн багадаа ${restrictions.minLos} шөнө байх шаардлагатай`
+        : `Minimum ${restrictions.minLos}-night stay required`);
+    }
+    if (restrictions.maxLos > 0 && restrictions.maxLos < numberOfNights) {
+      msgs.push(currentLocale === 'mn'
+        ? `Хамгийн ихдээ ${restrictions.maxLos} шөнө байх боломжтой`
+        : `Maximum ${restrictions.maxLos}-night stay`);
+    }
+    return msgs;
+  };
+
+  const isRateBlocked = (restrictions: RoomRestrictions | null | undefined): boolean => {
+    if (!restrictions) return false;
+    if (restrictions.closedToArrival) return true;
+    if (restrictions.closedToDeparture) return true;
+    if (restrictions.minLos > 0 && restrictions.minLos > numberOfNights) return true;
+    if (restrictions.maxLos > 0 && restrictions.maxLos < numberOfNights) return true;
+    return false;
+  };
+
   const renderRateRow = (rate: Room) => {
     const perNight = numberOfNights > 0 ? rate.totalRate / numberOfNights : rate.totalRate;
     const originalPerNight = rate.originalRate && numberOfNights > 0 ? rate.originalRate / numberOfNights : undefined;
     const rateCartItem = cart.find(c => cartKey(c.roomTypeID, c.rateID) === cartKey(rate.roomTypeID, rate.rateID));
     const isInCart = !!rateCartItem;
     const otherRateInCart = !isInCart && cart.some(c => c.roomTypeID === rate.roomTypeID);
+    const blocked = isRateBlocked(rate.restrictions);
+    const restrictionMsgs = getRestrictionMessages(rate.restrictions);
 
     return (
-      <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : otherRateInCart ? 'opacity-50' : ''}`}>
+      <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : (otherRateInCart || blocked) ? 'opacity-50' : ''}`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <p className="font-medium text-ink text-sm font-body">{translateRateName(rate.rateName, currentLocale)}</p>
-            {otherRateInCart && (
+            {otherRateInCart && !blocked && (
               <p className="text-red-500 text-xs font-body mt-1">
                 {currentLocale === 'mn' ? 'Сагсанд байгаа бараатай хамт авах боломжгүй' : 'Not available with items in your cart'}
               </p>
+            )}
+            {restrictionMsgs.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                {restrictionMsgs.map((msg, i) => (
+                  <span key={i} className="inline-flex items-center gap-1 text-xs text-orange-700 bg-orange-50 border border-orange-200 rounded px-2 py-0.5 font-body">
+                    <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+                    {msg}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
           <div className="flex items-center gap-4">
@@ -374,7 +429,7 @@ function BookingContent() {
                   {currentLocale === 'mn' ? 'Сонгосон' : 'Added'}
                 </button>
               </div>
-            ) : otherRateInCart ? (
+            ) : (otherRateInCart || blocked) ? (
               <button disabled className="px-5 py-2 bg-gray-200 text-gray-400 text-sm font-serif font-medium rounded-full cursor-not-allowed">
                 {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
               </button>
@@ -477,6 +532,31 @@ function BookingContent() {
                   : `Search results for ${totalAdults} adult${totalAdults > 1 ? 's' : ''}`}
                 {totalChildren > 0 && (currentLocale === 'mn' ? `, ${totalChildren} хүүхэд` : ` and ${totalChildren} child${totalChildren > 1 ? 'ren' : ''}`)}
               </p>
+
+              {(() => {
+                const allRestrictions = rooms
+                  .filter(r => r.restrictions)
+                  .flatMap(r => getRestrictionMessages(r.restrictions));
+                const uniqueRestrictions = [...new Set(allRestrictions)];
+                if (uniqueRestrictions.length === 0) return null;
+                return (
+                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                    <div className="flex items-start gap-2.5">
+                      <AlertTriangle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-orange-800 text-sm font-body mb-1">
+                          {currentLocale === 'mn' ? 'Сонгосон огнооны хязгаарлалтууд' : 'Restrictions for selected dates'}
+                        </p>
+                        <ul className="space-y-0.5">
+                          {uniqueRestrictions.map((msg, i) => (
+                            <li key={i} className="text-orange-700 text-xs font-body">{msg}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {groupedRooms
                 .filter(group => (group.maxGuests || 0) >= totalGuests)
