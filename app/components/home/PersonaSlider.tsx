@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocale } from "next-intl";
-import { ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -261,15 +261,6 @@ export default function PersonaSlider() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-surface/10 flex flex-col md:flex-row items-center justify-center gap-4 text-center">
-            <ShieldCheck className="w-5 h-5 text-main/40" />
-            <p className="font-body text-main/40 text-sm tracking-wide">
-              {locale === 'mn' 
-                ? "1998 оноос хойш төр, нийгмийн зүтгэлтнүүд болон гэр бүлүүдийн итгэлийг хүлээсэн." 
-                : "Trusted by leaders, executives, and families since 1998."
-              }
-            </p>
-        </div>
       </div>
     </section>
   );

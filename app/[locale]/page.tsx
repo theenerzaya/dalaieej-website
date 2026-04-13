@@ -5,6 +5,7 @@ import EditorialIntro from "../components/home/EditorialIntro";
 import SiloGrid from "../components/home/SiloGrid";
 import OffersCarousel from "../components/home/OffersCarousel";
 import PersonaSlider from "../components/home/PersonaSlider";
+import Testimonials from "../components/home/Testimonials";
 import InteractiveMap from "../components/InteractiveMap";
 import AvailabilityBar from "../components/AvailabilityBar";
 
@@ -16,6 +17,7 @@ export default function Home() {
       <SiloGrid />
       <OffersCarousel />
       <PersonaSlider />
+      <Testimonials />
       <InteractiveMap />
       <AvailabilityBar />
     </main>

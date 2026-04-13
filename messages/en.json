@@ -142,17 +142,23 @@
     },
     "testimonials": {
       "title": "Guest Experiences",
+      "subtitle": "What our guests say",
+      "heritage": "Trusted by leaders, executives, and families since 1998.",
+      "ratingLabel": "Exceptional",
+      "reviewCount": "Based on 35 reviews",
       "review1": {
-        "text": "Waking up to the sound of the waves and the smell of pine trees was magical. The heritage cabin was cozy and warm even on chilly nights.",
-        "author": "Sarah J., USA"
+        "text": "A peaceful, lovely stay on the quieter side of the lake. Family-run, with walking trails, a private sauna at the water's edge, and great food.",
+        "author": "Michael R.",
+        "source": "TripAdvisor"
       },
       "review2": {
-        "text": "The staff went above and beyond to help us organize a trip to the Reindeer herders. Truly the highlight of our Mongolia trip.",
-        "author": "Bat-Erdene, Ulaanbaatar"
+        "text": "Maria was overwhelmed. Had a wonderful time with you and the family. Bless you.",
+        "author": "Werner & Maria"
       },
       "review3": {
-        "text": "Perfect location. Right on the water, but quiet and peaceful. The food at the restaurant was surprisingly good for such a remote spot!",
-        "author": "Alex & Marie, France"
+        "text": "The hospitality of the owner and staff was the most wonderful thing. I spent a quiet, peaceful time — a wonderful memory of Mongolia.",
+        "author": "Makoto",
+        "source": "Booking.com"
       }
     },
     "policies": {
