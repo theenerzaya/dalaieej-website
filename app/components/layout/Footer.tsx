@@ -18,12 +18,12 @@ export default function Footer() {
     { key: "adventures", href: "#" },
   ];
 
-  const resortLinks = [
+  const resortLinks: { key: string; href: string; external?: boolean }[] = [
     { key: "about", href: "/about-us" },
-    { key: "catalogue", href: "/catalogue" },
+    { key: "catalogue", href: "https://online.fliphtml5.com/scxec/iewd/", external: true },
     { key: "gallery", href: "#" },
     { key: "faq", href: "#" },
-    { key: "route-finder", href: "/route-finder" }
+    { key: "route-finder", href: "#" }
   ];
 
   return (
@@ -75,12 +75,23 @@ export default function Footer() {
             <ul className="space-y-3">
               {resortLinks.map((item) => (
                 <li key={item.key}>
-                  <Link
-                    href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
-                    className="font-body text-sm text-main/80 hover:text-white transition-colors"
-                  >
-                    {t(item.key)}
-                  </Link>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-body text-sm text-main/80 hover:text-white transition-colors"
+                    >
+                      {t(item.key)}
+                    </a>
+                  ) : (
+                    <Link
+                      href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
+                      className="font-body text-sm text-main/80 hover:text-white transition-colors"
+                    >
+                      {t(item.key)}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
