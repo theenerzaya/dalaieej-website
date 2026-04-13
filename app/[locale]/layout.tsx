@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Lato, Pinyon_Script, Merriweather } from "next/font/google";
+import localFont from "next/font/local";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -9,32 +9,21 @@ import NavbarWrapper from "../components/NavbarWrapper";
 import Footer from "../components/layout/Footer";
 
 // Font Configurations for the "Heritage" Aesthetic
-const playfair = Playfair_Display({
+const vogun = localFont({
+  src: "../../public/fonts/Vogun-Medium.ttf",
   variable: "--font-heading",
-  subsets: ["latin"],
+  weight: "500",
   display: "swap",
 });
 
-const lato = Lato({
+const gip = localFont({
+  src: "../../public/fonts/GIP-Medium.otf",
   variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
+  weight: "500",
   display: "swap",
 });
 
-const pinyonScript = Pinyon_Script({
-  variable: "--font-script",
-  subsets: ["latin"],
-  weight: "400",
-  display: "swap",
-});
 
-const merriweather = Merriweather({
-  variable: "--font-editorial",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
-  display: "swap",
-});
 
 // Dynamic SEO, Social Media, and Favicon Metadata
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -141,7 +130,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           }) }}
         />
       </head>
-      <body className={`${playfair.variable} ${lato.variable} ${pinyonScript.variable} ${merriweather.variable} antialiased`} suppressHydrationWarning>
+      <body className={`${vogun.variable} ${gip.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
             Skip to main content
