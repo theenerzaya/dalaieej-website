@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Users, Check, Tag, Loader2, Plus, Minus, AlertTriangle } from "lucide-react";
+import { Users, Check, Tag, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 interface Room {
@@ -21,10 +21,22 @@ interface Room {
   features: string[];
 }
 
+interface RoomTypeGroup {
+  roomTypeName: string;
+  roomsAvailable: number;
+  description: string;
+  maxGuests: number;
+  photos: string[];
+  features: string[];
+  currency: string;
+  rates: Room[];
+}
+
 interface CartItem {
   roomTypeID: string;
   roomTypeName: string;
   rateID: string;
+  rateName: string;
   maxGuests: number;
   pricePerNight: number;
   currency: string;
@@ -38,6 +50,12 @@ interface AvailabilityData {
   checkin: string;
   checkout: string;
   rooms: Room[];
+}
+
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr + 'T00:00:00');
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 function calculateNights(checkinDate: string, checkoutDate: string): number {
@@ -79,13 +97,44 @@ function BookingContent() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
+  const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
 
   const totalGuests = totalAdults + totalChildren;
   const cartCapacity = cart.reduce((sum, item) => sum + (item.maxGuests * item.quantity), 0);
-
-  // FIX: Removed guest multiplier. Price is simply Rate * Quantity * Nights.
   const cartTotal = cart.reduce((sum, item) => sum + (item.pricePerNight * item.quantity * numberOfNights), 0);
   const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const cartKey = (roomTypeID: string, rateID: string) => `${roomTypeID}__${rateID}`;
+
+  const toggleExpand = (roomTypeName: string) => {
+    setExpandedRooms(prev => {
+      const next = new Set(prev);
+      if (next.has(roomTypeName)) next.delete(roomTypeName);
+      else next.add(roomTypeName);
+      return next;
+    });
+  };
+
+  const groupedRooms = useMemo<RoomTypeGroup[]>(() => {
+    const groups = new Map<string, RoomTypeGroup>();
+    for (const room of rooms) {
+      const key = room.roomTypeName;
+      if (!groups.has(key)) {
+        groups.set(key, {
+          roomTypeName: room.roomTypeName,
+          roomsAvailable: room.roomsAvailable,
+          description: room.description,
+          maxGuests: room.maxGuests,
+          photos: room.photos,
+          features: room.features,
+          currency: room.currency,
+          rates: [],
+        });
+      }
+      groups.get(key)!.rates.push(room);
+    }
+    return Array.from(groups.values());
+  }, [rooms]);
 
   useEffect(() => {
     if (cart.length > 0 && cartCapacity < totalGuests) {
@@ -114,7 +163,6 @@ function BookingContent() {
       setAppliedPromo(urlPromo);
     }
 
-    // Fallback values for parsing
     const parsedAdults = urlAdults ? parseInt(urlAdults) : 2;
     const parsedChildren = urlChildren ? parseInt(urlChildren) : 0;
 
@@ -123,19 +171,16 @@ function BookingContent() {
 
     if (urlCheckin && urlCheckout) {
       setNumberOfNights(calculateNights(urlCheckin, urlCheckout));
-      // Now TypeScript knows these are safe numbers
       fetchAvailability(urlCheckin, urlCheckout, urlPromo || "", parsedAdults, parsedChildren);
     }
   }, [searchParams]);
   
-  // RESTORED: We now pass the REAL guest count to the API.
   const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "", adults: number = totalAdults, children: number = totalChildren) => {
     setLoading(true);
     setError("");
     setRooms([]);
 
     try {
-      // Cloudbeds returns the TOTAL price for this specific number of adults.
       let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&adults=${adults}&children=${children}`;
 
       if (promo) {
@@ -178,14 +223,16 @@ function BookingContent() {
   };
 
   const toggleRoomSelection = (room: Room) => {
-    const existingIndex = cart.findIndex(item => item.roomTypeID === room.roomTypeID);
-    if (existingIndex >= 0) {
-      setCart(cart.filter(item => item.roomTypeID !== room.roomTypeID));
+    const key = cartKey(room.roomTypeID, room.rateID);
+    const exists = cart.find(item => cartKey(item.roomTypeID, item.rateID) === key);
+    if (exists) {
+      setCart(cart.filter(item => cartKey(item.roomTypeID, item.rateID) !== key));
     } else {
       const newItem: CartItem = {
         roomTypeID: room.roomTypeID,
         roomTypeName: room.roomTypeName,
         rateID: room.rateID,
+        rateName: room.rateName,
         maxGuests: room.maxGuests || 2,
         pricePerNight: numberOfNights > 0 ? (room.totalRate || 0) / numberOfNights : (room.totalRate || 0),
         currency: room.currency || 'MNT',
@@ -197,12 +244,13 @@ function BookingContent() {
     }
   };
 
-  const updateRoomQuantity = (roomTypeID: string, delta: number) => {
-    const room = rooms.find(r => r.roomTypeID === roomTypeID);
+  const updateRoomQuantity = (roomTypeID: string, rateID: string, delta: number) => {
+    const room = rooms.find(r => r.roomTypeID === roomTypeID && r.rateID === rateID);
     const maxAvailable = room?.roomsAvailable || 10;
+    const key = cartKey(roomTypeID, rateID);
 
     setCart(cart.map(item => {
-      if (item.roomTypeID === roomTypeID) {
+      if (cartKey(item.roomTypeID, item.rateID) === key) {
         const newQty = item.quantity + delta;
         if (newQty <= 0) return null;
         return { ...item, quantity: Math.min(maxAvailable, newQty) };
@@ -265,14 +313,56 @@ function BookingContent() {
   useEffect(() => {
     setMinDate(new Date().toISOString().split("T")[0]);
   }, []);
+
   const placeholderImages = [
     "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&auto=format&fit=crop&q=80",
   ];
 
+  const renderRateRow = (rate: Room) => {
+    const perNight = numberOfNights > 0 ? rate.totalRate / numberOfNights : rate.totalRate;
+    const rateCartItem = cart.find(c => cartKey(c.roomTypeID, c.rateID) === cartKey(rate.roomTypeID, rate.rateID));
+    const isInCart = !!rateCartItem;
+
+    return (
+      <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : ''}`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p className="font-medium text-ink text-sm font-body">{rate.rateName}</p>
+          </div>
+          <div className="flex items-center gap-4">
+            {perNight > 0 && (
+              <div className="text-right">
+                <p className="font-serif text-lg font-bold text-ink">{perNight.toLocaleString()}</p>
+                <p className="text-ink/50 text-xs font-body">{rate.currency || 'MNT'} / {t('perNight')}</p>
+              </div>
+            )}
+            {isInCart ? (
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 bg-surface-alt rounded-lg px-2 py-1">
+                  <button onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, -1)} className="w-7 h-7 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors"><Minus className="w-3.5 h-3.5" /></button>
+                  <span className="w-6 text-center font-semibold text-ink text-sm font-body">{rateCartItem.quantity}</span>
+                  <button onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, 1)} disabled={rateCartItem.quantity >= rate.roomsAvailable} className="w-7 h-7 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-3.5 h-3.5" /></button>
+                </div>
+                <button onClick={() => toggleRoomSelection(rate)} className="px-4 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors flex items-center gap-1.5">
+                  <Check className="w-4 h-4" />
+                  {currentLocale === 'mn' ? 'Сонгосон' : 'Added'}
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => toggleRoomSelection(rate)} className="px-5 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors">
+                {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <main className="min-h-screen bg-surface-alt pt-24 md:pt-16 pb-32">
+    <main className="min-h-screen bg-surface-alt pt-24 md:pt-16 pb-32 lg:pb-8">
       <div className="bg-ink py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">{t('findRoom')}</h1>
@@ -349,109 +439,197 @@ function BookingContent() {
         )}
 
         {!loading && rooms.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {rooms
-              // Filter logic remains to ensure rooms are big enough for the group
-              .filter(room => (room.maxGuests || 0) >= totalGuests)
-              .map((room, index) => {
-                const perNightRate = room.totalRate && numberOfNights > 0 ? Number(room.totalRate) / numberOfNights : (Number(room.totalRate) || 0);
-                const hasPrice = perNightRate > 0;
-                const photos = room.photos || [];
-                const features = room.features || [];
-                const cartItem = cart.find(item => item.roomTypeID === room.roomTypeID);
-                const isSelected = !!cartItem;
-                const maxGuests = room.maxGuests || 2;
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Room list */}
+            <div className="flex-1 space-y-6 min-w-0">
+              <p className="text-ink/60 text-sm font-body">
+                {currentLocale === 'mn'
+                  ? `${totalAdults} насанд хүрэгчдэд зориулсан хайлтын үр дүн`
+                  : `Search results for ${totalAdults} adult${totalAdults > 1 ? 's' : ''}`}
+                {totalChildren > 0 && (currentLocale === 'mn' ? `, ${totalChildren} хүүхэд` : ` and ${totalChildren} child${totalChildren > 1 ? 'ren' : ''}`)}
+              </p>
 
-                return (
-                  <div key={room.roomTypeID || index} className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all ${isSelected ? 'ring-2 ring-bark' : ''}`}>
-                    <div className="relative h-48 overflow-hidden">
-                      <img src={photos[0] || placeholderImages[index % placeholderImages.length]} alt={room.roomTypeName || "Room"} className="w-full h-full object-cover" />
-                      {room.roomsAvailable && room.roomsAvailable <= 3 && (
-                        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded font-body">
-                          {t('onlyLeft', { count: room.roomsAvailable })}
+              {groupedRooms
+                .filter(group => (group.maxGuests || 0) >= totalGuests)
+                .map((group, index) => {
+                  const photos = group.photos || [];
+                  const maxGuests = group.maxGuests || 2;
+                  const isExpanded = expandedRooms.has(group.roomTypeName);
+                  const hasCartItem = group.rates.some(r => cart.some(c => cartKey(c.roomTypeID, c.rateID) === cartKey(r.roomTypeID, r.rateID)));
+
+                  return (
+                    <div key={group.roomTypeName || index} className={`bg-white rounded-xl overflow-hidden shadow-lg transition-all ${hasCartItem ? 'ring-2 ring-bark' : ''}`}>
+                      <div className="flex flex-col md:flex-row">
+                        <div className="relative md:w-64 lg:w-72 h-56 md:h-auto flex-shrink-0">
+                          <img
+                            src={photos[0] || placeholderImages[index % placeholderImages.length]}
+                            alt={group.roomTypeName || "Room"}
+                            className="w-full h-full object-cover"
+                          />
+                          {group.roomsAvailable && group.roomsAvailable <= 3 && (
+                            <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded font-body">
+                              {t('onlyLeft', { count: group.roomsAvailable })}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {isSelected && (
-                        <div className="absolute top-3 left-3 bg-bark text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 font-medium font-body">
-                          <Check className="w-3.5 h-3.5" />
-                          {currentLocale === 'mn' ? 'Сонгосон' : 'Selected'}
-                        </div>
-                      )}
-                    </div>
 
-                    <div className="p-5">
-                      <h3 className="font-serif text-xl text-ink mb-2">
-                        <Link href={getRoomDetailPath(room.roomTypeName)} className="hover:text-ink/70 underline underline-offset-4 decoration-ink/30 hover:decoration-ink/60 transition-colors">
-                          {room.roomTypeName || "Room"}
-                        </Link>
-                      </h3>
+                        <div className="flex-1 p-5 md:p-6">
+                          <h3 className="font-serif text-xl text-ink mb-1">
+                            <Link href={getRoomDetailPath(group.roomTypeName)} className="hover:text-ink/70 underline underline-offset-4 decoration-ink/30 hover:decoration-ink/60 transition-colors">
+                              {group.roomTypeName || "Room"}
+                            </Link>
+                          </h3>
 
-                      <div 
-                        className="text-ink/60 text-sm mb-4 line-clamp-2 font-body"
-                        dangerouslySetInnerHTML={{ __html: room.description || "Luxurious accommodation" }}
-                      />
+                          <div className="flex items-center gap-1.5 text-sm text-ink/70 font-body mb-3">
+                            <Users className="w-4 h-4" />
+                            <span>{maxGuests}</span>
+                          </div>
 
-                      <div className="flex items-center gap-4 mb-4 text-sm text-ink/70 font-body">
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-4 h-4" />
-                          <span>{currentLocale === 'mn' ? `${maxGuests} хүн хүртэл` : `Up to ${maxGuests} guests`}</span>
+                          <div
+                            className="text-ink/60 text-sm mb-4 line-clamp-2 font-body"
+                            dangerouslySetInnerHTML={{ __html: group.description || "" }}
+                          />
+
+                          <Link href={getRoomDetailPath(group.roomTypeName)} className="text-sm text-bark hover:text-bark/80 font-medium font-body transition-colors">
+                            {currentLocale === 'mn' ? 'Дэлгэрэнгүй' : 'View details'}
+                          </Link>
                         </div>
                       </div>
 
-                      {features.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          {features.slice(0, 3).map((feature, idx) => (
-                            <span key={idx} className="flex items-center gap-1 text-xs text-ink/60 bg-surface-alt px-2 py-1 rounded font-body">
-                              <Check className="w-3 h-3" />{feature}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      {/* Rate plans */}
+                      <div className="border-t border-ink/10">
+                        {group.rates.length > 0 && (() => {
+                          const defaultRate = group.rates.reduce((min, r) => (r.totalRate > 0 && r.totalRate < min.totalRate) || min.totalRate === 0 ? r : min, group.rates[0]);
+                          return renderRateRow(defaultRate);
+                        })()}
 
-                      <div className="pt-4 border-t border-ink/10">
-                        {hasPrice ? (
+                        {group.rates.length > 1 && (
                           <>
-                            <div className="flex items-center justify-between mb-4">
-                              <div>
-                                {/* FIX: Display the API returned rate directly without frontend multiplication */}
-                                <p className="font-serif text-2xl text-ink font-bold">{perNightRate.toLocaleString()}</p>
-                                <p className="text-ink/50 text-xs font-body">{room.currency || "MNT"} / {t('perNight')}</p>
-                              </div>
-                              {numberOfNights > 1 && (
-                                <div className="text-right">
-                                  <p className="text-sm text-ink/70 font-body">{numberOfNights} {t('nights')}</p>
-                                  <p className="font-semibold text-ink font-serif">{(perNightRate * numberOfNights).toLocaleString()} {room.currency}</p>
-                                </div>
-                              )}
-                            </div>
-                            {isSelected ? (
-                              <div className="space-y-3">
-                                <div className="flex items-center justify-between bg-surface-alt rounded-lg p-3">
-                                  <span className="text-sm text-ink font-body">{currentLocale === 'mn' ? 'Тоо хэмжээ' : 'Quantity'}</span>
-                                  <div className="flex items-center gap-3">
-                                    <button onClick={() => updateRoomQuantity(room.roomTypeID, -1)} className="w-8 h-8 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors"><Minus className="w-4 h-4" /></button>
-                                    <span className="w-8 text-center font-semibold text-ink font-body">{cartItem.quantity}</span>
-                                    <button onClick={() => updateRoomQuantity(room.roomTypeID, 1)} disabled={cartItem.quantity >= room.roomsAvailable} className="w-8 h-8 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-4 h-4" /></button>
-                                  </div>
-                                </div>
-                                <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors flex items-center justify-center gap-2">
-                                  <Check className="w-5 h-5" />{currentLocale === 'mn' ? 'Сонгосон' : 'Selected'}
-                                </button>
-                              </div>
-                            ) : (
-                              <button onClick={() => toggleRoomSelection(room)} className="w-full py-3 bg-bark text-white font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors">
-                                {currentLocale === 'mn' ? 'Сонгох' : 'Select Room'}
+                            <div className="border-t border-ink/10">
+                              <button
+                                onClick={() => toggleExpand(group.roomTypeName)}
+                                className="w-full px-5 md:px-6 py-3 flex items-center justify-center gap-2 text-sm text-bark font-medium font-body hover:bg-surface-alt/50 transition-colors"
+                              >
+                                {isExpanded
+                                  ? (currentLocale === 'mn' ? 'Саналуудыг хаах' : 'Hide offers')
+                                  : (currentLocale === 'mn' ? 'Саналуудыг харах' : 'View offers')
+                                }
+                                {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                               </button>
-                            )}
+                            </div>
+
+                            {isExpanded && group.rates.slice(1).map((rate) => (
+                              <div key={rate.rateID} className="border-t border-ink/10">
+                                {renderRateRow(rate)}
+                              </div>
+                            ))}
                           </>
-                        ) : (
-                          <div className="text-center"><p className="font-serif text-lg text-ink/50">{t('contactUs')}</p></div>
                         )}
                       </div>
                     </div>
+                  );
+                })}
+            </div>
+
+            {/* Reservation Summary sidebar (desktop) */}
+            {cart.length > 0 && (
+              <div className="hidden lg:block w-80 flex-shrink-0">
+                <div className="sticky top-24">
+                  <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div className="p-5 border-b border-ink/10">
+                      <h3 className="font-serif text-lg font-semibold text-ink text-center">
+                        {currentLocale === 'mn' ? 'Захиалгын хураангуй' : 'Reservation Summary'}
+                      </h3>
+                    </div>
+
+                    <div className="p-5">
+                      <div className="flex items-center justify-between text-sm font-body mb-1">
+                        <span className="text-ink">{formatDate(checkin)}</span>
+                        <ArrowRight className="w-4 h-4 text-ink/40" />
+                        <span className="text-ink">{formatDate(checkout)}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-sm text-ink/60 font-body mb-5">
+                        <Moon className="w-3.5 h-3.5" />
+                        <span>{numberOfNights} {currentLocale === 'mn' ? 'шөнө' : `Night${numberOfNights > 1 ? 's' : ''}`}</span>
+                      </div>
+
+                      <div className="space-y-4 mb-5">
+                        {cart.map((item) => (
+                          <div key={cartKey(item.roomTypeID, item.rateID)} className="pb-4 border-b border-ink/10 last:border-0 last:pb-0">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-ink text-sm font-body">{item.roomTypeName}</p>
+                                <p className="text-ink/50 text-xs font-body">{item.rateName}</p>
+                              </div>
+                              <p className="font-serif text-sm font-semibold text-ink whitespace-nowrap">
+                                {(item.pricePerNight * item.quantity * numberOfNights).toLocaleString()}
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-between mt-2">
+                              <div className="flex items-center gap-1.5 text-xs text-ink/60 font-body">
+                                <Users className="w-3.5 h-3.5" />
+                                <span>{item.quantity > 1 ? `${item.quantity} x ` : ''}{item.maxGuests}</span>
+                              </div>
+                              <button
+                                onClick={() => toggleRoomSelection({ roomTypeID: item.roomTypeID, rateID: item.rateID, roomTypeName: item.roomTypeName, rateName: item.rateName, totalRate: item.pricePerNight * numberOfNights, currency: item.currency, maxGuests: item.maxGuests, roomsAvailable: 0, description: '', photos: [], features: [] })}
+                                className="w-7 h-7 flex items-center justify-center rounded-full border border-red-200 text-red-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="border-t border-ink/10 pt-4 space-y-2">
+                        <div className="flex justify-between text-sm font-body">
+                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Нийлбэр' : 'Subtotal'}</span>
+                          <span className="text-ink">{cartTotal.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm font-body">
+                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Татвар, хураамж' : 'Taxes and fees'}</span>
+                          <span className="text-ink">0.00</span>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t border-ink/10">
+                          <span className="font-serif font-bold text-ink">{currentLocale === 'mn' ? 'Нийт' : 'Total'}</span>
+                          <span className="font-serif font-bold text-ink">MNT {cartTotal.toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-4 border-t border-ink/10">
+                        <p className="text-xs text-ink/60 font-body font-medium uppercase tracking-wider mb-2">
+                          {currentLocale === 'mn' ? 'Төлбөрийн хуваарь' : 'Payment Schedule'}
+                        </p>
+                        <div className="flex justify-between text-sm font-body">
+                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Урьдчилгаа' : 'Deposit'}</span>
+                          <span className="text-ink">{cartTotal.toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      {capacityError && (
+                        <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-start gap-2">
+                          <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
+                          <p className="text-orange-700 text-xs font-body">{capacityError}</p>
+                        </div>
+                      )}
+
+                      <button
+                        onClick={proceedToCheckout}
+                        disabled={cartCapacity < totalGuests}
+                        className={`w-full mt-5 py-3 font-serif font-semibold text-sm rounded-lg transition-colors ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                      >
+                        {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
+                      </button>
+
+                      <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-ink/50 font-body">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>{currentLocale === 'mn' ? 'Аюулгүй онлайн төлбөр' : 'Secure Online Payment'}</span>
+                      </div>
+                    </div>
                   </div>
-                );
-              })}
+                </div>
+              </div>
+            )}
           </div>
         )}
         {!searched && !loading && <div className="text-center py-12"><p className="text-ink/50 text-lg font-body">{t('selectDatesPrompt')}</p></div>}
@@ -461,8 +639,9 @@ function BookingContent() {
         <a href={localePrefix || "/"} className="text-ink/50 text-sm hover:text-ink transition-colors font-body">&larr; {t('backToHome')}</a>
       </div>
 
+      {/* Mobile bottom bar */}
       {cart.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-ink/10 shadow-2xl z-50">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-ink/10 shadow-2xl z-50">
           <div className="max-w-6xl mx-auto px-4 py-4">
             {capacityError && (
               <div className="mb-3 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-2">
@@ -470,18 +649,14 @@ function BookingContent() {
                 <p className="text-orange-700 text-sm font-body">{capacityError}</p>
               </div>
             )}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3 text-sm text-ink font-body">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-2 text-sm text-ink font-body">
                 <span className="font-medium">{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
                 <span className="text-ink/30">•</span>
-                <span>{totalGuests} {currentLocale === 'mn' ? 'зочин' : 'Guests'}</span>
-                <span className="text-ink/30">•</span>
-                <span>{numberOfNights} {currentLocale === 'mn' ? 'шөнө' : 'Night(s)'}</span>
-                <span className="text-ink/30">•</span>
-                <span className="font-serif text-xl font-bold">{cartTotal.toLocaleString()} MNT</span>
+                <span className="font-serif text-lg font-bold">{cartTotal.toLocaleString()} MNT</span>
               </div>
-              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-8 py-3 font-serif uppercase tracking-widest text-sm rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
-                {currentLocale === 'mn' ? 'Захиалга үргэлжлүүлэх' : 'Complete Reservation'}
+              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-6 py-3 font-serif uppercase tracking-widest text-xs rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+                {currentLocale === 'mn' ? 'Захиалах' : 'Book Now'}
               </button>
             </div>
           </div>
