@@ -100,13 +100,17 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
+          id="navigation-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
           className="fixed inset-0 z-[100] bg-leaf text-main flex flex-col"
         >
           {/* Header: Close Button */}
           <div className="flex justify-end p-6 md:p-8 shrink-0 z-20">
             <button
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none"
+              className="p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50"
               aria-label="Close menu"
             >
               <X className="w-8 h-8 text-main" />
@@ -138,18 +142,18 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         {isMongolian ? item.mn : item.label}
                       </Link>
                     ) : (
-                      <Link
-                        href="#"
-                        onClick={(e) => { e.preventDefault(); }}
+                      <span
+                        role="link"
+                        aria-disabled="true"
                         onMouseEnter={() => setHoveredLink(item.id)}
                         onMouseLeave={() => setHoveredLink(null)}
-                        className="font-serif text-4xl md:text-6xl text-main/60 hover:text-white transition-colors tracking-wide block"
+                        className="font-serif text-4xl md:text-6xl text-main/60 hover:text-white transition-colors tracking-wide block cursor-default"
                       >
                         {isMongolian ? item.mn : item.label}
                         <span className="ml-3 font-body text-xs md:text-sm tracking-[0.15em] uppercase text-main/40 align-middle">
                           {isMongolian ? "Тун удахгүй" : "Coming Soon"}
                         </span>
-                      </Link>
+                      </span>
                     )}
                   </motion.div>
                 ))}
@@ -182,16 +186,16 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           rel="noopener noreferrer"
                           className={linkClass}
                         >
-                          <Icon className="w-4 h-4 text-main/60 group-hover:text-white transition-colors" />
+                          <Icon className="w-4 h-4 text-main/60 group-hover:text-white transition-colors" aria-hidden="true" />
                           <span>{isMongolian ? item.mn : item.label}</span>
                         </a>
                       ) : (
                         <Link
-                          href="#"
-                          onClick={(e) => { e.preventDefault(); }}
+                          href={`${isMongolian ? "/mn" : ""}${item.href}`}
+                          onClick={onClose}
                           className={linkClass}
                         >
-                          <Icon className="w-4 h-4 text-main/60 group-hover:text-white transition-colors" />
+                          <Icon className="w-4 h-4 text-main/60 group-hover:text-white transition-colors" aria-hidden="true" />
                           <span>{isMongolian ? item.mn : item.label}</span>
                         </Link>
                       )}

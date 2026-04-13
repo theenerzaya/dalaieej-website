@@ -46,9 +46,9 @@ export default function InteractiveMap() {
 
   return (
     <section className="bg-surface-alt py-20 px-8">
-      <div className="hidden">
+      <div className="hidden" aria-hidden="true">
         {locations.map((loc) => (
-           loc.image && <Image key={loc.id} src={loc.image} alt="preload" width={10} height={10} priority />
+           loc.image && <Image key={loc.id} src={loc.image} alt="" width={10} height={10} priority />
         ))}
       </div>
 
@@ -85,6 +85,8 @@ export default function InteractiveMap() {
               >
                 <button
                   onClick={(e) => handleHotspotClick(e, location.id)}
+                  aria-label={t(`map.${location.id}.title`)}
+                  aria-expanded={activeHotspot === location.id}
                   className={`relative flex items-center justify-center transition-all duration-300 ${
                     isArrowMarker(location.id)
                       ? `w-[30.5px] h-[30.5px] rounded-md ${
@@ -100,9 +102,9 @@ export default function InteractiveMap() {
                   }`}
                 >
                   {isArrowMarker(location.id) ? (
-                    <ArrowUpRight className="w-5 h-5 rotate-180" />
+                    <ArrowUpRight className="w-5 h-5 rotate-180" aria-hidden="true" />
                   ) : (
-                    <span className="text-2xl font-light">+</span>
+                    <span className="text-2xl font-light" aria-hidden="true">+</span>
                   )}
                   {!isArrowMarker(location.id) && (
                     <span className="absolute w-full h-full rounded-full bg-leaf/30 animate-ping" />
@@ -121,9 +123,10 @@ export default function InteractiveMap() {
                     >
                       <button
                         onClick={() => setActiveHotspot(null)}
+                        aria-label={t(`map.${location.id}.title`) + ' — close'}
                         className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-4 h-4" aria-hidden="true" />
                       </button>
                       {location.image && !location.noImage && (
                         <div className="relative aspect-video w-full">

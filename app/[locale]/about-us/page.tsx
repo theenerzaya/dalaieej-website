@@ -93,10 +93,11 @@ export default function AboutUsPage() {
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
   return (
-    <div className="bg-main text-ink min-h-screen" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E\")" }}>
+    <main id="main-content" className="bg-main text-ink min-h-screen" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E\")" }}>
 
       <section className="pt-28 md:pt-36 pb-12 md:pb-20">
         <div className="max-w-5xl mx-auto px-6">
+          <h1 className="sr-only">{isMn ? 'Бидний тухай' : 'Our Story'}</h1>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -243,6 +244,6 @@ export default function AboutUsPage() {
       </section>
 
       <div className="pb-20" />
-    </div>
+    </main>
   );
 }

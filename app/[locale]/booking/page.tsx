@@ -378,7 +378,7 @@ function BookingContent() {
   };
 
   return (
-    <main className="min-h-screen bg-surface-alt pt-24 md:pt-16 pb-32 lg:pb-8">
+    <main id="main-content" className="min-h-screen bg-surface-alt pt-24 md:pt-16 pb-32 lg:pb-8">
       <div className="bg-ink py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">{t('findRoom')}</h1>
@@ -386,29 +386,29 @@ function BookingContent() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-4xl mx-auto flex-wrap">
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkIn')}</label>
-              <input type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
+              <label htmlFor="checkin-date" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkIn')}</label>
+              <input id="checkin-date" type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
             </div>
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkOut')}</label>
-              <input type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
+              <label htmlFor="checkout-date" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkOut')}</label>
+              <input id="checkout-date" type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
             </div>
 
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Насанд хүрэгчид' : 'Adults'}</label>
-              <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2">
-                <button onClick={() => setTotalAdults(Math.max(1, totalAdults - 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="w-8 text-center text-main font-semibold font-body">{totalAdults}</span>
-                <button onClick={() => setTotalAdults(Math.min(20, totalAdults + 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
+              <span id="adults-label" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Насанд хүрэгчид' : 'Adults'}</span>
+              <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2" role="group" aria-labelledby="adults-label">
+                <button onClick={() => setTotalAdults(Math.max(1, totalAdults - 1))} aria-label={currentLocale === 'mn' ? 'Насанд хүрэгчдийг хасах' : 'Decrease adults'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
+                <span className="w-8 text-center text-main font-semibold font-body" aria-live="polite">{totalAdults}</span>
+                <button onClick={() => setTotalAdults(Math.min(20, totalAdults + 1))} aria-label={currentLocale === 'mn' ? 'Насанд хүрэгчдийг нэмэх' : 'Increase adults'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
             </div>
 
             <div className="flex flex-col">
-              <label className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Хүүхдүүд' : 'Children'}</label>
-              <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2">
-                <button onClick={() => setTotalChildren(Math.max(0, totalChildren - 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="w-8 text-center text-main font-semibold font-body">{totalChildren}</span>
-                <button onClick={() => setTotalChildren(Math.min(10, totalChildren + 1))} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
+              <span id="children-label" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Хүүхдүүд' : 'Children'}</span>
+              <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2" role="group" aria-labelledby="children-label">
+                <button onClick={() => setTotalChildren(Math.max(0, totalChildren - 1))} aria-label={currentLocale === 'mn' ? 'Хүүхдүүдийг хасах' : 'Decrease children'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
+                <span className="w-8 text-center text-main font-semibold font-body" aria-live="polite">{totalChildren}</span>
+                <button onClick={() => setTotalChildren(Math.min(10, totalChildren + 1))} aria-label={currentLocale === 'mn' ? 'Хүүхдүүдийг нэмэх' : 'Increase children'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
               </div>
             </div>
 
@@ -419,8 +419,9 @@ function BookingContent() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4 max-w-md mx-auto">
             <div className="flex items-center gap-2 flex-1 w-full sm:w-auto">
-              <Tag className="w-4 h-4 text-main/70" />
-              <input type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} placeholder={t('enterPromo')} className="flex-1 px-3 py-2 bg-white/10 border border-main/30 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 text-sm uppercase tracking-wider font-body" />
+              <label htmlFor="promo-code" className="sr-only">{t('promoCode')}</label>
+              <Tag className="w-4 h-4 text-main/70" aria-hidden="true" />
+              <input id="promo-code" type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} placeholder={t('enterPromo')} className="flex-1 px-3 py-2 bg-white/10 border border-main/30 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 text-sm uppercase tracking-wider font-body" />
             </div>
             <button onClick={handleApplyPromo} disabled={promoLoading || !promoCode.trim()} className="px-4 py-2 bg-surface-alt/20 text-main text-sm uppercase tracking-wider hover:bg-surface-alt/30 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-body">
               {promoLoading && <Loader2 className="w-4 h-4 animate-spin" />}

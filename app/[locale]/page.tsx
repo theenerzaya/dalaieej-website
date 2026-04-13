@@ -10,7 +10,7 @@ import AvailabilityBar from "../components/AvailabilityBar";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen">
+    <main id="main-content" className="relative min-h-screen">
       <VideoHero />
       <EditorialIntro />
       <SiloGrid />
@@ -18,6 +18,6 @@ export default function Home() {
       <PersonaSlider />
       <InteractiveMap />
       <AvailabilityBar />
-    </div>
+    </main>
   );
 }

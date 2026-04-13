@@ -45,7 +45,7 @@ export default function GalleryGrid() {
     : images.filter(img => img.category === activeFilter);
 
   return (
-    <main className="min-h-screen bg-white pt-24 md:pt-16">
+    <main id="main-content" className="min-h-screen bg-white pt-24 md:pt-16">
       <section className="py-12 px-4 bg-ink">
         <div className="max-w-6xl mx-auto text-center">
           <motion.h1
@@ -134,16 +134,17 @@ export default function GalleryGrid() {
           >
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
+              aria-label={locale === 'mn' ? 'Хаах' : 'Close lightbox'}
+              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
-              <X className="w-8 h-8" />
+              <X className="w-8 h-8" aria-hidden="true" />
             </button>
             <motion.img
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               src={selectedImage.replace("w=800", "w=1600")}
-              alt="Full size"
+              alt={images.find(img => img.src === selectedImage)?.alt || 'Gallery image'}
               className="max-w-full max-h-[90vh] object-contain rounded-lg"
               onClick={(e) => e.stopPropagation()}
             />

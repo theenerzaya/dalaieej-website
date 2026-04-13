@@ -26,7 +26,7 @@ export default function AmenitiesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white pt-24 md:pt-16">
+    <main id="main-content" className="min-h-screen bg-white pt-24 md:pt-16">
       <section className="relative min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-sky-900 to-sky-700">
         <div className="absolute inset-0">
           <img 

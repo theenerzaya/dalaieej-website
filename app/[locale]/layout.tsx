@@ -46,7 +46,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: t('description'),
     metadataBase: new URL('https://dalaieej.com'),
 
-    // Favicon and App Icons 
     icons: {
       icon: [
         { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
@@ -59,11 +58,18 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     },
     manifest: '/site.webmanifest',
 
-    // Social Media Previews (Absolute URLs for WhatsApp)
+    alternates: {
+      canonical: `https://dalaieej.com${locale === 'en' ? '' : `/${locale}`}`,
+      languages: {
+        en: 'https://dalaieej.com',
+        mn: 'https://dalaieej.com/mn',
+      },
+    },
+
     openGraph: {
       title: t('title'),
       description: t('description'),
-      url: 'https://dalaieej.com',
+      url: `https://dalaieej.com${locale === 'en' ? '' : `/${locale}`}`,
       siteName: 'Dalai Eej Resort',
       locale: locale === 'mn' ? 'mn_MN' : 'en_US',
       type: 'website',
@@ -137,6 +143,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       </head>
       <body className={`${playfair.variable} ${lato.variable} ${pinyonScript.variable} ${merriweather.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
+          <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
+            Skip to main content
+          </a>
           <NavbarWrapper />
           {children}
           <Footer />

@@ -11,6 +11,38 @@
     "planner": {
       "title": "Mongolia Itinerary Planner | Gobi to Khuvsgul Heritage Trail",
       "description": "Plan your journey across the Great Steppe. A curated guide for travelers seeking the intersection of Mongolian history and nature."
+    },
+    "booking": {
+      "title": "Book Your Stay | Dalai Eej Resort at Lake Khuvsgul",
+      "description": "Check availability and book your heritage cabin at Dalai Eej Resort. Wood-fired lakeside stays on the shores of Lake Khuvsgul, Mongolia."
+    },
+    "amenities": {
+      "title": "Resort Amenities | Dalai Eej Heritage Site",
+      "description": "Explore our lakeside amenities: private shoreline, restaurant, traditional sauna, guided tours and horse trekking at Lake Khuvsgul."
+    },
+    "gallery": {
+      "title": "Visual Journey | Dalai Eej Resort Photo Gallery",
+      "description": "Explore the beauty of Khuvsgul Lake, our heritage cabins, and the wilderness. A visual guide to Dalai Eej Resort."
+    },
+    "offers": {
+      "title": "Special Offers & Heritage Packages | Dalai Eej Resort",
+      "description": "Summer 2026 exclusive offers and heritage packages at Dalai Eej Resort. Romantic escapes, family stays, and early bird deals on Lake Khuvsgul."
+    },
+    "accommodation": {
+      "title": "Heritage Stays & Cabins | Dalai Eej Resort",
+      "description": "Choose from wood-fired cabins, ensuite suites, and the Grand Peninsula Suite at Dalai Eej Resort on Lake Khuvsgul."
+    },
+    "catalogue": {
+      "title": "Resort Journal | Dalai Eej 2026 Archive",
+      "description": "An editorial exploration of the hearth, the sanctuary, and the spirit of Khuvsgul. Browse the 2026 resort journal."
+    },
+    "contact": {
+      "title": "Contact Us | Dalai Eej Resort",
+      "description": "Get in touch with Dalai Eej Resort. Located in Khatgal Village, Khuvsgul Province, Mongolia on the shores of Lake Khuvsgul."
+    },
+    "fam": {
+      "title": "FAM Tour Application | Dalai Eej Resort",
+      "description": "Tour operators and travel agencies: apply for a complimentary familiarization trip to experience Dalai Eej Resort firsthand."
     }
   },
   "nav": {
