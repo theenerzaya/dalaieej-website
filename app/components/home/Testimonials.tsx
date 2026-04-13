@@ -72,14 +72,16 @@ export default function Testimonials() {
               <p className="font-serif text-xl text-ink">{t("ratingLabel")}</p>
               <div className="flex items-center gap-1 mt-0.5">
                 {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-3.5 h-3.5 ${
-                      i < FULL_STARS
-                        ? "fill-amber-400 text-amber-400"
-                        : "fill-amber-400/70 text-amber-400/70"
-                    }`}
-                  />
+                  i < FULL_STARS ? (
+                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  ) : (
+                    <span key={i} className="relative w-3.5 h-3.5">
+                      <Star className="absolute inset-0 w-3.5 h-3.5 fill-amber-400/20 text-amber-400/20" />
+                      <span className="absolute inset-0 overflow-hidden" style={{ width: "90%" }}>
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      </span>
+                    </span>
+                  )
                 ))}
                 <span className="ml-2 font-body text-xs text-ink/50">{t("reviewCount")}</span>
               </div>
@@ -99,7 +101,7 @@ export default function Testimonials() {
               className="text-center"
             >
               <p className="font-serif text-xl md:text-2xl lg:text-3xl text-water-deep leading-relaxed mb-6">
-                {t(`${reviewId}.text`)}
+                &ldquo;{t(`${reviewId}.text`)}&rdquo;
               </p>
               <footer className="flex flex-col items-center gap-1">
                 <cite className="font-body text-sm text-ink/70 not-italic font-medium tracking-wide">
