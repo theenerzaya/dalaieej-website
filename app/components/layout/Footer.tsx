@@ -18,12 +18,12 @@ export default function Footer() {
     { key: "adventures", href: "#" },
   ];
 
-  const resortLinks: { key: string; href: string; external?: boolean }[] = [
+  const resortLinks: { key: string; href: string; external?: boolean; enOnly?: boolean }[] = [
     { key: "about", href: "/about-us" },
     { key: "catalogue", href: "https://online.fliphtml5.com/scxec/iewd/", external: true },
     { key: "gallery", href: "#" },
     { key: "faq", href: "#" },
-    { key: "route-finder", href: "#" }
+    { key: "route-finder", href: "#", enOnly: true }
   ];
 
   return (
@@ -73,7 +73,7 @@ export default function Footer() {
               {t("resort")}
             </h4>
             <ul className="space-y-3">
-              {resortLinks.map((item) => (
+              {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
                 <li key={item.key}>
                   {item.external ? (
                     <a
