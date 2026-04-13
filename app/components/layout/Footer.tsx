@@ -43,7 +43,7 @@ export default function Footer() {
             <p className="mt-4 font-body text-sm text-main/70 leading-relaxed max-w-xs">
               {t("bio")}
             </p>
-            <div className="mt-6">
+            <div className="mt-4">
               <WeatherWidget />
             </div>
           </div>
