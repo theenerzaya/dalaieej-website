@@ -3,17 +3,19 @@
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
+import SearchOverlay from "./SearchOverlay";
 
 export default function Navbar() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const isBookingPage = pathname.includes('/booking') || pathname.includes('/checkout') || pathname.includes('/payment');
@@ -72,6 +74,14 @@ export default function Navbar() {
             </Link>
 
             <div className="flex items-center gap-4 md:gap-6">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="text-main/70 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1"
+                aria-label={locale === 'mn' ? "Хайлт" : "Search"}
+              >
+                <Search className="w-5 h-5" />
+              </button>
+
               <div className="hidden md:block">
                 <LanguageSwitcher />
               </div>
@@ -88,6 +98,7 @@ export default function Navbar() {
       </nav>
 
       <NavigationOverlay isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
