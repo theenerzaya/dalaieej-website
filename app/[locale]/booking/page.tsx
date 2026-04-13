@@ -68,6 +68,18 @@ function calculateNights(checkinDate: string, checkoutDate: string): number {
   return diffDays > 0 ? diffDays : 1;
 }
 
+function translateRateName(name: string, locale: string): string {
+  if (locale !== 'mn') return name;
+  const map: Record<string, string> = {
+    'non-refundable': 'Буцаан олгогдохгүй',
+    'dalai eej base': 'Үндсэн үнэ',
+    'standard rate': 'Үндсэн үнэ',
+    'base rate': 'Үндсэн үнэ'
+  };
+  const lowerName = name.toLowerCase().trim();
+  return map[lowerName] || name;
+}
+
 function BookingContent() {
   const t = useTranslations('booking');
   const searchParams = useSearchParams();
@@ -333,7 +345,7 @@ function BookingContent() {
       <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : otherRateInCart ? 'opacity-50' : ''}`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <p className="font-medium text-ink text-sm font-body">{rate.rateName}</p>
+            <p className="font-medium text-ink text-sm font-body">{translateRateName(rate.rateName, currentLocale)}</p>
             {otherRateInCart && (
               <p className="text-red-500 text-xs font-body mt-1">
                 {currentLocale === 'mn' ? 'Сагсанд байгаа бараатай хамт авах боломжгүй' : 'Not available with items in your cart'}
@@ -580,7 +592,7 @@ function BookingContent() {
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-ink text-sm font-body">{item.roomTypeName}</p>
-                                <p className="text-ink/50 text-xs font-body">{item.rateName}</p>
+                                <p className="text-ink/50 text-xs font-body">{translateRateName(item.rateName, currentLocale)}</p>
                               </div>
                               <p className="font-serif text-sm font-semibold text-ink whitespace-nowrap">
                                 {(item.pricePerNight * item.quantity * numberOfNights).toLocaleString()}
