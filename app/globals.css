@@ -19,6 +19,7 @@
   --text-primary: #0D0F1C;
   --text-secondary: #131D2F;
   --text-muted: #1D261F;
+  --text-disabled: #BBBBBB;
 
   --accent-leaf: #58725E;
   --accent-bark: #95794E;
@@ -39,6 +40,7 @@
   --color-ink: var(--text-primary);
   --color-ink-secondary: var(--text-secondary);
   --color-ink-muted: var(--text-muted);
+  --color-ink-disabled: var(--text-disabled);
   --color-leaf: var(--accent-leaf);
   --color-bark: var(--accent-bark);
   --color-earth: var(--accent-earth);
