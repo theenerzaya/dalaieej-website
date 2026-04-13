@@ -14,6 +14,7 @@ interface Room {
   rateID: string;
   rateName: string;
   totalRate: number;
+  originalRate?: number;
   currency: string;
   description: string;
   maxGuests: number;
@@ -240,7 +241,8 @@ function BookingContent() {
         children: 0,
         quantity: 1,
       };
-      setCart([...cart, newItem]);
+      const cartWithoutSameRoomType = cart.filter(item => item.roomTypeID !== room.roomTypeID);
+      setCart([...cartWithoutSameRoomType, newItem]);
     }
   };
 
@@ -322,20 +324,30 @@ function BookingContent() {
 
   const renderRateRow = (rate: Room) => {
     const perNight = numberOfNights > 0 ? rate.totalRate / numberOfNights : rate.totalRate;
+    const originalPerNight = rate.originalRate && numberOfNights > 0 ? rate.originalRate / numberOfNights : undefined;
     const rateCartItem = cart.find(c => cartKey(c.roomTypeID, c.rateID) === cartKey(rate.roomTypeID, rate.rateID));
     const isInCart = !!rateCartItem;
+    const otherRateInCart = !isInCart && cart.some(c => c.roomTypeID === rate.roomTypeID);
 
     return (
-      <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : ''}`}>
+      <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : otherRateInCart ? 'opacity-50' : ''}`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <p className="font-medium text-ink text-sm font-body">{rate.rateName}</p>
+            {otherRateInCart && (
+              <p className="text-red-500 text-xs font-body mt-1">
+                {currentLocale === 'mn' ? 'Сагсанд байгаа бараатай хамт авах боломжгүй' : 'Not available with items in your cart'}
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-4">
             {perNight > 0 && (
               <div className="text-right">
+                <p className="text-ink/40 text-xs font-body">{currentLocale === 'mn' ? 'Нэг шөнийн үнэ' : 'Price from'}</p>
+                {originalPerNight && originalPerNight > perNight && (
+                  <p className="font-serif text-sm text-red-400 line-through">{originalPerNight.toLocaleString()}</p>
+                )}
                 <p className="font-serif text-lg font-bold text-ink">{perNight.toLocaleString()}</p>
-                <p className="text-ink/50 text-xs font-body">{rate.currency || 'MNT'} / {t('perNight')}</p>
               </div>
             )}
             {isInCart ? (
@@ -350,6 +362,10 @@ function BookingContent() {
                   {currentLocale === 'mn' ? 'Сонгосон' : 'Added'}
                 </button>
               </div>
+            ) : otherRateInCart ? (
+              <button disabled className="px-5 py-2 bg-gray-200 text-gray-400 text-sm font-serif font-medium rounded-full cursor-not-allowed">
+                {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
+              </button>
             ) : (
               <button onClick={() => toggleRoomSelection(rate)} className="px-5 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors">
                 {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
@@ -497,35 +513,39 @@ function BookingContent() {
                       </div>
 
                       {/* Rate plans */}
-                      <div className="border-t border-ink/10">
-                        {group.rates.length > 0 && (() => {
-                          const defaultRate = group.rates.reduce((min, r) => (r.totalRate > 0 && r.totalRate < min.totalRate) || min.totalRate === 0 ? r : min, group.rates[0]);
-                          return renderRateRow(defaultRate);
-                        })()}
+                      {(() => {
+                        const defaultRate = group.rates.reduce((min, r) => (r.totalRate > 0 && r.totalRate < min.totalRate) || min.totalRate === 0 ? r : min, group.rates[0]);
+                        const otherRates = group.rates.filter(r => r.rateID !== defaultRate.rateID);
 
-                        {group.rates.length > 1 && (
-                          <>
-                            <div className="border-t border-ink/10">
-                              <button
-                                onClick={() => toggleExpand(group.roomTypeName)}
-                                className="w-full px-5 md:px-6 py-3 flex items-center justify-center gap-2 text-sm text-bark font-medium font-body hover:bg-surface-alt/50 transition-colors"
-                              >
-                                {isExpanded
-                                  ? (currentLocale === 'mn' ? 'Саналуудыг хаах' : 'Hide offers')
-                                  : (currentLocale === 'mn' ? 'Саналуудыг харах' : 'View offers')
-                                }
-                                {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                              </button>
-                            </div>
+                        return (
+                          <div className="border-t border-ink/10">
+                            {renderRateRow(defaultRate)}
 
-                            {isExpanded && group.rates.slice(1).map((rate) => (
-                              <div key={rate.rateID} className="border-t border-ink/10">
-                                {renderRateRow(rate)}
-                              </div>
-                            ))}
-                          </>
-                        )}
-                      </div>
+                            {otherRates.length > 0 && (
+                              <>
+                                <div className="border-t border-ink/10">
+                                  <button
+                                    onClick={() => toggleExpand(group.roomTypeName)}
+                                    className="w-full px-5 md:px-6 py-3 flex items-center justify-center gap-2 text-sm text-bark font-medium font-body hover:bg-surface-alt/50 transition-colors"
+                                  >
+                                    {isExpanded
+                                      ? (currentLocale === 'mn' ? 'Саналуудыг хаах' : 'Hide offers')
+                                      : (currentLocale === 'mn' ? 'Саналуудыг харах' : 'View offers')
+                                    }
+                                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                  </button>
+                                </div>
+
+                                {isExpanded && otherRates.map((rate) => (
+                                  <div key={rate.rateID} className="border-t border-ink/10">
+                                    {renderRateRow(rate)}
+                                  </div>
+                                ))}
+                              </>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   );
                 })}

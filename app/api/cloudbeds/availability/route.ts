@@ -52,11 +52,31 @@ export async function GET(request: NextRequest) {
     const currency = propertyData.propertyCurrency?.currencyCode || "MNT";
     const propertyRooms = propertyData.propertyRooms || [];
 
+    const baseRates = new Map<string, number>();
+    for (const room of propertyRooms) {
+      if (!room.derivedType && !room.derivedValue) {
+        baseRates.set(room.roomTypeID, room.roomRate || 0);
+      }
+    }
+
     const enrichedRooms = propertyRooms.map((room: any) => {
       const photos = (room.roomTypePhotos || []).map((p: any) => 
         typeof p === 'string' ? p : p.image || p.thumb || ''
       ).filter(Boolean);
       
+      let originalRate: number | undefined;
+      if (room.derivedType && room.derivedValue) {
+        const baseRate = baseRates.get(room.roomTypeID);
+        if (baseRate) {
+          originalRate = baseRate;
+        } else {
+          const pct = parseFloat(room.derivedValue);
+          if (pct !== 0) {
+            originalRate = Math.round((room.roomRate || 0) / (1 + pct / 100));
+          }
+        }
+      }
+
       return {
         roomTypeID: room.roomTypeID,
         roomTypeName: room.roomTypeName,
@@ -64,6 +84,7 @@ export async function GET(request: NextRequest) {
         rateID: room.roomRateID,
         rateName: room.ratePlanNamePublic || "Standard",
         totalRate: room.roomRate || 0,
+        originalRate,
         currency: currency,
         description: room.roomTypeDescription || "",
         maxGuests: parseInt(room.maxGuests) || 2,
