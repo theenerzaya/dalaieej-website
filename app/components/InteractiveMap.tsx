@@ -87,14 +87,14 @@ export default function InteractiveMap() {
                   onClick={(e) => handleHotspotClick(e, location.id)}
                   aria-label={t(`map.${location.id}.title`)}
                   aria-expanded={activeHotspot === location.id}
-                  className={`relative flex items-center justify-center transition-all duration-300 ${
+                  className={`relative inline-flex items-center justify-center transition-all duration-300 ${
                     isArrowMarker(location.id)
-                      ? `w-[30.5px] h-[30.5px] rounded-md ${
+                      ? `p-1 rounded-md ${
                           activeHotspot === location.id
                             ? "bg-surface-alt text-leaf scale-110"
                             : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
                         }`
-                      : `w-[38px] h-[31.25px] rounded-full ${
+                      : `w-6 h-6 rounded-full ${
                           activeHotspot === location.id
                             ? "bg-surface-alt text-leaf scale-110"
                             : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
@@ -102,9 +102,9 @@ export default function InteractiveMap() {
                   }`}
                 >
                   {isArrowMarker(location.id) ? (
-                    <ArrowUpRight className="w-5 h-5 rotate-180" aria-hidden="true" />
+                    <ArrowUpRight className="w-4 h-4 rotate-180" aria-hidden="true" />
                   ) : (
-                    <span className="text-2xl font-light" aria-hidden="true">+</span>
+                    <span className="text-lg leading-none font-light" aria-hidden="true">+</span>
                   )}
                   {!isArrowMarker(location.id) && (
                     <span className="absolute w-full h-full rounded-full bg-leaf/30 animate-ping" />
