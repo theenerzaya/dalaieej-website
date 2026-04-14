@@ -9,6 +9,7 @@ import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
 import SearchOverlay from "./SearchOverlay";
+import { useScrolledPast } from "@/hooks/useScrolledPast";
 
 export default function Navbar() {
   const locale = useLocale();
@@ -16,17 +17,10 @@ export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrolledPast();
 
   const isBookingPage = pathname.includes('/booking') || pathname.includes('/checkout') || pathname.includes('/payment');
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const showFullChrome = isBookingPage || scrolled;
 
   useEffect(() => {
     if (menuOpen) {
@@ -61,7 +55,11 @@ export default function Navbar() {
 
             <Link 
               href={localePrefix || "/"}
-              className="absolute left-1/2 -translate-x-1/2 hover:opacity-90 transition-opacity"
+              className={`absolute left-1/2 -translate-x-1/2 hover:opacity-90 transition-all duration-500 ${
+                showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+              aria-hidden={!showFullChrome}
+              tabIndex={showFullChrome ? undefined : -1}
             >
               <Image
                 src="/images/logo-white.png"
@@ -73,18 +71,21 @@ export default function Navbar() {
               />
             </Link>
 
-            <div className="flex items-center gap-4 md:gap-6">
+            <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
               <button
+                type="button"
                 onClick={() => setSearchOpen(true)}
-                className="text-main/70 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1"
+                className={`text-main/70 hover:text-white transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1 ${
+                  showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
                 aria-label={locale === 'mn' ? "Хайлт" : "Search"}
+                aria-hidden={!showFullChrome}
+                tabIndex={showFullChrome ? undefined : -1}
               >
                 <Search className="w-5 h-5" />
               </button>
 
-              <div className="hidden md:block">
-                <LanguageSwitcher />
-              </div>
+              <LanguageSwitcher />
               
               <Link
                 href={`${localePrefix}/booking`}

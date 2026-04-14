@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
+import { useScrolledPast } from "@/hooks/useScrolledPast";
 
 function useNavOpen() {
   const [navOpen, setNavOpen] = useState(false);
@@ -33,6 +34,7 @@ export default function AvailabilityBar() {
   const router = useRouter();
   const pathname = usePathname();
   const navOpen = useNavOpen();
+  const scrolledPast = useScrolledPast();
   
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
   const localePrefix = currentLocale === 'mn' ? '/mn' : '';
@@ -62,7 +64,14 @@ export default function AvailabilityBar() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-ink/95 backdrop-blur-md border-t border-white/10 py-4 px-4 md:py-5 md:px-6 shadow-2xl">
+    <div
+      className={`fixed bottom-0 left-0 right-0 z-50 bg-ink/95 backdrop-blur-md border-t border-white/10 py-4 px-4 md:py-5 md:px-6 shadow-2xl transition-all duration-500 ease-out ${
+        scrolledPast
+          ? "translate-y-0 opacity-100"
+          : "translate-y-full opacity-0 pointer-events-none"
+      }`}
+      inert={!scrolledPast ? true : undefined}
+    >
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
         <div className="text-center md:text-left hidden md:block">
           <p className="font-serif text-main text-lg tracking-wide">{t('planYourStay')}</p>
