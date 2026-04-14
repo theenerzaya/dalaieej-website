@@ -6,7 +6,26 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
   async redirects() {
+    const mnDomainHosts = [
+      { type: 'host' as const, value: 'dalaieej.com' },
+      { type: 'host' as const, value: 'www.dalaieej.com' },
+    ];
+
     return [
+      ...mnDomainHosts.flatMap((host) => [
+        {
+          source: '/mn',
+          destination: 'https://dalaieej.mn',
+          permanent: true,
+          has: [host],
+        },
+        {
+          source: '/mn/:path*',
+          destination: 'https://dalaieej.mn/:path*',
+          permanent: true,
+          has: [host],
+        },
+      ]),
       // Legacy Slugs to Home Page
       { source: '/about', destination: '/', permanent: true },
       { source: '/reserve', destination: '/', permanent: true },
