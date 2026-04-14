@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/request';
+import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
 import "../globals.css";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Footer from "../components/layout/Footer";
@@ -30,10 +31,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata.index' });
 
+  const canonical = absoluteSiteUrl(locale, '');
+
   return {
     title: t('title'),
     description: t('description'),
-    metadataBase: new URL('https://dalaieej.com'),
+    metadataBase: new URL(siteOriginForLocale(locale)),
 
     icons: {
       icon: [
@@ -48,17 +51,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     manifest: '/site.webmanifest',
 
     alternates: {
-      canonical: `https://dalaieej.com${locale === 'en' ? '' : `/${locale}`}`,
-      languages: {
-        en: 'https://dalaieej.com',
-        mn: 'https://dalaieej.com/mn',
-      },
+      canonical,
+      languages: hreflangLanguages(''),
     },
 
     openGraph: {
       title: t('title'),
       description: t('description'),
-      url: `https://dalaieej.com${locale === 'en' ? '' : `/${locale}`}`,
+      url: canonical,
       siteName: 'Dalai Eej Resort',
       locale: locale === 'mn' ? 'mn_MN' : 'en_US',
       type: 'website',
@@ -98,6 +98,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   const messages = await getMessages();
+  const resortCanonical = absoluteSiteUrl(locale, '');
+  const resortImageBase = siteOriginForLocale(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -109,7 +111,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             '@context': 'https://schema.org',
             '@type': 'Resort',
             name: 'Dalai Eej Heritage Site',
-            image: 'https://dalaieej.com/images/hero.jpg',
+            image: `${resortImageBase}/images/hero.jpg`,
             telephone: '+976-9500-5595',
             email: 'hello@dalaieej.com',
             address: {
@@ -125,7 +127,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               latitude: '50.48479874018978',
               longitude: '100.18977589128245'
             },
-            url: 'https://dalaieej.com',
+            url: resortCanonical,
             priceRange: '$$$'
           }) }}
         />

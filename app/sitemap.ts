@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
-
-const BASE_URL = 'https://dalaieej.com';
+import { SITE_URL_EN, SITE_URL_MN, hreflangLanguages } from '@/lib/site-urls';
 
 const routes = [
   '',
@@ -24,19 +23,16 @@ const routes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const locales = ['en', 'mn'];
+  const hosts = [SITE_URL_EN, SITE_URL_MN] as const;
 
   return routes.flatMap((route) =>
-    locales.map((locale) => ({
-      url: `${BASE_URL}${locale === 'en' ? '' : `/${locale}`}${route}`,
+    hosts.map((origin) => ({
+      url: `${origin}${route}`,
       lastModified: new Date(),
       changeFrequency: route === '' ? 'weekly' as const : 'monthly' as const,
       priority: route === '' ? 1.0 : route === '/booking' ? 0.9 : 0.7,
       alternates: {
-        languages: {
-          en: `${BASE_URL}${route}`,
-          mn: `${BASE_URL}/mn${route}`,
-        },
+        languages: hreflangLanguages(route),
       },
     }))
   );
