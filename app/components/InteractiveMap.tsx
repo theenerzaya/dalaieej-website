@@ -118,7 +118,7 @@ export default function InteractiveMap() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.9 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-12 left-1/2 -translate-x-1/2 w-72 bg-white rounded-xl shadow-xl overflow-hidden z-50"
+                      className="fixed left-1/2 top-1/2 z-[100] w-[min(18rem,calc(100vw-2rem))] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl md:absolute md:top-12 md:z-50 md:max-h-none md:w-72 md:translate-y-0 md:overflow-hidden"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
