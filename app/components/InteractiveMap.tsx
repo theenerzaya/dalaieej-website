@@ -68,7 +68,7 @@ export default function InteractiveMap() {
         </div>
 
         <div 
-          className="relative w-full overflow-visible z-10 cursor-pointer" 
+          className="relative w-full overflow-visible z-10 cursor-pointer touch-manipulation select-none [-webkit-touch-callout:none]" 
           style={{ aspectRatio: '6876 / 3000' }}
           onClick={handleBackgroundClick}
         >
@@ -77,7 +77,8 @@ export default function InteractiveMap() {
             alt="Dalai Eej Resort Map"
             fill
             priority
-            className="object-cover rounded-lg shadow-2xl"
+            draggable={false}
+            className="object-cover rounded-lg shadow-2xl touch-manipulation select-none [-webkit-touch-callout:none]"
             sizes="(max-width: 1200px) 100vw, 1200px"
           />
 
@@ -89,17 +90,18 @@ export default function InteractiveMap() {
                 style={{ top: `${location.top}%`, left: `${location.left}%` }}
               >
                 <button
+                  type="button"
                   onClick={(e) => handleHotspotClick(e, location.id)}
                   aria-label={t(`map.${location.id}.title`)}
                   aria-expanded={activeHotspot === location.id}
                   className={`relative inline-flex items-center justify-center transition-all duration-300 ${
                     isArrowMarker(location.id)
-                      ? `p-1 rounded-md ${
+                      ? `p-0.5 rounded-md md:p-1 ${
                           activeHotspot === location.id
                             ? "bg-surface-alt text-leaf scale-110"
                             : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
                         }`
-                      : `w-6 h-6 rounded-full ${
+                      : `h-5 w-5 rounded-full md:h-6 md:w-6 ${
                           activeHotspot === location.id
                             ? "bg-surface-alt text-leaf scale-110"
                             : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
@@ -107,9 +109,9 @@ export default function InteractiveMap() {
                   }`}
                 >
                   {isArrowMarker(location.id) ? (
-                    <ArrowUpRight className="w-4 h-4 rotate-180" aria-hidden="true" />
+                    <ArrowUpRight className="h-3 w-3 rotate-180 md:h-4 md:w-4" aria-hidden="true" />
                   ) : (
-                    <span className="text-lg leading-none font-light" aria-hidden="true">+</span>
+                    <span className="text-base leading-none font-light md:text-lg" aria-hidden="true">+</span>
                   )}
                   {!isArrowMarker(location.id) && (
                     <span className="absolute w-full h-full rounded-full bg-leaf/30 animate-ping" />
@@ -129,46 +131,57 @@ export default function InteractiveMap() {
         {activeLocation && (
           <motion.div
             key={activeLocation.id}
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+            role="presentation"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-1/2 top-1/2 z-[100] w-[min(18rem,calc(100vw-2rem))] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={`map-dialog-title-${activeLocation.id}`}
+            className="fixed inset-0 z-[99] flex items-center justify-center bg-ink/40 p-4"
+            onClick={() => setActiveHotspot(null)}
           >
-            <button
-              type="button"
-              onClick={() => setActiveHotspot(null)}
-              aria-label={t(`map.${activeLocation.id}.title`) + ' — close'}
-              className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-[min(18rem,calc(100vw-2rem))] max-h-[90vh] overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`map-dialog-title-${activeLocation.id}`}
             >
-              <X className="w-4 h-4" aria-hidden="true" />
-            </button>
-            {activeLocation.image && !activeLocation.noImage && (
-              <div className="relative aspect-video w-full">
-                <Image
-                  src={activeLocation.image}
-                  alt={t(`map.${activeLocation.id}.title`)}
-                  fill
-                  className="object-cover"
-                  sizes="288px"
-                />
-              </div>
-            )}
-            <div className="p-4">
-              <h3
-                id={`map-dialog-title-${activeLocation.id}`}
-                className="font-serif text-lg text-ink mb-2"
+              <button
+                type="button"
+                onClick={() => setActiveHotspot(null)}
+                aria-label={t(`map.${activeLocation.id}.title`) + ' — close'}
+                className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
               >
-                {t(`map.${activeLocation.id}.title`)}
-              </h3>
-              <p className="font-body text-sm text-ink/70">
-                {t(`map.${activeLocation.id}.desc`)}
-              </p>
-            </div>
+                <X className="w-4 h-4" aria-hidden="true" />
+              </button>
+              {activeLocation.image && !activeLocation.noImage && (
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={activeLocation.image}
+                    alt={t(`map.${activeLocation.id}.title`)}
+                    fill
+                    draggable={false}
+                    className="object-cover touch-manipulation select-none [-webkit-touch-callout:none]"
+                    sizes="288px"
+                  />
+                </div>
+              )}
+              <div className="p-4">
+                <h3
+                  id={`map-dialog-title-${activeLocation.id}`}
+                  className="font-serif text-lg text-ink mb-2"
+                >
+                  {t(`map.${activeLocation.id}.title`)}
+                </h3>
+                <p className="font-body text-sm text-ink/70">
+                  {t(`map.${activeLocation.id}.desc`)}
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
