@@ -66,7 +66,7 @@ export default function Navbar() {
                 alt="Dalai Eej Resort"
                 width={180}
                 height={50}
-                className="h-10 md:h-12 w-auto"
+                className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
                 priority
               />
             </Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className={`text-main/70 hover:text-white transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1 ${
+                className={`hidden md:inline-flex text-main/70 hover:text-white transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1 ${
                   showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
                 aria-label={locale === 'mn' ? "Хайлт" : "Search"}
@@ -85,11 +85,13 @@ export default function Navbar() {
                 <Search className="w-5 h-5" />
               </button>
 
-              <LanguageSwitcher />
+              <div className="hidden md:block">
+                <LanguageSwitcher />
+              </div>
               
               <Link
                 href={`${localePrefix}/booking`}
-                className="px-5 py-2.5 bg-surface text-water-deep font-body text-xs font-semibold tracking-[0.1em] uppercase hover:bg-white transition-colors rounded"
+                className="px-3 py-2 md:px-5 md:py-2.5 bg-surface text-water-deep font-body text-[10px] md:text-xs font-semibold tracking-[0.08em] md:tracking-[0.1em] uppercase hover:bg-white transition-colors rounded shrink-0"
               >
                 {locale === 'mn' ? "Захиалах" : "Book"}
               </Link>
@@ -98,7 +100,14 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <NavigationOverlay isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <NavigationOverlay
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onOpenSearch={() => {
+          setMenuOpen(false);
+          setSearchOpen(true);
+        }}
+      />
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
