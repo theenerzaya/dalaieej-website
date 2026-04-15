@@ -143,6 +143,7 @@
     "testimonials": {
       "title": "Guest Experiences",
       "subtitle": "What our guests say",
+      "cardEyebrow": "Testimonials",
       "heritage": "Trusted by leaders, executives, and families since 1998.",
       "ratingLabel": "Exceptional",
       "reviewCount": "Based on 35 reviews",
