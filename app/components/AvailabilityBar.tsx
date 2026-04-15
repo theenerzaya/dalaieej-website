@@ -77,31 +77,33 @@ export default function AvailabilityBar() {
           <p className="font-serif text-main text-lg tracking-wide">{t('planYourStay')}</p>
         </div>
         
-        <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4">
-          <div className="flex flex-col">
-            <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-body">
-              {t('checkIn')}
-            </label>
-            <input
-              type="date"
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
-              min={minDate}
-              className="px-4 py-2.5 bg-white/10 border border-white/20 text-main rounded-lg focus:outline-none focus:border-bark focus:ring-1 focus:ring-bark/50 transition-colors cursor-pointer"
-            />
-          </div>
-          
-          <div className="flex flex-col">
-            <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-body">
-              {t('checkOut')}
-            </label>
-            <input
-              type="date"
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-              min={checkIn || minDate}
-              className="px-4 py-2.5 bg-white/10 border border-white/20 text-main rounded-lg focus:outline-none focus:border-bark focus:ring-1 focus:ring-bark/50 transition-colors cursor-pointer"
-            />
+        <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 w-full md:w-auto">
+          <div className="flex flex-row gap-3 md:gap-4 w-full md:w-auto justify-center min-w-0">
+            <div className="flex flex-col flex-1 min-w-0 basis-0">
+              <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-body whitespace-nowrap">
+                {t('checkIn')}
+              </label>
+              <input
+                type="date"
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
+                min={minDate}
+                className="w-full min-w-0 px-2.5 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main rounded-lg focus:outline-none focus:border-bark focus:ring-1 focus:ring-bark/50 transition-colors cursor-pointer"
+              />
+            </div>
+
+            <div className="flex flex-col flex-1 min-w-0 basis-0">
+              <label className="text-main/60 text-xs uppercase tracking-wider mb-1 font-body whitespace-nowrap">
+                {t('checkOut')}
+              </label>
+              <input
+                type="date"
+                value={checkOut}
+                onChange={(e) => setCheckOut(e.target.value)}
+                min={checkIn || minDate}
+                className="w-full min-w-0 px-2.5 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main rounded-lg focus:outline-none focus:border-bark focus:ring-1 focus:ring-bark/50 transition-colors cursor-pointer"
+              />
+            </div>
           </div>
           
           <button

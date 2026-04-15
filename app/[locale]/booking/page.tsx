@@ -552,13 +552,15 @@ function BookingContent() {
           <p className="font-body text-main/70 mb-8">{t('selectDates')}</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-4xl mx-auto flex-wrap">
-            <div className="flex flex-col">
-              <label htmlFor="checkin-date" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkIn')}</label>
-              <input id="checkin-date" type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="checkout-date" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{t('checkOut')}</label>
-              <input id="checkout-date" type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
+            <div className="flex flex-row gap-3 sm:gap-4 w-full sm:w-auto justify-center min-w-0">
+              <div className="flex flex-col flex-1 min-w-0 basis-0">
+                <label htmlFor="checkin-date" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left whitespace-nowrap">{t('checkIn')}</label>
+                <input id="checkin-date" type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="w-full min-w-0 px-2.5 sm:px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
+              </div>
+              <div className="flex flex-col flex-1 min-w-0 basis-0">
+                <label htmlFor="checkout-date" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left whitespace-nowrap">{t('checkOut')}</label>
+                <input id="checkout-date" type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="w-full min-w-0 px-2.5 sm:px-4 py-3 bg-white/10 border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
+              </div>
             </div>
 
             <div className="flex flex-col">
