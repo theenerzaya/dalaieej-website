@@ -4,22 +4,54 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 
-/** Set in `.env.local` as `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux asset → Playback ID). */
-const DEFAULT_PLAYBACK_ID = "jE3kksx6nNQaWGYiY600x66owXHHn2SRPs02ki6oD003tU";
-const PLAYBACK_ID =
-  process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID?.trim() || DEFAULT_PLAYBACK_ID;
-const POSTER_URL = `https://image.mux.com/${PLAYBACK_ID}/thumbnail.webp`;
-const HLS_URL = `https://stream.mux.com/${PLAYBACK_ID}.m3u8`;
+/** Desktop: `.env.local` → `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux → Playback ID). */
+const DEFAULT_PLAYBACK_ID_DESKTOP =
+  "jE3kksx6nNQaWGYiY600x66owXHHn2SRPs02ki6oD003tU";
+/** Mobile (max-width 767px, below Tailwind `md`): `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID_MOBILE`. */
+const DEFAULT_PLAYBACK_ID_MOBILE =
+  "mK12ANdmNxuuntw4F31ga8KEptjC9sZyk2qPT02zmvPo";
+
+const PLAYBACK_ID_DESKTOP =
+  process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID?.trim() ||
+  DEFAULT_PLAYBACK_ID_DESKTOP;
+const PLAYBACK_ID_MOBILE =
+  process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID_MOBILE?.trim() ||
+  DEFAULT_PLAYBACK_ID_MOBILE;
+
+function muxPosterUrl(playbackId: string) {
+  return `https://image.mux.com/${playbackId}/thumbnail.webp`;
+}
+
+function muxHlsUrl(playbackId: string) {
+  return `https://stream.mux.com/${playbackId}.m3u8`;
+}
 
 export default function VideoHero() {
   const locale = useLocale();
   const [mounted, setMounted] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const playbackId = isMobileViewport ? PLAYBACK_ID_MOBILE : PLAYBACK_ID_DESKTOP;
+  const posterUrl = muxPosterUrl(playbackId);
+  const hlsUrl = muxHlsUrl(playbackId);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onChange = () => setIsMobileViewport(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    setVideoFailed(false);
+  }, [playbackId]);
 
   useEffect(() => {
     if (!mounted || videoFailed) return;
@@ -29,7 +61,7 @@ export default function VideoHero() {
     let hls: any = null;
 
     const tryPlayNative = () => {
-      video.src = HLS_URL;
+      video.src = hlsUrl;
       video.load();
       video.play().catch(() => setVideoFailed(true));
     };
@@ -48,7 +80,7 @@ export default function VideoHero() {
                 hls.destroy();
               }
             });
-            hls.loadSource(HLS_URL);
+            hls.loadSource(hlsUrl);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
               video.play().catch(() => {});
@@ -63,7 +95,7 @@ export default function VideoHero() {
     return () => {
       if (hls) hls.destroy();
     };
-  }, [mounted, videoFailed, HLS_URL]);
+  }, [mounted, videoFailed, hlsUrl]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -75,12 +107,12 @@ export default function VideoHero() {
             muted
             loop
             playsInline
-            poster={POSTER_URL}
+            poster={posterUrl}
             className="absolute inset-0 w-full h-full object-cover opacity-80"
           />
         ) : (
           <img
-            src={POSTER_URL}
+            src={posterUrl}
             alt="Dalai Eej Resort aerial view"
             className="absolute inset-0 w-full h-full object-cover opacity-80"
           />
