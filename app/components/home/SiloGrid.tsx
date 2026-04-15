@@ -9,28 +9,28 @@ const silos = [
   {
     id: "stay",
     href: /*"/accommodation",*/ "#",
-    en: "Sanctuary",
+    en: "Cabins",
     mn: "Өргөө",
     image: "/images/silogrid/sanctuary.webp"
   },
   {
     id: "dining",
     href: /*"/dining",*/ "#",
-    en: "Hearth",
+    en: "Restaurant",
     mn: "Гал голомт",
     image: "/images/silogrid/hearth.webp"
   },
   {
     id: "wellness",
     href: /*"/wellness",*/ "#",
-    en: "Stillness",
+    en: "Wellness",
     mn: "Анир",
     image: "/images/silogrid/wellness.webp"
   },
   {
     id: "adventure",
     href: /*"/experiences",*/ "#",
-    en: "Wilderness",
+    en: "Experiences",
     mn: "Хөвч",
     image: "/images/silogrid/wilderness.webp"
   }
