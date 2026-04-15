@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 
 /** Set in `.env.local` as `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux asset → Playback ID). */
-const DEFAULT_PLAYBACK_ID = "RznyTa0219reEqqGVM4HDlAjdu6bpgNJ025zj8YZNe1W";
+const DEFAULT_PLAYBACK_ID = "RznyTa0219reEqqGVM4HDlAjdu6bpgNJ025zj8YZNe1Ww";
 const PLAYBACK_ID =
   process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID?.trim() || DEFAULT_PLAYBACK_ID;
 const POSTER_URL = `https://image.mux.com/${PLAYBACK_ID}/thumbnail.webp`;
