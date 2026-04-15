@@ -134,7 +134,7 @@ export default function OffersCarousel() {
           transition={{ duration: 0.6 }}
           className="font-body text-leaf/60 text-sm tracking-[0.3em] uppercase mb-6"
         >
-          {locale === 'mn' ? "Энэ улирал" : "This Season"}
+          {locale === 'mn' ? "Энэ зун" : "This Season"}
         </motion.p>
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
@@ -143,7 +143,7 @@ export default function OffersCarousel() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="font-serif text-3xl md:text-4xl lg:text-5xl text-leaf leading-relaxed"
         >
-          {locale === 'mn' ? "Өөрийнхөө болго." : "Make it yours."}
+          {locale === 'mn' ? "Өөртөө зориул." : "Make it yours."}
         </motion.h2>
       </div>
 

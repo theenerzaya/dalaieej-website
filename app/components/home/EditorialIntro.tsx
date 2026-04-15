@@ -19,7 +19,7 @@ export default function EditorialIntro() {
           transition={{ duration: 0.6 }}
           className="font-body text-water-deep/60 text-sm tracking-[0.3em] uppercase mb-8"
         >
-          {locale === 'mn' ? "Монголын хойд хэсэгт" : "In the far north of Mongolia"}
+          {locale === 'mn' ? "Монгол орны хоймор хязгаарт" : "In the far north of Mongolia"}
         </motion.p>
         
         <motion.h2
@@ -30,7 +30,7 @@ export default function EditorialIntro() {
           className="font-serif text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed mb-8"
         >
           {locale === 'mn' 
-            ? "Дэлхийн захад байрлах хоргодох газар. Тайга ой хөх сувдтай уулзах газар."
+            ? "Хязгаар нутгийн амар амгалангийн орон. Хөвч тайга хөх сувдтай золгох газар."
             : "A refuge at the edge of the world. Where the taiga meets the blue pearl."}
         </motion.h2>
         
@@ -45,7 +45,7 @@ export default function EditorialIntro() {
             className="inline-flex items-center gap-2 font-body text-water-deep font-medium hover:gap-4 transition-all group"
           >
             <span className="border-b border-ink/30 group-hover:border-ink transition-colors">
-              {locale === 'mn' ? "Бидний түүхийг олж мэд" : "Discover Our Story"}
+              {locale === 'mn' ? "Бидний түүхтэй танилцах" : "Discover Our Story"}
             </span>
             <ArrowRight className="w-4 h-4" />
           </Link>

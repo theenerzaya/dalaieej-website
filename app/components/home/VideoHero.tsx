@@ -135,7 +135,7 @@ export default function VideoHero() {
           transition={{ duration: 1, delay: 0.6 }}
           className="font-body text-base md:text-lg text-white tracking-[0.2em] uppercase text-overlay-glow"
         >
-          {locale === 'mn' ? "Хөвсгөл нуурын эрэг дээр" : "On the shores of Lake Khuvsgul"}
+          {locale === 'mn' ? "Хөвсгөл далайн хөвөөнд" : "On the shores of Lake Khuvsgul"}
         </motion.p>
       </div>
 
