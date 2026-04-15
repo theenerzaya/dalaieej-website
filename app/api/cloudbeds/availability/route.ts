@@ -13,6 +13,45 @@ interface RateRestriction {
   maxLos: number;
 }
 
+/** Cloudbeds returns adultsExtraCharge / childrenExtraCharge as an array of single-key objects. */
+function flattenExtraChargeMap(extra: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (extra == null) return out;
+  const rows = Array.isArray(extra) ? extra : [extra];
+  for (const row of rows) {
+    if (row && typeof row === "object" && !Array.isArray(row)) {
+      for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
+        const n = typeof v === "number" ? v : parseFloat(String(v));
+        if (!Number.isNaN(n)) out[k] = n;
+      }
+    }
+  }
+  return out;
+}
+
+function extraChargeForGuestCount(map: Record<string, number>, count: number): number {
+  if (count <= 0) return 0;
+  const direct = map[String(count)];
+  if (direct != null) return direct;
+  const numericKeys = Object.keys(map)
+    .map((k) => parseInt(k, 10))
+    .filter((n) => !Number.isNaN(n))
+    .sort((a, b) => a - b);
+  let best = 0;
+  for (const k of numericKeys) {
+    if (k <= count) best = map[String(k)] ?? best;
+  }
+  return best;
+}
+
+/** Full stay total: base roomRate plus occupancy-based extras (per-person / extra guest). */
+function stayTotalForRoom(room: Record<string, unknown>, adults: number, children: number): number {
+  const base = typeof room.roomRate === "number" ? room.roomRate : parseFloat(String(room.roomRate || 0)) || 0;
+  const adultExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.adultsExtraCharge), adults);
+  const childExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.childrenExtraCharge), children);
+  return base + adultExtra + childExtra;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -37,18 +76,23 @@ export async function GET(request: NextRequest) {
     const promo = searchParams.get("promo");
     const adults = searchParams.get("adults");
     const children = searchParams.get("children");
-    
+    const rooms = searchParams.get("rooms") || "1";
+
+    const adultsNum = Math.max(1, parseInt(adults || "1", 10) || 1);
+    const childrenNum = Math.max(0, parseInt(children || "0", 10) || 0);
+
     const params: Record<string, string> = {
       startDate: checkin,
       endDate: checkout,
+      rooms,
+      adults: String(adultsNum),
+      children: String(childrenNum),
     };
-    
+
     if (promo) {
       params.promoCode = promo;
       console.log("Applying promo code:", promo);
     }
-    if (adults) params.adults = adults;
-    if (children) params.children = children;
 
     const [availabilityData, ratePlansData, hotelDetailsData] = await Promise.all([
       cloudbedsGet<any>("/getAvailableRoomTypes", params),
@@ -147,7 +191,7 @@ export async function GET(request: NextRequest) {
     const baseRates = new Map<string, number>();
     for (const room of propertyRooms) {
       if (!room.derivedType && !room.derivedValue) {
-        baseRates.set(room.roomTypeID, room.roomRate || 0);
+        baseRates.set(room.roomTypeID, stayTotalForRoom(room, adultsNum, childrenNum));
       }
     }
 
@@ -155,6 +199,8 @@ export async function GET(request: NextRequest) {
       const photos = (room.roomTypePhotos || []).map((p: any) => 
         typeof p === 'string' ? p : p.image || p.thumb || ''
       ).filter(Boolean);
+
+      const fullStayTotal = stayTotalForRoom(room, adultsNum, childrenNum);
       
       let originalRate: number | undefined;
       if (room.derivedType && room.derivedValue) {
@@ -164,7 +210,7 @@ export async function GET(request: NextRequest) {
         } else {
           const pct = parseFloat(room.derivedValue);
           if (pct !== 0) {
-            originalRate = Math.round((room.roomRate || 0) / (1 + pct / 100));
+            originalRate = Math.round(fullStayTotal / (1 + pct / 100));
           }
         }
       }
@@ -178,7 +224,7 @@ export async function GET(request: NextRequest) {
         roomsAvailable: room.roomsAvailable || 0,
         rateID: room.roomRateID,
         rateName: room.ratePlanNamePublic || "Standard",
-        totalRate: room.roomRate || 0,
+        totalRate: fullStayTotal,
         originalRate,
         currency: currency,
         description: room.roomTypeDescription || "",

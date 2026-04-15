@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -141,6 +141,7 @@ function BookingContent() {
   const [promoLoading, setPromoLoading] = useState(false);
   const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
+  const lastFetchedGuestsRef = useRef<{ a: number; c: number } | null>(null);
 
   const totalGuests = totalAdults + totalChildren;
   const cartCapacity = cart.reduce((sum, item) => sum + (item.maxGuests * item.quantity), 0);
@@ -291,15 +292,37 @@ function BookingContent() {
         throw new Error((data as any).error || "Failed to fetch availability");
       }
 
-      setRooms(data.rooms || []);
+      const list = data.rooms || [];
+      setRooms(list);
       setPropertyTermsAndConditions(data.propertyTermsAndConditions ?? null);
+      const nights = calculateNights(checkInDate, checkOutDate);
+      setCart((prev) =>
+        prev.flatMap((item) => {
+          const r = list.find((x) => x.roomTypeID === item.roomTypeID && x.rateID === item.rateID);
+          if (!r) return [];
+          const pricePerNight =
+            nights > 0 ? (r.totalRate || 0) / nights : r.totalRate || 0;
+          return [{ ...item, pricePerNight }];
+        })
+      );
       setSearched(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
+      lastFetchedGuestsRef.current = { a: adults, c: children };
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!searched || !checkin || !checkout) return;
+    const last = lastFetchedGuestsRef.current;
+    if (last && last.a === totalAdults && last.c === totalChildren) return;
+    const id = window.setTimeout(() => {
+      void fetchAvailability(checkin, checkout, appliedPromo, totalAdults, totalChildren);
+    }, 450);
+    return () => clearTimeout(id);
+  }, [totalAdults, totalChildren, searched, checkin, checkout]);
 
   const handleSearch = () => {
     if (!checkin || !checkout) {
