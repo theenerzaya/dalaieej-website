@@ -201,9 +201,20 @@ export default function PersonaSlider() {
       <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <p className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-8">
+        <p className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-6">
           {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
         </p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="text-center font-serif text-2xl md:text-3xl lg:text-4xl text-main/80 leading-relaxed max-w-2xl mx-auto mb-10"
+        >
+          {locale === "mn"
+            ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
+            : "Every traveler arrives with a different story. Which is yours?"}
+        </motion.h2>
 
         <div className="relative">
           {n === 1 ? (

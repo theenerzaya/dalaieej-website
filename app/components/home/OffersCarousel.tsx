@@ -125,7 +125,28 @@ export default function OffersCarousel() {
   const content = locale === 'mn' ? currentOffer.mn : currentOffer.en;
 
   return (
-    <section className="bg-main py-0">
+    <section className="bg-main pt-20 md:pt-28 pb-0">
+      <div className="max-w-7xl mx-auto px-6 text-center mb-12 md:mb-16">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="font-body text-leaf/60 text-sm tracking-[0.3em] uppercase mb-6"
+        >
+          {locale === 'mn' ? "Энэ улирал" : "This Season"}
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="font-serif text-3xl md:text-4xl lg:text-5xl text-leaf leading-relaxed"
+        >
+          {locale === 'mn' ? "Өөрийнхөө болго." : "Make it yours."}
+        </motion.h2>
+      </div>
+
       <div 
         className="max-w-7xl mx-auto"
         onMouseEnter={handleMouseEnter}
