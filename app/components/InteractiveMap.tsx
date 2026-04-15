@@ -44,6 +44,11 @@ export default function InteractiveMap() {
     setActiveHotspot(null);
   };
 
+  const activeLocation =
+    activeHotspot !== null
+      ? locations.find((l) => l.id === activeHotspot) ?? null
+      : null;
+
   return (
     <section className="bg-surface-alt py-20 px-8">
       <div className="hidden" aria-hidden="true">
@@ -110,46 +115,6 @@ export default function InteractiveMap() {
                     <span className="absolute w-full h-full rounded-full bg-leaf/30 animate-ping" />
                   )}
                 </button>
-
-                <AnimatePresence>
-                  {activeHotspot === location.id && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                      transition={{ duration: 0.2 }}
-                      className="fixed left-1/2 top-1/2 z-[100] w-[min(18rem,calc(100vw-2rem))] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl md:absolute md:top-12 md:z-50 md:max-h-none md:w-72 md:translate-y-0 md:overflow-hidden"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <button
-                        onClick={() => setActiveHotspot(null)}
-                        aria-label={t(`map.${location.id}.title`) + ' — close'}
-                        className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
-                      >
-                        <X className="w-4 h-4" aria-hidden="true" />
-                      </button>
-                      {location.image && !location.noImage && (
-                        <div className="relative aspect-video w-full">
-                          <Image
-                            src={location.image}
-                            alt={t(`map.${location.id}.title`)}
-                            fill
-                            className="object-cover"
-                            sizes="288px" 
-                          />
-                        </div>
-                      )}
-                      <div className="p-4">
-                        <h3 className="font-serif text-lg text-ink mb-2">
-                          {t(`map.${location.id}.title`)}
-                        </h3>
-                        <p className="font-body text-sm text-ink/70">
-                          {t(`map.${location.id}.desc`)}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
             ))}
           </div>
@@ -159,6 +124,54 @@ export default function InteractiveMap() {
           {t('map.hint')}
         </p>
       </div>
+
+      <AnimatePresence>
+        {activeLocation && (
+          <motion.div
+            key={activeLocation.id}
+            initial={{ opacity: 0, y: 10, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="fixed left-1/2 top-1/2 z-[100] w-[min(18rem,calc(100vw-2rem))] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`map-dialog-title-${activeLocation.id}`}
+          >
+            <button
+              type="button"
+              onClick={() => setActiveHotspot(null)}
+              aria-label={t(`map.${activeLocation.id}.title`) + ' — close'}
+              className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
+            >
+              <X className="w-4 h-4" aria-hidden="true" />
+            </button>
+            {activeLocation.image && !activeLocation.noImage && (
+              <div className="relative aspect-video w-full">
+                <Image
+                  src={activeLocation.image}
+                  alt={t(`map.${activeLocation.id}.title`)}
+                  fill
+                  className="object-cover"
+                  sizes="288px"
+                />
+              </div>
+            )}
+            <div className="p-4">
+              <h3
+                id={`map-dialog-title-${activeLocation.id}`}
+                className="font-serif text-lg text-ink mb-2"
+              >
+                {t(`map.${activeLocation.id}.title`)}
+              </h3>
+              <p className="font-body text-sm text-ink/70">
+                {t(`map.${activeLocation.id}.desc`)}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
