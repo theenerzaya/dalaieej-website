@@ -4,7 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 
-const PLAYBACK_ID = "01PQp009SKEfaXSKTQHovctcbBvzQUVVQf1CfRg5oOnWI";
+/** Set in `.env.local` as `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux asset → Playback ID). */
+const DEFAULT_PLAYBACK_ID = "HmwU8NlSnd68NPeFoiFP016GjpJW5SmOqAn6tSpAxc5U";
+const PLAYBACK_ID =
+  process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID?.trim() || DEFAULT_PLAYBACK_ID;
 const POSTER_URL = `https://image.mux.com/${PLAYBACK_ID}/thumbnail.webp`;
 const HLS_URL = `https://stream.mux.com/${PLAYBACK_ID}.m3u8`;
 
@@ -60,7 +63,7 @@ export default function VideoHero() {
     return () => {
       if (hls) hls.destroy();
     };
-  }, [mounted, videoFailed]);
+  }, [mounted, videoFailed, HLS_URL]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
