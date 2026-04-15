@@ -28,11 +28,11 @@ export default function Footer() {
 
   return (
     <footer className="bg-ink text-main">
-      <div className="max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-32 md:pb-36">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-20 md:pb-28 lg:pb-36">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10 lg:gap-8">
 
           {/* Column 1: Brand & Weather */}
-          <div className="lg:col-span-1">
+          <div className="col-span-2 lg:col-span-1">
             <Link href={localePrefix || "/"} className="inline-block hover:opacity-90 transition-opacity">
               <img
                 src="/images/logo-white.png"
@@ -49,8 +49,8 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Experience */}
-          <div>
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-6">
+          <div className="min-w-0">
+            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
               {t("experience")}
             </h4>
             <ul className="space-y-3">
@@ -68,8 +68,8 @@ export default function Footer() {
           </div>
 
           {/* Column 3: Resort */}
-          <div>
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-6">
+          <div className="min-w-0">
+            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
               {t("resort")}
             </h4>
             <ul className="space-y-3">
@@ -98,8 +98,8 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Contact */}
-          <div>
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-6">
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
               {t("contact")}
             </h4>
             <ul className="space-y-4">
@@ -132,7 +132,7 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR: Copyright & Agency Credits */}
-        <div className="mt-12 pt-8 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-main/40">
+        <div className="mt-8 pt-6 md:mt-12 md:pt-8 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-main/40">
           <p>
             &copy; 2026 Dalai Eej Resort. {t("rights")}
           </p>

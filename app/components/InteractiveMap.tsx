@@ -136,7 +136,7 @@ export default function InteractiveMap() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[99] flex items-center justify-center bg-ink/40 p-4"
+            className="fixed inset-0 z-[99] flex items-center justify-center bg-ink/40 p-2 sm:p-4"
             onClick={() => setActiveHotspot(null)}
           >
             <motion.div
@@ -144,7 +144,7 @@ export default function InteractiveMap() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ duration: 0.2 }}
-              className="relative w-[min(18rem,calc(100vw-2rem))] max-h-[90vh] overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl"
+              className="relative w-full max-w-md md:max-w-lg max-h-[min(90dvh,100vh)] overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl pb-[max(1rem,env(safe-area-inset-bottom))]"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
@@ -166,7 +166,7 @@ export default function InteractiveMap() {
                     fill
                     draggable={false}
                     className="object-cover touch-manipulation select-none [-webkit-touch-callout:none]"
-                    sizes="288px"
+                    sizes="(max-width: 768px) 100vw, 448px"
                   />
                 </div>
               )}

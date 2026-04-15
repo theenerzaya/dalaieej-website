@@ -143,7 +143,7 @@ export default function VideoHero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2"
+        className="hidden md:block absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2"
       >
         <svg 
           className="w-8 h-8 text-white animate-bounce drop-shadow-lg" 
