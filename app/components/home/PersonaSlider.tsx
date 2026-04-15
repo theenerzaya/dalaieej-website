@@ -10,111 +10,156 @@ import Image from "next/image";
 const personas = [
   {
     id: 1,
-    en: { 
+    en: {
       title: "THE SANCTUARY",
-      description: "Refined comfort in the wild. A peaceful escape from the capital, with zero compromises.",
-      // EN Image: Interior focus (Safety/Comfort)
+      description:
+        "Refined comfort in the wild. A peaceful escape from the capital, with zero compromises.",
       image: "/images/personas/sanctuary-en.jpg",
-      href: /*"/suites"*/ "/#"
+      href: /*"/suites"*/ "/#",
     },
-    mn: { 
+    mn: {
       title: "ЭРХЭМСЭГ АЯЛАЛ",
-      description: "Тав тух, аюулгүй байдал, тансаг зэрэглэл. Таны гэр бүлд зориулсан дээд зэрэглэлийн үйлчилгээ.",
-      // MN Image: Exterior/Grandeur focus (Status/Nature)
+      description:
+        "Тав тух, аюулгүй байдал, тансаг зэрэглэл. Таны гэр бүлд зориулсан дээд зэрэглэлийн үйлчилгээ.",
       image: "/images/personas/sanctuary-mn.jpg",
-      href: /*"/suites"*/ "/#"
-    }
+      href: /*"/suites"*/ "/#",
+    },
   },
   {
     id: 2,
-    en: { 
+    en: {
       title: "THE FRONTIER",
-      description: "For those who have been everywhere. Experience the untamed Taiga and the raw beauty of the Blue Pearl.",
-      // EN Image: Moody, dramatic, "National Geographic" style
+      description:
+        "For those who have been everywhere. Experience the untamed Taiga and the raw beauty of the Blue Pearl.",
       image: "/images/personas/frontier-en.jpg",
-      href: /*"/experiences"*/ "/#"
+      href: /*"/experiences"*/ "/#",
     },
-    mn: { 
+    mn: {
       title: "ХӨХ СУВДЫН АЯЛАЛ",
-      description: "Хязгааргүй эрх чөлөө, онгон байгаль. Морьт аялал, явган алхалт, байгалийн гэрэл зураг.",
-      // MN Image: Bright, sunny, "Holiday" style
+      description:
+        "Хязгааргүй эрх чөлөө, онгон байгаль. Морьт аялал, явган алхалт, байгалийн гэрэл зураг.",
       image: "/images/personas/frontier-mn.jpg",
-      href: /*"/experiences"*/ "/#"
-    }
+      href: /*"/experiences"*/ "/#",
+    },
   },
   {
     id: 3,
-    en: { 
+    en: {
       title: "DISCONNECT TO RECONNECT",
-      description: "Silence the noise. No Zoom calls, just crackling fires, lake sounds, and deep focus.",
-      // EN Image: Solitude, person reading, calm water
+      description:
+        "Silence the noise. No Zoom calls, just crackling fires, lake sounds, and deep focus.",
       image: "/images/personas/disconnect-en.jpg",
-      href: /*"/retreats"*/ "/#"
+      href: /*"/retreats"*/ "/#",
     },
-    mn: { 
+    mn: {
       title: "ХИЙМОРЬ СЭРГЭЭХ АЯН",
-      description: "Амжилттай яваа эрхмүүдийн алжаал тайлах цэг. Чимээгүй орчин, хувийн орон зай.",
-      // MN Image: Powerful stance, looking at horizon (Revitalization)
+      description:
+        "Амжилттай яваа эрхмүүдийн алжаал тайлах цэг. Чимээгүй орчин, хувийн орон зай.",
       image: "/images/personas/disconnect-mn.jpg",
-      href: /*"/retreats"*/ "/#"
-    }
+      href: /*"/retreats"*/ "/#",
+    },
   },
   {
     id: 4,
-    en: { 
+    en: {
       title: "THE SECLUSION",
-      description: "Intimate escapes designed for two. Private dining, sunset wine, and zero interruptions.",
-      // EN Image: Wine glasses, dim lighting, intimate
+      description:
+        "Intimate escapes designed for two. Private dining, sunset wine, and zero interruptions.",
       image: "/images/personas/seclusion.jpg",
-      href: /*"/offers"*/ "/#"
+      href: /*"/offers"*/ "/#",
     },
-    mn: { 
+    mn: {
       title: "ХАЙРЫН ДИВААЖИН",
-      description: "Хоёулаа төгс цагийг өнгөрүүлэх. Хувийн оройн хоол, жаргах нар, нандин мөчүүд.",
-      // MN Image: Couple walking together, golden hour
+      description:
+        "Хоёулаа төгс цагийг өнгөрүүлэх. Хувийн оройн хоол, жаргах нар, нандин мөчүүд.",
       image: "/images/personas/seclusion.jpg",
-      href: /*"/offers"*/ "/#"
-    }
-  }
+      href: /*"/offers"*/ "/#",
+    },
+  },
 ];
 
-const slideVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
-    opacity: 0
+type PersonaEntry = (typeof personas)[number];
+
+/** CapCut-style “Left”: next pushes current off to the left; prev is the reverse. */
+const pushVariants = {
+  enter: (d: number) => ({
+    x: d >= 0 ? "100%" : "-100%",
   }),
-  center: {
-    x: 0,
-    opacity: 1
-  },
-  exit: (direction: number) => ({
-    x: direction < 0 ? 300 : -300,
-    opacity: 0
-  })
+  center: { x: "0%" },
+  exit: (d: number) => ({
+    x: d >= 0 ? "-100%" : "100%",
+  }),
 };
+
+const pushTransition = {
+  duration: 0.5,
+  ease: [0.32, 0.72, 0, 1] as const,
+};
+
+function PersonaPushFrame({
+  persona,
+  locale,
+  direction,
+  priority,
+  sizes,
+}: {
+  persona: PersonaEntry;
+  locale: string;
+  direction: number;
+  priority?: boolean;
+  sizes: string;
+}) {
+  const copy = locale === "mn" ? persona.mn : persona.en;
+  return (
+    <AnimatePresence initial={false} custom={direction} mode="sync">
+      <motion.div
+        key={`${persona.id}-${locale}`}
+        custom={direction}
+        variants={pushVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        transition={pushTransition}
+        className="absolute inset-0"
+      >
+        <Image
+          src={copy.image}
+          alt={copy.title}
+          fill
+          className="object-cover"
+          sizes={sizes}
+          priority={priority}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 export default function PersonaSlider() {
   const locale = useLocale();
-  const localePrefix = locale === 'mn' ? '/mn' : '';
+  const localePrefix = locale === "mn" ? "/mn" : "";
 
-  const filtered = locale === 'en' ? personas.filter(p => p.id === 2) : personas;
+  const filtered = locale === "en" ? personas.filter((p) => p.id === 2) : personas;
   const visiblePersonas = filtered.length > 0 ? filtered : personas;
 
   const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const paginate = useCallback((newDirection: number) => {
-    setActiveIndex(([currentIndex]) => {
-      const newIndex = currentIndex + newDirection;
-      if (newIndex < 0) {
-        return [visiblePersonas.length - 1, newDirection];
-      } else if (newIndex >= visiblePersonas.length) {
-        return [0, newDirection];
-      } else {
+  const paginate = useCallback(
+    (newDirection: number) => {
+      setActiveIndex(([currentIndex]) => {
+        const newIndex = currentIndex + newDirection;
+        if (newIndex < 0) {
+          return [visiblePersonas.length - 1, newDirection];
+        }
+        if (newIndex >= visiblePersonas.length) {
+          return [0, newDirection];
+        }
         return [newIndex, newDirection];
-      }
-    });
-  }, [visiblePersonas.length]);
+      });
+    },
+    [visiblePersonas.length]
+  );
 
   const resetTimer = useCallback(() => {
     if (intervalRef.current) {
@@ -139,13 +184,17 @@ export default function PersonaSlider() {
     resetTimer();
   };
 
-  const handleDotClick = (index: number) => {
-    setActiveIndex(([currentIndex]) => [index, index > currentIndex ? 1 : -1]);
-    resetTimer();
-  };
+  const n = visiblePersonas.length;
+  const leftIdx = (activeIndex - 1 + n) % n;
+  const rightIdx = (activeIndex + 1) % n;
 
   const currentPersona = visiblePersonas[activeIndex];
-  const content = locale === 'mn' ? currentPersona.mn : currentPersona.en;
+  const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
+
+  const sideFrameClass =
+    "relative w-[28%] max-w-[220px] md:max-w-[300px] shrink-0 aspect-[5/4] md:aspect-[3/2] overflow-hidden shadow-2xl ring-1 ring-white/10";
+  const centerFrameClass =
+    "relative w-[min(52vw,720px)] shrink-0 aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10 z-10";
 
   return (
     <section className="py-16 md:py-24 bg-ink relative overflow-hidden">
@@ -153,114 +202,139 @@ export default function PersonaSlider() {
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <p className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-8">
-          {locale === 'mn' ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
+          {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
         </p>
 
         <div className="relative">
-          <div className="relative aspect-[16/9] md:aspect-[2.5/1] overflow-hidden rounded-lg shadow-2xl">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-              <motion.div
-                // KEY CHANGE: The key now includes locale to force re-render if language changes
-                key={`${currentPersona.id}-${locale}`}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.3 }
-                }}
-                className="absolute inset-0"
-              >
-                <Image
-                  // USE LOCALIZED IMAGE
-                  src={content.image}
-                  alt={content.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent" />
-              </motion.div>
-            </AnimatePresence>
+          {n === 1 ? (
+            <div className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10">
+              <PersonaPushFrame
+                persona={visiblePersonas[0]}
+                locale={locale}
+                direction={direction}
+                priority
+                sizes="(max-width: 768px) 100vw, 896px"
+              />
+            </div>
+          ) : (
+            <div className="w-full overflow-x-hidden">
+              <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 py-2 -mx-4 sm:-mx-8">
+                <div className={sideFrameClass}>
+                  <PersonaPushFrame
+                    persona={visiblePersonas[leftIdx]}
+                    locale={locale}
+                    direction={direction}
+                    sizes="(max-width: 768px) 40vw, 300px"
+                  />
+                </div>
+                <div className={centerFrameClass}>
+                  <PersonaPushFrame
+                    persona={visiblePersonas[activeIndex]}
+                    locale={locale}
+                    direction={direction}
+                    priority
+                    sizes="(max-width: 768px) 85vw, 720px"
+                  />
+                </div>
+                <div className={sideFrameClass}>
+                  <PersonaPushFrame
+                    persona={visiblePersonas[rightIdx]}
+                    locale={locale}
+                    direction={direction}
+                    sizes="(max-width: 768px) 40vw, 300px"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
-            {visiblePersonas.length > 1 && (
-              <>
+          {n > 1 && (
+            <div className="mt-8 flex flex-col items-center gap-6">
+              <div className="flex items-center gap-4">
                 <button
+                  type="button"
                   onClick={() => handlePaginate(-1)}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full transition-colors border border-white/10"
+                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-main transition-colors"
                   aria-label="Previous slide"
                 >
-                  <ChevronLeft className="w-6 h-6 text-white" />
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
+                <span className="font-body text-main/70 text-sm tabular-nums min-w-[3.5rem] text-center">
+                  {activeIndex + 1}/{n}
+                </span>
                 <button
+                  type="button"
                   onClick={() => handlePaginate(1)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full transition-colors border border-white/10"
+                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-main transition-colors"
                   aria-label="Next slide"
                 >
-                  <ChevronRight className="w-6 h-6 text-white" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
-              </>
-            )}
-          </div>
-
-          <div className="mt-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <span className="font-body text-main/50 text-sm">
-                  0{activeIndex + 1}
-                </span>
-                <div className="h-[1px] w-12 bg-surface/20" />
-                <span className="font-body text-main/50 text-sm">
-                  0{visiblePersonas.length}
-                </span>
               </div>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  // Force re-render on locale change for text animations too
-                  key={`${currentPersona.id}-${locale}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide">
-                    {content.title}
-                  </h3>
-                  <p className="font-body text-main/70 max-w-xl text-lg font-light leading-relaxed">
-                    {content.description}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
+              <div className="w-full max-w-2xl text-center mx-auto">
+                <AnimatePresence mode="wait" custom={direction}>
+                  <motion.div
+                    key={`${currentPersona.id}-${locale}`}
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide">
+                      {content.title}
+                    </h3>
+                    <p className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed">
+                      {content.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
+                  <Link
+                    href={`${localePrefix}${content.href}`}
+                    className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-main hover:text-white transition-colors border border-surface/30 px-6 py-3 rounded-full hover:bg-white/5"
+                  >
+                    <span>{locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}</span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </div>
             </div>
+          )}
 
-            <Link
-              href={`${localePrefix}${content.href}`}
-              className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-main hover:text-white transition-colors border border-surface/30 px-6 py-3 rounded-full hover:bg-white/5"
-            >
-              <span>{locale === 'mn' ? "Дэлгэрэнгүй" : "Explore"}</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
+          {n === 1 && (
+            <div className="mt-8 flex flex-col items-center text-center gap-6">
+              <div className="w-full max-w-2xl mx-auto">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${currentPersona.id}-${locale}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide">
+                      {content.title}
+                    </h3>
+                    <p className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed">
+                      {content.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
 
-          <div className="flex justify-center gap-2 mt-12 md:mt-0 md:absolute md:top-6 md:right-6 z-20">
-            {visiblePersonas.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === activeIndex 
-                    ? "bg-white w-6" 
-                    : "bg-white/30 hover:bg-white/50"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
+              <Link
+                href={`${localePrefix}${content.href}`}
+                className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-main hover:text-white transition-colors border border-surface/30 px-6 py-3 rounded-full hover:bg-white/5"
+              >
+                <span>{locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          )}
         </div>
-
       </div>
     </section>
   );
