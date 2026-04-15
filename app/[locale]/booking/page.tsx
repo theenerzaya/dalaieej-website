@@ -6,12 +6,18 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Users, Check, Tag, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
 import { useTranslations } from 'next-intl';
+import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 
 interface RoomRestrictions {
   closedToArrival: boolean;
   closedToDeparture: boolean;
   minLos: number;
   maxLos: number;
+}
+
+interface RoomCancellation {
+  daysBeforeArrival?: number;
+  policyText?: string;
 }
 
 interface Room {
@@ -28,6 +34,7 @@ interface Room {
   photos: string[];
   features: string[];
   restrictions?: RoomRestrictions | null;
+  cancellation?: RoomCancellation | null;
 }
 
 interface RoomTypeGroup {
@@ -59,6 +66,11 @@ interface AvailabilityData {
   checkin: string;
   checkout: string;
   rooms: Room[];
+  propertyTermsAndConditions?: string | null;
+}
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function formatDate(dateStr: string): string {
@@ -74,6 +86,15 @@ function calculateNights(checkinDate: string, checkoutDate: string): number {
   const diffTime = end.getTime() - start.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays > 0 ? diffDays : 1;
+}
+
+/** Jul 1–5 for the upcoming summer window (next year after Jul 5 has passed). */
+function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
+  const now = new Date();
+  let year = now.getFullYear();
+  const afterWindow = now.getMonth() > 6 || (now.getMonth() === 6 && now.getDate() > 5);
+  if (afterWindow) year += 1;
+  return { checkin: `${year}-07-01`, checkout: `${year}-07-05` };
 }
 
 function translateRateName(name: string, locale: string): string {
@@ -119,11 +140,63 @@ function BookingContent() {
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
   const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
+  const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
 
   const totalGuests = totalAdults + totalChildren;
   const cartCapacity = cart.reduce((sum, item) => sum + (item.maxGuests * item.quantity), 0);
   const cartTotal = cart.reduce((sum, item) => sum + (item.pricePerNight * item.quantity * numberOfNights), 0);
   const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const depositDueNow = useMemo(
+    () =>
+      sumDepositDueForRoomLines(
+        cart.map((item) => ({
+          rateName: item.rateName,
+          pricePerNight: item.pricePerNight,
+          quantity: item.quantity,
+        })),
+        numberOfNights
+      ),
+    [cart, numberOfNights]
+  );
+  const balanceOnArrival = Math.max(0, cartTotal - depositDueNow);
+
+  const cartCancellationNotes = useMemo(() => {
+    type Line = { label: string; text: string };
+    const lines: Line[] = [];
+    for (const item of cart) {
+      const room = rooms.find((r) => r.roomTypeID === item.roomTypeID && r.rateID === item.rateID);
+      const label =
+        item.quantity > 1
+          ? `${item.roomTypeName} (${item.quantity}×) · ${translateRateName(item.rateName, currentLocale)}`
+          : `${item.roomTypeName} · ${translateRateName(item.rateName, currentLocale)}`;
+
+      if (isNonRefundableRate(item.rateName)) {
+        lines.push({
+          label,
+          text:
+            currentLocale === "mn"
+              ? "Энэ үнэ буцаан олгогдохгүй."
+              : "This rate is non-refundable.",
+        });
+        continue;
+      }
+
+      const c = room?.cancellation;
+      if (c?.daysBeforeArrival != null && c.daysBeforeArrival > 0) {
+        lines.push({
+          label,
+          text:
+            currentLocale === "mn"
+              ? `Ирэхээс ${c.daysBeforeArrival} хоногийн өмнө хүртэл цуцлах боломжтой (Cloudbeds).`
+              : `Cancel free up to ${c.daysBeforeArrival} days before arrival (Cloudbeds).`,
+        });
+      } else if (c?.policyText?.trim()) {
+        lines.push({ label, text: stripHtml(c.policyText.trim()) });
+      }
+    }
+    return lines;
+  }, [cart, rooms, currentLocale]);
 
   const cartKey = (roomTypeID: string, rateID: string) => `${roomTypeID}__${rateID}`;
 
@@ -177,8 +250,12 @@ function BookingContent() {
     const urlAdults = searchParams.get("adults");
     const urlChildren = searchParams.get("children");
 
-    if (urlCheckin) setCheckin(urlCheckin);
-    if (urlCheckout) setCheckout(urlCheckout);
+    const defaults = getDefaultJulyStayDates();
+    const effectiveCheckin = urlCheckin || defaults.checkin;
+    const effectiveCheckout = urlCheckout || defaults.checkout;
+
+    setCheckin(effectiveCheckin);
+    setCheckout(effectiveCheckout);
     if (urlPromo) {
       setPromoCode(urlPromo);
       setAppliedPromo(urlPromo);
@@ -190,16 +267,15 @@ function BookingContent() {
     if (urlAdults) setTotalAdults(parsedAdults);
     if (urlChildren) setTotalChildren(parsedChildren);
 
-    if (urlCheckin && urlCheckout) {
-      setNumberOfNights(calculateNights(urlCheckin, urlCheckout));
-      fetchAvailability(urlCheckin, urlCheckout, urlPromo || "", parsedAdults, parsedChildren);
-    }
+    setNumberOfNights(calculateNights(effectiveCheckin, effectiveCheckout));
+    fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "", parsedAdults, parsedChildren);
   }, [searchParams]);
   
   const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "", adults: number = totalAdults, children: number = totalChildren) => {
     setLoading(true);
     setError("");
     setRooms([]);
+    setPropertyTermsAndConditions(null);
 
     try {
       let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&adults=${adults}&children=${children}`;
@@ -216,6 +292,7 @@ function BookingContent() {
       }
 
       setRooms(data.rooms || []);
+      setPropertyTermsAndConditions(data.propertyTermsAndConditions ?? null);
       setSearched(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -714,10 +791,51 @@ function BookingContent() {
                           {currentLocale === 'mn' ? 'Төлбөрийн хуваарь' : 'Payment Schedule'}
                         </p>
                         <div className="flex justify-between text-sm font-body">
-                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Урьдчилгаа' : 'Deposit'}</span>
-                          <span className="text-ink">{cartTotal.toLocaleString()}</span>
+                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Урьдчилгаа (одоо)' : 'Deposit (pay now)'}</span>
+                          <span className="text-ink">{depositDueNow.toLocaleString()}</span>
                         </div>
+                        {balanceOnArrival > 0 && (
+                          <div className="flex justify-between text-sm font-body mt-1.5">
+                            <span className="text-ink/70">{currentLocale === 'mn' ? 'Ирэхэд төлөх' : 'Due on arrival'}</span>
+                            <span className="text-ink">{balanceOnArrival.toLocaleString()}</span>
+                          </div>
+                        )}
                       </div>
+
+                      {cart.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-ink/10">
+                          <p className="text-xs text-ink/60 font-body font-medium uppercase tracking-wider mb-2">
+                            {currentLocale === "mn" ? "Цуцлалт (Cloudbeds)" : "Cancellation (Cloudbeds)"}
+                          </p>
+                          <ul className="space-y-2 text-xs text-ink/80 font-body">
+                            {cartCancellationNotes.map((row, i) => (
+                              <li key={i}>
+                                <span className="font-medium text-ink">{row.label}</span>
+                                <span className="text-ink/70"> — {row.text}</span>
+                              </li>
+                            ))}
+                            {cartCancellationNotes.length === 0 && (
+                              <li className="text-ink/70">
+                                {currentLocale === "mn"
+                                  ? "Танай сонгосон үнэд зориулсан өдрийн тоо API-аас ирээгүй байна. Доорх нөхцөл эсвэл баталгаажуулах имэйлээ шалгана уу."
+                                  : "No rate-level cancellation rule was returned by Cloudbeds for this search. Check the property terms below or your confirmation email."}
+                              </li>
+                            )}
+                          </ul>
+                          {propertyTermsAndConditions && (() => {
+                            const plain = stripHtml(propertyTermsAndConditions);
+                            const short = plain.length > 480 ? `${plain.slice(0, 480)}…` : plain;
+                            return (
+                              <p className="mt-3 text-xs text-ink/70 font-body leading-relaxed">
+                                <span className="font-medium text-ink/80">
+                                  {currentLocale === "mn" ? "Байршлын нөхцөл (Cloudbeds): " : "Property terms (Cloudbeds): "}
+                                </span>
+                                {short}
+                              </p>
+                            );
+                          })()}
+                        </div>
+                      )}
 
                       {capacityError && (
                         <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-start gap-2">

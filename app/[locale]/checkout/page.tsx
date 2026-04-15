@@ -6,11 +6,13 @@ import { Suspense } from "react";
 import { User, Mail, Phone, Globe, MessageSquare, Plus, Minus, Loader2, AlertCircle, Check, ChevronDown, ChevronUp, Bed } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
+import { sumDepositDueForRoomLines, depositPortionForAddonTotal } from "@/lib/deposit-policy";
 
 interface CartRoom {
   roomTypeID: string;
   roomTypeName: string;
   rateID: string;
+  rateName?: string;
   maxGuests: number;
   pricePerNight: number;
   currency: string;
@@ -141,9 +143,21 @@ function CheckoutContent() {
     }, 0);
   };
 
+  const addonsTotal = calculateAddonsTotal();
   const roomsTotal = cartRooms.reduce((sum, room) => sum + (room.pricePerNight * room.quantity * nights), 0);
-  const totalPrice = roomsTotal + calculateAddonsTotal();
+  const totalPrice = roomsTotal + addonsTotal;
   const currency = cartRooms[0]?.currency || "MNT";
+
+  const depositDueNow =
+    sumDepositDueForRoomLines(
+      cartRooms.map((r) => ({
+        rateName: r.rateName ?? "",
+        pricePerNight: r.pricePerNight,
+        quantity: r.quantity,
+      })),
+      nights
+    ) + depositPortionForAddonTotal(addonsTotal);
+  const balanceOnArrival = Math.max(0, totalPrice - depositDueNow);
 
   const validateForm = () => {
     if (!firstName.trim()) return t('errorFirstName');
@@ -199,7 +213,8 @@ function CheckoutContent() {
 
       const paymentParams = new URLSearchParams({
         bookingId: data.reservationId || `booking-${Date.now()}`,
-        amount: String(totalPrice),
+        amount: String(depositDueNow),
+        totalAmount: String(totalPrice),
         nights: String(nights),
         guestName: `${firstName} ${lastName}`,
       });
@@ -526,6 +541,23 @@ function CheckoutContent() {
                     })}
                   </div>
                 )}
+
+                <div className="border-t border-ink-secondary/10 pt-3 space-y-2">
+                  <div className="flex justify-between text-sm font-body text-ink">
+                    <span className="text-ink/70">
+                      {currentLocale === "mn" ? "Урьдчилгаа (одоо төлнө)" : "Deposit (pay now)"}
+                    </span>
+                    <span>{depositDueNow.toLocaleString()} {currency}</span>
+                  </div>
+                  {balanceOnArrival > 0 && (
+                    <div className="flex justify-between text-sm font-body text-ink">
+                      <span className="text-ink/70">
+                        {currentLocale === "mn" ? "Ирэхэд төлөх" : "Due on arrival"}
+                      </span>
+                      <span>{balanceOnArrival.toLocaleString()} {currency}</span>
+                    </div>
+                  )}
+                </div>
 
                 <div className="border-t border-ink-secondary/10 pt-3">
                   <div className="flex justify-between font-serif text-lg text-ink">

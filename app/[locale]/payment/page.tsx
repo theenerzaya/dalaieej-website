@@ -22,12 +22,18 @@ function StripePaymentForm({
   bookingId, 
   guestName, 
   nights,
+  totalAmount,
+  returnPathPrefix,
+  paymentLocale,
   onSuccess 
 }: { 
   amount: string; 
   bookingId: string; 
   guestName: string;
   nights: string;
+  totalAmount?: string;
+  returnPathPrefix: string;
+  paymentLocale: "en" | "mn";
   onSuccess: () => void;
 }) {
   const stripe = useStripe();
@@ -44,10 +50,19 @@ function StripePaymentForm({
     setError("");
 
     try {
+      const confirmReturn = new URLSearchParams({
+        bookingId,
+        guestName,
+        nights,
+        amount,
+        source: "stripe",
+      });
+      if (totalAmount) confirmReturn.set("totalAmount", totalAmount);
+
       const { error: submitError } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/booking/confirmation?bookingId=${bookingId}&guestName=${encodeURIComponent(guestName)}&nights=${nights}&amount=${amount}&source=stripe`,
+          return_url: `${window.location.origin}${returnPathPrefix}/booking/confirmation?${confirmReturn.toString()}`,
         },
         redirect: "if_required",
       });
@@ -83,6 +98,13 @@ function StripePaymentForm({
           <span className="text-main/60 text-sm font-body">{nights} {parseInt(nights) !== 1 ? 'nights' : 'night'}</span>
           <span className="text-main font-serif text-xl">{formattedAmount} MNT</span>
         </div>
+        {totalAmount && parseInt(totalAmount, 10) > parseInt(amount || "0", 10) && (
+          <p className="text-main/50 text-xs font-body pt-2 border-t border-main/10">
+            {paymentLocale === "mn"
+              ? `Урьдчилгаа. Ирэхэд ${(parseInt(totalAmount, 10) - parseInt(amount, 10)).toLocaleString()} ₮ төлнө.`
+              : `Deposit today. Balance ${(parseInt(totalAmount, 10) - parseInt(amount, 10)).toLocaleString()} MNT due on arrival.`}
+          </p>
+        )}
       </div>
 
       <div className="bg-white rounded-xl p-4">
@@ -143,6 +165,7 @@ function PaymentContent() {
   const [manualExpanded, setManualExpanded] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [guestName, setGuestName] = useState("");
+  const [bookingTotal, setBookingTotal] = useState("");
   const [fromCheckout, setFromCheckout] = useState(false);
   const [autoGenerating, setAutoGenerating] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
@@ -153,12 +176,14 @@ function PaymentContent() {
   useEffect(() => {
     const urlBookingId = searchParams.get("bookingId");
     const urlAmount = searchParams.get("amount");
+    const urlTotalAmount = searchParams.get("totalAmount");
     const urlNights = searchParams.get("nights");
     const urlGuestName = searchParams.get("guestName");
     const success = searchParams.get("success");
     
     if (urlBookingId) setBookingId(urlBookingId);
     if (urlAmount) setAmount(urlAmount);
+    if (urlTotalAmount) setBookingTotal(urlTotalAmount);
     if (urlNights) setNights(urlNights);
     if (urlGuestName) setGuestName(urlGuestName);
     if (success === "true") {
@@ -167,6 +192,7 @@ function PaymentContent() {
       if (urlGuestName) confirmParams.set("guestName", urlGuestName);
       if (urlNights) confirmParams.set("nights", urlNights);
       if (urlAmount) confirmParams.set("amount", urlAmount);
+      if (urlTotalAmount) confirmParams.set("totalAmount", urlTotalAmount);
       confirmParams.set("source", "stripe");
       router.replace(`${localePrefix}/booking/confirmation?${confirmParams.toString()}`);
       return;
@@ -326,6 +352,7 @@ function PaymentContent() {
     if (guestName) confirmParams.set("guestName", guestName);
     if (nights) confirmParams.set("nights", nights);
     if (amount) confirmParams.set("amount", amount);
+    if (bookingTotal) confirmParams.set("totalAmount", bookingTotal);
     confirmParams.set("source", "qpay");
     router.replace(`${localePrefix}/booking/confirmation?${confirmParams.toString()}`);
   };
@@ -420,6 +447,12 @@ function PaymentContent() {
 
   const formattedAmount = amount ? parseInt(amount).toLocaleString() : "0";
   const tBooking = useTranslations('booking');
+
+  const payNowNum = amount ? parseInt(amount, 10) : 0;
+  const bookingTotalNum = bookingTotal ? parseInt(bookingTotal, 10) : 0;
+  const showPaymentSplit =
+    bookingTotalNum > 0 && payNowNum > 0 && bookingTotalNum > payNowNum;
+  const balanceOnArrival = showPaymentSplit ? bookingTotalNum - payNowNum : 0;
 
   if (autoGenerating || (currentLocale === 'mn' && fromCheckout && loading && !qrCode)) {
     return (
@@ -528,6 +561,9 @@ function PaymentContent() {
                   bookingId={bookingId}
                   guestName={guestName}
                   nights={nights}
+                  totalAmount={bookingTotal || undefined}
+                  returnPathPrefix={localePrefix}
+                  paymentLocale={currentLocale}
                   onSuccess={() => handlePaymentConfirmed()}
                 />
               </Elements>
@@ -652,9 +688,26 @@ function PaymentContent() {
                 </div>
                 <div className="text-right">
                   <p className="text-main/70 text-xs font-body">{nights} {parseInt(nights) !== 1 ? tBooking('nights') : tBooking('night')}</p>
+                  <p className="text-main/50 text-xs font-body mb-0.5">
+                    {showPaymentSplit
+                      ? (currentLocale === "mn" ? "Урьдчилгаа" : "Deposit")
+                      : (currentLocale === "mn" ? "Дүн" : "Amount")}
+                  </p>
                   <p className="text-main font-serif text-xl">{formattedAmount} MNT</p>
                 </div>
               </div>
+              {showPaymentSplit && (
+                <div className="mt-3 pt-3 border-t border-main/10 space-y-2 text-sm font-body">
+                  <div className="flex justify-between text-main/80">
+                    <span>{currentLocale === "mn" ? "Захиалгын нийт" : "Booking total"}</span>
+                    <span>{bookingTotalNum.toLocaleString()} MNT</span>
+                  </div>
+                  <div className="flex justify-between text-main/80">
+                    <span>{currentLocale === "mn" ? "Ирэхэд төлөх" : "Due on arrival"}</span>
+                    <span>{balanceOnArrival.toLocaleString()} MNT</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {bankUrls.length > 0 && (

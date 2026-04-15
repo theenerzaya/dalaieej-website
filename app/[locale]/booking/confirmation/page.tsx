@@ -19,6 +19,7 @@ function ConfirmationContent() {
   const guestName = searchParams.get("guestName") || "";
   const nights = searchParams.get("nights") || "";
   const amount = searchParams.get("amount") || "";
+  const totalAmount = searchParams.get("totalAmount") || "";
   const checkin = searchParams.get("checkin") || "";
   const checkout = searchParams.get("checkout") || "";
   const source = searchParams.get("source") || "";
@@ -48,7 +49,15 @@ function ConfirmationContent() {
     setConfirmed(true);
   }, [bookingId, source]);
 
-  const formattedAmount = amount ? parseInt(amount).toLocaleString() : "";
+  const paidNum = amount ? parseInt(amount, 10) : 0;
+  const bookingTotalNum = totalAmount ? parseInt(totalAmount, 10) : 0;
+  const showSplit =
+    bookingTotalNum > 0 && paidNum > 0 && bookingTotalNum > paidNum;
+  const balanceNum = showSplit ? bookingTotalNum - paidNum : 0;
+
+  const formattedAmount = amount ? paidNum.toLocaleString() : "";
+  const formattedBalance = showSplit ? balanceNum.toLocaleString() : "";
+  const formattedBookingTotal = showSplit ? bookingTotalNum.toLocaleString() : "";
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
@@ -140,12 +149,35 @@ function ConfirmationContent() {
                 </div>
               )}
 
-              {formattedAmount && (
+              {formattedAmount && !showSplit && (
                 <div className="flex items-center gap-3 pt-3 border-t border-main/10">
                   <span className="text-main/50 text-sm font-body">{t("totalPaid")}</span>
                   <span className="text-main font-serif text-xl ml-auto">
                     {formattedAmount} MNT
                   </span>
+                </div>
+              )}
+
+              {formattedAmount && showSplit && (
+                <div className="pt-3 border-t border-main/10 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-main/50 text-sm font-body">{t("bookingTotal")}</span>
+                    <span className="text-main font-medium font-body ml-auto">
+                      {formattedBookingTotal} MNT
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-main/50 text-sm font-body">{t("paidToday")}</span>
+                    <span className="text-main font-serif text-xl ml-auto">
+                      {formattedAmount} MNT
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-main/50 text-sm font-body">{t("balanceOnArrival")}</span>
+                    <span className="text-main font-medium font-body ml-auto">
+                      {formattedBalance} MNT
+                    </span>
+                  </div>
                 </div>
               )}
             </div>

@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet } from "@/lib/cloudbeds";
+import {
+  extractRateCancellationFromPlan,
+  mergeCancellation,
+  type RateCancellation,
+} from "@/lib/cloudbeds-rate-cancellation";
 
 interface RateRestriction {
   closedToArrival: boolean;
@@ -45,10 +50,14 @@ export async function GET(request: NextRequest) {
     if (adults) params.adults = adults;
     if (children) params.children = children;
 
-    const [availabilityData, ratePlansData] = await Promise.all([
+    const [availabilityData, ratePlansData, hotelDetailsData] = await Promise.all([
       cloudbedsGet<any>("/getAvailableRoomTypes", params),
       cloudbedsGet<any>("/getRatePlans", { ...params, detailedRates: "true" }).catch((err) => {
         console.error("Failed to fetch rate plan restrictions:", err);
+        return null;
+      }),
+      cloudbedsGet<any>("/getHotelDetails", {}).catch((err) => {
+        console.error("Failed to fetch hotel details:", err);
         return null;
       }),
     ]);
@@ -58,6 +67,8 @@ export async function GET(request: NextRequest) {
 
     const restrictionByRateID = new Map<string, RateRestriction>();
     const baseRestrictionByRoomType = new Map<string, RateRestriction>();
+    const cancellationByRateID = new Map<string, RateCancellation>();
+    const baseCancellationByRoomType = new Map<string, RateCancellation>();
 
     if (ratePlansData?.data) {
       for (const rate of ratePlansData.data) {
@@ -79,6 +90,14 @@ export async function GET(request: NextRequest) {
         if (!rate.isDerived && rate.roomTypeID) {
           baseRestrictionByRoomType.set(String(rate.roomTypeID), restriction);
         }
+
+        const cancellation = extractRateCancellationFromPlan(rate as Record<string, unknown>);
+        if (cancellation) {
+          cancellationByRateID.set(String(rate.rateID), cancellation);
+          if (!rate.isDerived && rate.roomTypeID) {
+            baseCancellationByRoomType.set(String(rate.roomTypeID), cancellation);
+          }
+        }
       }
     }
 
@@ -98,6 +117,18 @@ export async function GET(request: NextRequest) {
       };
     }
 
+    function mergeCancellationForRoom(rateID: string, roomTypeID: string): RateCancellation | null {
+      return mergeCancellation(
+        cancellationByRateID.get(rateID),
+        baseCancellationByRoomType.get(roomTypeID)
+      );
+    }
+
+    const propertyTermsAndConditions =
+      typeof hotelDetailsData?.data?.propertyPolicy?.propertyTermsAndConditions === "string"
+        ? hotelDetailsData.data.propertyPolicy.propertyTermsAndConditions.trim() || null
+        : null;
+
     const propertyData = availabilityData?.data?.[0];
     if (!propertyData || !propertyData.propertyRooms) {
       console.log("No property rooms found in response, returning empty");
@@ -106,6 +137,7 @@ export async function GET(request: NextRequest) {
         checkin,
         checkout,
         rooms: [],
+        propertyTermsAndConditions,
       });
     }
 
@@ -138,6 +170,7 @@ export async function GET(request: NextRequest) {
       }
 
       const mergedRestriction = mergeRestrictions(String(room.roomRateID), String(room.roomTypeID));
+      const mergedCancellation = mergeCancellationForRoom(String(room.roomRateID), String(room.roomTypeID));
 
       return {
         roomTypeID: room.roomTypeID,
@@ -153,6 +186,7 @@ export async function GET(request: NextRequest) {
         photos: photos,
         features: room.roomTypeFeatures || [],
         restrictions: mergedRestriction,
+        cancellation: mergedCancellation,
       };
     });
 
@@ -161,6 +195,7 @@ export async function GET(request: NextRequest) {
       checkin,
       checkout,
       rooms: enrichedRooms,
+      propertyTermsAndConditions,
     });
   } catch (error) {
     console.error("Cloudbeds availability error:", error);
