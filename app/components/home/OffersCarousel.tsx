@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocale } from "next-intl";
 import Link from "next/link";
@@ -80,7 +80,19 @@ export default function OffersCarousel() {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [headingBlockHeight, setHeadingBlockHeight] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const headingBlockRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const el = headingBlockRef.current;
+    if (!el) return;
+    const measure = () => setHeadingBlockHeight(el.offsetHeight);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [locale]);
 
   const startAutoPlay = useCallback(() => {
     if (intervalRef.current) {
@@ -125,26 +137,33 @@ export default function OffersCarousel() {
   const content = locale === 'mn' ? currentOffer.mn : currentOffer.en;
 
   return (
-    <section className="bg-main pt-20 md:pt-28 pb-0">
+    <section
+      className="bg-main pt-20 md:pt-28 pb-12 md:pb-16"
+      style={
+        { ["--offers-heading-block-h" as string]: `${headingBlockHeight}px` } as React.CSSProperties
+      }
+    >
       <div className="max-w-7xl mx-auto px-6 text-center mb-12 md:mb-16">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="font-body text-leaf/60 text-sm tracking-[0.3em] uppercase mb-6"
-        >
-          {locale === 'mn' ? "Энэ зун" : "This Season"}
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-serif text-3xl md:text-4xl lg:text-5xl text-leaf leading-relaxed"
-        >
-          {locale === 'mn' ? "Өөртөө зориул." : "Make it yours."}
-        </motion.h2>
+        <div ref={headingBlockRef}>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="font-body text-leaf/60 text-sm tracking-[0.3em] uppercase mb-6"
+          >
+            {locale === 'mn' ? "Энэ зун" : "This Season"}
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="font-serif text-3xl md:text-4xl lg:text-5xl text-leaf leading-relaxed"
+          >
+            {locale === 'mn' ? "Өөртөө зориул." : "Make it yours."}
+          </motion.h2>
+        </div>
       </div>
 
       <div 
@@ -154,7 +173,9 @@ export default function OffersCarousel() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]">
           {/* Image Side */}
-          <div className="relative h-[350px] lg:h-auto overflow-hidden">
+          <div
+            className="relative h-[350px] lg:h-auto overflow-hidden mb-[calc(3rem+var(--offers-heading-block-h,0px))] md:mb-[calc(4rem+var(--offers-heading-block-h,0px))] lg:mb-0 lg:pb-[calc(4rem+var(--offers-heading-block-h,0px))]"
+          >
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentOffer.id}
@@ -173,7 +194,7 @@ export default function OffersCarousel() {
           </div>
 
           {/* Content Side */}
-          <div className="flex flex-col items-center justify-center px-8 lg:px-16 py-16 lg:py-0 text-center">
+          <div className="flex flex-col items-center justify-center px-8 lg:px-16 pt-0 pb-16 lg:py-0 text-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentOffer.id}
