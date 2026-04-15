@@ -71,23 +71,12 @@ export default function Testimonials() {
       <div className="absolute inset-0 bg-black/25 pointer-events-none" aria-hidden />
 
       <div className="relative z-10 flex flex-col flex-1 min-h-[85vh] px-4 sm:px-6 py-10 md:py-14">
-        {/* Section eyebrow — narrative bridge */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-6 text-overlay-glow"
-        >
-          {t("sectionEyebrow")}
-        </motion.p>
-
         {/* Aggregate rating — on photo, outside card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.05 }}
+          transition={{ duration: 0.6 }}
           className="flex flex-col items-center gap-3 shrink-0"
         >
           <div className="flex items-center gap-4 rounded-2xl bg-ink/35 px-5 py-3 backdrop-blur-sm shadow-lg border border-main/10">

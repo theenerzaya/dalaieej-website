@@ -98,29 +98,6 @@ export default function SiloGrid() {
 
   return (
     <section className="bg-white w-full">
-      <div className="py-20 md:py-28 px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="font-body text-water-deep/60 text-sm tracking-[0.3em] uppercase mb-6"
-        >
-          {isMongolian ? "Туршлага" : "The Experience"}
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-serif text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed max-w-3xl mx-auto"
-        >
-          {isMongolian
-            ? "Байгальтай уулзах дөрвөн зам."
-            : "Four ways to meet the wilderness."}
-        </motion.h2>
-      </div>
-
       {/* Mobile Stack */}
       <div className="flex flex-col w-full md:hidden">
         {silos.map((silo) => (
