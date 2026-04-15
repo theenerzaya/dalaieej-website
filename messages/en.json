@@ -579,10 +579,10 @@
     "errorTerms": "Please accept the Terms & Conditions to continue"
   },
   "silo": {
-    "sanctuary": "THE SANCTUARY",
-    "hearth": "THE HEARTH",
-    "stillness": "THE STILLNESS",
-    "wilderness": "THE WILDERNESS"
+    "sanctuary": "CABINS",
+    "hearth": "RESTAURANT",
+    "stillness": "WELLNESS",
+    "wilderness": "EXPERIENCES"
   },
   "catalogue": {
     "archiveLabel": "The 2026 Archive",
