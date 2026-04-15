@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const silos = [
   {
@@ -50,9 +50,9 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
     offset: ["start end", "end start"]
   });
 
-  // Moves from Top (-35vh) to Bottom (+35vh)
-  const yRaw = useTransform(scrollYProgress, [0, 1], ["-35vh", "35vh"]);
-  const y = useSpring(yRaw, { stiffness: 300, damping: 40 });
+  // % of the motion layer (≈ card height), not vh — avoids iOS toolbar resize jank.
+  // No spring: touch scroll has inertia; a spring lags behind and feels rubbery.
+  const y = useTransform(scrollYProgress, [0, 1], ["-40%", "40%"]);
 
   return (
     <div 
@@ -76,7 +76,7 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
         {/* Motion Text Layer */}
         {/* Added 'pointer-events-none' to prevent cursor interaction glitches */}
         <motion.div 
-          style={{ y }} 
+          style={{ y, willChange: "transform" }} 
           className="absolute inset-0 flex flex-col items-center justify-center p-4 z-10 pointer-events-none"
         >
           <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl md:text-6xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg`}>
