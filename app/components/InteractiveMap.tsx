@@ -78,7 +78,7 @@ export default function InteractiveMap() {
             fill
             priority
             draggable={false}
-            className="object-cover rounded-lg shadow-2xl touch-manipulation select-none [-webkit-touch-callout:none]"
+            className="object-cover object-center rounded-lg shadow-2xl touch-manipulation select-none [-webkit-touch-callout:none]"
             sizes="(max-width: 1200px) 100vw, 1200px"
           />
 
@@ -165,7 +165,7 @@ export default function InteractiveMap() {
                     alt={t(`map.${activeLocation.id}.title`)}
                     fill
                     draggable={false}
-                    className="object-cover touch-manipulation select-none [-webkit-touch-callout:none]"
+                    className="object-cover object-center touch-manipulation select-none [-webkit-touch-callout:none]"
                     sizes="(max-width: 768px) 100vw, 448px"
                   />
                 </div>
