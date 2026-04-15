@@ -62,7 +62,7 @@ export default function TheFamilyPage() {
               </h2>
               <p className="font-body text-leaf/70 mb-4">
                 {locale === 'mn'
-                  ? "Далай Ээж Resort нь гэр бүлийн мөрөөдлөөс эхэлсэн. Манай өвөг дээдэс энэ газарт олон үеийн турш амьдарч, нутгийн үзэсгэлэнг хамгаалж ирсэн."
+                  ? "Далай ээж ресорт нь гэр бүлийн мөрөөдлөөс эхэлсэн. Манай өвөг дээдэс энэ газарт олон үеийн турш амьдарч, нутгийн үзэсгэлэнг хамгаалж ирсэн."
                   : "Dalai Eej Resort began as a family dream. For generations, our ancestors called these shores home, guardians of this pristine wilderness."}
               </p>
               <p className="font-body text-leaf/70">

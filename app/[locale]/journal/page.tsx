@@ -64,7 +64,7 @@ export default function StoriesPage() {
             transition={{ duration: 0.8 }}
             className="font-serif text-5xl md:text-7xl text-main mb-6"
           >
-            {locale === 'mn' ? "Далай Ээж Stories" : "Dalai Eej Stories"}
+            {locale === 'mn' ? "Далай ээж Stories" : "Dalai Eej Stories"}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

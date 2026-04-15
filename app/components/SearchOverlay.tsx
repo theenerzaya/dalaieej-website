@@ -61,7 +61,7 @@ const searchablePages: SearchableItem[] = [
     label: "Our Story",
     mn: "Бидний тухай",
     description: "The heritage and mission behind Dalai Eej",
-    mnDescription: "Далай Ээж Ресортын түүх ба зорилго",
+    mnDescription: "Далай ээж ресортын түүх ба зорилго",
     keywords: ["about", "story", "heritage", "history", "түүх", "тухай"],
   },
   {
@@ -117,7 +117,7 @@ const searchablePages: SearchableItem[] = [
     label: "Route Finder",
     mn: "Замын чиглэл",
     description: "Find directions to Dalai Eej Resort",
-    mnDescription: "Далай Ээж Ресорт руу хэрхэн хүрэх",
+    mnDescription: "Далай ээж ресорт руу хэрхэн хүрэх",
     keywords: ["route", "directions", "map", "how to get", "зам", "чиглэл"],
   },
 ];

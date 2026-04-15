@@ -14,14 +14,14 @@ export default function LocationPage() {
       icon: Plane,
       title: locale === 'mn' ? "Нисэх онгоцоор" : "By Air",
       steps: locale === 'mn' 
-        ? ["Улаанбаатар → Мөрөн хот (1 цаг 15 минут)", "Мөрөн → Далай Ээж Resort (3 цаг машинаар)"]
+        ? ["Улаанбаатар → Мөрөн хот (1 цаг 15 минут)", "Мөрөн → Далай ээж ресорт (3 цаг машинаар)"]
         : ["Fly from Ulaanbaatar to Murun (1h 15m)", "Resort transfer from Murun Airport (3 hours)"]
     },
     {
       icon: Car,
       title: locale === 'mn' ? "Автомашинаар" : "By Road",
       steps: locale === 'mn'
-        ? ["Улаанбаатар → Мөрөн (10-12 цаг)", "Мөрөн → Хатгал → Далай Ээж Resort (3 цаг)"]
+        ? ["Улаанбаатар → Мөрөн (10-12 цаг)", "Мөрөн → Хатгал → Далай ээж ресорт (3 цаг)"]
         : ["Drive from Ulaanbaatar to Murun (10-12 hours)", "Continue to Khatgal and the resort (3 hours)"]
     },
   ];
@@ -45,7 +45,7 @@ export default function LocationPage() {
             className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
-              ? "Хөвсгөл нуурын баруун эргийн Далай Ээж Resort-д тавтай морил"
+              ? "Хөвсгөл нуурын баруун эргийн Далай ээж ресортод тавтай морил"
               : "Your journey to Lake Khuvsgul begins here"}
           </motion.p>
         </div>
@@ -71,7 +71,7 @@ export default function LocationPage() {
                   {locale === 'mn' ? "Хөвсгөл рүү аялал" : "The Journey to Khuvsgul"}
                 </p>
                 <p className="font-body text-leaf/60 text-sm">
-                  {locale === 'mn' ? "Далай Ээж Resort руу хүрэх замын видео" : "Experience the off-road adventure to our resort"}
+                  {locale === 'mn' ? "Далай ээж ресорт руу хүрэх замын видео" : "Experience the off-road adventure to our resort"}
                 </p>
               </div>
               <div className="absolute bottom-4 right-4 bg-leaf/80 text-main px-3 py-1 rounded text-sm font-body">

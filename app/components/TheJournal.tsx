@@ -23,7 +23,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&auto=format&fit=crop&q=80",
       title: isMn ? "Нийгмийн менежер" : "The Social Director",
       quote: isMn 
-        ? "Далай Ээж дэх төгс зуны өдөр." 
+        ? "Далай ээж дэх төгс зуны өдөр." 
         : "The perfect summer day at Dalai Eej.",
       alt: "The Social Director smiling"
     },

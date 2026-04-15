@@ -12,7 +12,7 @@ export default function GalleryGrid() {
 
   const filters = [
     { id: "all", label: locale === 'mn' ? "Бүгд" : "All" },
-    { id: "resort", label: locale === 'mn' ? "Ресорт" : "The Resort" },
+    { id: "resort", label: locale === 'mn' ? "ресорт" : "The Resort" },
     { id: "rooms", label: locale === 'mn' ? "Байр" : "Accommodations" },
     { id: "dining", label: locale === 'mn' ? "Хоол" : "Culinary" },
     { id: "wellness", label: locale === 'mn' ? "Эрүүл мэнд" : "Wellness" },

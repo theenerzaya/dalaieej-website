@@ -93,7 +93,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
             className="font-body text-main/80 text-sm tracking-[0.3em] uppercase mb-8"
           >
-            {locale === 'mn' ? "Далай Ээж Resort" : "Dalai Eej Resort"}
+            {locale === 'mn' ? "Далай ээж ресорт" : "Dalai Eej Resort"}
           </motion.p>
           
           <motion.h1
