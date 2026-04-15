@@ -143,6 +143,7 @@
     "testimonials": {
       "title": "Guest Experiences",
       "subtitle": "What our guests say",
+      "sectionEyebrow": "In their words",
       "cardEyebrow": "Testimonials",
       "heritage": "Trusted by leaders, executives, and families since 1998.",
       "ratingLabel": "Exceptional",
@@ -243,7 +244,7 @@
   },
   "map": {
     "title": "Explore the Peninsula",
-    "subtitle": "Discover the heritage landmarks of our shoreline",
+    "subtitle": "Now picture yourself here. Walk the grounds that guests return to year after year.",
     "hint": "Click the + icons to learn more about each area",
     "reception": {
       "title": "Reception & Restaurant",
