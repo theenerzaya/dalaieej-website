@@ -1,12 +1,25 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import FadeInWhenVisible from "./FadeInWhenVisible";
+
+/**
+ * Scroll reveal: card + persona row scale together (one factor).
+ * Runs from this value → 1. That is ~24% smaller at the start than at rest,
+ * or equivalently ~31.6% larger at the end than at the start ((1/min − 1) × 100).
+ */
+const REVEAL_SCALE_MIN = 0.76;
 
 const personas = [
   {
@@ -140,6 +153,17 @@ export default function PersonaSlider() {
   const locale = useLocale();
   const localePrefix = locale === "mn" ? "/mn" : "";
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    /** Full pass through the viewport so the zoom unfolds over more scroll. */
+    offset: ["start end", "end start"],
+  });
+  const revealScale = useTransform(scrollYProgress, [0, 1], [
+    REVEAL_SCALE_MIN,
+    1,
+  ]);
 
   const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -195,8 +219,13 @@ export default function PersonaSlider() {
   const centerFrameClass =
     "relative w-[min(52vw,720px)] shrink-0 aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10 z-10";
 
+  const cardMotionStyle = reduceMotion ? undefined : { scale: revealScale };
+
   return (
-    <section className="py-16 md:py-24 bg-main relative">
+    <section
+      ref={sectionRef}
+      className="py-16 md:py-24 bg-main relative overflow-x-hidden"
+    >
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <FadeInWhenVisible
           className="text-center font-body text-ink/60 text-xs tracking-[0.3em] uppercase mb-6"
@@ -223,8 +252,13 @@ export default function PersonaSlider() {
             ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
             : "Every traveler arrives with a different story. Which is yours?"}
         </motion.h2>
+      </div>
 
-        <div className="relative mx-auto max-w-5xl rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden">
+      <div className="relative z-10 w-full px-4 sm:px-6 md:px-8">
+        <motion.div
+          className="relative mx-auto w-full max-w-[min(100%,calc(100vw-2rem))] rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden origin-center will-change-transform"
+          style={cardMotionStyle}
+        >
           {n === 1 ? (
             <FadeInWhenVisible
               className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10"
@@ -387,7 +421,7 @@ export default function PersonaSlider() {
               </Link>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
