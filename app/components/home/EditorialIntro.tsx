@@ -47,9 +47,19 @@ export default function EditorialIntro() {
           }}
           className="font-serif font-light text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed mb-8"
         >
-          {locale === 'mn' 
-            ? "АРИУН ДАГШИН, ХОСГҮЙ, ЦОР ГАНЦ — ЗҮҮН ЭРГИЙН АМИН ЗҮРХ."
-            : "SOLITARY, SACRED, SINGULAR — THE HEART OF KHUVSGUL."}
+          {locale === 'mn' ? (
+            <>
+              АРИУН ДАГШИН, ХОСГҮЙ, ЦОР ГАНЦ
+              <br />
+              — ЗҮҮН ЭРГИЙН АМИН ЗҮРХ.
+            </>
+          ) : (
+            <>
+              SOLITARY, SACRED, SINGULAR
+              <br />
+              — THE HEART OF KHUVSGUL.
+            </>
+          )}
         </motion.h2>
         
         <motion.div
