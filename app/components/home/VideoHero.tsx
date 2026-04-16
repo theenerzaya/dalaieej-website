@@ -100,7 +100,10 @@ export default function VideoHero() {
   }, [mounted, videoFailed, hlsUrl]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="site-hero"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       <div className="absolute inset-0 bg-ink">
         {mounted && !videoFailed ? (
           <video
@@ -171,20 +174,13 @@ export default function VideoHero() {
         }}
         className="hidden md:block absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2"
       >
-        <svg 
-          className="w-8 h-8 text-white animate-bounce drop-shadow-lg" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-          aria-label="Scroll down"
+        <span
+          role="img"
+          aria-label={locale === "mn" ? "Доош гүйлгэх" : "Scroll down"}
+          className="block font-body text-3xl md:text-4xl font-light uppercase tracking-[0.18em] text-white animate-bounce drop-shadow-lg leading-none"
         >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-          />
-        </svg>
+          ↓
+        </span>
       </motion.div>
     </section>
   );
