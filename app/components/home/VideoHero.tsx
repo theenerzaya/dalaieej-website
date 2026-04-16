@@ -172,15 +172,21 @@ export default function VideoHero() {
           duration: reduceMotion ? 0 : 0.8,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="hidden md:block absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2"
+        className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2"
       >
-        <span
-          role="img"
+        <button
+          type="button"
+          onClick={() => {
+            document.getElementById("editorial-intro")?.scrollIntoView({
+              behavior: reduceMotion ? "auto" : "smooth",
+              block: "start",
+            });
+          }}
           aria-label={locale === "mn" ? "Доош гүйлгэх" : "Scroll down"}
-          className="block font-body text-3xl md:text-4xl font-light uppercase tracking-[0.18em] text-white animate-bounce drop-shadow-lg leading-none"
+          className="block cursor-pointer border-0 bg-transparent p-0 font-body text-3xl md:text-4xl font-light uppercase tracking-[0.18em] text-white animate-bounce drop-shadow-lg leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink rounded-sm"
         >
           ↓
-        </span>
+        </button>
       </motion.div>
     </section>
   );

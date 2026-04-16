@@ -65,6 +65,7 @@ function MobileSilo({
 }: MobileSiloProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
+  const isStoriesMnTitle = isMongolian && silo.id === "stories";
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -96,7 +97,11 @@ function MobileSilo({
           <img
             src={silo.image}
             alt={isMongolian ? silo.mn : silo.en}
-            className="w-full h-full object-cover"
+            className={
+              silo.id === "stories"
+                ? "w-full h-full object-cover object-center"
+                : "w-full h-full object-cover"
+            }
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -112,7 +117,9 @@ function MobileSilo({
               isMongolian
                 ? `${playfairDisplayItalic.className} italic font-normal`
                 : "font-sloops",
-              "text-4xl md:text-5xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg",
+              isStoriesMnTitle
+                ? "text-[2.025rem] md:text-[2.7rem] text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg"
+                : "text-4xl md:text-5xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg",
             ].join(" ")}
           >
             {isMongolian ? silo.mn : silo.en}
@@ -230,7 +237,7 @@ export default function SiloGrid() {
             <img
               src={storiesSilo.image}
               alt={isMongolian ? storiesSilo.mn : storiesSilo.en}
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+              className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
             <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10">
@@ -239,7 +246,9 @@ export default function SiloGrid() {
                   isMongolian
                     ? `${playfairDisplayItalic.className} italic font-normal`
                     : "font-sloops",
-                  "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
+                  isMongolian
+                    ? "text-[2.025rem] lg:text-[4.05rem] text-white text-center tracking-wider drop-shadow-lg"
+                    : "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
                 ].join(" ")}
               >
                 {isMongolian ? storiesSilo.mn : storiesSilo.en}

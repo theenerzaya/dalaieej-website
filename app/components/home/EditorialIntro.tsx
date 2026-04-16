@@ -11,7 +11,10 @@ export default function EditorialIntro() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="py-24 md:py-32 px-6 bg-surface">
+    <section
+      id="editorial-intro"
+      className="scroll-mt-24 py-24 md:py-32 px-6 bg-surface"
+    >
       <div className="max-w-4xl mx-auto text-center">
         <motion.p
           initial={
