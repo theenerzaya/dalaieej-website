@@ -103,6 +103,12 @@ body {
   font-family: 'GIP', serif;
 }
 
+/* SiloGrid Mongolian titles — Cormorant Garamond Italic */
+.font-silogrid-mn {
+  font-family: var(--font-cormorant-garamond-italic), ui-serif, Georgia, serif;
+  font-style: italic;
+}
+
 html {
   scroll-behavior: smooth;
 }
