@@ -36,6 +36,14 @@ const silos = [
   }
 ];
 
+const storiesSilo = {
+  id: "stories",
+  href: "#",
+  en: "Stories",
+  mn: "Түүхүүд",
+  image: "/images/silogrid/stories-placeholder.webp"
+};
+
 interface MobileSiloProps {
   silo: typeof silos[0];
   localePrefix: string;
@@ -98,29 +106,6 @@ export default function SiloGrid() {
 
   return (
     <section className="bg-white w-full">
-      <div className="py-20 md:py-28 px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="font-body text-water-deep/60 text-sm tracking-[0.3em] uppercase mb-6"
-        >
-          {isMongolian ? "Туршлага" : "The Experience"}
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-serif text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed max-w-3xl mx-auto"
-        >
-          {isMongolian
-            ? "Байгальтай уулзах дөрвөн зам."
-            : "Four ways to meet the wilderness."}
-        </motion.h2>
-      </div>
-
       {/* Mobile Stack */}
       <div className="flex flex-col w-full md:hidden">
         {silos.map((silo) => (
@@ -131,6 +116,12 @@ export default function SiloGrid() {
             isMongolian={isMongolian}
           />
         ))}
+        <MobileSilo
+          key={storiesSilo.id}
+          silo={storiesSilo}
+          localePrefix={localePrefix}
+          isMongolian={isMongolian}
+        />
       </div>
 
       {/* Desktop Grid */}
@@ -158,6 +149,29 @@ export default function SiloGrid() {
             </Link>
           </div>
         ))}
+
+        {/* Stories — full-width row spanning both columns */}
+        <div className="relative col-span-2 h-[80vh] w-full bg-gray-900 overflow-hidden group">
+          <Link
+            href={`${localePrefix}${storiesSilo.href}`}
+            className="relative block w-full h-full"
+          >
+            <img
+              src={storiesSilo.image}
+              alt={isMongolian ? storiesSilo.mn : storiesSilo.en}
+              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
+            <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10">
+              <h3 className={`${isMongolian ? 'font-serif' : 'font-sloops'} text-5xl lg:text-8xl text-white text-center tracking-wider drop-shadow-lg`}>
+                {isMongolian ? storiesSilo.mn : storiesSilo.en}
+              </h3>
+              <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
+                {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
+              </span>
+            </div>
+          </Link>
+        </div>
       </div>
     </section>
   );
