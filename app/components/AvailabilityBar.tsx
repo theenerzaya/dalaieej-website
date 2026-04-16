@@ -45,11 +45,13 @@ export default function AvailabilityBar() {
 
   useEffect(() => {
     const now = new Date();
-    const defaultCheckout = new Date(now);
+    const defaultCheckIn = new Date(now);
+    defaultCheckIn.setDate(defaultCheckIn.getDate() + 1);
+    const defaultCheckout = new Date(defaultCheckIn);
     defaultCheckout.setDate(defaultCheckout.getDate() + 3);
-    
+
     setMinDate(getDateString(now));
-    setCheckIn(getDateString(now));
+    setCheckIn(getDateString(defaultCheckIn));
     setCheckOut(getDateString(defaultCheckout));
   }, []);
 
@@ -87,7 +89,7 @@ export default function AvailabilityBar() {
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
               min={minDate}
-              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
+              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base !rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
             />
           </div>
 
@@ -100,7 +102,7 @@ export default function AvailabilityBar() {
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
               min={checkIn || minDate}
-              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
+              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base !rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
             />
           </div>
         </div>
