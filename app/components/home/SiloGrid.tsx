@@ -156,12 +156,17 @@ export default function SiloGrid() {
           <motion.div
             key={silo.id}
             className="relative h-[80vh] w-full bg-gray-900 overflow-hidden group"
-            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={
+              reduceMotion
+                ? { opacity: 1, y: 0, x: 0 }
+                : { opacity: 0, y: 28, x: -28 }
+            }
+            whileInView={{ opacity: 1, y: 0, x: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{
               duration: reduceMotion ? 0 : 0.65,
-              delay: reduceMotion ? 0 : i * 0.06,
+              // Grid is filled row-wise: left → right, then next row (same reading order).
+              delay: reduceMotion ? 0 : i * 0.11,
               ease: [0.22, 1, 0.36, 1],
             }}
           >
@@ -190,12 +195,16 @@ export default function SiloGrid() {
         {/* Stories — full-width row spanning both columns */}
         <motion.div
           className="relative col-span-2 h-[80vh] w-full bg-gray-900 overflow-hidden group"
-          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={
+            reduceMotion
+              ? { opacity: 1, y: 0, x: 0 }
+              : { opacity: 0, y: 28, x: -28 }
+          }
+          whileInView={{ opacity: 1, y: 0, x: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{
             duration: reduceMotion ? 0 : 0.65,
-            delay: reduceMotion ? 0 : silos.length * 0.06,
+            delay: reduceMotion ? 0 : silos.length * 0.11,
             ease: [0.22, 1, 0.36, 1],
           }}
         >

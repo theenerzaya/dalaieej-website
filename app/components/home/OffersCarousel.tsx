@@ -169,14 +169,15 @@ export default function OffersCarousel() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <FadeInWhenVisible
-          className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]"
-          y={24}
-          duration={0.65}
-        >
-          {/* Image Side */}
-          <div
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]">
+          {/* Image Side — first in reading order (left on lg) */}
+          <FadeInWhenVisible
             className="relative h-[350px] lg:h-auto overflow-hidden mb-[calc(3rem+var(--offers-heading-block-h,0px))] md:mb-[calc(4rem+var(--offers-heading-block-h,0px))] lg:mb-0 lg:pb-[calc(4rem+var(--offers-heading-block-h,0px))]"
+            delay={0}
+            x={-22}
+            y={18}
+            duration={0.6}
+            amount={0.12}
           >
             <AnimatePresence mode="wait">
               <motion.img
@@ -193,10 +194,17 @@ export default function OffersCarousel() {
 
             {/* Mobile Overlay Text (Optional visibility boost) */}
             <div className="absolute inset-0 bg-black/10 lg:hidden" />
-          </div>
+          </FadeInWhenVisible>
 
-          {/* Content Side */}
-          <div className="flex flex-col items-center justify-center px-8 lg:px-16 pt-0 pb-16 lg:py-0 text-center">
+          {/* Content Side — second (right on lg); same motion so mobile stack still reads top → bottom */}
+          <FadeInWhenVisible
+            className="flex flex-col items-center justify-center px-8 lg:px-16 pt-0 pb-16 lg:py-0 text-center"
+            delay={0.14}
+            x={-22}
+            y={18}
+            duration={0.6}
+            amount={0.12}
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentOffer.id}
@@ -243,8 +251,8 @@ export default function OffersCarousel() {
                 />
               ))}
             </div>
-          </div>
-        </FadeInWhenVisible>
+          </FadeInWhenVisible>
+        </div>
       </div>
     </section>
   );

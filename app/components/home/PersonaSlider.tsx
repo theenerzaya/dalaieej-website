@@ -224,14 +224,15 @@ export default function PersonaSlider() {
             : "Every traveler arrives with a different story. Which is yours?"}
         </motion.h2>
 
-        <FadeInWhenVisible
-          className="relative mx-auto max-w-5xl rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden"
-          delay={0.08}
-          y={28}
-          duration={0.65}
-        >
+        <div className="relative mx-auto max-w-5xl rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden">
           {n === 1 ? (
-            <div className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10">
+            <FadeInWhenVisible
+              className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10"
+              delay={0.06}
+              x={-20}
+              y={20}
+              duration={0.6}
+            >
               <PersonaPushFrame
                 persona={personas[0]}
                 locale={locale}
@@ -239,19 +240,33 @@ export default function PersonaSlider() {
                 priority
                 sizes="(max-width: 768px) 100vw, 896px"
               />
-            </div>
+            </FadeInWhenVisible>
           ) : (
             <div className="w-full overflow-x-hidden">
               <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 py-2 -mx-4 sm:-mx-8">
-                <div className={sideFrameClass}>
+                <FadeInWhenVisible
+                  className={sideFrameClass}
+                  delay={0}
+                  x={-20}
+                  y={14}
+                  duration={0.55}
+                  amount={0.08}
+                >
                   <PersonaPushFrame
                     persona={personas[leftIdx]}
                     locale={locale}
                     direction={direction}
                     sizes="(max-width: 768px) 40vw, 300px"
                   />
-                </div>
-                <div className={centerFrameClass}>
+                </FadeInWhenVisible>
+                <FadeInWhenVisible
+                  className={centerFrameClass}
+                  delay={0.12}
+                  x={-20}
+                  y={14}
+                  duration={0.55}
+                  amount={0.08}
+                >
                   <PersonaPushFrame
                     persona={personas[activeIndex]}
                     locale={locale}
@@ -259,21 +274,35 @@ export default function PersonaSlider() {
                     priority
                     sizes="(max-width: 768px) 85vw, 720px"
                   />
-                </div>
-                <div className={sideFrameClass}>
+                </FadeInWhenVisible>
+                <FadeInWhenVisible
+                  className={sideFrameClass}
+                  delay={0.24}
+                  x={-20}
+                  y={14}
+                  duration={0.55}
+                  amount={0.08}
+                >
                   <PersonaPushFrame
                     persona={personas[rightIdx]}
                     locale={locale}
                     direction={direction}
                     sizes="(max-width: 768px) 40vw, 300px"
                   />
-                </div>
+                </FadeInWhenVisible>
               </div>
             </div>
           )}
 
           {n > 1 && (
-            <div className="mt-8 flex flex-col items-center gap-6">
+            <FadeInWhenVisible
+              className="mt-8 flex flex-col items-center gap-6"
+              delay={0.34}
+              x={-16}
+              y={12}
+              duration={0.5}
+              amount={0.15}
+            >
               <div className="flex items-center gap-4">
                 <button
                   type="button"
@@ -325,7 +354,7 @@ export default function PersonaSlider() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </FadeInWhenVisible>
           )}
 
           {n === 1 && (
@@ -358,7 +387,7 @@ export default function PersonaSlider() {
               </Link>
             </div>
           )}
-        </FadeInWhenVisible>
+        </div>
       </div>
     </section>
   );
