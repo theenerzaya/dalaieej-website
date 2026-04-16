@@ -55,7 +55,7 @@ export default function Navbar() {
               aria-expanded={menuOpen}
               aria-controls="navigation-overlay"
             >
-              <span className="flex w-10 flex-col justify-center gap-[5px] md:w-[3.25rem] md:gap-1.5" aria-hidden>
+              <span className="flex w-9 flex-col justify-center gap-[5px] md:w-[2.925rem] md:gap-1.5" aria-hidden>
                 <span className="h-px w-full bg-current" />
                 <span className="h-px w-full bg-current" />
                 <span className="h-px w-full bg-current" />

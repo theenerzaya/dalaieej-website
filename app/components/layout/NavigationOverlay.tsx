@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Phone, MapPin, LayoutGrid, Search } from "lucide-react";
+import { Phone, MapPin, LayoutGrid, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -123,15 +123,28 @@ export default function NavigationOverlay({ isOpen, onClose, onOpenSearch }: Nav
           aria-label="Navigation menu"
           className="fixed inset-0 z-[100] bg-leaf text-main flex flex-col"
         >
-          {/* Header: Close Button */}
-          <div className="flex justify-end p-6 md:p-8 shrink-0 z-20">
-            <button
-              onClick={onClose}
-              className="p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50"
-              aria-label="Close menu"
-            >
-              <X className="w-8 h-8 text-main" />
-            </button>
+          {/* Header: close control — same slot as navbar hamburger */}
+          <div className="relative flex min-h-[calc(5rem*1.10)] w-full shrink-0 items-stretch pt-[calc(5rem*0.10)] z-20">
+            <div className="flex items-center pl-8 md:pl-12 z-10">
+              <button
+                onClick={onClose}
+                className="text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg px-2 py-3"
+                aria-label="Close menu"
+              >
+                <span
+                  className="flex w-9 shrink-0 flex-col justify-center md:w-[2.925rem]"
+                  aria-hidden
+                >
+                  {/* Same outer slot as Navbar hamburger; 0.75× icon centered; h-px weight */}
+                  <span className="relative flex h-[13px] w-full items-center justify-center md:h-[15px]">
+                    <span className="relative h-[9.75px] w-[1.6875rem] shrink-0 md:h-[11.25px] md:w-[2.19375rem]">
+                      <span className="absolute left-1/2 top-1/2 h-px w-[140%] max-w-none origin-center -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white" />
+                      <span className="absolute left-1/2 top-1/2 h-px w-[140%] max-w-none origin-center -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-white" />
+                    </span>
+                  </span>
+                </span>
+              </button>
+            </div>
           </div>
 
           <div className="flex-1 flex flex-col md:flex-row w-full h-full max-w-7xl mx-auto">
