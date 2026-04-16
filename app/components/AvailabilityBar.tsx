@@ -65,7 +65,7 @@ export default function AvailabilityBar() {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-50 bg-ink border-t border-white/10 py-4 px-8 md:py-5 md:px-12 transition-all duration-500 ease-out ${
+      className={`fixed bottom-0 left-0 right-0 z-50 bg-ink pt-2 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] px-8 md:pt-2.5 md:pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:px-12 transition-all duration-500 ease-out ${
         scrolledPast
           ? "translate-y-0 opacity-100"
           : "translate-y-full opacity-0 pointer-events-none"
