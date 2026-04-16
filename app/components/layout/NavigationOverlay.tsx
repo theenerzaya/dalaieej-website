@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import WeatherWidget from "../WeatherWidget";
 
 // 1. Primary Navigation with Images
 const mainNavItems = [
@@ -239,6 +240,15 @@ export default function NavigationOverlay({ isOpen, onClose, onOpenSearch }: Nav
                   );
                 })}
               </nav>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.75 }}
+                className="flex justify-center md:justify-start mt-8 md:mt-10"
+              >
+                <WeatherWidget />
+              </motion.div>
 
               {/* C. Language Switcher (Visible on Mobile Only) */}
               <motion.div 

@@ -75,9 +75,6 @@ export default function OffersCarousel() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
 
-  const filtered = locale === 'en' ? offers.filter(o => o.id === 3) : offers;
-  const visibleOffers = filtered.length > 0 ? filtered : offers;
-
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [headingBlockHeight, setHeadingBlockHeight] = useState(0);
@@ -99,9 +96,9 @@ export default function OffersCarousel() {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % visibleOffers.length);
+      setActiveIndex((prev) => (prev + 1) % offers.length);
     }, 7000);
-  }, [visibleOffers.length]);
+  }, [offers.length]);
 
   const stopAutoPlay = useCallback(() => {
     if (intervalRef.current) {
@@ -133,7 +130,7 @@ export default function OffersCarousel() {
     }
   };
 
-  const currentOffer = visibleOffers[activeIndex];
+  const currentOffer = offers[activeIndex];
   const content = locale === 'mn' ? currentOffer.mn : currentOffer.en;
 
   return (
@@ -228,7 +225,7 @@ export default function OffersCarousel() {
 
             {/* Navigation Dots */}
             <div className="flex gap-3 mt-16">
-              {visibleOffers.map((offer, index) => (
+              {offers.map((offer, index) => (
                 <button
                   key={offer.id}
                   onClick={() => handleDotClick(index)}

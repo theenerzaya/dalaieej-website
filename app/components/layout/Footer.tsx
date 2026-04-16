@@ -4,8 +4,6 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { Phone, Mail, MapPin } from "lucide-react";
-import WeatherWidget from "../WeatherWidget";
-
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
@@ -31,7 +29,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-20 md:pb-28 lg:pb-36">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10 lg:gap-8">
 
-          {/* Column 1: Brand & Weather */}
+          {/* Column 1: Brand */}
           <div className="col-span-2 lg:col-span-1">
             <Link href={localePrefix || "/"} className="inline-block hover:opacity-90 transition-opacity">
               <img
@@ -43,9 +41,6 @@ export default function Footer() {
             <p className="mt-4 font-body text-sm text-main/70 leading-relaxed max-w-xs">
               {t("bio")}
             </p>
-            <div className="mt-4">
-              <WeatherWidget />
-            </div>
           </div>
 
           {/* Column 2: Experience */}

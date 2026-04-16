@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Cormorant_Garamond } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -21,6 +22,13 @@ const gip = localFont({
   src: "../../public/fonts/GIP-Medium.otf",
   variable: "--font-body",
   weight: "500",
+  display: "swap",
+});
+
+const testimonialQuote = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-testimonial",
   display: "swap",
 });
 
@@ -132,7 +140,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           }) }}
         />
       </head>
-      <body className={`${vogun.variable} ${gip.variable} antialiased`} suppressHydrationWarning>
+      <body className={`${vogun.variable} ${gip.variable} ${testimonialQuote.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
             Skip to main content

@@ -64,7 +64,7 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
   return (
     <div 
       ref={ref}
-      className="relative h-[80vh] min-h-[600px] w-full shrink-0 border-b border-white/10 bg-gray-900 overflow-hidden z-0"
+      className="relative h-[80vh] min-h-[600px] w-full shrink-0 bg-gray-900 overflow-hidden z-0"
     >
       <Link
         href={`${localePrefix}${silo.href}`}
@@ -105,9 +105,9 @@ export default function SiloGrid() {
   const isMongolian = locale === 'mn';
 
   return (
-    <section className="bg-white w-full">
+    <section className="relative w-full bg-white">
       {/* Mobile Stack */}
-      <div className="flex flex-col w-full md:hidden">
+      <div className="flex flex-col w-full md:hidden bg-white [&>*:not(:first-child)]:border-t [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-white">
         {silos.map((silo) => (
           <MobileSilo
             key={silo.id}
@@ -125,7 +125,10 @@ export default function SiloGrid() {
       </div>
 
       {/* Desktop Grid */}
-      <div className="hidden md:grid grid-cols-2 w-full">
+      <div
+        className="hidden md:grid grid-cols-2 w-full bg-white gap-x-px gap-y-px"
+        style={{ columnGap: "1px", rowGap: "1px" }}
+      >
         {silos.map((silo) => (
           <div key={silo.id} className="relative h-[80vh] w-full bg-gray-900 overflow-hidden group">
             <Link

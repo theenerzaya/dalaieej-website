@@ -139,9 +139,6 @@ export default function PersonaSlider() {
   const locale = useLocale();
   const localePrefix = locale === "mn" ? "/mn" : "";
 
-  const filtered = locale === "en" ? personas.filter((p) => p.id === 2) : personas;
-  const visiblePersonas = filtered.length > 0 ? filtered : personas;
-
   const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -150,15 +147,15 @@ export default function PersonaSlider() {
       setActiveIndex(([currentIndex]) => {
         const newIndex = currentIndex + newDirection;
         if (newIndex < 0) {
-          return [visiblePersonas.length - 1, newDirection];
+          return [personas.length - 1, newDirection];
         }
-        if (newIndex >= visiblePersonas.length) {
+        if (newIndex >= personas.length) {
           return [0, newDirection];
         }
         return [newIndex, newDirection];
       });
     },
-    [visiblePersonas.length]
+    [personas.length]
   );
 
   const resetTimer = useCallback(() => {
@@ -184,11 +181,11 @@ export default function PersonaSlider() {
     resetTimer();
   };
 
-  const n = visiblePersonas.length;
+  const n = personas.length;
   const leftIdx = (activeIndex - 1 + n) % n;
   const rightIdx = (activeIndex + 1) % n;
 
-  const currentPersona = visiblePersonas[activeIndex];
+  const currentPersona = personas[activeIndex];
   const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
 
   const sideFrameClass =
@@ -220,7 +217,7 @@ export default function PersonaSlider() {
           {n === 1 ? (
             <div className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10">
               <PersonaPushFrame
-                persona={visiblePersonas[0]}
+                persona={personas[0]}
                 locale={locale}
                 direction={direction}
                 priority
@@ -232,7 +229,7 @@ export default function PersonaSlider() {
               <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 py-2 -mx-4 sm:-mx-8">
                 <div className={sideFrameClass}>
                   <PersonaPushFrame
-                    persona={visiblePersonas[leftIdx]}
+                    persona={personas[leftIdx]}
                     locale={locale}
                     direction={direction}
                     sizes="(max-width: 768px) 40vw, 300px"
@@ -240,7 +237,7 @@ export default function PersonaSlider() {
                 </div>
                 <div className={centerFrameClass}>
                   <PersonaPushFrame
-                    persona={visiblePersonas[activeIndex]}
+                    persona={personas[activeIndex]}
                     locale={locale}
                     direction={direction}
                     priority
@@ -249,7 +246,7 @@ export default function PersonaSlider() {
                 </div>
                 <div className={sideFrameClass}>
                   <PersonaPushFrame
-                    persona={visiblePersonas[rightIdx]}
+                    persona={personas[rightIdx]}
                     locale={locale}
                     direction={direction}
                     sizes="(max-width: 768px) 40vw, 300px"

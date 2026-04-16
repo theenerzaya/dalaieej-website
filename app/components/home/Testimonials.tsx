@@ -147,7 +147,7 @@ export default function Testimonials() {
                   }
                   transition={slideTransition}
                 >
-                  <p className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-[1.75rem] leading-relaxed mb-6 md:mb-8 font-medium">
+                  <p className="font-testimonial text-xl sm:text-2xl md:text-3xl lg:text-[1.75rem] leading-relaxed mb-6 md:mb-8 font-medium">
                     &ldquo;{t(`${reviewId}.text`)}&rdquo;
                   </p>
                   <p className="font-body text-[10px] sm:text-xs tracking-[0.2em] uppercase text-main/85">

@@ -190,7 +190,7 @@ export default function AmenitiesPage() {
             {['review1', 'review2', 'review3'].map((review) => (
               <div key={review} className="bg-white rounded-xl p-8 shadow-lg relative">
                 <Quote className="w-10 h-10 text-sky-200 absolute top-6 right-6" />
-                <p className="font-body text-slate-600 italic mb-6 leading-relaxed">
+                <p className="font-testimonial text-slate-600 italic mb-6 leading-relaxed">
                   "{t(`amenities.testimonials.${review}.text`)}"
                 </p>
                 <p className="font-body text-sky-900 font-semibold">
