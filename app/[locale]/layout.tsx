@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Cormorant_Garamond } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/request';
 import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
 import "../globals.css";
+import { cormorantGaramondItalic, playfairDisplayItalic } from "../fonts";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Footer from "../components/layout/Footer";
 
@@ -22,14 +22,6 @@ const gip = localFont({
   src: "../../public/fonts/GIP-Medium.otf",
   variable: "--font-body",
   weight: "500",
-  display: "swap",
-});
-
-const cormorantGaramondItalic = Cormorant_Garamond({
-  subsets: ["latin", "cyrillic", "cyrillic-ext"],
-  style: ["italic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-cormorant-garamond-italic",
   display: "swap",
 });
 
@@ -139,7 +131,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           }) }}
         />
       </head>
-      <body className={`${vogun.variable} ${gip.variable} ${cormorantGaramondItalic.variable} antialiased`} suppressHydrationWarning>
+      <body className={`${vogun.variable} ${gip.variable} ${cormorantGaramondItalic.variable} ${playfairDisplayItalic.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
             Skip to main content

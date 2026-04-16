@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
+import { playfairDisplayItalic } from "@/app/fonts";
 import {
   motion,
   useReducedMotion,
@@ -106,7 +107,14 @@ function MobileSilo({
           style={{ y, willChange: "transform" }} 
           className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10 pointer-events-none"
         >
-          <h3 className={`${isMongolian ? 'font-silogrid-mn' : 'font-sloops'} text-5xl md:text-6xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg`}>
+          <h3
+            className={[
+              isMongolian
+                ? `${playfairDisplayItalic.className} italic font-normal`
+                : "font-sloops",
+              "text-4xl md:text-5xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg",
+            ].join(" ")}
+          >
             {isMongolian ? silo.mn : silo.en}
           </h3>
 
@@ -181,7 +189,14 @@ export default function SiloGrid() {
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
               <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10">
-                <h3 className={`${isMongolian ? 'font-silogrid-mn' : 'font-sloops'} text-5xl lg:text-8xl text-white text-center tracking-wider drop-shadow-lg`}>
+                <h3
+                  className={[
+                    isMongolian
+                      ? `${playfairDisplayItalic.className} italic font-normal`
+                      : "font-sloops",
+                    "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
+                  ].join(" ")}
+                >
                   {isMongolian ? silo.mn : silo.en}
                 </h3>
                 <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
@@ -219,7 +234,14 @@ export default function SiloGrid() {
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
             <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10">
-              <h3 className={`${isMongolian ? 'font-silogrid-mn' : 'font-sloops'} text-5xl lg:text-8xl text-white text-center tracking-wider drop-shadow-lg`}>
+              <h3
+                className={[
+                  isMongolian
+                    ? `${playfairDisplayItalic.className} italic font-normal`
+                    : "font-sloops",
+                  "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
+                ].join(" ")}
+              >
                 {isMongolian ? storiesSilo.mn : storiesSilo.en}
               </h3>
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">

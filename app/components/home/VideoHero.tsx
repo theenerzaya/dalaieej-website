@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { cormorantGaramondItalic } from "@/app/fonts";
 
 /** Desktop: `.env.local` → `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux → Playback ID). */
 const DEFAULT_PLAYBACK_ID_DESKTOP =
@@ -133,9 +134,14 @@ export default function VideoHero() {
             delay: reduceMotion ? 0 : 0.3,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-6 text-hero-glow"
+          className={[
+            locale === "mn"
+              ? `${cormorantGaramondItalic.className} italic font-normal text-4xl md:text-5xl lg:text-[4.875rem] xl:text-[5.25rem] tracking-wider leading-none drop-shadow-lg`
+              : "font-sloops font-normal text-6xl md:text-8xl lg:text-9xl",
+            "text-white mb-6 text-hero-glow",
+          ].join(" ")}
         >
-          Dalai Eej
+          {locale === "mn" ? "Далай ээж" : "Dalai Eej"}
         </motion.h1>
         <motion.p
           initial={
