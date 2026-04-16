@@ -3,12 +3,10 @@
 import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
-import SearchOverlay from "./SearchOverlay";
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
 
 function isHomePathname(pathname: string) {
@@ -20,7 +18,6 @@ export default function Navbar() {
   const localePrefix = locale === 'mn' ? '/mn' : '';
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   const isBookingPage = pathname.includes('/booking') || pathname.includes('/checkout') || pathname.includes('/payment');
   const isHome = isHomePathname(pathname);
@@ -83,19 +80,6 @@ export default function Navbar() {
 
           <div className="ml-auto flex items-center pr-8 md:pr-12 z-10">
             <div className="hidden md:flex items-center gap-4 md:gap-6 pr-3 md:pr-5">
-              <button
-                type="button"
-                onClick={() => setSearchOpen(true)}
-                className={`inline-flex text-main/70 hover:text-white transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1 ${
-                  showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
-                }`}
-                aria-label={locale === 'mn' ? "Хайлт" : "Search"}
-                aria-hidden={!showFullChrome}
-                tabIndex={showFullChrome ? undefined : -1}
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
               <LanguageSwitcher />
             </div>
 
@@ -112,12 +96,7 @@ export default function Navbar() {
       <NavigationOverlay
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
-        onOpenSearch={() => {
-          setMenuOpen(false);
-          setSearchOpen(true);
-        }}
       />
-      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

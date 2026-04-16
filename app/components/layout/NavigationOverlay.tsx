@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Phone, MapPin, LayoutGrid, Search } from "lucide-react";
+import { Phone, MapPin, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -59,10 +59,9 @@ const secondaryNavItems = [
 interface NavigationOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenSearch?: () => void;
 }
 
-export default function NavigationOverlay({ isOpen, onClose, onOpenSearch }: NavigationOverlayProps) {
+export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
   const pathname = usePathname();
   const isMongolian = pathname.startsWith("/mn");
 
@@ -199,26 +198,6 @@ export default function NavigationOverlay({ isOpen, onClose, onOpenSearch }: Nav
 
               {/* B. Secondary Navigation (Icons) */}
               <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-6 mb-8 md:mb-0">
-                {onOpenSearch && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.55 }}
-                    className="md:hidden"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        onOpenSearch();
-                      }}
-                      className="group flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase text-main/80 hover:text-white transition-colors"
-                    >
-                      <Search className="w-4 h-4 text-main/60 group-hover:text-white transition-colors" aria-hidden="true" />
-                      <span>{isMongolian ? "Хайлт" : "Search"}</span>
-                    </button>
-                  </motion.div>
-                )}
                 {secondaryNavItems.map((item, i) => {
                   const Icon = item.icon;
                   const linkClass = "group flex items-center gap-2 font-body text-xs md:text-sm tracking-[0.2em] uppercase text-main/80 hover:text-white transition-colors";

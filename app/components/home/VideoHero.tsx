@@ -159,7 +159,7 @@ export default function VideoHero() {
           }}
           className="font-body text-base md:text-lg text-white tracking-[0.2em] uppercase text-overlay-glow"
         >
-          {locale === 'mn' ? "Хөвсгөл далайн хөвөөнд" : "On the shores of Lake Khuvsgul"}
+          {locale === 'mn' ? "Хөвсгөлийн зүүн эрэгт" : "On the eastern shore of Khuvsgul"}
         </motion.p>
       </div>
 

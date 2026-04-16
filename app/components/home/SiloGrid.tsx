@@ -16,28 +16,28 @@ const silos = [
     id: "stay",
     href: /*"/accommodation",*/ "#",
     en: "Cabins",
-    mn: "Өргөө",
+    mn: "Өрөөнүүд",
     image: "/images/silogrid/sanctuary.webp"
   },
   {
     id: "dining",
     href: /*"/dining",*/ "#",
     en: "Restaurant",
-    mn: "Гал голомт",
+    mn: "Ресторан",
     image: "/images/silogrid/hearth.webp"
   },
   {
     id: "wellness",
     href: /*"/wellness",*/ "#",
     en: "Wellness",
-    mn: "Анир",
+    mn: "Алжаал тайлах",
     image: "/images/silogrid/wellness.webp"
   },
   {
     id: "adventure",
     href: /*"/experiences",*/ "#",
     en: "Experiences",
-    mn: "Хөвч",
+    mn: "Аялал",
     image: "/images/silogrid/wilderness.webp"
   }
 ];
@@ -46,7 +46,7 @@ const storiesSilo = {
   id: "stories",
   href: "#",
   en: "Stories",
-  mn: "Түүхүүд",
+  mn: "Нийтлэл",
   image: "/images/silogrid/stories-placeholder.webp"
 };
 
@@ -126,7 +126,7 @@ function MobileSilo({
           </h3>
 
           <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 drop-shadow-md">
-            {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
+            {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
           </span>
         </motion.div>
       </Link>
@@ -207,7 +207,7 @@ export default function SiloGrid() {
                   {isMongolian ? silo.mn : silo.en}
                 </h3>
                 <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
-                  {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
+                  {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
                 </span>
               </div>
             </Link>
@@ -254,7 +254,7 @@ export default function SiloGrid() {
                 {isMongolian ? storiesSilo.mn : storiesSilo.en}
               </h3>
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
-                {isMongolian ? "ДЭЛГЭРЭНГҮЙ" : "DISCOVER"}
+                {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
               </span>
             </div>
           </Link>
