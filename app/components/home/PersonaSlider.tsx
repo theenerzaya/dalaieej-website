@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import FadeInWhenVisible from "./FadeInWhenVisible";
 
 const personas = [
   {
@@ -138,6 +139,7 @@ function PersonaPushFrame({
 export default function PersonaSlider() {
   const locale = useLocale();
   const localePrefix = locale === "mn" ? "/mn" : "";
+  const reduceMotion = useReducedMotion();
 
   const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -196,14 +198,25 @@ export default function PersonaSlider() {
   return (
     <section className="py-16 md:py-24 bg-main relative">
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <p className="text-center font-body text-ink/60 text-xs tracking-[0.3em] uppercase mb-6">
-          {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
-        </p>
+        <FadeInWhenVisible
+          className="text-center font-body text-ink/60 text-xs tracking-[0.3em] uppercase mb-6"
+          y={14}
+          duration={0.5}
+        >
+          <p>
+            {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
+          </p>
+        </FadeInWhenVisible>
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={
+            reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.8,
+            delay: reduceMotion ? 0 : 0.1,
+          }}
           className="text-center font-serif text-2xl md:text-3xl lg:text-4xl text-ink/80 leading-relaxed max-w-2xl mx-auto mb-10"
         >
           {locale === "mn"
@@ -211,7 +224,12 @@ export default function PersonaSlider() {
             : "Every traveler arrives with a different story. Which is yours?"}
         </motion.h2>
 
-        <div className="relative mx-auto max-w-5xl rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden">
+        <FadeInWhenVisible
+          className="relative mx-auto max-w-5xl rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden"
+          delay={0.08}
+          y={28}
+          duration={0.65}
+        >
           {n === 1 ? (
             <div className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10">
               <PersonaPushFrame
@@ -340,7 +358,7 @@ export default function PersonaSlider() {
               </Link>
             </div>
           )}
-        </div>
+        </FadeInWhenVisible>
       </div>
     </section>
   );

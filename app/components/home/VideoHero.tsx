@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
 
 /** Desktop: `.env.local` → `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux → Playback ID). */
@@ -28,6 +28,7 @@ function muxHlsUrl(playbackId: string) {
 
 export default function VideoHero() {
   const locale = useLocale();
+  const reduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -122,17 +123,31 @@ export default function VideoHero() {
       
       <div className="relative z-10 text-center px-6">
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          initial={
+            reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+          }
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{
+            duration: reduceMotion ? 0 : 1,
+            delay: reduceMotion ? 0 : 0.3,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-6 text-hero-glow"
         >
           Dalai Eej
         </motion.h1>
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
+          initial={
+            reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{
+            duration: reduceMotion ? 0 : 1,
+            delay: reduceMotion ? 0 : 0.6,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="font-body text-base md:text-lg text-white tracking-[0.2em] uppercase text-overlay-glow"
         >
           {locale === 'mn' ? "Хөвсгөл далайн хөвөөнд" : "On the shores of Lake Khuvsgul"}
@@ -140,9 +155,14 @@ export default function VideoHero() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
+        initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{
+          delay: reduceMotion ? 0 : 1.2,
+          duration: reduceMotion ? 0 : 0.8,
+          ease: [0.22, 1, 0.36, 1],
+        }}
         className="hidden md:block absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2"
       >
         <svg 

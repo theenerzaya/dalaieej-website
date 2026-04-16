@@ -3,7 +3,12 @@
 import { useRef } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
 const silos = [
   {
@@ -48,10 +53,17 @@ interface MobileSiloProps {
   silo: typeof silos[0];
   localePrefix: string;
   isMongolian: boolean;
+  index: number;
 }
 
-function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
+function MobileSilo({
+  silo,
+  localePrefix,
+  isMongolian,
+  index,
+}: MobileSiloProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -62,9 +74,17 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
   const y = useTransform(scrollYProgress, [0, 1], ["-40%", "40%"]);
 
   return (
-    <div 
+    <motion.div
       ref={ref}
       className="relative h-[80vh] min-h-[600px] w-full shrink-0 bg-gray-900 overflow-hidden z-0"
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        duration: reduceMotion ? 0 : 0.6,
+        delay: reduceMotion ? 0 : index * 0.06,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       <Link
         href={`${localePrefix}${silo.href}`}
@@ -95,7 +115,7 @@ function MobileSilo({ silo, localePrefix, isMongolian }: MobileSiloProps) {
           </span>
         </motion.div>
       </Link>
-    </div>
+    </motion.div>
   );
 }
 
@@ -103,17 +123,19 @@ export default function SiloGrid() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
   const isMongolian = locale === 'mn';
+  const reduceMotion = useReducedMotion();
 
   return (
     <section className="relative w-full bg-white">
       {/* Mobile Stack */}
       <div className="flex flex-col w-full md:hidden bg-white [&>*:not(:first-child)]:border-t [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-white">
-        {silos.map((silo) => (
+        {silos.map((silo, i) => (
           <MobileSilo
             key={silo.id}
             silo={silo}
             localePrefix={localePrefix}
             isMongolian={isMongolian}
+            index={i}
           />
         ))}
         <MobileSilo
@@ -121,6 +143,7 @@ export default function SiloGrid() {
           silo={storiesSilo}
           localePrefix={localePrefix}
           isMongolian={isMongolian}
+          index={silos.length}
         />
       </div>
 
@@ -129,8 +152,19 @@ export default function SiloGrid() {
         className="hidden md:grid grid-cols-2 w-full bg-white gap-x-px gap-y-px"
         style={{ columnGap: "1px", rowGap: "1px" }}
       >
-        {silos.map((silo) => (
-          <div key={silo.id} className="relative h-[80vh] w-full bg-gray-900 overflow-hidden group">
+        {silos.map((silo, i) => (
+          <motion.div
+            key={silo.id}
+            className="relative h-[80vh] w-full bg-gray-900 overflow-hidden group"
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.65,
+              delay: reduceMotion ? 0 : i * 0.06,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
             <Link
               href={`${localePrefix}${silo.href}`}
               className="relative block w-full h-full"
@@ -150,11 +184,21 @@ export default function SiloGrid() {
                 </span>
               </div>
             </Link>
-          </div>
+          </motion.div>
         ))}
 
         {/* Stories — full-width row spanning both columns */}
-        <div className="relative col-span-2 h-[80vh] w-full bg-gray-900 overflow-hidden group">
+        <motion.div
+          className="relative col-span-2 h-[80vh] w-full bg-gray-900 overflow-hidden group"
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.65,
+            delay: reduceMotion ? 0 : silos.length * 0.06,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <Link
             href={`${localePrefix}${storiesSilo.href}`}
             className="relative block w-full h-full"
@@ -174,7 +218,7 @@ export default function SiloGrid() {
               </span>
             </div>
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

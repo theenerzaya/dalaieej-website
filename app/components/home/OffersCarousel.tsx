@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import FadeInWhenVisible from "./FadeInWhenVisible";
 
 // STRATEGY UPDATE:
 // 1. Erdenet 50th: Targeted local intent.
@@ -145,7 +146,7 @@ export default function OffersCarousel() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
             className="font-body text-leaf/60 text-sm tracking-[0.3em] uppercase mb-6"
           >
@@ -154,7 +155,7 @@ export default function OffersCarousel() {
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="font-serif text-3xl md:text-4xl lg:text-5xl text-leaf leading-relaxed"
           >
@@ -168,7 +169,11 @@ export default function OffersCarousel() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]">
+        <FadeInWhenVisible
+          className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]"
+          y={24}
+          duration={0.65}
+        >
           {/* Image Side */}
           <div
             className="relative h-[350px] lg:h-auto overflow-hidden mb-[calc(3rem+var(--offers-heading-block-h,0px))] md:mb-[calc(4rem+var(--offers-heading-block-h,0px))] lg:mb-0 lg:pb-[calc(4rem+var(--offers-heading-block-h,0px))]"
@@ -239,7 +244,7 @@ export default function OffersCarousel() {
               ))}
             </div>
           </div>
-        </div>
+        </FadeInWhenVisible>
       </div>
     </section>
   );

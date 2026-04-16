@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Star, ShieldCheck } from "lucide-react";
+import FadeInWhenVisible from "./FadeInWhenVisible";
 
 const REVIEW_IDS = ["review1", "review2", "review3"] as const;
 const AUTO_ADVANCE_MS = 5000;
@@ -75,7 +76,7 @@ export default function Testimonials() {
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5 }}
           className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-6 text-overlay-glow"
         >
@@ -86,7 +87,7 @@ export default function Testimonials() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.05 }}
           className="flex flex-col items-center gap-3 shrink-0"
         >
@@ -124,7 +125,12 @@ export default function Testimonials() {
 
         {/* Centered shade card */}
         <div className="flex-1 flex items-center justify-center py-10 md:py-12 min-h-0">
-          <div className="w-full max-w-[min(90vw,56rem)] md:w-[min(62vw,56rem)] px-8 sm:px-12 md:px-16 py-12 md:py-14 shadow-2xl bg-ink-muted text-main border border-main/10">
+          <FadeInWhenVisible
+            className="w-full max-w-[min(90vw,56rem)] md:w-[min(62vw,56rem)] px-8 sm:px-12 md:px-16 py-12 md:py-14 shadow-2xl bg-ink-muted text-main border border-main/10"
+            y={26}
+            duration={0.65}
+            amount={0.12}
+          >
             <p className="text-center font-body text-[11px] sm:text-xs tracking-[0.3em] uppercase mb-8 md:mb-10 text-main/80">
               {t("cardEyebrow")}
             </p>
@@ -173,14 +179,14 @@ export default function Testimonials() {
                 />
               ))}
             </div>
-          </div>
+          </FadeInWhenVisible>
         </div>
 
         {/* Heritage line — on photo, outside card */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, delay: 0.15 }}
           className="flex items-center justify-center gap-3 shrink-0 pb-2 md:pb-4 max-w-2xl mx-auto text-center"
         >

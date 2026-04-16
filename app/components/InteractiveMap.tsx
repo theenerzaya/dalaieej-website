@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -31,6 +31,7 @@ const locations: Location[] = [
 
 export default function InteractiveMap() {
   const t = useTranslations();
+  const reduceMotion = useReducedMotion();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
   const isArrowMarker = (id: string) => id === 'overland' || id === 'parking';
@@ -58,19 +59,36 @@ export default function InteractiveMap() {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
+        <motion.div
+          className="text-center mb-8"
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.55,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <h2 className="font-serif text-4xl md:text-5xl text-ink mb-4">
             {t('map.title')}
           </h2>
           <p className="font-body text-ink/70 max-w-2xl mx-auto text-lg">
             {t('map.subtitle')}
           </p>
-        </div>
+        </motion.div>
 
-        <div 
-          className="relative w-full overflow-visible z-10 cursor-pointer touch-manipulation select-none [-webkit-touch-callout:none]" 
-          style={{ aspectRatio: '6876 / 3000' }}
+        <motion.div
+          className="relative w-full overflow-visible z-10 cursor-pointer touch-manipulation select-none [-webkit-touch-callout:none]"
+          style={{ aspectRatio: "6876 / 3000" }}
           onClick={handleBackgroundClick}
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.12 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.6,
+            delay: reduceMotion ? 0 : 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <Image
             src="/images/resort-map.jpg"
@@ -120,11 +138,21 @@ export default function InteractiveMap() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <p className="text-center font-body text-ink/50 text-sm mt-4">
-          {t('map.hint')}
-        </p>
+        <motion.p
+          className="text-center font-body text-ink/50 text-sm mt-4"
+          initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.45,
+            delay: reduceMotion ? 0 : 0.12,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          {t("map.hint")}
+        </motion.p>
       </div>
 
       <AnimatePresence>
