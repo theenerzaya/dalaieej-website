@@ -41,8 +41,8 @@ export default function Navbar() {
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         isBookingPage || scrolled ? 'bg-ink shadow-lg' : 'bg-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-20">
+        <div className="relative flex h-20 w-full items-stretch">
+          <div className="flex items-center pl-4 md:pl-8 z-10">
             <button
               onClick={() => setMenuOpen(true)}
               className="text-main hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-2"
@@ -52,30 +52,32 @@ export default function Navbar() {
             >
               <Menu className="w-6 h-6" />
             </button>
+          </div>
 
-            <Link 
-              href={localePrefix || "/"}
-              className={`absolute left-1/2 -translate-x-1/2 hover:opacity-90 transition-all duration-500 ${
-                showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
-              }`}
-              aria-hidden={!showFullChrome}
-              tabIndex={showFullChrome ? undefined : -1}
-            >
-              <Image
-                src="/images/logo-white.png"
-                alt="Dalai Eej Resort"
-                width={180}
-                height={50}
-                className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
-                priority
-              />
-            </Link>
+          <Link
+            href={localePrefix || "/"}
+            className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 hover:opacity-90 transition-all duration-500 ${
+              showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            aria-hidden={!showFullChrome}
+            tabIndex={showFullChrome ? undefined : -1}
+          >
+            <Image
+              src="/images/logo-white.png"
+              alt="Dalai Eej Resort"
+              width={180}
+              height={50}
+              className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
+              priority
+            />
+          </Link>
 
-            <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
+          <div className="ml-auto flex items-stretch z-10">
+            <div className="hidden md:flex items-center gap-4 md:gap-6 pr-3 md:pr-5">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className={`hidden md:inline-flex text-main/70 hover:text-white transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1 ${
+                className={`inline-flex text-main/70 hover:text-white transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg p-1 ${
                   showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
                 aria-label={locale === 'mn' ? "Хайлт" : "Search"}
@@ -85,17 +87,15 @@ export default function Navbar() {
                 <Search className="w-5 h-5" />
               </button>
 
-              <div className="hidden md:block">
-                <LanguageSwitcher />
-              </div>
-              
-              <Link
-                href={`${localePrefix}/booking`}
-                className="px-3 py-2 md:px-5 md:py-2.5 bg-surface text-water-deep font-body text-[10px] md:text-xs font-semibold tracking-[0.08em] md:tracking-[0.1em] uppercase hover:bg-white transition-colors rounded shrink-0"
-              >
-                {locale === 'mn' ? "Захиалах" : "Book"}
-              </Link>
+              <LanguageSwitcher />
             </div>
+
+            <Link
+              href={`${localePrefix}/booking`}
+              className="flex min-h-20 w-[10.75rem] sm:w-[11.75rem] md:w-[12.5rem] shrink-0 items-center justify-center self-stretch px-3 sm:px-4 bg-bark text-white font-body text-xs sm:text-sm font-bold uppercase tracking-wide whitespace-nowrap rounded-none hover:bg-bark/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-inset"
+            >
+              {locale === 'mn' ? "Захиалах" : "Book"}
+            </Link>
           </div>
         </div>
       </nav>
