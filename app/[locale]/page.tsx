@@ -3,7 +3,7 @@
 import VideoHero from "../components/home/VideoHero";
 import EditorialIntro from "../components/home/EditorialIntro";
 import SiloGrid from "../components/home/SiloGrid";
-import OffersCarousel from "../components/home/OffersCarousel";
+// import OffersCarousel from "../components/home/OffersCarousel";
 import PersonaSlider from "../components/home/PersonaSlider";
 import Testimonials from "../components/home/Testimonials";
 import InteractiveMap from "../components/InteractiveMap";
@@ -15,7 +15,7 @@ export default function Home() {
       <VideoHero />
       <EditorialIntro />
       <SiloGrid />
-      <OffersCarousel />
+      {/* <OffersCarousel /> */}
       <PersonaSlider />
       <Testimonials />
       <InteractiveMap />
