@@ -45,7 +45,7 @@ export default function EditorialIntro() {
             duration: reduceMotion ? 0 : 0.8,
             delay: reduceMotion ? 0 : 0.1,
           }}
-          className="font-serif text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed mb-8"
+          className="font-serif font-light text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed mb-8"
         >
           {locale === 'mn' 
             ? "АРИУН ДАГШИН, ХОСГҮЙ, ЦОР ГАНЦ — ЗҮҮН ЭРГИЙН АМИН ЗҮРХ."
