@@ -72,49 +72,47 @@ export default function AvailabilityBar() {
       }`}
       inert={!scrolledPast ? true : undefined}
     >
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 min-w-0">
-        <div className="text-center md:text-left hidden md:block">
-          <p className="font-body text-main text-base md:text-lg font-light tracking-wide">{t('planYourStay')}</p>
-        </div>
-        
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4 w-full md:w-auto min-w-0">
-          <div className="w-full min-w-0 max-w-full md:w-auto md:max-w-none grid gap-2.5 md:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
-            <div className="min-w-0 flex flex-col">
-              <label className="text-main/60 text-[10px] md:text-xs uppercase tracking-[0.18em] mb-1 font-body whitespace-nowrap">
-                {t('checkIn')}
-              </label>
-              <input
-                type="date"
-                value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
-                min={minDate}
-                className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
-              />
-            </div>
+      <div className="max-w-6xl mx-auto flex flex-col items-center md:flex-row md:items-center justify-center gap-4 md:gap-6 min-w-0">
+        <p className="font-body text-main text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] text-center md:text-left shrink-0">
+          {t('planYourStay')}
+        </p>
 
-            <div className="min-w-0 flex flex-col">
-              <label className="text-main/60 text-[10px] md:text-xs uppercase tracking-[0.18em] mb-1 font-body whitespace-nowrap">
-                {t('checkOut')}
-              </label>
-              <input
-                type="date"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                min={checkIn || minDate}
-                className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
-              />
-            </div>
+        <div className="w-full min-w-0 max-w-full md:w-auto md:max-w-none grid gap-2.5 md:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
+          <div className="min-w-0 flex flex-col">
+            <label className="text-main/60 text-[10px] md:text-xs uppercase tracking-[0.18em] mb-1 font-body whitespace-nowrap">
+              {t('checkIn')}
+            </label>
+            <input
+              type="date"
+              value={checkIn}
+              onChange={(e) => setCheckIn(e.target.value)}
+              min={minDate}
+              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
+            />
           </div>
-          
-          <button
-            type="button"
-            onClick={handleCheckAvailability}
-            className="mt-4 sm:mt-6 group inline-flex items-center gap-2 px-5 sm:px-6 py-[calc(0.625rem*1.6)] sm:py-[calc(0.75rem*1.6)] bg-bark text-white font-body text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] hover:bg-bark-hover transition-colors cursor-pointer rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-          >
-            {t('checkAvailability')}
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </button>
+
+          <div className="min-w-0 flex flex-col">
+            <label className="text-main/60 text-[10px] md:text-xs uppercase tracking-[0.18em] mb-1 font-body whitespace-nowrap">
+              {t('checkOut')}
+            </label>
+            <input
+              type="date"
+              value={checkOut}
+              onChange={(e) => setCheckOut(e.target.value)}
+              min={checkIn || minDate}
+              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
+            />
+          </div>
         </div>
+
+        <button
+          type="button"
+          onClick={handleCheckAvailability}
+          className="shrink-0 group inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-[calc(0.625rem*1.6)] sm:py-[calc(0.75rem*1.6)] bg-bark text-white font-body text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] hover:bg-bark-hover transition-colors cursor-pointer rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent w-full sm:w-auto md:w-auto"
+        >
+          {t('checkAvailability')}
+          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+        </button>
       </div>
     </div>
   );
