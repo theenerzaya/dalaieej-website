@@ -39,6 +39,7 @@
 
   --accent-leaf: #58725E;
   --accent-bark: #95794E;
+  --accent-bark-hover: #6B5636;
   --accent-earth: #A65C3A;
   --accent-sun: #96964E;
   --accent-water: #419CDB;
@@ -59,6 +60,7 @@
   --color-ink-disabled: var(--text-disabled);
   --color-leaf: var(--accent-leaf);
   --color-bark: var(--accent-bark);
+  --color-bark-hover: var(--accent-bark-hover);
   --color-earth: var(--accent-earth);
   --color-sun: var(--accent-sun);
   --color-water: var(--accent-water);
@@ -188,14 +190,14 @@ a {
 }
 
 .btn-secondary:hover {
-  background-color: #826a43;
-  box-shadow: 0 4px 12px rgba(149, 121, 78, 0.35);
+  background-color: var(--accent-bark-hover);
+  box-shadow: 0 4px 12px rgba(107, 86, 54, 0.35);
   transform: translateY(-2px);
 }
 
 .btn-secondary:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(149, 121, 78, 0.25);
+  box-shadow: 0 2px 6px rgba(107, 86, 54, 0.25);
 }
 
 .card {

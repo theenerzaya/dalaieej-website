@@ -597,7 +597,7 @@ function CheckoutContent() {
                   disabled={loading || !termsAccepted}
                   className={`w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold flex items-center justify-center gap-2 ${
                     termsAccepted && !loading
-                      ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer'
+                      ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
                 >

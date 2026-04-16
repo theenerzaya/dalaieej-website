@@ -524,7 +524,7 @@ function BookingContent() {
                   <span className="w-6 text-center font-semibold text-ink text-sm font-body">{rateCartItem.quantity}</span>
                   <button onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, 1)} disabled={rateCartItem.quantity >= rate.roomsAvailable} className="w-7 h-7 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-3.5 h-3.5" /></button>
                 </div>
-                <button onClick={() => toggleRoomSelection(rate)} className="px-4 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors flex items-center gap-1.5">
+                <button onClick={() => toggleRoomSelection(rate)} className="px-4 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark-hover transition-colors flex items-center gap-1.5">
                   <Check className="w-4 h-4" />
                   {currentLocale === 'mn' ? 'Сонгосон' : 'Added'}
                 </button>
@@ -534,7 +534,7 @@ function BookingContent() {
                 {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
               </button>
             ) : (
-              <button onClick={() => toggleRoomSelection(rate)} className="px-5 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark/80 transition-colors">
+              <button onClick={() => toggleRoomSelection(rate)} className="px-5 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark-hover transition-colors">
                 {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
               </button>
             )}
@@ -581,7 +581,7 @@ function BookingContent() {
               </div>
             </div>
 
-            <button onClick={handleSearch} disabled={loading} className="mt-6 sm:mt-6 px-8 py-3 bg-bark text-white font-serif uppercase tracking-widest hover:bg-bark/80 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50">
+            <button onClick={handleSearch} disabled={loading} className="mt-6 sm:mt-6 px-8 py-3 bg-bark text-white font-serif uppercase tracking-widest hover:bg-bark-hover transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50">
               {loading ? t('loading') : t('searchRooms')}
             </button>
           </div>
@@ -872,7 +872,7 @@ function BookingContent() {
                       <button
                         onClick={proceedToCheckout}
                         disabled={cartCapacity < totalGuests}
-                        className={`w-full mt-5 py-3 font-serif font-semibold text-sm rounded-lg transition-colors ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                        className={`w-full mt-5 py-3 font-serif font-semibold text-sm rounded-lg transition-colors ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                       >
                         {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
                       </button>
@@ -911,7 +911,7 @@ function BookingContent() {
                 <span className="text-ink/30">•</span>
                 <span className="font-serif text-lg font-bold">{cartTotal.toLocaleString()} MNT</span>
               </div>
-              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-6 py-3 font-serif uppercase tracking-widest text-xs rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-6 py-3 font-serif uppercase tracking-widest text-xs rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
                 {currentLocale === 'mn' ? 'Захиалах' : 'Book Now'}
               </button>
             </div>

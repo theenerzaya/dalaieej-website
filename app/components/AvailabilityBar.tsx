@@ -108,7 +108,7 @@ export default function AvailabilityBar() {
           
           <button
             onClick={handleCheckAvailability}
-            className="mt-4 sm:mt-6 group inline-flex items-center gap-2 px-8 py-3 bg-bark text-white font-serif uppercase tracking-widest hover:bg-bark/80 active:scale-[0.98] transition-all cursor-pointer rounded-lg font-semibold shadow-lg shadow-bark/20"
+            className="mt-4 sm:mt-6 group inline-flex items-center gap-2 px-8 py-3 bg-bark text-white font-serif uppercase tracking-widest hover:bg-bark-hover active:scale-[0.98] transition-all cursor-pointer rounded-lg font-semibold shadow-lg shadow-bark/20"
           >
             {t('checkAvailability')}
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

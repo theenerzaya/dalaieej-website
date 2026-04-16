@@ -210,7 +210,7 @@ function ConfirmationContent() {
           >
             <a
               href={localePrefix || "/"}
-              className="inline-block px-10 py-4 bg-bark text-white font-serif uppercase tracking-widest rounded-lg hover:bg-bark/80 transition-colors"
+              className="inline-block px-10 py-4 bg-bark text-white font-serif uppercase tracking-widest rounded-lg hover:bg-bark-hover transition-colors"
             >
               {t("backToHome")}
             </a>

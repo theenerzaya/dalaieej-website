@@ -124,7 +124,7 @@ function StripePaymentForm({
       <button
         type="submit"
         disabled={!stripe || loading}
-        className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark/80 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark-hover cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
@@ -519,7 +519,7 @@ function PaymentContent() {
               </div>
               <button
                 onClick={fetchStripeClientSecret}
-                className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark/80 cursor-pointer"
+                className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark-hover cursor-pointer"
               >
                 Try Again
               </button>
@@ -604,7 +604,7 @@ function PaymentContent() {
                 </div>
                 <button
                   onClick={() => generateQPayQR(bookingId, amount)}
-                  className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark/80 cursor-pointer"
+                  className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark-hover cursor-pointer"
                 >
                   {currentLocale === 'mn' ? 'Дахин оролдох' : 'Try Again'}
                 </button>
@@ -664,7 +664,7 @@ function PaymentContent() {
                   disabled={loading || !termsAccepted}
                   className={`w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold ${
                     termsAccepted 
-                      ? 'bg-bark text-white hover:bg-bark/80 cursor-pointer' 
+                      ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer' 
                       : 'bg-bark/30 text-main/50 cursor-not-allowed'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
