@@ -194,11 +194,9 @@ export default function PersonaSlider() {
     "relative w-[min(52vw,720px)] shrink-0 aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10 z-10";
 
   return (
-    <section className="py-16 md:py-24 bg-ink relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
+    <section className="py-16 md:py-24 bg-main relative">
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <p className="text-center font-body text-main/60 text-xs tracking-[0.3em] uppercase mb-6">
+        <p className="text-center font-body text-ink/60 text-xs tracking-[0.3em] uppercase mb-6">
           {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
         </p>
         <motion.h2
@@ -206,14 +204,14 @@ export default function PersonaSlider() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-center font-serif text-2xl md:text-3xl lg:text-4xl text-main/80 leading-relaxed max-w-2xl mx-auto mb-10"
+          className="text-center font-serif text-2xl md:text-3xl lg:text-4xl text-ink/80 leading-relaxed max-w-2xl mx-auto mb-10"
         >
           {locale === "mn"
             ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
             : "Every traveler arrives with a different story. Which is yours?"}
         </motion.h2>
 
-        <div className="relative">
+        <div className="relative mx-auto max-w-5xl rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden">
           {n === 1 ? (
             <div className="relative max-w-4xl mx-auto aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10">
               <PersonaPushFrame
