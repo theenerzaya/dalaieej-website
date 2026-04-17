@@ -1,22 +1,18 @@
 "use client";
 
+import { CTAButton } from "./ui/Typography";
+
 interface BookingButtonProps {
   variant?: "primary" | "small";
   label?: string;
   onClick?: () => void;
 }
 
-export default function BookingButton({ 
-  variant = "primary", 
+export default function BookingButton({
+  variant = "primary",
   label = "View Rooms",
-  onClick
+  onClick,
 }: BookingButtonProps) {
-  const baseClasses = "bg-surface-alt text-leaf font-serif uppercase tracking-widest hover:bg-white transition-all cursor-pointer";
-  
-  const variantClasses = variant === "primary" 
-    ? "px-8 py-3" 
-    : "px-6 py-3 text-sm";
-
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -29,11 +25,12 @@ export default function BookingButton({
   };
 
   return (
-    <button
+    <CTAButton
+      variant="primary"
+      size={variant === "primary" ? "md" : "sm"}
       onClick={handleClick}
-      className={`${baseClasses} ${variantClasses}`}
     >
       {label}
-    </button>
+    </CTAButton>
   );
 }

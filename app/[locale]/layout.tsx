@@ -1,22 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/request';
 import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
 import "../globals.css";
-import { araboto, cormorantGaramondItalic, playfairDisplayItalic } from "../fonts";
+import { araboto, cormorantGaramondItalic, montserrat, playfairDisplayItalic } from "../fonts";
 import NavbarWrapper from "../components/NavbarWrapper";
 import Footer from "../components/layout/Footer";
-
-// Font Configurations for the "Heritage" Aesthetic
-const vogun = localFont({
-  src: "../../public/fonts/Vogun-Medium.ttf",
-  variable: "--font-heading",
-  weight: "500",
-  display: "swap",
-});
 
 // Dynamic SEO, Social Media, and Favicon Metadata
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -124,7 +115,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           }) }}
         />
       </head>
-      <body className={`${vogun.variable} ${araboto.variable} ${cormorantGaramondItalic.variable} ${playfairDisplayItalic.variable} antialiased`} suppressHydrationWarning>
+      <body className={`${araboto.variable} ${montserrat.variable} ${cormorantGaramondItalic.variable} ${playfairDisplayItalic.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
             Skip to main content

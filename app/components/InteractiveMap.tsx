@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, ArrowUpRight } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { cormorantGaramondItalic } from "@/app/fonts";
+import { BodyText, Eyebrow, Headline } from "./ui/Typography";
 
 interface Location {
   id: string;
@@ -31,8 +31,6 @@ const locations: Location[] = [
 ];
 
 export default function InteractiveMap() {
-  const locale = useLocale();
-  const isMn = locale === "mn";
   const t = useTranslations();
   const reduceMotion = useReducedMotion();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
@@ -63,7 +61,7 @@ export default function InteractiveMap() {
 
       <div className="max-w-6xl mx-auto">
         <motion.div
-          className="text-center mb-8"
+          className="text-center mb-8 flex flex-col items-center gap-6"
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -72,25 +70,8 @@ export default function InteractiveMap() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          <p
-            className={[
-              "text-ink/55 uppercase mb-6",
-              isMn
-                ? "text-[11px] sm:text-xs font-light tracking-[0.18em]"
-                : "text-xs tracking-[0.3em]",
-            ].join(" ")}
-          >
-            {t("map.eyebrow")}
-          </p>
-          <h2
-            className={
-              isMn
-                ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep`
-                : "font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed"
-            }
-          >
-            {t("map.title")}
-          </h2>
+          <Eyebrow>{t("map.eyebrow")}</Eyebrow>
+          <Headline as="h2" size="section">{t("map.title")}</Headline>
         </motion.div>
 
         <motion.div
@@ -156,8 +137,8 @@ export default function InteractiveMap() {
           </div>
         </motion.div>
 
-        <motion.p
-          className="text-center font-body text-water-deep/60 text-sm font-light leading-relaxed mt-4"
+        <motion.div
+          className="mt-4"
           initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -167,8 +148,10 @@ export default function InteractiveMap() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          {t("map.hint")}
-        </motion.p>
+          <BodyText size="sm" align="center" className="!text-water-deep/60">
+            {t("map.hint")}
+          </BodyText>
+        </motion.div>
       </div>
 
       <AnimatePresence>
@@ -214,20 +197,20 @@ export default function InteractiveMap() {
                   />
                 </div>
               )}
-              <div className="p-6">
-                <h3
-                  id={`map-dialog-title-${activeLocation.id}`}
-                  className={
-                    isMn
-                      ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep mb-4`
-                      : "font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-4"
-                  }
+              <div className="p-6 flex flex-col gap-4">
+                <Headline
+                  as="h3"
+                  size="section"
+                  align="left"
+                  className=""
                 >
-                  {t(`map.${activeLocation.id}.title`)}
-                </h3>
-                <p className="font-body text-lg font-light leading-relaxed text-water-deep/70">
+                  <span id={`map-dialog-title-${activeLocation.id}`}>
+                    {t(`map.${activeLocation.id}.title`)}
+                  </span>
+                </Headline>
+                <BodyText align="left" className="!text-water-deep/70">
                   {t(`map.${activeLocation.id}.desc`)}
-                </p>
+                </BodyText>
               </div>
             </motion.div>
           </motion.div>

@@ -11,14 +11,6 @@
 }
 
 @font-face {
-  font-family: 'Vogun';
-  src: url('/fonts/Vogun-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'GIP';
   src: url('/fonts/GIP-Medium.otf') format('opentype');
   font-weight: 500;
@@ -65,8 +57,10 @@
   --color-sun: var(--accent-sun);
   --color-water: var(--accent-water);
   --color-water-deep: var(--accent-water-deep);
-  --font-heading: var(--font-heading);
   --font-body: var(--font-body);
+  --font-cta: var(--font-cta);
+  --font-editorial-en: var(--font-playfair-display-italic);
+  --font-editorial-mn: var(--font-cormorant-garamond-italic);
 }
 
 body {
@@ -77,32 +71,47 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.font-heading {
-  font-family: var(--font-heading), serif;
-}
-
 .font-body {
   font-family: var(--font-body), "Araboto", system-ui, sans-serif;
+}
+
+.font-cta {
+  font-family: var(--font-cta), system-ui, sans-serif;
+}
+
+/* Back-compat: pages not yet migrated to the Typography primitives (catalogue,
+   amenities, about-us, offers, fam-tour-application) still reference the old
+   `font-heading` class. Point it at the new EN editorial stack so they render
+   with Playfair Display Italic instead of falling back to the UI sans. */
+.font-heading {
+  font-family: var(--font-playfair-display-italic), Georgia, serif;
+  font-style: italic;
+}
+
+.font-editorial-en {
+  font-family: var(--font-playfair-display-italic), Georgia, serif;
+  font-style: italic;
+}
+
+.font-editorial-mn {
+  font-family: var(--font-cormorant-garamond-italic), Georgia, serif;
+  font-style: italic;
+}
+
+.font-signature {
+  font-family: 'Sloops', cursive;
 }
 
 .font-sloops {
   font-family: 'Sloops', serif;
 }
 
-.font-vogun {
-  font-family: 'Vogun', serif;
-}
-
-.font-gip {
-  font-family: 'GIP', sans-serif;
-}
-
 .font-script {
   font-family: 'Sloops', cursive;
 }
 
-.font-editorial {
-  font-family: 'GIP', serif;
+.font-gip {
+  font-family: 'GIP', sans-serif;
 }
 
 html {
@@ -155,8 +164,11 @@ a {
   padding: 0.75rem 1.75rem;
   background-color: var(--accent-leaf);
   color: var(--bg-main);
-  font-size: 0.95rem;
+  font-family: var(--font-cta), system-ui, sans-serif;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -181,8 +193,11 @@ a {
   padding: 0.75rem 1.75rem;
   background-color: var(--accent-bark);
   color: var(--bg-main);
-  font-size: 0.95rem;
+  font-family: var(--font-cta), system-ui, sans-serif;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -223,7 +238,7 @@ select {
   color: var(--text-primary);
   border: 1px solid var(--bg-muted);
   border-radius: 6px;
-  font-family: inherit;
+  font-family: var(--font-cta), system-ui, sans-serif;
   font-size: 0.95rem;
   line-height: 1.5;
   outline: none;

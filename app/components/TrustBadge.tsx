@@ -1,8 +1,8 @@
 "use client";
 
-import { mnPlayfairDisplayClassName } from "@/app/fonts";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
+import { Headline } from "./ui/Typography";
 
 interface TrustBadgeProps {
   locale?: string;
@@ -24,21 +24,20 @@ export default function TrustBadge({ locale = 'en' }: TrustBadgeProps) {
       <div className="flex items-center gap-4">
         <div className="flex-shrink-0">
           <div className="w-14 h-14 rounded-full bg-gradient-to-br from-leaf to-ink flex items-center justify-center">
-            <span className="font-serif text-main text-xl font-bold">5.0</span>
+            <span className="font-cta text-main text-xl font-semibold">5.0</span>
           </div>
         </div>
-        
+
         <div className="flex-1">
-          <p
-            className={
-              locale === "mn"
-                ? `${mnPlayfairDisplayClassName} text-ink mb-1`
-                : "font-serif text-2xl text-ink mb-1"
-            }
+          <Headline
+            as="h3"
+            size="sub"
+            align="left"
+            className="!text-xl md:!text-2xl !text-ink mb-1 leading-tight"
           >
             {locale === "mn" ? "Маш сайн" : "Excellent"}
-          </p>
-          
+          </Headline>
+
           <div className="flex items-center gap-0.5 mb-2">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -47,7 +46,7 @@ export default function TrustBadge({ locale = 'en' }: TrustBadgeProps) {
               />
             ))}
           </div>
-          
+
           <a
             href="#reviews"
             className="font-body text-sm text-ink/60 hover:text-leaf transition-colors"
@@ -64,7 +63,9 @@ export default function TrustBadge({ locale = 'en' }: TrustBadgeProps) {
           </span>
           <div className="flex items-center gap-1">
             <div className="w-2 h-2 rounded-full bg-green-500" />
-            <span>{locale === 'mn' ? "Баталгаатай" : "Verified"}</span>
+            <span className="font-cta uppercase tracking-[0.18em] text-[10px]">
+              {locale === 'mn' ? "Баталгаатай" : "Verified"}
+            </span>
           </div>
         </div>
       </div>

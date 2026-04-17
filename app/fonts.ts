@@ -1,5 +1,5 @@
 import localFont from "next/font/local";
-import { Cormorant_Garamond, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Montserrat, Playfair_Display } from "next/font/google";
 
 /** Site body copy — local Araboto; `--font-body` on `<body>` and `font-body` in Tailwind. */
 export const araboto = localFont({
@@ -14,7 +14,15 @@ export const araboto = localFont({
   display: "swap",
 });
 
-/** Italic — Mongolian hero; use `.className` so Next injects the correct @font-face. */
+/** CTA / UI / label font — Montserrat. `--font-cta` token, `font-cta` utility. */
+export const montserrat = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600"],
+  variable: "--font-cta",
+  display: "swap",
+});
+
+/** MN editorial headlines (H1/H2/H3) — Cormorant Garamond Italic. */
 export const cormorantGaramondItalic = Cormorant_Garamond({
   subsets: ["latin", "cyrillic"],
   style: ["italic"],
@@ -23,7 +31,7 @@ export const cormorantGaramondItalic = Cormorant_Garamond({
   display: "swap",
 });
 
-/** Italic cuts — use `.className` on headings so Next injects the correct @font-face. */
+/** EN editorial headlines (H1/H2/H3) — Playfair Display Italic. */
 export const playfairDisplayItalic = Playfair_Display({
   subsets: ["latin", "cyrillic"],
   style: ["italic"],
@@ -31,6 +39,3 @@ export const playfairDisplayItalic = Playfair_Display({
   variable: "--font-playfair-display-italic",
   display: "swap",
 });
-
-/** Mongolian display copy — Playfair Display Italic at one shared scale site-wide. */
-export const mnPlayfairDisplayClassName = `${playfairDisplayItalic.className} italic font-normal text-2xl md:text-3xl lg:text-4xl leading-relaxed`;

@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
+import { CTAButton } from "./ui/Typography";
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
 
 function isHomePathname(pathname: string) {
@@ -83,12 +84,14 @@ export default function Navbar() {
               <LanguageSwitcher />
             </div>
 
-            <Link
+            <CTAButton
               href={`${localePrefix}/booking`}
-              className="inline-flex shrink-0 items-center justify-center bg-bark px-5 py-[calc(0.625rem*1.6)] sm:px-6 sm:py-[calc(0.75rem*1.6)] font-body text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] text-white whitespace-nowrap rounded-none transition-colors hover:bg-bark-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+              variant="secondary"
+              size="sm"
+              className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
             >
               {locale === 'mn' ? "Захиалах" : "Book"}
-            </Link>
+            </CTAButton>
           </div>
         </div>
       </nav>

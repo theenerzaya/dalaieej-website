@@ -166,7 +166,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         onClick={onClose}
                         onMouseEnter={() => setHoveredLink(item.id)}
                         onMouseLeave={() => setHoveredLink(null)}
-                        className="font-serif text-4xl md:text-6xl text-main/60 hover:text-white transition-colors tracking-wide block"
+                        className="font-cta text-3xl md:text-5xl font-light uppercase tracking-[0.08em] text-main/60 hover:text-white transition-colors block"
                       >
                         {isMongolian ? item.mn : item.label}
                       </Link>
@@ -176,10 +176,10 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         aria-disabled="true"
                         onMouseEnter={() => setHoveredLink(item.id)}
                         onMouseLeave={() => setHoveredLink(null)}
-                        className="font-serif text-4xl md:text-6xl text-main/60 hover:text-white transition-colors tracking-wide block cursor-default"
+                        className="font-cta text-3xl md:text-5xl font-light uppercase tracking-[0.08em] text-main/60 hover:text-white transition-colors block cursor-default"
                       >
                         {isMongolian ? item.mn : item.label}
-                        <span className="ml-3 font-body text-xs md:text-sm tracking-[0.15em] uppercase text-main/40 align-middle">
+                        <span className="ml-3 font-cta text-xs md:text-sm font-medium tracking-[0.18em] uppercase text-main/40 align-middle">
                           {isMongolian ? "Тун удахгүй" : "Coming Soon"}
                         </span>
                       </span>
@@ -200,7 +200,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
               <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-6 mb-8 md:mb-0">
                 {secondaryNavItems.map((item, i) => {
                   const Icon = item.icon;
-                  const linkClass = "group flex items-center gap-2 font-body text-xs md:text-sm tracking-[0.2em] uppercase text-main/80 hover:text-white transition-colors";
+                  const linkClass = "group flex items-center gap-2 font-cta text-xs md:text-sm font-medium tracking-[0.18em] uppercase text-main/80 hover:text-white transition-colors";
                   return (
                     <motion.div
                       key={item.label}
@@ -252,7 +252,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
               >
                 <button
                   onClick={toggleLanguage}
-                  className="font-body text-xs tracking-[0.2em] font-normal text-main/70 hover:text-white transition-colors uppercase py-3 px-6 border border-white/10 rounded-full hover:border-white/30"
+                  className="font-cta text-xs font-medium tracking-[0.18em] text-main/70 hover:text-white transition-colors uppercase py-3 px-6 border border-white/10 rounded-full hover:border-white/30"
                 >
                   <span className={!isMongolian ? "text-white" : ""}>EN</span>
                   <span className="mx-3 opacity-50">|</span>

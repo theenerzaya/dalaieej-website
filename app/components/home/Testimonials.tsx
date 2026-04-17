@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { Star, ShieldCheck } from "lucide-react";
 import FadeInWhenVisible from "./FadeInWhenVisible";
-import { mnPlayfairDisplayClassName } from "@/app/fonts";
+import { BodyText, Eyebrow, Headline } from "../ui/Typography";
 
 const REVIEW_IDS = ["review1", "review2", "review3"] as const;
 const AUTO_ADVANCE_MS = 5000;
@@ -62,20 +62,15 @@ export default function Testimonials() {
     <section className="relative min-h-[85vh] flex flex-col overflow-hidden bg-surface">
       <div className="relative z-10 flex flex-col flex-1 min-h-[85vh] px-4 sm:px-6 py-10 md:py-14">
         {/* Section eyebrow — narrative bridge */}
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5 }}
-          className={[
-            "text-center text-ink/55 uppercase mb-6",
-            locale === "mn"
-              ? "text-[11px] sm:text-xs font-light tracking-[0.18em]"
-              : "text-xs tracking-[0.3em]",
-          ].join(" ")}
+          className="mb-6"
         >
-          {t("sectionEyebrow")}
-        </motion.p>
+          <Eyebrow>{t("sectionEyebrow")}</Eyebrow>
+        </motion.div>
 
         {/* Aggregate rating — outside card */}
         <motion.div
@@ -87,26 +82,14 @@ export default function Testimonials() {
         >
           <div className="flex items-center gap-4 rounded-2xl bg-main px-5 py-3 shadow-sm border border-bark/15">
             <div className="w-12 h-12 rounded-full flex items-center justify-center border-2 border-bark/80 bg-leaf/95 shadow-md">
-              <span
-                className={
-                  locale === "mn"
-                    ? "text-lg font-light text-main"
-                    : "text-lg font-normal text-main"
-                }
-              >
+              <span className="font-cta text-lg font-medium text-main">
                 {RATING}
               </span>
             </div>
             <div>
-              <p
-                className={
-                  locale === "mn"
-                    ? `${mnPlayfairDisplayClassName} text-ink`
-                    : "text-xl font-normal text-ink"
-                }
-              >
+              <Headline as="h3" size="sub" align="left" className="!text-xl md:!text-2xl leading-tight">
                 {t("ratingLabel")}
-              </p>
+              </Headline>
               <div className="flex items-center gap-1 mt-0.5 flex-wrap">
                 {[...Array(5)].map((_, i) =>
                   i < FULL_STARS ? (
@@ -123,12 +106,7 @@ export default function Testimonials() {
                     </span>
                   )
                 )}
-                <span
-                  className={[
-                    "ml-2 text-xs text-ink/65",
-                    locale === "mn" ? "font-light" : "",
-                  ].join(" ")}
-                >
+                <span className="ml-2 font-cta text-xs font-medium text-ink/65">
                   {t("reviewCount")}
                 </span>
               </div>
@@ -155,16 +133,11 @@ export default function Testimonials() {
             />
 
             <div className="relative">
-              <p
-                className={[
-                  "text-center uppercase mb-8 md:mb-10 text-bark/65",
-                  locale === "mn"
-                    ? "text-[11px] sm:text-xs font-light tracking-[0.18em]"
-                    : "text-[11px] sm:text-xs tracking-[0.3em]",
-                ].join(" ")}
-              >
-                {t("cardEyebrow")}
-              </p>
+              <div className="text-center mb-8 md:mb-10">
+                <Eyebrow className="!text-bark/65">
+                  {t("cardEyebrow")}
+                </Eyebrow>
+              </div>
 
               <div className="relative min-h-[200px] sm:min-h-[220px] md:min-h-[240px] overflow-hidden">
                 <AnimatePresence mode="sync" initial={false}>
@@ -184,15 +157,19 @@ export default function Testimonials() {
                     }
                     transition={slideTransition}
                   >
-                    <p className="font-light text-xl sm:text-2xl md:text-3xl lg:text-[1.75rem] leading-relaxed mb-6 md:mb-8">
+                    <Headline
+                      as="h3"
+                      size="sub"
+                      className="!text-xl sm:!text-2xl md:!text-3xl lg:!text-[1.75rem] !text-bark leading-relaxed mb-6 md:mb-8"
+                    >
                       &ldquo;{t(`${reviewId}.text`)}&rdquo;
-                    </p>
+                    </Headline>
                     <p
                       className={[
-                        "uppercase text-bark/75",
+                        "font-cta uppercase text-bark/75",
                         locale === "mn"
                           ? "text-[10px] sm:text-xs font-light tracking-[0.18em]"
-                          : "text-[10px] sm:text-xs tracking-[0.2em]",
+                          : "text-[10px] sm:text-xs font-medium tracking-[0.2em]",
                       ].join(" ")}
                     >
                       {attributionLine}
@@ -230,14 +207,9 @@ export default function Testimonials() {
           className="flex items-center justify-center gap-3 shrink-0 pb-2 md:pb-4 max-w-2xl mx-auto text-center"
         >
           <ShieldCheck className="w-4.5 h-4.5 flex-shrink-0 text-bark" />
-          <p
-            className={[
-              "text-sm text-ink/70",
-              locale === "mn" ? "font-light leading-relaxed" : "tracking-wide",
-            ].join(" ")}
-          >
+          <BodyText size="sm" align="center" className="!text-ink/70">
             {t("heritage")}
-          </p>
+          </BodyText>
         </motion.div>
       </div>
     </section>

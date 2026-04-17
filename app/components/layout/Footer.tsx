@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { Eyebrow } from "../ui/Typography";
 
 export default function Footer() {
   const locale = useLocale();
@@ -46,8 +47,8 @@ export default function Footer() {
 
           {/* Column 2: Experience */}
           <div className="min-w-0">
-            <h4 className="text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
-              {t("experience")}
+            <h4 className="mb-4 md:mb-6">
+              <Eyebrow tone="dark" className="!text-main/50">{t("experience")}</Eyebrow>
             </h4>
             <ul className="space-y-3">
               {experienceLinks.map((item) => (
@@ -65,8 +66,8 @@ export default function Footer() {
 
           {/* Column 3: Resort */}
           <div className="min-w-0">
-            <h4 className="text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
-              {t("resort")}
+            <h4 className="mb-4 md:mb-6">
+              <Eyebrow tone="dark" className="!text-main/50">{t("resort")}</Eyebrow>
             </h4>
             <ul className="space-y-3">
               {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
@@ -95,8 +96,8 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div className="col-span-2 lg:col-span-1">
-            <h4 className="text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
-              {t("contact")}
+            <h4 className="mb-4 md:mb-6">
+              <Eyebrow tone="dark" className="!text-main/50">{t("contact")}</Eyebrow>
             </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">

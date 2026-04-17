@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { cormorantGaramondItalic } from "@/app/fonts";
+import { Eyebrow, Headline } from "../ui/Typography";
 
 /** Desktop: `.env.local` → `NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID` (Mux → Playback ID). */
 const DEFAULT_PLAYBACK_ID_DESKTOP =
@@ -125,8 +125,8 @@ export default function VideoHero() {
         <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/20 to-ink/70" />
       </div>
       
-      <div className="relative z-10 text-center px-6">
-        <motion.h1
+      <div className="relative z-10 text-center px-6 flex flex-col items-center gap-6">
+        <motion.div
           initial={
             reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
           }
@@ -137,16 +137,18 @@ export default function VideoHero() {
             delay: reduceMotion ? 0 : 0.3,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className={[
-            locale === "mn"
-              ? `${cormorantGaramondItalic.className} italic font-normal text-4xl md:text-5xl lg:text-[4.875rem] xl:text-[5.25rem] tracking-wider leading-none drop-shadow-lg`
-              : "font-normal text-6xl md:text-8xl lg:text-9xl",
-            "text-white mb-6 text-hero-glow",
-          ].join(" ")}
         >
-          {locale === "mn" ? "Далай ээж" : "Dalai Eej"}
-        </motion.h1>
-        <motion.p
+          <Headline
+            as="h1"
+            size="hero"
+            variant="signature"
+            tone="dark"
+            className="text-white text-hero-glow"
+          >
+            {locale === "mn" ? "Далай ээж" : "Dalai Eej"}
+          </Headline>
+        </motion.div>
+        <motion.div
           initial={
             reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
           }
@@ -157,16 +159,11 @@ export default function VideoHero() {
             delay: reduceMotion ? 0 : 0.6,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className={[
-            "font-body",
-            "text-white text-overlay-glow uppercase",
-            locale === "mn"
-              ? "text-base md:text-lg font-light tracking-[0.18em]"
-              : "text-base md:text-lg tracking-[0.2em]",
-          ].join(" ")}
         >
-          {locale === 'mn' ? "Зүүн Эрэгт" : "On the eastern shore of Khuvsgul"}
-        </motion.p>
+          <Eyebrow tone="dark" className="text-white text-overlay-glow">
+            {locale === 'mn' ? "Зүүн Эрэгт" : "On the eastern shore of Khuvsgul"}
+          </Eyebrow>
+        </motion.div>
       </div>
 
       <motion.div

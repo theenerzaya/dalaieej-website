@@ -3,13 +3,13 @@
 import { useRef } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
-import { cormorantGaramondItalic } from "@/app/fonts";
 import {
   motion,
   useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
+import { Headline } from "../ui/Typography";
 
 const silos = [
   {
@@ -50,8 +50,54 @@ const storiesSilo = {
   image: "/images/silogrid/stories-placeholder.webp"
 };
 
+type SiloEntry = typeof silos[0];
+
+/** Shared tile copy block used on both mobile and desktop. */
+function SiloOverlay({
+  silo,
+  isMongolian,
+  size = "section",
+}: {
+  silo: SiloEntry;
+  isMongolian: boolean;
+  size?: "section" | "hero";
+}) {
+  const isStoriesMnTitle = isMongolian && silo.id === "stories";
+  const headlineSize = size;
+  const headlineExtra = isStoriesMnTitle
+    ? "!text-[2.025rem] md:!text-[2.7rem] lg:!text-[4.05rem]"
+    : size === "hero"
+      ? "!text-4xl lg:!text-7xl"
+      : "";
+
+  return (
+    <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10 pointer-events-none">
+      <Headline
+        as="h3"
+        size={headlineSize}
+        variant="editorial"
+        tone="dark"
+        className={`text-white tracking-wider drop-shadow-lg mb-6 ${headlineExtra}`}
+      >
+        {isMongolian ? silo.mn : silo.en}
+      </Headline>
+
+      <span
+        className={[
+          "font-cta uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md",
+          isMongolian
+            ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
+            : "text-[10px] font-medium tracking-[0.4em]",
+        ].join(" ")}
+      >
+        {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
+      </span>
+    </div>
+  );
+}
+
 interface MobileSiloProps {
-  silo: typeof silos[0];
+  silo: SiloEntry;
   localePrefix: string;
   isMongolian: boolean;
   index: number;
@@ -65,14 +111,12 @@ function MobileSilo({
 }: MobileSiloProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
-  const isStoriesMnTitle = isMongolian && silo.id === "stories";
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
 
-  // % of the motion layer (≈ card height), not vh — avoids iOS toolbar resize jank.
   const y = useTransform(scrollYProgress, [0, 1], ["-40%", "40%"]);
 
   return (
@@ -90,9 +134,8 @@ function MobileSilo({
     >
       <Link
         href={`${localePrefix}${silo.href}`}
-        className="relative block w-full h-full"
+        className="group relative block w-full h-full"
       >
-        {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img
             src={silo.image}
@@ -106,35 +149,11 @@ function MobileSilo({
           <div className="absolute inset-0 bg-black/40" />
         </div>
 
-        {/* Motion Text Layer */}
-        {/* Added 'pointer-events-none' to prevent cursor interaction glitches */}
-        <motion.div 
-          style={{ y, willChange: "transform" }} 
-          className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10 pointer-events-none"
+        <motion.div
+          style={{ y, willChange: "transform" }}
+          className="absolute inset-0 pointer-events-none"
         >
-          <h3
-            className={[
-              isMongolian
-                ? `${cormorantGaramondItalic.className} italic font-normal`
-                : "font-normal",
-              isStoriesMnTitle
-                ? "text-[2.025rem] md:text-[2.7rem] text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg"
-                : "text-4xl md:text-5xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg",
-            ].join(" ")}
-          >
-            {isMongolian ? silo.mn : silo.en}
-          </h3>
-
-          <span
-            className={[
-              "text-white/90 border-b border-white/40 pb-1 mt-8 drop-shadow-md uppercase",
-              isMongolian
-                ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
-                : "text-[10px] tracking-[0.4em]",
-            ].join(" ")}
-          >
-            {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
-          </span>
+          <SiloOverlay silo={silo} isMongolian={isMongolian} size="section" />
         </motion.div>
       </Link>
     </motion.div>
@@ -187,7 +206,6 @@ export default function SiloGrid() {
             viewport={{ once: true, amount: 0.15 }}
             transition={{
               duration: reduceMotion ? 0 : 0.65,
-              // Grid is filled row-wise: left → right, then next row (same reading order).
               delay: reduceMotion ? 0 : i * 0.11,
               ease: [0.22, 1, 0.36, 1],
             }}
@@ -202,33 +220,12 @@ export default function SiloGrid() {
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-              <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10">
-                <h3
-                  className={[
-                    isMongolian
-                      ? `${cormorantGaramondItalic.className} italic font-normal`
-                      : "font-normal",
-                    "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
-                  ].join(" ")}
-                >
-                  {isMongolian ? silo.mn : silo.en}
-                </h3>
-                <span
-                  className={[
-                    "uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md",
-                    isMongolian
-                      ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
-                      : "text-[10px] tracking-[0.4em]",
-                  ].join(" ")}
-                >
-                  {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
-                </span>
-              </div>
+              <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
             </Link>
           </motion.div>
         ))}
 
-        {/* Stories — full-width row spanning both columns */}
+        {/* Stories — full-width row */}
         <motion.div
           className="relative col-span-2 h-[80vh] w-full bg-gray-900 overflow-hidden group"
           initial={
@@ -254,30 +251,7 @@ export default function SiloGrid() {
               className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-            <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10">
-              <h3
-                className={[
-                  isMongolian
-                    ? `${cormorantGaramondItalic.className} italic font-normal`
-                    : "font-normal",
-                  isMongolian
-                    ? "text-[2.025rem] lg:text-[4.05rem] text-white text-center tracking-wider drop-shadow-lg"
-                    : "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
-                ].join(" ")}
-              >
-                {isMongolian ? storiesSilo.mn : storiesSilo.en}
-              </h3>
-              <span
-                className={[
-                  "uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md",
-                  isMongolian
-                    ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
-                    : "text-[10px] tracking-[0.4em]",
-                ].join(" ")}
-              >
-                {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
-              </span>
-            </div>
+            <SiloOverlay silo={storiesSilo} isMongolian={isMongolian} size="hero" />
           </Link>
         </motion.div>
       </div>

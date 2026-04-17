@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
+import { CTAButton } from "./ui/Typography";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 
 function useNavOpen() {
@@ -75,13 +76,13 @@ export default function AvailabilityBar() {
       inert={!scrolledPast ? true : undefined}
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center md:flex-row md:items-center justify-center gap-4 md:gap-6 min-w-0">
-        <p className="text-main text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] text-center md:text-left shrink-0">
+        <p className="font-cta text-main text-[11px] sm:text-xs font-medium uppercase tracking-[0.18em] text-center md:text-left shrink-0">
           {t('planYourStay')}
         </p>
 
         <div className="w-full min-w-0 max-w-full md:w-auto md:max-w-none grid gap-2.5 md:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
           <div className="min-w-0 flex flex-col">
-            <label className="text-main/60 text-[10px] md:text-xs uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
+            <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
               {t('checkIn')}
             </label>
             <input
@@ -94,7 +95,7 @@ export default function AvailabilityBar() {
           </div>
 
           <div className="min-w-0 flex flex-col">
-            <label className="text-main/60 text-[10px] md:text-xs uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
+            <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
               {t('checkOut')}
             </label>
             <input
@@ -107,14 +108,15 @@ export default function AvailabilityBar() {
           </div>
         </div>
 
-        <button
-          type="button"
+        <CTAButton
+          variant="secondary"
+          size="sm"
           onClick={handleCheckAvailability}
-          className="shrink-0 group inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-[calc(0.625rem*1.6)] sm:py-[calc(0.75rem*1.6)] bg-bark text-white text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] hover:bg-bark-hover transition-colors cursor-pointer rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent w-full sm:w-auto md:w-auto"
+          className="group !px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)] w-full sm:w-auto md:w-auto"
         >
           {t('checkAvailability')}
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </button>
+        </CTAButton>
       </div>
     </div>
   );

@@ -10,17 +10,17 @@ import {
 } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import FadeInWhenVisible from "./FadeInWhenVisible";
-import { cormorantGaramondItalic } from "@/app/fonts";
+import { BodyText, CTALink, Eyebrow, Headline } from "../ui/Typography";
 
 /**
  * Scroll reveal: card + persona row scale together (one factor).
- * Runs from this value → 1. That is ~24% smaller at the start than at rest,
- * or equivalently ~31.6% larger at the end than at the start ((1/min − 1) × 100).
+ * Smallest size during scroll-in / scroll-out; peaks at 1 in the middle
+ * of the section's pass through the viewport, where the card reaches its
+ * full viewport width.
  */
-const REVEAL_SCALE_MIN = 0.76;
+const REVEAL_SCALE_MIN = 0.6;
 
 const personas = [
   {
@@ -161,10 +161,11 @@ export default function PersonaSlider() {
     /** Full pass through the viewport so the zoom unfolds over more scroll. */
     offset: ["start end", "end start"],
   });
-  const revealScale = useTransform(scrollYProgress, [0, 1], [
-    REVEAL_SCALE_MIN,
-    1,
-  ]);
+  const revealScale = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [REVEAL_SCALE_MIN, 1, REVEAL_SCALE_MIN]
+  );
 
   const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -226,41 +227,33 @@ export default function PersonaSlider() {
       ref={sectionRef}
       className="py-24 md:py-32 bg-surface relative overflow-x-hidden"
     >
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <FadeInWhenVisible
-          className="text-center font-body text-water-deep/60 text-sm tracking-[0.3em] uppercase mb-8"
-          y={14}
-          duration={0.5}
-        >
-          <p>
+      <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col items-center gap-6 mb-10 md:mb-12">
+        <FadeInWhenVisible y={14} duration={0.5}>
+          <Eyebrow>
             {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
-          </p>
+          </Eyebrow>
         </FadeInWhenVisible>
-        <motion.h2
-          initial={
-            reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-          }
+        <motion.div
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{
             duration: reduceMotion ? 0 : 0.8,
             delay: reduceMotion ? 0 : 0.1,
           }}
-          className={
-            locale === "mn"
-              ? `${cormorantGaramondItalic.className} italic font-normal text-center text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep max-w-2xl mx-auto mb-8`
-              : "text-center font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed max-w-2xl mx-auto mb-8"
-          }
+          className="max-w-2xl"
         >
-          {locale === "mn"
-            ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
-            : "Every traveler arrives with a different story. Which is yours?"}
-        </motion.h2>
+          <Headline as="h2" size="section">
+            {locale === "mn"
+              ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
+              : "Every traveler arrives with a different story. Which is yours?"}
+          </Headline>
+        </motion.div>
       </div>
 
-      <div className="relative z-10 w-full px-4 sm:px-6 md:px-8">
+      <div className="relative z-10 w-full">
         <motion.div
-          className="relative mx-auto w-full max-w-[min(100%,calc(100vw-2rem))] rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden origin-center will-change-transform"
+          className="relative mx-auto w-screen max-w-none rounded-3xl bg-ink p-6 sm:p-8 md:p-10 shadow-2xl ring-1 ring-white/10 overflow-x-hidden origin-center will-change-transform"
           style={cardMotionStyle}
         >
           {n === 1 ? (
@@ -342,7 +335,7 @@ export default function PersonaSlider() {
               amount={0.15}
             >
               <div className="w-full max-w-3xl text-center mx-auto">
-                <p className="font-body text-main/60 text-sm tracking-[0.3em] uppercase tabular-nums mb-4">
+                <p className="font-cta text-main/60 text-xs tracking-[0.3em] uppercase tabular-nums mb-4">
                   {String(activeIndex + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
                 </p>
 
@@ -358,21 +351,18 @@ export default function PersonaSlider() {
 
                   <div className="flex-1 min-w-0">
                     <AnimatePresence mode="wait" custom={direction}>
-                      <motion.h3
+                      <motion.div
                         key={`${currentPersona.id}-${locale}`}
                         custom={direction}
                         initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                        className={
-                          locale === "mn"
-                            ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-main`
-                            : "font-light text-2xl md:text-3xl lg:text-4xl text-main leading-relaxed"
-                        }
                       >
-                        {content.title}
-                      </motion.h3>
+                        <Headline as="h3" size="sub" tone="dark">
+                          {content.title}
+                        </Headline>
+                      </motion.div>
                     </AnimatePresence>
                   </div>
 
@@ -387,28 +377,25 @@ export default function PersonaSlider() {
                 </div>
 
                 <AnimatePresence mode="wait" custom={direction}>
-                  <motion.p
+                  <motion.div
                     key={`${currentPersona.id}-${locale}-desc`}
                     custom={direction}
                     initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed mt-4"
+                    className="mt-4"
                   >
-                    {content.description}
-                  </motion.p>
+                    <BodyText tone="dark" size="md" className="max-w-xl mx-auto">
+                      {content.description}
+                    </BodyText>
+                  </motion.div>
                 </AnimatePresence>
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
-                  <Link
-                    href={`${localePrefix}${content.href}`}
-                    className="group inline-block uppercase text-[11px] sm:text-xs font-light tracking-[0.18em] text-main"
-                  >
-                    <span className="border-b border-main/40 pb-0.5 group-hover:border-main transition-colors">
-                      {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
-                    </span>
-                  </Link>
+                  <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
+                    {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
+                  </CTALink>
                 </div>
               </div>
             </FadeInWhenVisible>
@@ -424,31 +411,21 @@ export default function PersonaSlider() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-3 items-center"
                   >
-                    <h3
-                      className={
-                        locale === "mn"
-                          ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-main mb-3`
-                          : "font-light text-2xl md:text-3xl lg:text-4xl text-main leading-relaxed mb-3"
-                      }
-                    >
+                    <Headline as="h3" size="sub" tone="dark">
                       {content.title}
-                    </h3>
-                    <p className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed">
+                    </Headline>
+                    <BodyText tone="dark" size="md" className="max-w-xl mx-auto">
                       {content.description}
-                    </p>
+                    </BodyText>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              <Link
-                href={`${localePrefix}${content.href}`}
-                className="group inline-block uppercase text-[11px] sm:text-xs font-light tracking-[0.18em] text-main"
-              >
-                <span className="border-b border-main/40 pb-0.5 group-hover:border-main transition-colors">
-                  {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
-                </span>
-              </Link>
+              <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
+                {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
+              </CTALink>
             </div>
           )}
         </motion.div>

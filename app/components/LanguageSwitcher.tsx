@@ -28,7 +28,7 @@ export default function LanguageSwitcher() {
     <Link
       href={pathWithoutLocale}
       locale={targetLocale}
-      className="text-sm font-body px-2 py-1 rounded text-main/70 hover:text-main transition-colors"
+      className="font-cta text-xs font-medium uppercase tracking-[0.18em] px-2 py-1 rounded text-main/70 hover:text-main transition-colors"
       aria-label={ariaLabel}
     >
       {label}
