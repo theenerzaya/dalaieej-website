@@ -252,7 +252,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
               >
                 <button
                   onClick={toggleLanguage}
-                  className="font-body text-xs tracking-[0.2em] font-medium text-main/70 hover:text-white transition-colors uppercase py-3 px-6 border border-white/10 rounded-full hover:border-white/30"
+                  className="font-body text-xs tracking-[0.2em] font-normal text-main/70 hover:text-white transition-colors uppercase py-3 px-6 border border-white/10 rounded-full hover:border-white/30"
                 >
                   <span className={!isMongolian ? "text-white" : ""}>EN</span>
                   <span className="mx-3 opacity-50">|</span>

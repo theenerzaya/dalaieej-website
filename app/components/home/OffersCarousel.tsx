@@ -136,7 +136,7 @@ export default function OffersCarousel() {
 
   return (
     <section
-      className="bg-main pt-20 md:pt-28 pb-12 md:pb-16"
+      className="bg-surface pt-20 md:pt-28 pb-12 md:pb-16"
       style={
         { ["--offers-heading-block-h" as string]: `${headingBlockHeight}px` } as React.CSSProperties
       }

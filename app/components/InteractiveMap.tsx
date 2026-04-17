@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, ArrowUpRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { cormorantGaramondItalic } from "@/app/fonts";
 
 interface Location {
   id: string;
@@ -30,6 +31,8 @@ const locations: Location[] = [
 ];
 
 export default function InteractiveMap() {
+  const locale = useLocale();
+  const isMn = locale === "mn";
   const t = useTranslations();
   const reduceMotion = useReducedMotion();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
@@ -51,7 +54,7 @@ export default function InteractiveMap() {
       : null;
 
   return (
-    <section className="bg-surface-alt py-20 px-8">
+    <section className="bg-surface pt-24 md:pt-32 pb-[6.9rem] md:pb-[9.2rem] mb-[6.9rem] md:mb-[9.2rem] px-6">
       <div className="hidden" aria-hidden="true">
         {locations.map((loc) => (
            loc.image && <Image key={loc.id} src={loc.image} alt="" width={10} height={10} priority />
@@ -69,12 +72,25 @@ export default function InteractiveMap() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          <h2 className="font-serif text-4xl md:text-5xl text-ink mb-4">
-            {t('map.title')}
-          </h2>
-          <p className="font-body text-ink/70 max-w-2xl mx-auto text-lg">
-            {t('map.subtitle')}
+          <p
+            className={[
+              "text-ink/55 uppercase mb-6",
+              isMn
+                ? "text-[11px] sm:text-xs font-light tracking-[0.18em]"
+                : "text-xs tracking-[0.3em]",
+            ].join(" ")}
+          >
+            {t("map.eyebrow")}
           </p>
+          <h2
+            className={
+              isMn
+                ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep`
+                : "font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed"
+            }
+          >
+            {t("map.title")}
+          </h2>
         </motion.div>
 
         <motion.div
@@ -141,7 +157,7 @@ export default function InteractiveMap() {
         </motion.div>
 
         <motion.p
-          className="text-center font-body text-ink/50 text-sm mt-4"
+          className="text-center font-body text-water-deep/60 text-sm font-light leading-relaxed mt-4"
           initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -172,7 +188,7 @@ export default function InteractiveMap() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-md md:max-w-lg max-h-[min(90dvh,100vh)] overflow-y-auto overflow-x-hidden bg-white rounded-xl shadow-xl pb-[max(1rem,env(safe-area-inset-bottom))]"
+              className="relative w-full max-w-md md:max-w-lg max-h-[min(90dvh,100vh)] overflow-y-auto overflow-x-hidden bg-surface rounded-xl shadow-xl pb-[max(1rem,env(safe-area-inset-bottom))]"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
@@ -182,7 +198,7 @@ export default function InteractiveMap() {
                 type="button"
                 onClick={() => setActiveHotspot(null)}
                 aria-label={t(`map.${activeLocation.id}.title`) + ' — close'}
-                className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-white/90 rounded-full text-ink/70 hover:text-ink hover:bg-white transition-colors"
+                className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center bg-surface/90 rounded-full text-ink/70 hover:text-ink hover:bg-surface transition-colors"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
               </button>
@@ -198,14 +214,18 @@ export default function InteractiveMap() {
                   />
                 </div>
               )}
-              <div className="p-4">
+              <div className="p-6">
                 <h3
                   id={`map-dialog-title-${activeLocation.id}`}
-                  className="font-serif text-lg text-ink mb-2"
+                  className={
+                    isMn
+                      ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep mb-4`
+                      : "font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-4"
+                  }
                 >
                   {t(`map.${activeLocation.id}.title`)}
                 </h3>
-                <p className="font-body text-sm text-ink/70">
+                <p className="font-body text-lg font-light leading-relaxed text-water-deep/70">
                   {t(`map.${activeLocation.id}.desc`)}
                 </p>
               </div>

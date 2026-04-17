@@ -11,7 +11,10 @@ import AvailabilityBar from "../components/AvailabilityBar";
 
 export default function Home() {
   return (
-    <main id="main-content" className="relative min-h-screen">
+    <main
+      id="main-content"
+      className="relative min-h-screen bg-surface font-body"
+    >
       <VideoHero />
       <EditorialIntro />
       <SiloGrid />

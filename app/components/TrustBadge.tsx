@@ -1,6 +1,6 @@
 "use client";
 
-import { cormorantGaramondItalic } from "@/app/fonts";
+import { mnPlayfairDisplayClassName } from "@/app/fonts";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -32,7 +32,7 @@ export default function TrustBadge({ locale = 'en' }: TrustBadgeProps) {
           <p
             className={
               locale === "mn"
-                ? `${cormorantGaramondItalic.className} italic font-normal text-2xl text-ink mb-1`
+                ? `${mnPlayfairDisplayClassName} text-ink mb-1`
                 : "font-serif text-2xl text-ink mb-1"
             }
           >

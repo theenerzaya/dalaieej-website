@@ -140,7 +140,7 @@ export default function VideoHero() {
           className={[
             locale === "mn"
               ? `${cormorantGaramondItalic.className} italic font-normal text-4xl md:text-5xl lg:text-[4.875rem] xl:text-[5.25rem] tracking-wider leading-none drop-shadow-lg`
-              : "font-sloops font-normal text-6xl md:text-8xl lg:text-9xl",
+              : "font-normal text-6xl md:text-8xl lg:text-9xl",
             "text-white mb-6 text-hero-glow",
           ].join(" ")}
         >
@@ -157,9 +157,15 @@ export default function VideoHero() {
             delay: reduceMotion ? 0 : 0.6,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="font-body text-base md:text-lg text-white tracking-[0.2em] uppercase text-overlay-glow"
+          className={[
+            "font-body",
+            "text-white text-overlay-glow uppercase",
+            locale === "mn"
+              ? "text-base md:text-lg font-light tracking-[0.18em]"
+              : "text-base md:text-lg tracking-[0.2em]",
+          ].join(" ")}
         >
-          {locale === 'mn' ? "Зүүн эрэгт" : "On the eastern shore of Khuvsgul"}
+          {locale === 'mn' ? "Зүүн Эрэгт" : "On the eastern shore of Khuvsgul"}
         </motion.p>
       </div>
 
@@ -183,7 +189,7 @@ export default function VideoHero() {
             });
           }}
           aria-label={locale === "mn" ? "Доош гүйлгэх" : "Scroll down"}
-          className="block cursor-pointer border-0 bg-transparent p-0 font-body text-3xl md:text-4xl font-light uppercase tracking-[0.18em] text-white animate-bounce drop-shadow-lg leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink rounded-sm"
+          className="block cursor-pointer border-0 bg-transparent p-0 text-3xl md:text-4xl font-light uppercase tracking-[0.18em] text-white animate-bounce drop-shadow-lg leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink rounded-sm"
         >
           ↓
         </button>

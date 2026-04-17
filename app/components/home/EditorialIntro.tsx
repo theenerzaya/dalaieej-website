@@ -5,7 +5,6 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cormorantGaramondItalic } from "@/app/fonts";
-
 export default function EditorialIntro() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
@@ -48,8 +47,8 @@ export default function EditorialIntro() {
           }}
           className={
             locale === "mn"
-              ? `${cormorantGaramondItalic.className} italic font-normal text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-8`
-              : "font-serif font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-8"
+              ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep mb-8`
+              : "font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-8"
           }
         >
           {locale === 'mn' ? (
@@ -80,7 +79,7 @@ export default function EditorialIntro() {
         >
           <Link
             href={storyHref}
-            className="inline-flex items-center gap-2 font-body text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] text-water-deep hover:gap-4 transition-all group"
+            className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] text-water-deep hover:gap-4 transition-all group"
           >
             <span className="border-b border-ink/30 group-hover:border-ink transition-colors">
               {locale === "mn" ? "Бидний тухай" : "About us"}

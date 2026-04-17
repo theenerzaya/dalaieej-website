@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
-import { playfairDisplayItalic } from "@/app/fonts";
+import { cormorantGaramondItalic } from "@/app/fonts";
 import {
   motion,
   useReducedMotion,
@@ -115,8 +115,8 @@ function MobileSilo({
           <h3
             className={[
               isMongolian
-                ? `${playfairDisplayItalic.className} italic font-normal`
-                : "font-sloops",
+                ? `${cormorantGaramondItalic.className} italic font-normal`
+                : "font-normal",
               isStoriesMnTitle
                 ? "text-[2.025rem] md:text-[2.7rem] text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg"
                 : "text-4xl md:text-5xl text-white text-center tracking-wider leading-none mb-6 drop-shadow-lg",
@@ -125,7 +125,14 @@ function MobileSilo({
             {isMongolian ? silo.mn : silo.en}
           </h3>
 
-          <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 drop-shadow-md">
+          <span
+            className={[
+              "text-white/90 border-b border-white/40 pb-1 mt-8 drop-shadow-md uppercase",
+              isMongolian
+                ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
+                : "text-[10px] tracking-[0.4em]",
+            ].join(" ")}
+          >
             {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
           </span>
         </motion.div>
@@ -141,9 +148,9 @@ export default function SiloGrid() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative w-full bg-white">
+    <section className="relative w-full bg-surface">
       {/* Mobile Stack */}
-      <div className="flex flex-col w-full md:hidden bg-white [&>*:not(:first-child)]:border-t [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-white">
+      <div className="flex flex-col w-full md:hidden bg-surface [&>*:not(:first-child)]:border-t [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-surface">
         {silos.map((silo, i) => (
           <MobileSilo
             key={silo.id}
@@ -164,7 +171,7 @@ export default function SiloGrid() {
 
       {/* Desktop Grid */}
       <div
-        className="hidden md:grid grid-cols-2 w-full bg-white gap-x-px gap-y-px"
+        className="hidden md:grid grid-cols-2 w-full bg-surface gap-x-px gap-y-px"
         style={{ columnGap: "1px", rowGap: "1px" }}
       >
         {silos.map((silo, i) => (
@@ -199,14 +206,21 @@ export default function SiloGrid() {
                 <h3
                   className={[
                     isMongolian
-                      ? `${playfairDisplayItalic.className} italic font-normal`
-                      : "font-sloops",
+                      ? `${cormorantGaramondItalic.className} italic font-normal`
+                      : "font-normal",
                     "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
                   ].join(" ")}
                 >
                   {isMongolian ? silo.mn : silo.en}
                 </h3>
-                <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
+                <span
+                  className={[
+                    "uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md",
+                    isMongolian
+                      ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
+                      : "text-[10px] tracking-[0.4em]",
+                  ].join(" ")}
+                >
                   {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
                 </span>
               </div>
@@ -244,8 +258,8 @@ export default function SiloGrid() {
               <h3
                 className={[
                   isMongolian
-                    ? `${playfairDisplayItalic.className} italic font-normal`
-                    : "font-sloops",
+                    ? `${cormorantGaramondItalic.className} italic font-normal`
+                    : "font-normal",
                   isMongolian
                     ? "text-[2.025rem] lg:text-[4.05rem] text-white text-center tracking-wider drop-shadow-lg"
                     : "text-4xl lg:text-7xl text-white text-center tracking-wider drop-shadow-lg",
@@ -253,7 +267,14 @@ export default function SiloGrid() {
               >
                 {isMongolian ? storiesSilo.mn : storiesSilo.en}
               </h3>
-              <span className="text-[10px] tracking-[0.4em] uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md">
+              <span
+                className={[
+                  "uppercase text-white/90 border-b border-white/40 pb-1 mt-8 group-hover:border-white transition-colors duration-300 drop-shadow-md",
+                  isMongolian
+                    ? "text-[10px] sm:text-[11px] font-light tracking-[0.18em]"
+                    : "text-[10px] tracking-[0.4em]",
+                ].join(" ")}
+              >
                 {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
               </span>
             </div>

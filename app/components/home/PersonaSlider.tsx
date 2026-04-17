@@ -9,7 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useLocale } from "next-intl";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import FadeInWhenVisible from "./FadeInWhenVisible";
@@ -214,10 +214,6 @@ export default function PersonaSlider() {
 
   const currentPersona = personas[activeIndex];
   const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
-  const mnCormorantPersonaTitle =
-    locale === "mn" &&
-    (currentPersona.id === 1 || currentPersona.id === 4);
-
   const sideFrameClass =
     "relative w-[28%] max-w-[220px] md:max-w-[300px] shrink-0 aspect-[5/4] md:aspect-[3/2] overflow-hidden shadow-2xl ring-1 ring-white/10";
   const centerFrameClass =
@@ -228,11 +224,11 @@ export default function PersonaSlider() {
   return (
     <section
       ref={sectionRef}
-      className="py-16 md:py-24 bg-main relative overflow-x-hidden"
+      className="py-24 md:py-32 bg-surface relative overflow-x-hidden"
     >
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <FadeInWhenVisible
-          className="text-center font-body text-ink/60 text-xs tracking-[0.3em] uppercase mb-6"
+          className="text-center font-body text-water-deep/60 text-sm tracking-[0.3em] uppercase mb-8"
           y={14}
           duration={0.5}
         >
@@ -250,12 +246,11 @@ export default function PersonaSlider() {
             duration: reduceMotion ? 0 : 0.8,
             delay: reduceMotion ? 0 : 0.1,
           }}
-          className={[
-            "text-center text-2xl md:text-3xl lg:text-4xl text-ink/80 leading-relaxed max-w-2xl mx-auto mb-10",
+          className={
             locale === "mn"
-              ? `${cormorantGaramondItalic.className} italic font-normal`
-              : "font-serif",
-          ].join(" ")}
+              ? `${cormorantGaramondItalic.className} italic font-normal text-center text-3xl md:text-4xl lg:text-5xl leading-relaxed text-water-deep max-w-2xl mx-auto mb-8`
+              : "text-center font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed max-w-2xl mx-auto mb-8"
+          }
         >
           {locale === "mn"
             ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
@@ -346,61 +341,73 @@ export default function PersonaSlider() {
               duration={0.5}
               amount={0.15}
             >
-              <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => handlePaginate(-1)}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-main transition-colors"
-                  aria-label="Previous slide"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <span className="font-body text-main/70 text-sm tabular-nums min-w-[3.5rem] text-center">
-                  {activeIndex + 1}/{n}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handlePaginate(1)}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-main transition-colors"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
+              <div className="w-full max-w-3xl text-center mx-auto">
+                <p className="font-body text-main/60 text-sm tracking-[0.3em] uppercase tabular-nums mb-4">
+                  {String(activeIndex + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+                </p>
 
-              <div className="w-full max-w-2xl text-center mx-auto">
+                <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
+                  <button
+                    type="button"
+                    onClick={() => handlePaginate(-1)}
+                    className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-main transition-colors"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+
+                  <div className="flex-1 min-w-0">
+                    <AnimatePresence mode="wait" custom={direction}>
+                      <motion.h3
+                        key={`${currentPersona.id}-${locale}`}
+                        custom={direction}
+                        initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
+                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                        className={
+                          locale === "mn"
+                            ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-main`
+                            : "font-light text-2xl md:text-3xl lg:text-4xl text-main leading-relaxed"
+                        }
+                      >
+                        {content.title}
+                      </motion.h3>
+                    </AnimatePresence>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handlePaginate(1)}
+                    className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-main transition-colors"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+
                 <AnimatePresence mode="wait" custom={direction}>
-                  <motion.div
-                    key={`${currentPersona.id}-${locale}`}
+                  <motion.p
+                    key={`${currentPersona.id}-${locale}-desc`}
                     custom={direction}
                     initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed mt-4"
                   >
-                    <h3
-                      className={[
-                        "text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide",
-                        mnCormorantPersonaTitle
-                          ? `${cormorantGaramondItalic.className} italic font-normal`
-                          : "font-serif",
-                      ].join(" ")}
-                    >
-                      {content.title}
-                    </h3>
-                    <p className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed">
-                      {content.description}
-                    </p>
-                  </motion.div>
+                    {content.description}
+                  </motion.p>
                 </AnimatePresence>
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
                   <Link
                     href={`${localePrefix}${content.href}`}
-                    className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-main hover:text-white transition-colors border border-surface/30 px-6 py-3 rounded-full hover:bg-white/5"
+                    className="group inline-block uppercase text-[11px] sm:text-xs font-light tracking-[0.18em] text-main"
                   >
-                    <span>{locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    <span className="border-b border-main/40 pb-0.5 group-hover:border-main transition-colors">
+                      {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -419,12 +426,11 @@ export default function PersonaSlider() {
                     transition={{ duration: 0.3 }}
                   >
                     <h3
-                      className={[
-                        "text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide",
-                        mnCormorantPersonaTitle
-                          ? `${cormorantGaramondItalic.className} italic font-normal`
-                          : "font-serif",
-                      ].join(" ")}
+                      className={
+                        locale === "mn"
+                          ? `${cormorantGaramondItalic.className} italic font-normal text-3xl md:text-4xl lg:text-5xl leading-relaxed text-main mb-3`
+                          : "font-light text-2xl md:text-3xl lg:text-4xl text-main leading-relaxed mb-3"
+                      }
                     >
                       {content.title}
                     </h3>
@@ -437,10 +443,11 @@ export default function PersonaSlider() {
 
               <Link
                 href={`${localePrefix}${content.href}`}
-                className="group inline-flex items-center gap-3 font-body text-sm tracking-[0.15em] uppercase text-main hover:text-white transition-colors border border-surface/30 px-6 py-3 rounded-full hover:bg-white/5"
+                className="group inline-block uppercase text-[11px] sm:text-xs font-light tracking-[0.18em] text-main"
               >
-                <span>{locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                <span className="border-b border-main/40 pb-0.5 group-hover:border-main transition-colors">
+                  {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
+                </span>
               </Link>
             </div>
           )}

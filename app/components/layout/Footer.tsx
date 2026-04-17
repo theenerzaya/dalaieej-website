@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { Phone, Mail, MapPin } from "lucide-react";
+
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
@@ -25,7 +26,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-ink text-main">
+    <footer className="sticky bottom-0 z-0 bg-ink text-main font-body">
       <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-20 md:pb-28 lg:pb-36">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10 lg:gap-8">
 
@@ -38,14 +39,14 @@ export default function Footer() {
                 className="h-12 w-auto"
               />
             </Link>
-            <p className="mt-4 font-body text-sm text-main/70 leading-relaxed max-w-xs">
+            <p className="mt-4 text-sm text-main/70 leading-relaxed max-w-xs">
               {t("bio")}
             </p>
           </div>
 
           {/* Column 2: Experience */}
           <div className="min-w-0">
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
+            <h4 className="text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
               {t("experience")}
             </h4>
             <ul className="space-y-3">
@@ -53,7 +54,7 @@ export default function Footer() {
                 <li key={item.key}>
                   <Link
                     href="#"
-                    className="font-body text-sm text-main/80 hover:text-white transition-colors"
+                    className="text-sm text-main/80 hover:text-white transition-colors"
                   >
                     {t(item.key)}
                   </Link>
@@ -64,7 +65,7 @@ export default function Footer() {
 
           {/* Column 3: Resort */}
           <div className="min-w-0">
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
+            <h4 className="text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
               {t("resort")}
             </h4>
             <ul className="space-y-3">
@@ -75,14 +76,14 @@ export default function Footer() {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-body text-sm text-main/80 hover:text-white transition-colors"
+                      className="text-sm text-main/80 hover:text-white transition-colors"
                     >
                       {t(item.key)}
                     </a>
                   ) : (
                     <Link
                       href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
-                      className="font-body text-sm text-main/80 hover:text-white transition-colors"
+                      className="text-sm text-main/80 hover:text-white transition-colors"
                     >
                       {t(item.key)}
                     </Link>
@@ -94,20 +95,20 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div className="col-span-2 lg:col-span-1">
-            <h4 className="font-body text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
+            <h4 className="text-xs tracking-[0.2em] uppercase text-main/50 mb-4 md:mb-6">
               {t("contact")}
             </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-main/50 mt-0.5 flex-shrink-0" />
-                <span className="font-body text-sm text-main/80">
+                <span className="text-sm text-main/80">
                   {t("address")}
                 </span>
               </li>
               <li>
                 <a 
                   href="tel:+97695005595" 
-                  className="flex items-center gap-3 font-body text-sm text-main/80 hover:text-white transition-colors"
+                  className="flex items-center gap-3 text-sm text-main/80 hover:text-white transition-colors"
                 >
                   <Phone className="w-4 h-4 text-main/50 flex-shrink-0" />
                   +976 9500 5595
@@ -116,7 +117,7 @@ export default function Footer() {
               <li>
                 <a 
                   href="mailto:hello@dalaieej.com" 
-                  className="flex items-center gap-3 font-body text-sm text-main/80 hover:text-white transition-colors"
+                  className="flex items-center gap-3 text-sm text-main/80 hover:text-white transition-colors"
                 >
                   <Mail className="w-4 h-4 text-main/50 flex-shrink-0" />
                   hello@dalaieej.com
@@ -141,7 +142,7 @@ export default function Footer() {
                 href="https://matterofform.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors font-semibold"
+                className="hover:text-white transition-colors font-normal"
               >
                 MOF London
               </a>
@@ -157,7 +158,7 @@ export default function Footer() {
                 href="https://brainstorm.agency" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors font-semibold"
+                className="hover:text-white transition-colors font-normal"
               >
                 Brainstorm
               </a>
