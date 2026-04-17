@@ -13,6 +13,7 @@ import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import FadeInWhenVisible from "./FadeInWhenVisible";
+import { cormorantGaramondItalic } from "@/app/fonts";
 
 /**
  * Scroll reveal: card + persona row scale together (one factor).
@@ -213,6 +214,9 @@ export default function PersonaSlider() {
 
   const currentPersona = personas[activeIndex];
   const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
+  const mnCormorantPersonaTitle =
+    locale === "mn" &&
+    (currentPersona.id === 1 || currentPersona.id === 4);
 
   const sideFrameClass =
     "relative w-[28%] max-w-[220px] md:max-w-[300px] shrink-0 aspect-[5/4] md:aspect-[3/2] overflow-hidden shadow-2xl ring-1 ring-white/10";
@@ -246,7 +250,12 @@ export default function PersonaSlider() {
             duration: reduceMotion ? 0 : 0.8,
             delay: reduceMotion ? 0 : 0.1,
           }}
-          className="text-center font-serif text-2xl md:text-3xl lg:text-4xl text-ink/80 leading-relaxed max-w-2xl mx-auto mb-10"
+          className={[
+            "text-center text-2xl md:text-3xl lg:text-4xl text-ink/80 leading-relaxed max-w-2xl mx-auto mb-10",
+            locale === "mn"
+              ? `${cormorantGaramondItalic.className} italic font-normal`
+              : "font-serif",
+          ].join(" ")}
         >
           {locale === "mn"
             ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
@@ -369,7 +378,14 @@ export default function PersonaSlider() {
                     exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide">
+                    <h3
+                      className={[
+                        "text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide",
+                        mnCormorantPersonaTitle
+                          ? `${cormorantGaramondItalic.className} italic font-normal`
+                          : "font-serif",
+                      ].join(" ")}
+                    >
                       {content.title}
                     </h3>
                     <p className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed">
@@ -402,7 +418,14 @@ export default function PersonaSlider() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide">
+                    <h3
+                      className={[
+                        "text-3xl md:text-4xl lg:text-5xl text-main mb-3 tracking-wide",
+                        mnCormorantPersonaTitle
+                          ? `${cormorantGaramondItalic.className} italic font-normal`
+                          : "font-serif",
+                      ].join(" ")}
+                    >
                       {content.title}
                     </h3>
                     <p className="font-body text-main/70 max-w-xl mx-auto text-lg font-light leading-relaxed">

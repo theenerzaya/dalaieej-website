@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { cormorantGaramondItalic } from "@/app/fonts";
 
 export default function EditorialIntro() {
   const locale = useLocale();
@@ -45,11 +46,15 @@ export default function EditorialIntro() {
             duration: reduceMotion ? 0 : 0.8,
             delay: reduceMotion ? 0 : 0.1,
           }}
-          className="font-serif font-light text-3xl md:text-4xl lg:text-5xl text-water-deep leading-relaxed mb-8"
+          className={
+            locale === "mn"
+              ? `${cormorantGaramondItalic.className} italic font-normal text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-8`
+              : "font-serif font-light text-2xl md:text-3xl lg:text-4xl text-water-deep leading-relaxed mb-8"
+          }
         >
           {locale === 'mn' ? (
             <>
-              АРИУН ДАГШИН, ХОСГҮЙ, ҮНЭТ ӨВ 
+              Ариун дагшин, хосгүй, үнэт өв
               <br />
               — ЗҮҮН ЭРГИЙН АМИН ЗҮРХ.
             </>
@@ -75,10 +80,10 @@ export default function EditorialIntro() {
         >
           <Link
             href={storyHref}
-            className="inline-flex items-center gap-2 font-body text-water-deep font-medium hover:gap-4 transition-all group"
+            className="inline-flex items-center gap-2 font-body text-[11px] sm:text-xs font-light uppercase tracking-[0.18em] text-water-deep hover:gap-4 transition-all group"
           >
             <span className="border-b border-ink/30 group-hover:border-ink transition-colors">
-              {locale === 'mn' ? "Бидний тухай" : "About us"}
+              {locale === "mn" ? "Бидний тухай" : "About us"}
             </span>
             <ArrowRight className="w-4 h-4" />
           </Link>

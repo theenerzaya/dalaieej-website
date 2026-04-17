@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { cormorantGaramondItalic } from "@/app/fonts";
 import { Star, ShieldCheck } from "lucide-react";
 import FadeInWhenVisible from "./FadeInWhenVisible";
 
@@ -15,6 +16,7 @@ const FULL_STARS = 4;
 const BG_IMAGE = "/images/silogrid/hearth.webp";
 
 export default function Testimonials() {
+  const locale = useLocale();
   const t = useTranslations("amenities.testimonials");
   const prefersReducedMotion = useReducedMotion();
 
@@ -96,7 +98,13 @@ export default function Testimonials() {
               <span className="font-heading text-lg font-medium text-main">{RATING}</span>
             </div>
             <div>
-              <p className="font-heading text-xl text-main text-overlay-glow">
+              <p
+                className={
+                  locale === "mn"
+                    ? `${cormorantGaramondItalic.className} italic font-normal text-xl text-main text-overlay-glow`
+                    : "font-heading text-xl text-main text-overlay-glow"
+                }
+              >
                 {t("ratingLabel")}
               </p>
               <div className="flex items-center gap-1 mt-0.5 flex-wrap">
@@ -153,7 +161,9 @@ export default function Testimonials() {
                   }
                   transition={slideTransition}
                 >
-                  <p className="font-vogun text-xl sm:text-2xl md:text-3xl lg:text-[1.75rem] leading-relaxed mb-6 md:mb-8 font-medium">
+                  <p
+                    className={`${cormorantGaramondItalic.className} italic font-normal text-xl sm:text-2xl md:text-3xl lg:text-[1.75rem] leading-relaxed mb-6 md:mb-8`}
+                  >
                     &ldquo;{t(`${reviewId}.text`)}&rdquo;
                   </p>
                   <p className="font-body text-[10px] sm:text-xs tracking-[0.2em] uppercase text-main/85">
