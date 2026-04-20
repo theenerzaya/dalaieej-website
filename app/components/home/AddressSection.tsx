@@ -32,7 +32,7 @@ export default function AddressSection() {
     "relative flex flex-col justify-between bg-earth text-main p-8 md:p-12 min-h-[260px] md:min-h-[360px]";
 
   const inlineLink =
-    "underline decoration-main/40 underline-offset-4 hover:decoration-main transition-colors";
+    "underline decoration-main decoration-[1px] underline-offset-[6px] hover:decoration-main/60 transition-colors";
 
   return (
     <section className="bg-ink px-6 pt-16 md:pt-20 pb-20 md:pb-28">
@@ -109,6 +109,10 @@ export default function AddressSection() {
                 >
                   ({t("mapLabel")})
                 </a>
+              </p>
+              <p>
+                <span className="text-main/85">{t("coordinatesLabel")}:</span>{" "}
+                <span className="tabular-nums">{t("coordinatesValue")}</span>
               </p>
               <p>
                 <a href={PHONE_HREF} className={inlineLink}>

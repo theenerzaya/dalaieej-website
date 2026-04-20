@@ -169,7 +169,7 @@ export default function RouteFinderPage() {
       <footer className="py-20 px-6 bg-main text-center">
         <div className="max-w-3xl mx-auto space-y-4 text-stone-800">
           <h2 className="text-3xl font-serif mb-8">Contact Us</h2>
-          <p><strong>Address:</strong> Mergen’s Ridge, Khatgal Village, Khövsgöl Province, Mongolia</p>
+          <p><strong>Address:</strong> Mergen&apos;s Ridge, Haichin Am, eastern shore of Lake Khuvsgul (13 km from Khatgal), Khövsgöl Province, Mongolia</p>
           <p><strong>Location Notes:</strong> 50.4° N, 100.1° E</p>
           <p><strong>Email:</strong> <a href="mailto:hello@dalaieej.com" className="underline hover:text-stone-500">hello@dalaieej.com</a></p>
           <p className="pt-4 text-sm">For all inquiries: <a href="tel:+97695005595" className="underline hover:text-stone-500">+976 9500 5595</a></p>

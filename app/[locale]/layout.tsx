@@ -99,7 +99,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             email: 'hello@dalaieej.com',
             address: {
               '@type': 'PostalAddress',
-              streetAddress: 'Khuvsgul Lake National Park',
+              streetAddress: "Mergen's Ridge, Haichin Am, eastern shore of Lake Khuvsgul",
               addressLocality: 'Khatgal',
               addressRegion: 'Khuvsgul',
               postalCode: '67143',
@@ -107,8 +107,8 @@ export default async function LocaleLayout({ children, params }: Props) {
             },
             geo: {
               '@type': 'GeoCoordinates',
-              latitude: '50.48479874018978',
-              longitude: '100.18977589128245'
+              latitude: '50.485139',
+              longitude: '100.198139'
             },
             url: resortCanonical,
             priceRange: '$$$'

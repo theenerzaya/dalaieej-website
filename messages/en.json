@@ -38,7 +38,7 @@
     },
     "contact": {
       "title": "Contact Us | Dalai Eej Resort",
-      "description": "Get in touch with Dalai Eej Resort. Located in Khatgal Village, Khuvsgul Province, Mongolia on the shores of Lake Khuvsgul."
+      "description": "Get in touch with Dalai Eej Resort. Mergen's Ridge, Haichin Am, on the eastern shore of Lake Khuvsgul (13 km from Khatgal), Khuvsgul Province, Mongolia."
     },
     "fam": {
       "title": "FAM Tour Application | Dalai Eej Resort",
@@ -230,7 +230,7 @@
     "gallery": "Gallery",
     "faq": "FAQ",
     "contact": "Contact",
-    "address": "Khatgal Village, Khuvsgul Province, Mongolia",
+    "address": "Mergen's Ridge, eastern Lake Khuvsgul shore, Khuvsgul Province, Mongolia",
     "rights": "All rights reserved.",
     "digital": "Digital",
     "brand": "Brand",
@@ -244,11 +244,13 @@
   },
   "address": {
     "title": "Address",
-    "visitCopy": "Find us on the western shore of Lake Khuvsgul, where larch forests meet the Blue Pearl. The road is part of the heritage.",
+    "visitCopy": "Find us on the eastern shore of Lake Khuvsgul, where larch forests meet the Blue Pearl. The road is part of the heritage.",
     "visitCta": "Visit Us",
     "stayHeadline": "Spend your holidays with us",
     "bestPrice": "You'll always get the best price and full availability by booking directly with us.",
-    "fullAddress": "Khatgal Village, Khuvsgul Province, Mongolia",
+    "fullAddress": "Mergen's Ridge, Haichin Am, eastern shore of Lake Khuvsgul (13 km from Khatgal), Khuvsgul Province, Mongolia",
+    "coordinatesLabel": "Coordinates",
+    "coordinatesValue": "50°29'06.5\"N 100°11'53.3\"E",
     "mapLabel": "map",
     "manageReservation": "Manage a Reservation",
     "directionsLabel": "Get directions:",
@@ -627,7 +629,7 @@
     "bookingTotal": "Booking total",
     "whatNext": "What to Expect",
     "emailNote": "A confirmation email with your reservation details will be sent to you shortly.",
-    "locationNote": "Dalai Eej Resort is located on the western shore of Lake Khuvsgul. Detailed arrival instructions will be included in your confirmation email.",
+    "locationNote": "Dalai Eej Resort is on the eastern shore of Lake Khuvsgul. Detailed arrival instructions will be included in your confirmation email.",
     "backToHome": "Back to Home"
   }
 }
