@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { Minus, Pause, Play, Plus } from "lucide-react";
@@ -328,26 +328,16 @@ function CampfireMark({ className }: { className?: string }) {
   );
 }
 
-function SectionRuleTitle({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex items-center gap-6 mb-2">
-      <div className="h-px flex-1 bg-ink/15" />
-      <p className="font-editorial-mn not-italic text-xs md:text-sm uppercase tracking-[0.2em] text-ink/55 text-center max-w-[90vw]">
-        {children}
-      </p>
-      <div className="h-px flex-1 bg-ink/15" />
-    </div>
-  );
-}
-
 function SectionAccent({
   className = "",
   width = "w-20 md:w-24",
   invert = false,
+  src = "/images/about-us/decorations/accent.svg",
 }: {
   className?: string;
   width?: string;
   invert?: boolean;
+  src?: string;
 }) {
   return (
     <div
@@ -355,7 +345,7 @@ function SectionAccent({
       className={`flex justify-center items-center py-8 md:py-12 ${className}`}
     >
       <img
-        src="/images/about-us/decorations/accent.svg"
+        src={src}
         alt=""
         className={`${width} h-auto opacity-70 select-none pointer-events-none ${
           invert ? "invert brightness-0 opacity-60" : ""
@@ -660,15 +650,32 @@ export default function AboutUsPage() {
 
       <section className="py-24 md:py-36">
         <div className="max-w-6xl mx-auto px-6">
-          <SectionRuleTitle>{t.storySectionLabel}</SectionRuleTitle>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-start mt-10 md:mt-14">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center"
+          >
+            <h2 className="font-editorial-mn text-5xl md:text-7xl text-ink leading-tight">
+              {t.storySectionLabel}
+            </h2>
+            <SectionAccent
+              src="/images/about-us/decorations/accent-2.svg"
+              width="w-36 md:w-44 lg:w-48"
+              className="py-4 md:py-6"
+            />
+          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-start mt-4 md:mt-6">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="font-editorial-mn text-5xl md:text-7xl text-ink mb-10 md:mb-14 leading-tight">{t.storyHeading}</h2>
+              <h3 className="font-editorial-mn text-4xl md:text-6xl text-ink mb-10 md:mb-14 leading-tight">
+                {t.storyHeading}
+              </h3>
               <div className="space-y-6">
                 {t.storyParagraphs.map((p, i) => (
                   <p key={i} className="font-body text-base md:text-lg leading-[1.9] text-ink/85">
