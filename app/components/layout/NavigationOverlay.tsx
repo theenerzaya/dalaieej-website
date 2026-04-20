@@ -180,45 +180,34 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
             aria-label="Navigation menu"
             className="fixed inset-0 z-[100] flex flex-col bg-ink text-main"
           >
-            {/* ───────── Header row ───────── */}
+            {/* ───────── Header row ─────────
+                Close stays viewport-aligned (matches navbar hamburger). EN/MN sits in
+                the same max-w-7xl inset + left column width as the nav labels below. */}
             <div className="shrink-0 border-b border-main/10">
-              <div className="relative mx-auto flex min-h-[calc(5rem*1.10)] w-full max-w-7xl items-center pt-[calc(5rem*0.10)] px-6 md:px-12">
-                {/* Left cluster: close + language */}
-                <div className="flex items-center gap-6 md:gap-8">
-                  <button
-                    onClick={onClose}
-                    className="rounded-lg px-2 py-3 text-main transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-main/40"
-                    aria-label="Close menu"
+              <div className="relative flex min-h-[calc(5rem*1.10)] w-full items-stretch pt-[calc(5rem*0.10)]">
+                <button
+                  onClick={onClose}
+                  className="absolute left-8 top-[calc(50%+5rem*0.10/2)] z-20 -translate-y-1/2 rounded-lg px-2 py-3 text-main transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50 md:left-12"
+                  aria-label="Close menu"
+                >
+                  <span
+                    className="flex w-9 shrink-0 flex-col justify-center md:w-[2.925rem]"
+                    aria-hidden
                   >
-                    <span
-                      className="flex w-9 shrink-0 flex-col justify-center md:w-[2.925rem]"
-                      aria-hidden
-                    >
-                      <span className="relative flex h-[13px] w-full items-center justify-center md:h-[15px]">
-                        <span className="relative h-[9.75px] w-[1.6875rem] shrink-0 md:h-[11.25px] md:w-[2.19375rem]">
-                          <span className="absolute left-1/2 top-1/2 h-px w-[140%] max-w-none origin-center -translate-x-1/2 -translate-y-1/2 rotate-45 bg-main" />
-                          <span className="absolute left-1/2 top-1/2 h-px w-[140%] max-w-none origin-center -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-main" />
-                        </span>
+                    <span className="relative flex h-[13px] w-full items-center justify-center md:h-[15px]">
+                      <span className="relative h-[9.75px] w-[1.6875rem] shrink-0 md:h-[11.25px] md:w-[2.19375rem]">
+                        <span className="absolute left-1/2 top-1/2 h-px w-[140%] max-w-none origin-center -translate-x-1/2 -translate-y-1/2 rotate-45 bg-current" />
+                        <span className="absolute left-1/2 top-1/2 h-px w-[140%] max-w-none origin-center -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-current" />
                       </span>
                     </span>
-                  </button>
+                  </span>
+                </button>
 
-                  <button
-                    onClick={toggleLanguage}
-                    className="font-cta text-[11px] font-medium uppercase tracking-[0.3em] text-main/70 transition-colors hover:text-main"
-                    aria-label="Toggle language"
-                  >
-                    <span className={!isMn ? "text-main" : ""}>EN</span>
-                    <span className="mx-2 text-main/30">|</span>
-                    <span className={isMn ? "text-main" : ""}>MN</span>
-                  </button>
-                </div>
-
-                {/* Centered wordmark */}
+                {/* Centered wordmark — matches Navbar positioning exactly */}
                 <Link
                   href={localePrefix || "/"}
                   onClick={onClose}
-                  className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
+                  className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
                   <Image
                     src="/images/logo-white.png"
@@ -230,17 +219,50 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                   />
                 </Link>
 
-                {/* Right cluster: Book your stay */}
-                <div className="ml-auto">
-                  <CTAButton
-                    href={`${localePrefix}/booking`}
-                    variant="secondary"
-                    size="sm"
-                    onClick={onClose}
-                    className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
-                  >
-                    {isMn ? "Захиалах" : "Book your stay"}
-                  </CTAButton>
+                <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-6 md:px-12">
+                  {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
+                  <div className="flex min-w-0 flex-1 items-center md:w-[35%] md:max-w-[35%] md:flex-none">
+                    <button
+                      type="button"
+                      onClick={toggleLanguage}
+                      className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left text-main transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50"
+                      aria-label="Toggle language"
+                    >
+                      <span
+                        className={
+                          !isMn
+                            ? "text-main"
+                            : "text-main/40 hover:text-main/70 transition-colors"
+                        }
+                      >
+                        EN
+                      </span>
+                      <span className="mx-2 text-main/30" aria-hidden="true">
+                        /
+                      </span>
+                      <span
+                        className={
+                          isMn
+                            ? "text-main"
+                            : "text-main/40 hover:text-main/70 transition-colors"
+                        }
+                      >
+                        MN
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="ml-auto flex shrink-0 items-center">
+                    <CTAButton
+                      href={`${localePrefix}/booking`}
+                      variant="secondary"
+                      size="sm"
+                      onClick={onClose}
+                      className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
+                    >
+                      {isMn ? "Захиалах" : "Book your stay"}
+                    </CTAButton>
+                  </div>
                 </div>
               </div>
             </div>

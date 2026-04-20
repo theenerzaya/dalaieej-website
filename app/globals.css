@@ -152,8 +152,12 @@ html {
   }
 }
 
-a {
+/* Zero-specificity reset so Tailwind's `underline` / `decoration-*` utilities
+   applied via className always win without needing `!important`. */
+:where(a) {
   text-decoration: none;
+}
+a {
   transition: color 0.2s ease;
 }
 

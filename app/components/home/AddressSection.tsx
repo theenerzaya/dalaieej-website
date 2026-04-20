@@ -17,8 +17,8 @@ const DIRECTIONS_CITY_URL =
 
 const PHONE = "+976 9500 5595";
 const PHONE_HREF = "tel:+97695005595";
-const EMAIL = "reservations@dalaieej.com";
-const EMAIL_HREF = "mailto:reservations@dalaieej.com";
+const EMAIL = "hello@dalaieej.com";
+const EMAIL_HREF = "mailto: hello@dalaieej.com";
 
 export default function AddressSection() {
   const t = useTranslations("address");
@@ -31,8 +31,15 @@ export default function AddressSection() {
   const cardBase =
     "relative flex flex-col justify-between bg-earth text-main p-8 md:p-12 min-h-[260px] md:min-h-[360px]";
 
-  const inlineLink =
-    "underline decoration-main decoration-[1px] underline-offset-[6px] hover:decoration-main/60 transition-colors";
+  const inlineLinkClass = "hover:opacity-80 transition-opacity";
+  const inlineLinkStyle: React.CSSProperties = {
+    textDecorationLine: "underline",
+    textDecorationStyle: "solid",
+    textDecorationThickness: "1.5px",
+    textUnderlineOffset: "6px",
+    textDecorationColor: "currentColor",
+    textDecorationSkipInk: "none",
+  };
 
   return (
     <section className="bg-ink px-6 pt-16 md:pt-20 pb-20 md:pb-28">
@@ -105,7 +112,8 @@ export default function AddressSection() {
                   href={MAP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={inlineLink}
+                  className={inlineLinkClass}
+                  style={inlineLinkStyle}
                 >
                   ({t("mapLabel")})
                 </a>
@@ -115,19 +123,20 @@ export default function AddressSection() {
                 <span className="tabular-nums">{t("coordinatesValue")}</span>
               </p>
               <p>
-                <a href={PHONE_HREF} className={inlineLink}>
+                <a href={PHONE_HREF} className={inlineLinkClass} style={inlineLinkStyle}>
                   {PHONE}
                 </a>
               </p>
               <p>
-                <a href={EMAIL_HREF} className={inlineLink}>
+                <a href={EMAIL_HREF} className={inlineLinkClass} style={inlineLinkStyle}>
                   {EMAIL}
                 </a>
               </p>
               <p>
                 <Link
                   href={`${localePrefix}/booking`}
-                  className={inlineLink}
+                  className={inlineLinkClass}
+                  style={inlineLinkStyle}
                 >
                   {t("manageReservation")}
                 </Link>
@@ -140,7 +149,8 @@ export default function AddressSection() {
                 href={DIRECTIONS_CITY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={inlineLink}
+                className={inlineLinkClass}
+                style={inlineLinkStyle}
               >
                 {t("directionsFromCity")}
               </a>
@@ -149,7 +159,8 @@ export default function AddressSection() {
                 href={DIRECTIONS_AIRPORT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={inlineLink}
+                className={inlineLinkClass}
+                style={inlineLinkStyle}
               >
                 {t("directionsFromAirport")}
               </a>

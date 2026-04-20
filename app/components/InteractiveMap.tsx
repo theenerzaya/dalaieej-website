@@ -210,13 +210,13 @@ export default function InteractiveMap() {
                         isArrow
                           ? `p-0.5 rounded-md md:p-1 ${
                               isActive
-                                ? "bg-surface-alt text-leaf scale-110"
-                                : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
+                                ? "bg-surface-alt text-bark scale-110"
+                                : "bg-bark/80 text-main hover:bg-bark hover:scale-110"
                             }`
                           : `h-6 w-6 rounded-full md:h-7 md:w-7 ${
                               isActive
-                                ? "bg-surface-alt text-leaf scale-110 ring-2 ring-leaf"
-                                : "bg-leaf text-main hover:bg-[#4a6350] hover:scale-110"
+                                ? "bg-surface-alt text-bark scale-110 ring-2 ring-bark"
+                                : "bg-bark text-main hover:bg-bark-hover hover:scale-110"
                             }`
                       }`}
                     >
@@ -228,7 +228,7 @@ export default function InteractiveMap() {
                         </span>
                       )}
                       {!isArrow && !isActive && (
-                        <span className="absolute inset-0 rounded-full bg-leaf/30 animate-ping" />
+                        <span className="absolute inset-0 rounded-full bg-bark/30 animate-ping" />
                       )}
                     </button>
                   </motion.div>
@@ -286,8 +286,8 @@ export default function InteractiveMap() {
                             <span
                               className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-cta text-[11px] font-medium leading-none transition-colors ${
                                 isActive
-                                  ? "bg-surface-alt text-leaf ring-2 ring-leaf"
-                                  : "bg-leaf text-main group-hover:bg-[#4a6350]"
+                                  ? "bg-surface-alt text-bark ring-2 ring-bark"
+                                  : "bg-bark text-main group-hover:bg-bark-hover"
                               }`}
                               aria-hidden="true"
                             >
