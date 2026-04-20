@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 import { BodyText, Headline } from "../ui/Typography";
@@ -80,9 +81,19 @@ export default function AddressSection() {
               {t("visitCopy")}
             </BodyText>
 
+            <div className="relative mt-8 w-full aspect-[4/3] overflow-hidden">
+              <Image
+                src="/images/address.jpeg"
+                alt={t("visitCta")}
+                fill
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+
             <Link
               href={`${localePrefix}/contact`}
-              className={`${editorialFont} mt-10 inline-block text-2xl md:text-3xl text-main hover:text-main/70 transition-colors`}
+              className={`${editorialFont} mt-8 inline-block text-2xl md:text-3xl text-main hover:text-main/70 transition-colors`}
             >
               {t("visitCta")}
             </Link>
