@@ -148,6 +148,11 @@ export default function VideoHero() {
             {locale === "mn" ? "Далай ээж" : "Dalai Eej"}
           </Headline>
         </motion.div>
+        <div
+          id="hero-nav-sentinel"
+          aria-hidden
+          className="pointer-events-none h-px w-full shrink-0"
+        />
         <motion.div
           initial={
             reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
