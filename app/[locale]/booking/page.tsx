@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Users, Check, Tag, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
+import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, ChevronRight, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 
@@ -103,7 +103,13 @@ function translateRateName(name: string, locale: string): string {
     'non-refundable': 'Буцаан олгогдохгүй',
     'dalai eej base': 'Үндсэн үнэ',
     'standard rate': 'Үндсэн үнэ',
-    'base rate': 'Үндсэн үнэ'
+    'base rate': 'Үндсэн үнэ',
+    'default': 'Үндсэн үнэ',
+    'early bird / shoulder': 'Завсарын улирлын үнэ',
+    'early bird/shoulder': 'Завсарын улирлын үнэ',
+    'early bird': 'Завсарын улирлын үнэ',
+    'shoulder': 'Завсарын улирлын үнэ',
+    'shoulder season': 'Завсарын улирлын үнэ',
   };
   const lowerName = name.toLowerCase().trim();
   return map[lowerName] || name;
@@ -189,8 +195,8 @@ function BookingContent() {
           label,
           text:
             currentLocale === "mn"
-              ? `Ирэхээс ${c.daysBeforeArrival} хоногийн өмнө хүртэл цуцлах боломжтой (Cloudbeds).`
-              : `Cancel free up to ${c.daysBeforeArrival} days before arrival (Cloudbeds).`,
+              ? `Ирэхээс ${c.daysBeforeArrival} хоногийн өмнө үнэгүй цуцлах боломжтой.`
+              : `Cancel free up to ${c.daysBeforeArrival} days before arrival.`,
         });
       } else if (c?.policyText?.trim()) {
         lines.push({ label, text: stripHtml(c.policyText.trim()) });
@@ -487,154 +493,422 @@ function BookingContent() {
     const restrictionMsgs = getRestrictionMessages(rate.restrictions);
 
     return (
-      <div key={rate.rateID} className={`px-5 md:px-6 py-4 ${isInCart ? 'bg-bark/5' : (otherRateInCart || blocked) ? 'opacity-50' : ''}`}>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <p className="font-medium text-ink text-sm font-body">{translateRateName(rate.rateName, currentLocale)}</p>
-            {otherRateInCart && !blocked && (
-              <p className="text-red-500 text-xs font-body mt-1">
-                {currentLocale === 'mn' ? 'Сагсанд байгаа бараатай хамт авах боломжгүй' : 'Not available with items in your cart'}
+      <div
+        key={rate.rateID}
+        className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 ${
+          isInCart ? 'bg-white/[0.04]' : (otherRateInCart || blocked) ? 'opacity-50' : ''
+        }`}
+      >
+        <div className="min-w-0">
+          <p className="font-body text-main text-sm">
+            {translateRateName(rate.rateName, currentLocale)}
+          </p>
+          {otherRateInCart && !blocked && (
+            <p className="text-red-300 text-xs font-body mt-1">
+              {currentLocale === 'mn' ? 'Сагсанд байгаа өрөөтэй хамт захиалах боломжгүй' : 'Not available with items in your cart'}
+            </p>
+          )}
+          {restrictionMsgs.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+              {restrictionMsgs.map((msg, i) => (
+                <span key={i} className="inline-flex items-center gap-1 text-xs text-orange-200 bg-orange-500/10 border border-orange-500/30 px-2 py-0.5 font-body">
+                  <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+                  {msg}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-4 flex-shrink-0">
+          {perNight > 0 && (
+            <div className="text-right">
+              {originalPerNight && originalPerNight > perNight && (
+                <p className="font-body text-xs text-red-300/80 line-through">
+                  {originalPerNight.toLocaleString()}
+                </p>
+              )}
+              <p className="font-editorial-en italic text-lg text-main leading-tight">
+                {perNight.toLocaleString()}
               </p>
-            )}
-            {restrictionMsgs.length > 0 && (
-              <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                {restrictionMsgs.map((msg, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 text-xs text-orange-700 bg-orange-50 border border-orange-200 rounded px-2 py-0.5 font-body">
-                    <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                    {msg}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-4">
-            {perNight > 0 && (
-              <div className="text-right">
-                <p className="text-ink/40 text-xs font-body">{currentLocale === 'mn' ? 'Нэг шөнийн үнэ' : 'Price from'}</p>
-                {originalPerNight && originalPerNight > perNight && (
-                  <p className="font-serif text-sm text-red-400 line-through">{originalPerNight.toLocaleString()}</p>
-                )}
-                <p className="font-serif text-lg font-bold text-ink">{perNight.toLocaleString()}</p>
-              </div>
-            )}
-            {isInCart ? (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 bg-surface-alt rounded-lg px-2 py-1">
-                  <button onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, -1)} className="w-7 h-7 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors"><Minus className="w-3.5 h-3.5" /></button>
-                  <span className="w-6 text-center font-semibold text-ink text-sm font-body">{rateCartItem.quantity}</span>
-                  <button onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, 1)} disabled={rateCartItem.quantity >= rate.roomsAvailable} className="w-7 h-7 border border-ink/20 rounded-full flex items-center justify-center hover:bg-white transition-colors disabled:opacity-30"><Plus className="w-3.5 h-3.5" /></button>
-                </div>
-                <button onClick={() => toggleRoomSelection(rate)} className="px-4 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark-hover transition-colors flex items-center gap-1.5">
-                  <Check className="w-4 h-4" />
-                  {currentLocale === 'mn' ? 'Сонгосон' : 'Added'}
+              <p className="font-cta uppercase text-[9px] tracking-[0.26em] text-main/40">
+                {currentLocale === 'mn' ? 'шөнө' : 'per night'}
+              </p>
+            </div>
+          )}
+          {isInCart ? (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 border border-main/20 px-1.5 py-1">
+                <button
+                  onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, -1)}
+                  className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                  aria-label={currentLocale === 'mn' ? 'Хасах' : 'Decrease'}
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <span className="w-6 text-center font-body text-main text-sm">{rateCartItem.quantity}</span>
+                <button
+                  onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, 1)}
+                  disabled={rateCartItem.quantity >= rate.roomsAvailable}
+                  className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors disabled:opacity-30"
+                  aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
+                >
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
-            ) : (otherRateInCart || blocked) ? (
-              <button disabled className="px-5 py-2 bg-gray-200 text-gray-400 text-sm font-serif font-medium rounded-full cursor-not-allowed">
-                {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
+              <button
+                onClick={() => toggleRoomSelection(rate)}
+                className="px-5 py-2.5 bg-main text-ink font-cta uppercase text-[11px] tracking-[0.26em] hover:bg-main/90 transition-colors flex items-center gap-1.5"
+              >
+                <Check className="w-3.5 h-3.5" />
+                {currentLocale === 'mn' ? 'Нэмсэн' : 'Added'}
               </button>
-            ) : (
-              <button onClick={() => toggleRoomSelection(rate)} className="px-5 py-2 bg-bark text-white text-sm font-serif font-medium rounded-lg hover:bg-bark-hover transition-colors">
-                {currentLocale === 'mn' ? 'Нэмэх' : 'Add'}
-              </button>
-            )}
-          </div>
+            </div>
+          ) : (otherRateInCart || blocked) ? (
+            <button
+              disabled
+              className="px-6 py-2.5 bg-main/10 text-main/40 font-cta uppercase text-[11px] tracking-[0.26em] cursor-not-allowed"
+            >
+              {currentLocale === 'mn' ? 'Захиалах' : 'Book'}
+            </button>
+          ) : (
+            <button
+              onClick={() => toggleRoomSelection(rate)}
+              className="px-6 py-2.5 bg-main text-ink font-cta uppercase text-[11px] tracking-[0.26em] hover:bg-main/90 transition-colors"
+            >
+              {currentLocale === 'mn' ? 'Захиалах' : 'Book'}
+            </button>
+          )}
         </div>
       </div>
     );
   };
 
+  const resultsCount = groupedRooms.filter(g => (g.maxGuests || 0) >= totalGuests).length;
+
   return (
-    <main id="main-content" className="min-h-screen bg-surface-alt pt-24 md:pt-16 pb-32 lg:pb-8">
-      <div className="bg-ink py-12 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">{t('findRoom')}</h1>
-          <p className="font-body text-main/70 mb-8">{t('selectDates')}</p>
-
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 max-w-4xl mx-auto flex-wrap">
-            <div className="w-full min-w-0 max-w-full sm:w-auto sm:max-w-none grid gap-2.5 sm:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
-              <div className="min-w-0 flex flex-col">
-                <label htmlFor="checkin-date" className="text-main/70 text-[10px] sm:text-xs uppercase tracking-wider mb-1 font-body text-left whitespace-nowrap">{t('checkIn')}</label>
-                <input id="checkin-date" type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} min={minDate} className="box-border w-full max-w-full min-w-0 px-2 sm:px-4 py-3 bg-white/10 border border-main/50 text-main text-sm sm:text-base rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
-              </div>
-              <div className="min-w-0 flex flex-col">
-                <label htmlFor="checkout-date" className="text-main/70 text-[10px] sm:text-xs uppercase tracking-wider mb-1 font-body text-left whitespace-nowrap">{t('checkOut')}</label>
-                <input id="checkout-date" type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin || minDate} className="box-border w-full max-w-full min-w-0 px-2 sm:px-4 py-3 bg-white/10 border border-main/50 text-main text-sm sm:text-base rounded-lg focus:outline-none focus:border-main transition-colors font-body" />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <span id="adults-label" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Насанд хүрэгчид' : 'Adults'}</span>
-              <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2" role="group" aria-labelledby="adults-label">
-                <button onClick={() => setTotalAdults(Math.max(1, totalAdults - 1))} aria-label={currentLocale === 'mn' ? 'Насанд хүрэгчдийг хасах' : 'Decrease adults'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="w-8 text-center text-main font-semibold font-body" aria-live="polite">{totalAdults}</span>
-                <button onClick={() => setTotalAdults(Math.min(20, totalAdults + 1))} aria-label={currentLocale === 'mn' ? 'Насанд хүрэгчдийг нэмэх' : 'Increase adults'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <span id="children-label" className="text-main/70 text-xs uppercase tracking-wider mb-1 font-body text-left">{currentLocale === 'mn' ? 'Хүүхдүүд' : 'Children'}</span>
-              <div className="flex items-center gap-2 bg-white/10 border border-main/50 rounded-lg px-3 py-2" role="group" aria-labelledby="children-label">
-                <button onClick={() => setTotalChildren(Math.max(0, totalChildren - 1))} aria-label={currentLocale === 'mn' ? 'Хүүхдүүдийг хасах' : 'Decrease children'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Minus className="w-4 h-4" /></button>
-                <span className="w-8 text-center text-main font-semibold font-body" aria-live="polite">{totalChildren}</span>
-                <button onClick={() => setTotalChildren(Math.min(10, totalChildren + 1))} aria-label={currentLocale === 'mn' ? 'Хүүхдүүдийг нэмэх' : 'Increase children'} className="w-8 h-8 flex items-center justify-center text-main hover:bg-white/10 rounded transition-colors"><Plus className="w-4 h-4" /></button>
-              </div>
-            </div>
-
-            <button onClick={handleSearch} disabled={loading} className="mt-6 sm:mt-6 px-8 py-3 bg-bark text-white font-serif uppercase tracking-widest hover:bg-bark-hover transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50">
-              {loading ? t('loading') : t('searchRooms')}
-            </button>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4 max-w-md mx-auto">
-            <div className="flex items-center gap-2 flex-1 w-full sm:w-auto">
-              <label htmlFor="promo-code" className="sr-only">{t('promoCode')}</label>
-              <Tag className="w-4 h-4 text-main/70" aria-hidden="true" />
-              <input id="promo-code" type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} placeholder={t('enterPromo')} className="flex-1 px-3 py-2 bg-white/10 border border-main/30 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 text-sm uppercase tracking-wider font-body" />
-            </div>
-            <button onClick={handleApplyPromo} disabled={promoLoading || !promoCode.trim()} className="px-4 py-2 bg-surface-alt/20 text-main text-sm uppercase tracking-wider hover:bg-surface-alt/30 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-body">
-              {promoLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {t('apply')}
-            </button>
-          </div>
-          {appliedPromo && (
-            <div className="mt-3 text-center">
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-bark/20 text-bark text-sm rounded-full font-body">
-                <Check className="w-4 h-4" />
-                {t('promoApplied')} ({appliedPromo})
-              </span>
-            </div>
+    <main id="main-content" className="min-h-screen bg-ink pt-24 md:pt-20 pb-32 lg:pb-20 text-main">
+      {/* Results header band */}
+      <div className="px-6 pt-6 md:pt-10 pb-8 border-b border-main/10">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="font-editorial-en italic text-4xl md:text-5xl leading-tight text-main mb-3">
+            {currentLocale === 'mn' ? 'Хайлтын үр дүн' : 'Search Results'}
+          </h1>
+          {!loading && searched && resultsCount > 0 && checkin && checkout && (
+            <p className="font-body text-main/60 text-sm md:text-base">
+              {currentLocale === 'mn'
+                ? `${resultsCount} өрөө олдлоо · ${formatDate(checkin)} – ${formatDate(checkout)}`
+                : `${resultsCount} accommodation${resultsCount === 1 ? '' : 's'} found from ${formatDate(checkin)} – till ${formatDate(checkout)}`}
+            </p>
           )}
-          {error && <div className="mt-4 text-red-300 text-sm font-body">{error}</div>}
+          {!searched && !loading && (
+            <p className="font-body text-main/60 text-sm md:text-base">
+              {currentLocale === 'mn'
+                ? 'Баруун талын маягтаас огноогоо сонгон хайлт хийнэ үү.'
+                : 'Use the form to select your dates and check availability.'}
+            </p>
+          )}
+          {error && <div className="mt-3 text-red-300 text-sm font-body">{error}</div>}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto py-12 px-4">
-        {loading && (
-          <div className="text-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto text-bark" />
-            <p className="text-ink/70 mt-4 font-body">{t('loading')}</p>
-          </div>
-        )}
-
-        {!loading && searched && rooms.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-ink/70 text-lg font-body">{t('noRooms')}</p>
-            <p className="text-ink/50 mt-2 font-body">{t('tryDifferent')}</p>
-          </div>
-        )}
-
-        {!loading && rooms.length > 0 && (
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Room list */}
-            <div className="flex-1 space-y-6 min-w-0">
-              <p className="text-ink/60 text-sm font-body">
+      <div className="max-w-7xl mx-auto px-6 pt-10 md:pt-14 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-10 lg:gap-12">
+        {/* Sidebar — first in DOM so it appears on top on mobile */}
+        <aside className="min-w-0 lg:order-2">
+          <div className="lg:sticky lg:top-24 space-y-6">
+            {/* Book Your Stay form */}
+            <section className="bg-white/[0.04] border border-main/10 p-6">
+              <h2 className="font-editorial-en italic text-2xl text-main mb-2">
+                {currentLocale === 'mn' ? 'Амралтаа захиалах' : 'Book Your Stay'}
+              </h2>
+              <p className="font-body text-main/50 text-xs mb-5">
                 {currentLocale === 'mn'
-                  ? `${totalAdults} насанд хүрэгчдэд зориулсан хайлтын үр дүн`
-                  : `Search results for ${totalAdults} adult${totalAdults > 1 ? 's' : ''}`}
-                {totalChildren > 0 && (currentLocale === 'mn' ? `, ${totalChildren} хүүхэд` : ` and ${totalChildren} child${totalChildren > 1 ? 'ren' : ''}`)}
+                  ? 'Заавал бөглөх талбарыг * тэмдгээр илэрхийлсэн'
+                  : 'Required fields are followed by *'}
               </p>
 
+              <div className="space-y-5">
+                <div>
+                  <label htmlFor="checkin-date" className="block font-body text-main text-sm mb-1">
+                    {t('checkIn')}: <span className="text-main/50">*</span>
+                  </label>
+                  <input
+                    id="checkin-date"
+                    type="date"
+                    value={checkin}
+                    onChange={(e) => setCheckin(e.target.value)}
+                    min={minDate}
+                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="checkout-date" className="block font-body text-main text-sm mb-1">
+                    {t('checkOut')}: <span className="text-main/50">*</span>
+                  </label>
+                  <input
+                    id="checkout-date"
+                    type="date"
+                    value={checkout}
+                    onChange={(e) => setCheckout(e.target.value)}
+                    min={checkin || minDate}
+                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span id="adults-label" className="block font-body text-main text-sm mb-1">
+                      {currentLocale === 'mn' ? 'Том хүн' : 'Adults'}:
+                    </span>
+                    <div className="flex items-center justify-between border border-main/20 px-1.5 py-1" role="group" aria-labelledby="adults-label">
+                      <button
+                        onClick={() => setTotalAdults(Math.max(1, totalAdults - 1))}
+                        aria-label={currentLocale === 'mn' ? 'Хасах' : 'Decrease'}
+                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                      >
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="text-main font-body text-sm" aria-live="polite">{totalAdults}</span>
+                      <button
+                        onClick={() => setTotalAdults(Math.min(20, totalAdults + 1))}
+                        aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
+                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <span id="children-label" className="block font-body text-main text-sm mb-1">
+                      {currentLocale === 'mn' ? 'Хүүхэд' : 'Children'}:
+                    </span>
+                    <div className="flex items-center justify-between border border-main/20 px-1.5 py-1" role="group" aria-labelledby="children-label">
+                      <button
+                        onClick={() => setTotalChildren(Math.max(0, totalChildren - 1))}
+                        aria-label={currentLocale === 'mn' ? 'Хасах' : 'Decrease'}
+                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                      >
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="text-main font-body text-sm" aria-live="polite">{totalChildren}</span>
+                      <button
+                        onClick={() => setTotalChildren(Math.min(10, totalChildren + 1))}
+                        aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
+                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="promo-code" className="block font-body text-main text-sm mb-1">
+                    {t('promoCode')}:
+                  </label>
+                  <div className="flex items-stretch gap-2">
+                    <input
+                      id="promo-code"
+                      type="text"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      placeholder={t('enterPromo')}
+                      className="flex-1 min-w-0 bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none placeholder:text-main/30 uppercase tracking-wider text-sm"
+                    />
+                    <button
+                      onClick={handleApplyPromo}
+                      disabled={promoLoading || !promoCode.trim()}
+                      className="px-3 py-2 border border-main/30 text-main text-[10px] font-cta uppercase tracking-[0.22em] hover:border-main transition-colors disabled:opacity-40 flex items-center gap-1.5"
+                    >
+                      {promoLoading && <Loader2 className="w-3 h-3 animate-spin" />}
+                      {t('apply')}
+                    </button>
+                  </div>
+                  {appliedPromo && (
+                    <div className="mt-2">
+                      <span className="inline-flex items-center gap-1.5 text-bark text-xs font-body">
+                        <Check className="w-3.5 h-3.5" />
+                        {t('promoApplied')} ({appliedPromo})
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleSearch}
+                  disabled={loading}
+                  className="w-full py-3.5 bg-main text-ink font-cta uppercase tracking-[0.28em] text-xs hover:bg-main/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {loading ? t('loading') : (currentLocale === 'mn' ? 'Хайх' : 'Search')}
+                </button>
+              </div>
+            </section>
+
+            {/* Reservation summary (shown only when cart has items) */}
+            {cart.length > 0 && (
+              <section className="bg-white/[0.04] border border-main/10 p-6">
+                <h2 className="font-editorial-en italic text-2xl text-main text-center mb-5">
+                  {currentLocale === 'mn' ? 'Захиалгын хураангуй' : 'Your Reservation'}
+                </h2>
+
+                <div className="flex items-center justify-between text-sm font-body text-main mb-1">
+                  <span>{formatDate(checkin)}</span>
+                  <ArrowRight className="w-4 h-4 text-main/40" />
+                  <span>{formatDate(checkout)}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-main/60 font-body mb-5">
+                  <Moon className="w-3.5 h-3.5" />
+                  <span>{numberOfNights} {currentLocale === 'mn' ? 'шөнө' : `Night${numberOfNights > 1 ? 's' : ''}`}</span>
+                </div>
+
+                <div className="space-y-4 mb-5">
+                  {cart.map((item) => (
+                    <div key={cartKey(item.roomTypeID, item.rateID)} className="pb-4 border-b border-main/10 last:border-0 last:pb-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-body text-main text-sm">{item.roomTypeName}</p>
+                          <p className="text-main/50 text-xs font-body">{translateRateName(item.rateName, currentLocale)}</p>
+                        </div>
+                        <p className="font-editorial-en italic text-sm text-main whitespace-nowrap">
+                          {(item.pricePerNight * item.quantity * numberOfNights).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center gap-1.5 text-xs text-main/60 font-body">
+                          <Users className="w-3.5 h-3.5" />
+                          <span>{item.quantity > 1 ? `${item.quantity} × ` : ''}{item.maxGuests}</span>
+                        </div>
+                        <button
+                          onClick={() => toggleRoomSelection({ roomTypeID: item.roomTypeID, rateID: item.rateID, roomTypeName: item.roomTypeName, rateName: item.rateName, totalRate: item.pricePerNight * numberOfNights, currency: item.currency, maxGuests: item.maxGuests, roomsAvailable: 0, description: '', photos: [], features: [] })}
+                          className="w-7 h-7 flex items-center justify-center border border-main/20 text-main/60 hover:border-red-400/60 hover:text-red-400 transition-colors"
+                          aria-label={currentLocale === 'mn' ? 'Устгах' : 'Remove'}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-main/15 pt-4 space-y-2 text-sm font-body">
+                  <div className="flex justify-between">
+                    <span className="text-main/70">{currentLocale === 'mn' ? 'Нийлбэр' : 'Subtotal'}</span>
+                    <span className="text-main">{cartTotal.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-main/70">{currentLocale === 'mn' ? 'Татвар, хураамж' : 'Taxes and fees'}</span>
+                    <span className="text-main">0.00</span>
+                  </div>
+                  <div className="flex justify-between pt-2 border-t border-main/15">
+                    <span className="font-editorial-en italic text-base text-main">
+                      {currentLocale === 'mn' ? 'Нийт' : 'Total'}
+                    </span>
+                    <span className="font-editorial-en italic text-base text-main">
+                      MNT {cartTotal.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-main/15">
+                  <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
+                    {currentLocale === 'mn' ? 'Төлбөрийн хуваарь' : 'Payment Schedule'}
+                  </p>
+                  <div className="flex justify-between text-sm font-body">
+                    <span className="text-main/70">{currentLocale === 'mn' ? 'Урьдчилгаа төлбөр' : 'Deposit (pay now)'}</span>
+                    <span className="text-main">{depositDueNow.toLocaleString()}</span>
+                  </div>
+                  {balanceOnArrival > 0 && (
+                    <div className="flex justify-between text-sm font-body mt-1.5">
+                      <span className="text-main/70">{currentLocale === 'mn' ? 'Үлдэгдэл төлбөр' : 'Due on arrival'}</span>
+                      <span className="text-main">{balanceOnArrival.toLocaleString()}</span>
+                    </div>
+                  )}
+                </div>
+
+                {cartCancellationNotes.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-main/15">
+                    <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
+                      {currentLocale === 'mn' ? 'Цуцлалтын нөхцөл' : 'Cancellation'}
+                    </p>
+                    <ul className="space-y-2 text-xs font-body">
+                      {cartCancellationNotes.map((row, i) => (
+                        <li key={i}>
+                          <span className="text-main">{row.label}</span>
+                          <span className="text-main/60"> — {row.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {propertyTermsAndConditions && (() => {
+                  const plain = stripHtml(propertyTermsAndConditions);
+                  const short = plain.length > 320 ? `${plain.slice(0, 320)}…` : plain;
+                  return (
+                    <p className="mt-3 text-xs text-main/50 font-body leading-relaxed">
+                      <span className="text-main/70">
+                        {currentLocale === 'mn' ? 'Байршлын нөхцөл: ' : 'Property terms: '}
+                      </span>
+                      {short}
+                    </p>
+                  );
+                })()}
+
+                {capacityError && (
+                  <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/30 flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-orange-200/80 text-xs font-body">{capacityError}</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={proceedToCheckout}
+                  disabled={cartCapacity < totalGuests}
+                  className={`w-full mt-5 py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
+                    cartCapacity >= totalGuests
+                      ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
+                      : 'bg-main/10 text-main/40 cursor-not-allowed'
+                  }`}
+                >
+                  {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
+                </button>
+
+                <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-main/40 font-body">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>{currentLocale === 'mn' ? 'Аюулгүй онлайн төлбөр' : 'Secure Online Payment'}</span>
+                </div>
+              </section>
+            )}
+          </div>
+        </aside>
+
+        {/* Main column — accommodations */}
+        <div className="min-w-0 lg:order-1 space-y-8">
+          {loading && (
+            <div className="text-center py-16">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto text-main/70" />
+              <p className="text-main/60 mt-4 font-body">{t('loading')}</p>
+            </div>
+          )}
+
+          {!loading && searched && rooms.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-main/80 text-lg font-body">{t('noRooms')}</p>
+              <p className="text-main/50 mt-2 font-body">{t('tryDifferent')}</p>
+            </div>
+          )}
+
+          {!searched && !loading && (
+            <div className="text-center py-16">
+              <p className="text-main/60 text-lg font-body">{t('selectDatesPrompt')}</p>
+            </div>
+          )}
+
+          {!loading && rooms.length > 0 && (
+            <>
+              {/* Search-date restrictions banner */}
               {(() => {
                 const allRestrictions = rooms
                   .filter(r => r.restrictions)
@@ -642,16 +916,16 @@ function BookingContent() {
                 const uniqueRestrictions = [...new Set(allRestrictions)];
                 if (uniqueRestrictions.length === 0) return null;
                 return (
-                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                  <div className="p-4 bg-orange-500/10 border border-orange-500/30">
                     <div className="flex items-start gap-2.5">
-                      <AlertTriangle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-orange-800 text-sm font-body mb-1">
+                        <p className="font-body text-orange-200 text-sm mb-1">
                           {currentLocale === 'mn' ? 'Сонгосон огнооны хязгаарлалтууд' : 'Restrictions for selected dates'}
                         </p>
                         <ul className="space-y-0.5">
                           {uniqueRestrictions.map((msg, i) => (
-                            <li key={i} className="text-orange-700 text-xs font-body">{msg}</li>
+                            <li key={i} className="text-orange-200/70 text-xs font-body">{msg}</li>
                           ))}
                         </ul>
                       </div>
@@ -668,250 +942,178 @@ function BookingContent() {
                   const isExpanded = expandedRooms.has(group.roomTypeName);
                   const hasCartItem = group.rates.some(r => cart.some(c => cartKey(c.roomTypeID, c.rateID) === cartKey(r.roomTypeID, r.rateID)));
 
-                  return (
-                    <div key={group.roomTypeName || index} className={`bg-white rounded-xl overflow-hidden shadow-lg transition-all ${hasCartItem ? 'ring-2 ring-bark' : ''}`}>
-                      <div className="flex flex-col md:flex-row">
-                        <div className="relative md:w-64 lg:w-72 h-56 md:h-auto flex-shrink-0">
-                          <img
-                            src={photos[0] || placeholderImages[index % placeholderImages.length]}
-                            alt={group.roomTypeName || "Room"}
-                            className="w-full h-full object-cover"
-                          />
-                          {group.roomsAvailable && group.roomsAvailable <= 3 && (
-                            <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded font-body">
-                              {t('onlyLeft', { count: group.roomsAvailable })}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex-1 p-5 md:p-6">
-                          <h3 className="font-serif text-xl text-ink mb-1">
-                            <Link href={getRoomDetailPath(group.roomTypeName)} className="hover:text-ink/70 underline underline-offset-4 decoration-ink/30 hover:decoration-ink/60 transition-colors">
-                              {group.roomTypeName || "Room"}
-                            </Link>
-                          </h3>
-
-                          <div className="flex items-center gap-1.5 text-sm text-ink/70 font-body mb-3">
-                            <Users className="w-4 h-4" />
-                            <span>{maxGuests}</span>
-                          </div>
-
-                          <div
-                            className="text-ink/60 text-sm mb-4 line-clamp-2 font-body"
-                            dangerouslySetInnerHTML={{ __html: group.description || "" }}
-                          />
-
-                          <Link href={getRoomDetailPath(group.roomTypeName)} className="text-sm text-bark hover:text-bark/80 font-medium font-body transition-colors">
-                            {currentLocale === 'mn' ? 'Дэлгэрэнгүй' : 'View details'}
-                          </Link>
-                        </div>
-                      </div>
-
-                      {/* Rate plans */}
-                      {(() => {
-                        const defaultRate = group.rates.reduce((min, r) => (r.totalRate > 0 && r.totalRate < min.totalRate) || min.totalRate === 0 ? r : min, group.rates[0]);
-                        const otherRates = group.rates.filter(r => r.rateID !== defaultRate.rateID);
-
-                        return (
-                          <div className="border-t border-ink/10">
-                            {renderRateRow(defaultRate)}
-
-                            {otherRates.length > 0 && (
-                              <>
-                                <div className="border-t border-ink/10">
-                                  <button
-                                    onClick={() => toggleExpand(group.roomTypeName)}
-                                    className="w-full px-5 md:px-6 py-3 flex items-center justify-center gap-2 text-sm text-bark font-medium font-body hover:bg-surface-alt/50 transition-colors"
-                                  >
-                                    {isExpanded
-                                      ? (currentLocale === 'mn' ? 'Саналуудыг хаах' : 'Hide offers')
-                                      : (currentLocale === 'mn' ? 'Саналуудыг харах' : 'View offers')
-                                    }
-                                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                                  </button>
-                                </div>
-
-                                {isExpanded && otherRates.map((rate) => (
-                                  <div key={rate.rateID} className="border-t border-ink/10">
-                                    {renderRateRow(rate)}
-                                  </div>
-                                ))}
-                              </>
-                            )}
-                          </div>
-                        );
-                      })()}
-                    </div>
+                  const defaultRate = group.rates.reduce(
+                    (min, r) => ((r.totalRate > 0 && r.totalRate < min.totalRate) || min.totalRate === 0 ? r : min),
+                    group.rates[0]
                   );
-                })}
-            </div>
+                  const otherRates = group.rates.filter(r => r.rateID !== defaultRate.rateID);
+                  const perNightFrom = numberOfNights > 0 ? defaultRate.totalRate / numberOfNights : defaultRate.totalRate;
 
-            {/* Reservation Summary sidebar (desktop) */}
-            {cart.length > 0 && (
-              <div className="hidden lg:block w-80 flex-shrink-0">
-                <div className="sticky top-24">
-                  <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div className="p-5 border-b border-ink/10">
-                      <h3 className="font-serif text-lg font-semibold text-ink text-center">
-                        {currentLocale === 'mn' ? 'Захиалгын хураангуй' : 'Reservation Summary'}
-                      </h3>
-                    </div>
+                  const descriptionPlain = stripHtml(group.description || '');
+                  const firstSentence = descriptionPlain.split(/(?<=\.)\s/)[0] || '';
+                  const tagline = firstSentence.length > 160 ? `${firstSentence.slice(0, 160)}…` : firstSentence;
 
-                    <div className="p-5">
-                      <div className="flex items-center justify-between text-sm font-body mb-1">
-                        <span className="text-ink">{formatDate(checkin)}</span>
-                        <ArrowRight className="w-4 h-4 text-ink/40" />
-                        <span className="text-ink">{formatDate(checkout)}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm text-ink/60 font-body mb-5">
-                        <Moon className="w-3.5 h-3.5" />
-                        <span>{numberOfNights} {currentLocale === 'mn' ? 'шөнө' : `Night${numberOfNights > 1 ? 's' : ''}`}</span>
-                      </div>
-
-                      <div className="space-y-4 mb-5">
-                        {cart.map((item) => (
-                          <div key={cartKey(item.roomTypeID, item.rateID)} className="pb-4 border-b border-ink/10 last:border-0 last:pb-0">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium text-ink text-sm font-body">{item.roomTypeName}</p>
-                                <p className="text-ink/50 text-xs font-body">{translateRateName(item.rateName, currentLocale)}</p>
-                              </div>
-                              <p className="font-serif text-sm font-semibold text-ink whitespace-nowrap">
-                                {(item.pricePerNight * item.quantity * numberOfNights).toLocaleString()}
-                              </p>
-                            </div>
-                            <div className="flex items-center justify-between mt-2">
-                              <div className="flex items-center gap-1.5 text-xs text-ink/60 font-body">
-                                <Users className="w-3.5 h-3.5" />
-                                <span>{item.quantity > 1 ? `${item.quantity} x ` : ''}{item.maxGuests}</span>
-                              </div>
-                              <button
-                                onClick={() => toggleRoomSelection({ roomTypeID: item.roomTypeID, rateID: item.rateID, roomTypeName: item.roomTypeName, rateName: item.rateName, totalRate: item.pricePerNight * numberOfNights, currency: item.currency, maxGuests: item.maxGuests, roomsAvailable: 0, description: '', photos: [], features: [] })}
-                                className="w-7 h-7 flex items-center justify-center rounded-full border border-red-200 text-red-400 hover:bg-red-50 hover:text-red-500 transition-colors"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="border-t border-ink/10 pt-4 space-y-2">
-                        <div className="flex justify-between text-sm font-body">
-                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Нийлбэр' : 'Subtotal'}</span>
-                          <span className="text-ink">{cartTotal.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between text-sm font-body">
-                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Татвар, хураамж' : 'Taxes and fees'}</span>
-                          <span className="text-ink">0.00</span>
-                        </div>
-                        <div className="flex justify-between pt-2 border-t border-ink/10">
-                          <span className="font-serif font-bold text-ink">{currentLocale === 'mn' ? 'Нийт' : 'Total'}</span>
-                          <span className="font-serif font-bold text-ink">MNT {cartTotal.toLocaleString()}</span>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 pt-4 border-t border-ink/10">
-                        <p className="text-xs text-ink/60 font-body font-medium uppercase tracking-wider mb-2">
-                          {currentLocale === 'mn' ? 'Төлбөрийн хуваарь' : 'Payment Schedule'}
-                        </p>
-                        <div className="flex justify-between text-sm font-body">
-                          <span className="text-ink/70">{currentLocale === 'mn' ? 'Урьдчилгаа (одоо)' : 'Deposit (pay now)'}</span>
-                          <span className="text-ink">{depositDueNow.toLocaleString()}</span>
-                        </div>
-                        {balanceOnArrival > 0 && (
-                          <div className="flex justify-between text-sm font-body mt-1.5">
-                            <span className="text-ink/70">{currentLocale === 'mn' ? 'Ирэхэд төлөх' : 'Due on arrival'}</span>
-                            <span className="text-ink">{balanceOnArrival.toLocaleString()}</span>
+                  return (
+                    <article
+                      key={group.roomTypeName || index}
+                      className={`bg-white/[0.03] border transition-colors ${hasCartItem ? 'border-main/50' : 'border-main/10'}`}
+                    >
+                      {/* Image */}
+                      <Link
+                        href={getRoomDetailPath(group.roomTypeName)}
+                        className="relative block aspect-[21/10] md:aspect-[21/9] bg-black/40 overflow-hidden group"
+                      >
+                        <img
+                          src={photos[0] || placeholderImages[index % placeholderImages.length]}
+                          alt={group.roomTypeName || 'Room'}
+                          className="w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.02]"
+                        />
+                        {group.roomsAvailable && group.roomsAvailable <= 3 && (
+                          <div className="absolute top-4 right-4 bg-ink/80 text-main text-[10px] font-cta uppercase tracking-[0.22em] px-2.5 py-1 border border-main/20">
+                            {t('onlyLeft', { count: group.roomsAvailable })}
                           </div>
                         )}
-                      </div>
+                      </Link>
 
-                      {cart.length > 0 && (
-                        <div className="mt-4 pt-4 border-t border-ink/10">
-                          <p className="text-xs text-ink/60 font-body font-medium uppercase tracking-wider mb-2">
-                            {currentLocale === "mn" ? "Цуцлалт (Cloudbeds)" : "Cancellation (Cloudbeds)"}
+                      <div className="p-6 md:p-8">
+                        <h2 className="font-editorial-en italic text-3xl md:text-[2.25rem] leading-tight text-main mb-2">
+                          <Link
+                            href={getRoomDetailPath(group.roomTypeName)}
+                            className="hover:text-main/80 transition-colors"
+                          >
+                            {group.roomTypeName || 'Room'}
+                          </Link>
+                        </h2>
+
+                        {tagline && (
+                          <p className="text-main/60 text-sm font-body mb-6">{tagline}</p>
+                        )}
+
+                        <h3 className="font-cta uppercase text-[10px] tracking-[0.28em] text-main/50 mb-3">
+                          {currentLocale === 'mn' ? 'Дэлгэрэнгүй' : 'Details'}
+                        </h3>
+
+                        <ul className="space-y-1.5 mb-6 text-sm text-main/80 font-body">
+                          <li className="flex items-start gap-2">
+                            <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
+                            <span>
+                              <span className="text-main/50">
+                                {currentLocale === 'mn' ? 'Зочид:' : 'Guests:'}
+                              </span>{' '}
+                              {currentLocale === 'mn' ? `${maxGuests} хүртэл` : `Up to ${maxGuests}`}
+                            </span>
+                          </li>
+                          {group.features && group.features.length > 0 && (
+                            <li className="flex items-start gap-2">
+                              <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
+                              <span>
+                                <span className="text-main/50">
+                                  {currentLocale === 'mn' ? 'Тохижилт:' : 'Amenities:'}
+                                </span>{' '}
+                                {group.features.join(', ')}
+                              </span>
+                            </li>
+                          )}
+                          <li className="flex items-start gap-2">
+                            <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
+                            <span>
+                              <span className="text-main/50">
+                                {currentLocale === 'mn' ? 'Боломж:' : 'Availability:'}
+                              </span>{' '}
+                              {currentLocale === 'mn'
+                                ? `${group.roomsAvailable} өрөө үлдсэн`
+                                : `${group.roomsAvailable} ${group.roomsAvailable === 1 ? 'room' : 'rooms'} available`}
+                            </span>
+                          </li>
+                        </ul>
+
+                        {perNightFrom > 0 && (
+                          <p className="font-body text-main">
+                            <span className="text-main/60">
+                              {currentLocale === 'mn' ? 'Үнэ эхлэх:' : 'Prices start at:'}
+                            </span>
+                            <span className="font-editorial-en italic text-xl text-main ml-2">
+                              {perNightFrom.toLocaleString()} {defaultRate.currency || 'MNT'}
+                            </span>
+                            <span className="text-main/60 text-sm ml-1">
+                              {currentLocale === 'mn' ? '/ шөнө' : 'per night'}
+                            </span>
                           </p>
-                          <ul className="space-y-2 text-xs text-ink/80 font-body">
-                            {cartCancellationNotes.map((row, i) => (
-                              <li key={i}>
-                                <span className="font-medium text-ink">{row.label}</span>
-                                <span className="text-ink/70"> — {row.text}</span>
-                              </li>
-                            ))}
-                            {cartCancellationNotes.length === 0 && (
-                              <li className="text-ink/70">
-                                {currentLocale === "mn"
-                                  ? "Танай сонгосон үнэд зориулсан өдрийн тоо API-аас ирээгүй байна. Доорх нөхцөл эсвэл баталгаажуулах имэйлээ шалгана уу."
-                                  : "No rate-level cancellation rule was returned by Cloudbeds for this search. Check the property terms below or your confirmation email."}
-                              </li>
-                            )}
-                          </ul>
-                          {propertyTermsAndConditions && (() => {
-                            const plain = stripHtml(propertyTermsAndConditions);
-                            const short = plain.length > 480 ? `${plain.slice(0, 480)}…` : plain;
-                            return (
-                              <p className="mt-3 text-xs text-ink/70 font-body leading-relaxed">
-                                <span className="font-medium text-ink/80">
-                                  {currentLocale === "mn" ? "Байршлын нөхцөл (Cloudbeds): " : "Property terms (Cloudbeds): "}
-                                </span>
-                                {short}
-                              </p>
-                            );
-                          })()}
+                        )}
+
+                        <Link
+                          href={getRoomDetailPath(group.roomTypeName)}
+                          className="inline-flex items-center gap-1.5 mt-3 font-cta uppercase text-[10px] tracking-[0.28em] text-bark hover:text-main transition-colors"
+                        >
+                          {currentLocale === 'mn' ? 'Дэлгэрэнгүй' : 'View Details'}
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+
+                        <div className="border-t border-main/10 mt-6 divide-y divide-main/10">
+                          {renderRateRow(defaultRate)}
+
+                          {otherRates.length > 0 && (
+                            <>
+                              {isExpanded && otherRates.map((rate) => (
+                                <div key={rate.rateID}>{renderRateRow(rate)}</div>
+                              ))}
+                              <button
+                                onClick={() => toggleExpand(group.roomTypeName)}
+                                className="w-full py-3 flex items-center justify-center gap-2 font-cta uppercase text-[10px] tracking-[0.28em] text-main/60 hover:text-main transition-colors"
+                              >
+                                {isExpanded
+                                  ? (currentLocale === 'mn' ? 'Хаах' : 'Hide offers')
+                                  : (currentLocale === 'mn'
+                                      ? `Өөр ${otherRates.length} үнэ харах`
+                                      : `View ${otherRates.length} more offer${otherRates.length > 1 ? 's' : ''}`)}
+                                {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                              </button>
+                            </>
+                          )}
                         </div>
-                      )}
-
-                      {capacityError && (
-                        <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-start gap-2">
-                          <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                          <p className="text-orange-700 text-xs font-body">{capacityError}</p>
-                        </div>
-                      )}
-
-                      <button
-                        onClick={proceedToCheckout}
-                        disabled={cartCapacity < totalGuests}
-                        className={`w-full mt-5 py-3 font-serif font-semibold text-sm rounded-lg transition-colors ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
-                      >
-                        {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
-                      </button>
-
-                      <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-ink/50 font-body">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span>{currentLocale === 'mn' ? 'Аюулгүй онлайн төлбөр' : 'Secure Online Payment'}</span>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-        {!searched && !loading && <div className="text-center py-12"><p className="text-ink/50 text-lg font-body">{t('selectDatesPrompt')}</p></div>}
+                    </article>
+                  );
+                })}
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="py-8 text-center">
-        <a href={localePrefix || "/"} className="text-ink/50 text-sm hover:text-ink transition-colors font-body">&larr; {t('backToHome')}</a>
+      <div className="py-12 text-center">
+        <a
+          href={localePrefix || '/'}
+          className="font-cta uppercase tracking-[0.28em] text-xs text-main/50 hover:text-main transition-colors"
+        >
+          &larr; {t('backToHome')}
+        </a>
       </div>
 
-      {/* Mobile bottom bar */}
+      {/* Mobile sticky cart */}
       {cart.length > 0 && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-ink/10 shadow-2xl z-50">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-ink border-t border-main/15 shadow-2xl z-40">
           <div className="max-w-6xl mx-auto px-4 py-4">
             {capacityError && (
-              <div className="mb-3 p-3 bg-orange-50 border border-orange-200 rounded-lg flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <p className="text-orange-700 text-sm font-body">{capacityError}</p>
+              <div className="mb-3 p-3 bg-orange-500/10 border border-orange-500/30 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                <p className="text-orange-200/80 text-sm font-body">{capacityError}</p>
               </div>
             )}
             <div className="flex items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-2 text-sm text-ink font-body">
-                <span className="font-medium">{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
-                <span className="text-ink/30">•</span>
-                <span className="font-serif text-lg font-bold">{cartTotal.toLocaleString()} MNT</span>
+              <div className="flex flex-wrap items-center gap-2 text-sm text-main font-body">
+                <span>{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
+                <span className="text-main/30">•</span>
+                <span className="font-editorial-en italic text-lg">{cartTotal.toLocaleString()} MNT</span>
               </div>
-              <button onClick={proceedToCheckout} disabled={cartCapacity < totalGuests} className={`px-6 py-3 font-serif uppercase tracking-widest text-xs rounded-lg font-semibold transition-colors whitespace-nowrap ${cartCapacity >= totalGuests ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+              <button
+                onClick={proceedToCheckout}
+                disabled={cartCapacity < totalGuests}
+                className={`px-6 py-3 font-cta uppercase tracking-[0.28em] text-[11px] transition-colors whitespace-nowrap ${
+                  cartCapacity >= totalGuests
+                    ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
+                    : 'bg-main/10 text-main/40 cursor-not-allowed'
+                }`}
+              >
                 {currentLocale === 'mn' ? 'Захиалах' : 'Book Now'}
               </button>
             </div>
@@ -925,7 +1127,7 @@ function BookingContent() {
 export default function BookingPage() {
   const t = useTranslations('common');
   return (
-    <Suspense fallback={<main className="min-h-screen bg-surface-alt flex items-center justify-center"><p className="text-ink">{t('loading')}</p></main>}>
+    <Suspense fallback={<main className="min-h-screen bg-ink flex items-center justify-center"><p className="text-main/70 font-body">{t('loading')}</p></main>}>
       <BookingContent />
     </Suspense>
   );
