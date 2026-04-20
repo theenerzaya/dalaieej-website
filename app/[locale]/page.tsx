@@ -16,8 +16,17 @@ export default function Home() {
       className="relative min-h-screen bg-surface font-body"
     >
       <VideoHero />
-      <EditorialIntro />
-      <SiloGrid />
+      {/**
+       * EditorialIntro pins via `sticky top-0` and SiloGrid layers above it
+       * with `z-10 bg-surface`, so SiloGrid scrolls up over the pinned
+       * EditorialIntro — visually tucking it behind the grid. Wrapping both
+       * in a `relative` container scopes the sticky release to the end of
+       * SiloGrid, so the editorial doesn't bleed into later sections.
+       */}
+      <div className="relative">
+        <EditorialIntro />
+        <SiloGrid />
+      </div>
       {/* <OffersCarousel /> */}
       <PersonaSlider />
       <InteractiveMap />

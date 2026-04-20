@@ -13,9 +13,9 @@ export default function EditorialIntro() {
   return (
     <section
       id="editorial-intro"
-      className="scroll-mt-24 py-24 md:py-32 px-6 bg-surface"
+      className="sticky top-0 z-0 scroll-mt-24 min-h-screen flex items-center px-6 bg-surface"
     >
-      <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 text-center">
+      <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 text-center w-full">
         <motion.div
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -189,7 +189,7 @@ export default function SiloGrid() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative w-full bg-surface">
+    <section className="relative z-10 w-full bg-surface">
       {/* Mobile Stack */}
       <div className="flex flex-col w-full md:hidden bg-surface [&>*:not(:first-child)]:border-t [&>*:not(:first-child)]:border-solid [&>*:not(:first-child)]:border-surface">
         {silos.map((silo, i) => (

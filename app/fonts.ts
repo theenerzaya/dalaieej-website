@@ -22,10 +22,10 @@ export const montserrat = Montserrat({
   display: "swap",
 });
 
-/** MN editorial headlines (H1/H2/H3) — Cormorant Garamond Italic. */
+/** MN editorial headlines (H1/H2/H3) — Cormorant Garamond (normal + italic). */
 export const cormorantGaramondItalic = Cormorant_Garamond({
   subsets: ["latin", "cyrillic"],
-  style: ["italic"],
+  style: ["normal", "italic"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-cormorant-garamond-italic",
   display: "swap",
