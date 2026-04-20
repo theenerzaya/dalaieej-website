@@ -57,25 +57,28 @@ function SiloOverlay({
   silo,
   isMongolian,
   size = "section",
+  positionClassName = "top-[30%]",
 }: {
   silo: SiloEntry;
   isMongolian: boolean;
   size?: "section" | "hero";
+  positionClassName?: string;
 }) {
   const isStoriesMnTitle = isMongolian && silo.id === "stories";
   const headlineSize = size;
+  /** EN: Sloops via `variant="signature"`. MN keeps Cormorant (Typography ignores signature for mn). */
   const headlineExtra = isStoriesMnTitle
     ? "!text-[2.025rem] md:!text-[2.7rem] lg:!text-[4.05rem]"
     : size === "hero"
-      ? "!text-4xl lg:!text-7xl"
+      ? "!text-4xl md:!text-5xl lg:!text-7xl !leading-[1.1]"
       : "";
 
   return (
-    <div className="absolute inset-x-0 top-[30%] flex flex-col items-center px-4 z-10 pointer-events-none">
+    <div className={`absolute inset-x-0 ${positionClassName} flex flex-col items-center px-4 z-10 pointer-events-none`}>
       <Headline
         as="h3"
         size={headlineSize}
-        variant="editorial"
+        variant="signature"
         tone="dark"
         className={`text-white tracking-wider drop-shadow-lg mb-6 ${headlineExtra}`}
       >
@@ -117,7 +120,21 @@ function MobileSilo({
     offset: ["start end", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["-40%", "40%"]);
+  /**
+   * Pre-trigger (progress [0, 0.5]): no transform — the text rides with the
+   * tile and lands at viewport 50% exactly when the tile is centered.
+   * Post-trigger (progress [0.5, 1]): y ramps 0vh -> 90vh, which exactly
+   * cancels the tile's continued upward motion. The text stays pinned at
+   * viewport 50% while the tile slides up behind it, so visually the text
+   * drifts down over the image at precisely 1:1 with the scroll (never
+   * faster). Clipping at the tile's bottom edge — the seam where the next
+   * silo begins — is what makes the text appear to sink under it.
+   */
+  const y = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    reduceMotion ? ["0vh", "0vh", "0vh"] : ["0vh", "0vh", "90vh"],
+  );
 
   return (
     <motion.div
@@ -153,7 +170,12 @@ function MobileSilo({
           style={{ y, willChange: "transform" }}
           className="absolute inset-0 pointer-events-none"
         >
-          <SiloOverlay silo={silo} isMongolian={isMongolian} size="section" />
+          <SiloOverlay
+            silo={silo}
+            isMongolian={isMongolian}
+            size="section"
+            positionClassName="top-1/2 -translate-y-1/2"
+          />
         </motion.div>
       </Link>
     </motion.div>
