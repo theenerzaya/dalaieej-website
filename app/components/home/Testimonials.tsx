@@ -112,7 +112,17 @@ export default function Testimonials() {
         </motion.div>
 
         {/* Quote */}
-        <div className="relative w-full mt-12 md:mt-16">
+        <motion.div
+          initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            duration: prefersReducedMotion ? 0 : 0.6,
+            delay: prefersReducedMotion ? 0 : 0.1,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="relative w-full mt-12 md:mt-16"
+        >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={reviewId}
@@ -156,10 +166,20 @@ export default function Testimonials() {
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         {/* Pagination — pill for active, dots for inactive */}
-        <div className="flex items-center justify-center gap-2 mt-10 md:mt-12">
+        <motion.div
+          initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            duration: prefersReducedMotion ? 0 : 0.5,
+            delay: prefersReducedMotion ? 0 : 0.2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="flex items-center justify-center gap-2 mt-10 md:mt-12"
+        >
           {REVIEW_IDS.map((_, index) => {
             const isActive = index === activeIndex;
             return (
@@ -179,7 +199,7 @@ export default function Testimonials() {
               />
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Visually hidden heritage line — kept for SEO/screen readers */}
         <BodyText size="sm" align="center" className="sr-only">

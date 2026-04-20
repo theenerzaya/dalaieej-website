@@ -164,7 +164,7 @@ export default function PersonaSlider() {
   const revealScale = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    [REVEAL_SCALE_MIN, 1, REVEAL_SCALE_MIN]
+    [REVEAL_SCALE_MIN, 1, 1]
   );
 
   const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
