@@ -111,51 +111,51 @@ export default function Testimonials() {
           </div>
         </motion.div>
 
-        {/* Quote — in-flow height so long copy (e.g. MN locale) is never clipped */}
+        {/* Quote */}
         <div className="relative w-full mt-12 md:mt-16">
           <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={reviewId}
-                className="flex w-full flex-col items-center justify-start px-2 text-center"
-                initial={
-                  prefersReducedMotion
-                    ? { opacity: 0, x: 0 }
-                    : { opacity: 0, x: "8%" }
-                }
-                animate={{ opacity: 1, x: 0 }}
-                exit={
-                  prefersReducedMotion
-                    ? { opacity: 0, x: 0 }
-                    : { opacity: 0, x: "-8%" }
-                }
-                transition={slideTransition}
+            <motion.div
+              key={reviewId}
+              className="flex w-full flex-col items-center justify-start px-2 text-center"
+              initial={
+                prefersReducedMotion
+                  ? { opacity: 0, x: 0 }
+                  : { opacity: 0, x: "8%" }
+              }
+              animate={{ opacity: 1, x: 0 }}
+              exit={
+                prefersReducedMotion
+                  ? { opacity: 0, x: 0 }
+                  : { opacity: 0, x: "-8%" }
+              }
+              transition={slideTransition}
+            >
+              <blockquote
+                className={[
+                  "mx-auto max-w-3xl break-words text-pretty",
+                  "font-editorial-en italic text-water-deep",
+                  "text-2xl sm:text-3xl md:text-[2rem] lg:text-[2.25rem]",
+                  "leading-snug md:leading-[1.35]",
+                ].join(" ")}
               >
-                <blockquote
+                &ldquo;{t(`${reviewId}.text`)}&rdquo;
+              </blockquote>
+
+              <div className="mt-8 md:mt-10 flex flex-col items-center gap-1">
+                <p
                   className={[
-                    "mx-auto max-w-3xl break-words text-pretty",
-                    "font-editorial-en italic text-water-deep",
-                    "text-2xl sm:text-3xl md:text-[2rem] lg:text-[2.25rem]",
-                    "leading-snug md:leading-[1.35]",
+                    "font-body text-ink",
+                    locale === "mn" ? "text-sm font-light" : "text-sm font-medium",
                   ].join(" ")}
                 >
-                  &ldquo;{t(`${reviewId}.text`)}&rdquo;
-                </blockquote>
-
-                <div className="mt-8 md:mt-10 flex flex-col items-center gap-1">
-                  <p
-                    className={[
-                      "font-body text-ink",
-                      locale === "mn" ? "text-sm font-light" : "text-sm font-medium",
-                    ].join(" ")}
-                  >
-                    {author}
-                  </p>
-                  {source && (
-                    <p className="font-body text-xs text-ink/50">{source}</p>
-                  )}
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                  {author}
+                </p>
+                {source && (
+                  <p className="font-body text-xs text-ink/50">{source}</p>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Pagination — pill for active, dots for inactive */}

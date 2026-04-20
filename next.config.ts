@@ -1,10 +1,16 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import createNextIntlPlugin from 'next-intl/plugin';
-import { withNextVideo } from 'next-video/process';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
+const turbopackRoot = path.dirname(fileURLToPath(import.meta.url));
+
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: turbopackRoot,
+  },
   async redirects() {
     const mnDomainHosts = [
       { type: 'host' as const, value: 'dalaieej.com' },
@@ -67,4 +73,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextVideo(withNextIntl(nextConfig));
+export default withNextIntl(nextConfig);
