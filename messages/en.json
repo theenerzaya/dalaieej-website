@@ -242,11 +242,30 @@
     "viewRooms": "View Stays",
     "bookNow": "Book Now"
   },
+  "address": {
+    "title": "Address",
+    "visitCopy": "Find us on the western shore of Lake Khuvsgul, where larch forests meet the Blue Pearl. The road is part of the heritage.",
+    "visitCta": "Visit Us",
+    "stayHeadline": "Spend your holidays with us",
+    "bestPrice": "You'll always get the best price and full availability by booking directly with us.",
+    "fullAddress": "Khatgal Village, Khuvsgul Province, Mongolia",
+    "mapLabel": "map",
+    "manageReservation": "Manage a Reservation",
+    "directionsLabel": "Get directions:",
+    "directionsFromCity": "Khatgal",
+    "directionsFromAirport": "Murun Airport",
+    "bookCta": "Book your stay"
+  },
   "map": {
     "eyebrow": "The grounds",
     "title": "Explore the Peninsula",
     "subtitle": "Now picture yourself here. Walk the grounds that guests return to year after year.",
-    "hint": "Click the + icons to learn more about each area",
+    "hint": "Tap a number on the map or the legend below to learn more about each area",
+    "categories": {
+      "stays": "Accommodations",
+      "amenities": "Amenities & Wellness",
+      "gettingAround": "Getting Around"
+    },
     "reception": {
       "title": "Reception & Restaurant",
       "desc": "The main lodge featuring our lakefront dining hall and lounge bar."

@@ -103,8 +103,8 @@ const socialLinks: Array<{
   external: boolean;
   icon: typeof Facebook;
 }> = [
-  { href: "https://www.facebook.com/", label: "Facebook", external: true, icon: Facebook },
-  { href: "https://www.instagram.com/", label: "Instagram", external: true, icon: Instagram },
+  { href: "https://www.facebook.com/dalaieej", label: "Facebook", external: true, icon: Facebook },
+  { href: "https://www.instagram.com/dalaieejresort", label: "Instagram", external: true, icon: Instagram },
   { href: "mailto:hello@dalaieej.com", label: "Email", external: true, icon: Mail },
 ];
 

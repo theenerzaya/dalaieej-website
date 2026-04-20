@@ -1,34 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X, ArrowUpRight } from "lucide-react";
+import { useMemo, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
+import { X, ArrowUpRight, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { BodyText, Eyebrow, Headline } from "./ui/Typography";
+
+type CategoryId = "stays" | "amenities" | "gettingAround";
 
 interface Location {
   id: string;
   left: number;
   top: number;
+  category: CategoryId;
   image?: string;
   noImage?: boolean;
 }
 
 const locations: Location[] = [
-  { id: 'reception', left: 66.27, top: 66.2, image: '/images/map/reception.jpg' },
-  { id: 'annex', left: 54.44, top: 63.5, image: '/images/map/annex.jpg' },
-  { id: 'ensuite', left: 28.32, top: 79.5, image: '/images/map/ensuite.jpg' },
-  { id: 'heritage', left: 47.88, top: 63.43, image: '/images/map/heritage.jpg' },
-  { id: 'grand', left: 41.23, top: 71.4, image: '/images/map/grand.jpg' },
-  { id: 'bathhouse', left: 69.01, top: 71.3, image: '/images/map/bathhouse.jpg' },
-  { id: 'sauna', left: 95.43, top: 75.53, image: '/images/map/sauna.jpg' },
-  { id: 'pier', left: 93.37, top: 66.03, image: '/images/map/pier.jpg' },
-  { id: 'courts', left: 74.38, top: 63.2, image: '/images/map/courts.jpg' },
-  { id: 'entrance', left: 34.1, top: 51.3, noImage: true },
-  { id: 'overland', left: 19.43, top: 99.7, image: '/images/map/overland.jpg' },
-  { id: 'parking', left: 0.03, top: 58.1, noImage: true }
+  { id: 'annex',     left: 54.44, top: 63.50, category: 'stays',         image: '/images/map/annex.jpg' },
+  { id: 'ensuite',   left: 28.32, top: 79.50, category: 'stays',         image: '/images/map/ensuite.jpg' },
+  { id: 'heritage',  left: 47.88, top: 63.43, category: 'stays',         image: '/images/map/heritage.jpg' },
+  { id: 'grand',     left: 41.23, top: 71.40, category: 'stays',         image: '/images/map/grand.jpg' },
+
+  { id: 'reception', left: 66.27, top: 66.20, category: 'amenities',     image: '/images/map/reception.jpg' },
+  { id: 'bathhouse', left: 69.01, top: 71.30, category: 'amenities',     image: '/images/map/bathhouse.jpg' },
+  { id: 'sauna',     left: 95.43, top: 75.53, category: 'amenities',     image: '/images/map/sauna.jpg' },
+  { id: 'pier',      left: 93.37, top: 66.03, category: 'amenities',     image: '/images/map/pier.jpg' },
+  { id: 'courts',    left: 74.38, top: 63.20, category: 'amenities',     image: '/images/map/courts.jpg' },
+
+  { id: 'entrance',  left: 34.10, top: 51.30, category: 'gettingAround', noImage: true },
+  { id: 'overland',  left: 19.43, top: 99.70, category: 'gettingAround', image: '/images/map/overland.jpg' },
+  { id: 'parking',   left:  0.03, top: 58.10, category: 'gettingAround', noImage: true },
 ];
+
+const categoryOrder: CategoryId[] = ["stays", "amenities", "gettingAround"];
+
+// Staggered "drop-from-above" reveal for the map markers, triggered on scroll-in.
+const hotspotContainerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      delayChildren: 0.25,
+      staggerChildren: 0.07,
+    },
+  },
+};
+
+const hotspotItemVariants: Variants = {
+  hidden: { y: -48, opacity: 0, scale: 0.6 },
+  show: {
+    y: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring",
+      damping: 11,
+      stiffness: 170,
+      mass: 0.9,
+    },
+  },
+};
+
+// Softer "drop-from-above" for the heading and hint text.
+const textContainerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      delayChildren: 0.05,
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const textItemVariants: Variants = {
+  hidden: { y: -28, opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      damping: 16,
+      stiffness: 150,
+      mass: 0.8,
+    },
+  },
+};
 
 export default function InteractiveMap() {
   const t = useTranslations();
@@ -36,6 +94,30 @@ export default function InteractiveMap() {
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
   const isArrowMarker = (id: string) => id === 'overland' || id === 'parking';
+
+  // Per-category numbering (1..n within each category), matching the legend below.
+  const numberById = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const category of categoryOrder) {
+      let n = 1;
+      for (const loc of locations) {
+        if (loc.category === category) {
+          map.set(loc.id, n++);
+        }
+      }
+    }
+    return map;
+  }, []);
+
+  const locationsByCategory = useMemo(() => {
+    const grouped: Record<CategoryId, Location[]> = {
+      stays: [],
+      amenities: [],
+      gettingAround: [],
+    };
+    for (const loc of locations) grouped[loc.category].push(loc);
+    return grouped;
+  }, []);
 
   const handleHotspotClick = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -52,7 +134,7 @@ export default function InteractiveMap() {
       : null;
 
   return (
-    <section className="bg-surface pt-24 md:pt-32 pb-[6.9rem] md:pb-[9.2rem] mb-[6.9rem] md:mb-[9.2rem] px-6">
+    <section className="bg-surface pt-24 md:pt-32 pb-[3.45rem] md:pb-[4.6rem] mb-[3.45rem] md:mb-[4.6rem] px-6">
       <div className="hidden" aria-hidden="true">
         {locations.map((loc) => (
            loc.image && <Image key={loc.id} src={loc.image} alt="" width={10} height={10} priority />
@@ -62,16 +144,17 @@ export default function InteractiveMap() {
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-8 flex flex-col items-center gap-6"
-          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={reduceMotion ? undefined : textContainerVariants}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "show"}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{
-            duration: reduceMotion ? 0 : 0.55,
-            ease: [0.22, 1, 0.36, 1],
-          }}
         >
-          <Eyebrow>{t("map.eyebrow")}</Eyebrow>
-          <Headline as="h2" size="section">{t("map.title")}</Headline>
+          <motion.div variants={reduceMotion ? undefined : textItemVariants}>
+            <Eyebrow>{t("map.eyebrow")}</Eyebrow>
+          </motion.div>
+          <motion.div variants={reduceMotion ? undefined : textItemVariants}>
+            <Headline as="h2" size="section">{t("map.title")}</Headline>
+          </motion.div>
         </motion.div>
 
         <motion.div
@@ -97,60 +180,135 @@ export default function InteractiveMap() {
             sizes="(max-width: 1200px) 100vw, 1200px"
           />
 
-          <div className="absolute inset-0 z-20">
-            {locations.map((location) => (
-              <div
-                key={location.id}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 ${activeHotspot === location.id ? 'z-50' : 'z-20'}`}
-                style={{ top: `${location.top}%`, left: `${location.left}%` }}
-              >
-                <button
-                  type="button"
-                  onClick={(e) => handleHotspotClick(e, location.id)}
-                  aria-label={t(`map.${location.id}.title`)}
-                  aria-expanded={activeHotspot === location.id}
-                  className={`relative inline-flex items-center justify-center transition-all duration-300 ${
-                    isArrowMarker(location.id)
-                      ? `p-0.5 rounded-md md:p-1 ${
-                          activeHotspot === location.id
-                            ? "bg-surface-alt text-leaf scale-110"
-                            : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
-                        }`
-                      : `h-5 w-5 rounded-full md:h-6 md:w-6 ${
-                          activeHotspot === location.id
-                            ? "bg-surface-alt text-leaf scale-110"
-                            : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
-                        }`
-                  }`}
+          <motion.div
+            className="absolute inset-0 z-20"
+            variants={reduceMotion ? undefined : hotspotContainerVariants}
+            initial={reduceMotion ? false : "hidden"}
+            whileInView={reduceMotion ? undefined : "show"}
+            viewport={{ once: true, amount: 0.25 }}
+          >
+            {locations.map((location) => {
+              const number = numberById.get(location.id);
+              const isActive = activeHotspot === location.id;
+              const isArrow = isArrowMarker(location.id);
+              return (
+                <div
+                  key={location.id}
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 ${isActive ? 'z-50' : 'z-20'}`}
+                  style={{ top: `${location.top}%`, left: `${location.left}%` }}
                 >
-                  {isArrowMarker(location.id) ? (
-                    <ArrowUpRight className="h-3 w-3 rotate-180 md:h-4 md:w-4" aria-hidden="true" />
-                  ) : (
-                    <span className="text-base leading-none font-light md:text-lg" aria-hidden="true">+</span>
-                  )}
-                  {!isArrowMarker(location.id) && (
-                    <span className="absolute w-full h-full rounded-full bg-leaf/30 animate-ping" />
-                  )}
-                </button>
-              </div>
-            ))}
-          </div>
+                  <motion.div
+                    variants={reduceMotion ? undefined : hotspotItemVariants}
+                    style={{ transformOrigin: "center top" }}
+                  >
+                    <button
+                      type="button"
+                      onClick={(e) => handleHotspotClick(e, location.id)}
+                      aria-label={t(`map.${location.id}.title`)}
+                      aria-expanded={isActive}
+                      className={`relative inline-flex items-center justify-center transition-all duration-300 ${
+                        isArrow
+                          ? `p-0.5 rounded-md md:p-1 ${
+                              isActive
+                                ? "bg-surface-alt text-leaf scale-110"
+                                : "bg-leaf/80 text-main hover:bg-leaf hover:scale-110"
+                            }`
+                          : `h-6 w-6 rounded-full md:h-7 md:w-7 ${
+                              isActive
+                                ? "bg-surface-alt text-leaf scale-110 ring-2 ring-leaf"
+                                : "bg-leaf text-main hover:bg-[#4a6350] hover:scale-110"
+                            }`
+                      }`}
+                    >
+                      {isArrow ? (
+                        <ArrowUpRight className="h-3 w-3 rotate-180 md:h-4 md:w-4" aria-hidden="true" />
+                      ) : (
+                        <span className="font-cta text-[11px] md:text-xs font-medium leading-none" aria-hidden="true">
+                          {number}
+                        </span>
+                      )}
+                      {!isArrow && !isActive && (
+                        <span className="absolute inset-0 rounded-full bg-leaf/30 animate-ping" />
+                      )}
+                    </button>
+                  </motion.div>
+                </div>
+              );
+            })}
+          </motion.div>
         </motion.div>
 
         <motion.div
           className="mt-4"
-          initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          variants={reduceMotion ? undefined : textItemVariants}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "show"}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{
-            duration: reduceMotion ? 0 : 0.45,
-            delay: reduceMotion ? 0 : 0.12,
-            ease: [0.22, 1, 0.36, 1],
-          }}
         >
           <BodyText size="sm" align="center" className="!text-water-deep/60">
             {t("map.hint")}
           </BodyText>
+        </motion.div>
+
+        <motion.div
+          className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 md:gap-x-14 gap-y-10"
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.55,
+            delay: reduceMotion ? 0 : 0.1,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          {categoryOrder.map((category) => {
+            const items = locationsByCategory[category];
+            if (!items.length) return null;
+            return (
+              <div key={category} className="flex flex-col">
+                <Eyebrow className="!text-water-deep/70">
+                  {t(`map.categories.${category}`)}
+                </Eyebrow>
+                <div className="mt-4 border-t border-water-deep/15">
+                  <ul className="flex flex-col">
+                    {items.map((loc) => {
+                      const number = numberById.get(loc.id);
+                      const isActive = activeHotspot === loc.id;
+                      return (
+                        <li key={loc.id} className="border-b border-water-deep/10">
+                          <button
+                            type="button"
+                            onClick={() => setActiveHotspot(loc.id)}
+                            aria-label={t(`map.${loc.id}.title`)}
+                            aria-expanded={isActive}
+                            className="group flex w-full items-center gap-4 py-3.5 text-left transition-colors"
+                          >
+                            <span
+                              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-cta text-[11px] font-medium leading-none transition-colors ${
+                                isActive
+                                  ? "bg-surface-alt text-leaf ring-2 ring-leaf"
+                                  : "bg-leaf text-main group-hover:bg-[#4a6350]"
+                              }`}
+                              aria-hidden="true"
+                            >
+                              {number}
+                            </span>
+                            <span className="flex-1 font-body text-sm md:text-base text-water-deep/85 group-hover:text-water-deep transition-colors">
+                              {t(`map.${loc.id}.title`)}
+                            </span>
+                            <ChevronRight
+                              className="h-4 w-4 text-water-deep/40 transition-all group-hover:text-water-deep/80 group-hover:translate-x-0.5"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
         </motion.div>
       </div>
 

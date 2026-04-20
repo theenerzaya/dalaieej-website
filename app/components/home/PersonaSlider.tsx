@@ -8,7 +8,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import FadeInWhenVisible from "./FadeInWhenVisible";
@@ -25,6 +25,7 @@ const REVEAL_SCALE_MIN = 0.6;
 const personas = [
   {
     id: 1,
+    quoteKey: "review1",
     en: {
       title: "THE SANCTUARY",
       description:
@@ -42,6 +43,7 @@ const personas = [
   },
   {
     id: 2,
+    quoteKey: "review3",
     en: {
       title: "THE FRONTIER",
       description:
@@ -59,6 +61,7 @@ const personas = [
   },
   {
     id: 3,
+    quoteKey: "review2",
     en: {
       title: "DISCONNECT TO RECONNECT",
       description:
@@ -76,6 +79,7 @@ const personas = [
   },
   {
     id: 4,
+    quoteKey: "review2",
     en: {
       title: "THE SECLUSION",
       description:
@@ -155,6 +159,8 @@ export default function PersonaSlider() {
   const localePrefix = locale === "mn" ? "/mn" : "";
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
+  const tTestimonials = useTranslations("amenities.testimonials");
+  const isMn = locale === "mn";
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -397,6 +403,35 @@ export default function PersonaSlider() {
                     {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
                   </CTALink>
                 </div>
+
+                <AnimatePresence mode="wait" custom={direction}>
+                  <motion.figure
+                    key={`${currentPersona.id}-${locale}-quote`}
+                    custom={direction}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+                    className="mt-14 md:mt-16 flex flex-col items-center"
+                    aria-label="Guest reflection"
+                  >
+                    <span
+                      aria-hidden
+                      className="block h-px w-12 bg-main/20"
+                    />
+                    <blockquote
+                      className={[
+                        "mt-8 mx-auto max-w-2xl text-pretty text-center text-main/85",
+                        isMn ? "font-editorial-mn" : "font-editorial-en",
+                        "italic font-light",
+                        "text-xl sm:text-2xl md:text-[1.6rem]",
+                        "leading-[1.5] md:leading-[1.55]",
+                      ].join(" ")}
+                    >
+                      &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                    </blockquote>
+                  </motion.figure>
+                </AnimatePresence>
               </div>
             </FadeInWhenVisible>
           )}
@@ -426,10 +461,31 @@ export default function PersonaSlider() {
               <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
                 {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
               </CTALink>
+
+              <figure
+                className="mt-14 md:mt-16 flex flex-col items-center"
+                aria-label="Guest reflection"
+              >
+                <span aria-hidden className="block h-px w-12 bg-main/20" />
+                <blockquote
+                  className={[
+                    "mt-8 mx-auto max-w-2xl text-pretty text-center text-main/85",
+                    isMn ? "font-editorial-mn" : "font-editorial-en",
+                    "italic font-light",
+                    "text-xl sm:text-2xl md:text-[1.6rem]",
+                    "leading-[1.5] md:leading-[1.55]",
+                  ].join(" ")}
+                >
+                  &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                </blockquote>
+              </figure>
             </div>
           )}
         </motion.div>
       </div>
+
+      {/* Visually hidden heritage line — kept for SEO/screen readers */}
+      <p className="sr-only">{tTestimonials("heritage")}</p>
     </section>
   );
 }
