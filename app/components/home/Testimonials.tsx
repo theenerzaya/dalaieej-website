@@ -3,9 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { Star, ShieldCheck } from "lucide-react";
-import FadeInWhenVisible from "./FadeInWhenVisible";
-import { BodyText, Eyebrow, Headline } from "../ui/Typography";
+import { Star } from "lucide-react";
+import { BodyText, Eyebrow } from "../ui/Typography";
 
 const REVIEW_IDS = ["review1", "review2", "review3"] as const;
 const AUTO_ADVANCE_MS = 5000;
@@ -45,172 +44,147 @@ export default function Testimonials() {
   };
 
   const reviewId = REVIEW_IDS[activeIndex];
-
-  const attributionLine = (() => {
-    const author = t(`${reviewId}.author`);
-    if (t.has(`${reviewId}.source`)) {
-      return `— ${t(`${reviewId}.source`)} | ${author}`;
-    }
-    return `— ${author}`;
-  })();
+  const author = t(`${reviewId}.author`);
+  const source = t.has(`${reviewId}.source`) ? t(`${reviewId}.source`) : null;
 
   const slideTransition = prefersReducedMotion
     ? { duration: 0.2, ease: "easeOut" as const }
     : { duration: 0.55, ease: "easeInOut" as const };
 
   return (
-    <section className="relative min-h-[85vh] flex flex-col overflow-hidden bg-surface">
-      <div className="relative z-10 flex flex-col flex-1 min-h-[85vh] px-4 sm:px-6 py-10 md:py-14">
-        {/* Section eyebrow — narrative bridge */}
+    <section className="relative bg-surface overflow-hidden">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 py-16 md:py-24 flex flex-col items-center">
+        {/* Section eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5 }}
-          className="mb-6"
+          className="mb-8 md:mb-10"
         >
-          <Eyebrow>{t("sectionEyebrow")}</Eyebrow>
+          <Eyebrow className="!text-water-deep/70">
+            {t("sectionEyebrow")}
+          </Eyebrow>
         </motion.div>
 
-        {/* Aggregate rating — outside card */}
+        {/* Rating cluster — dark circle + label + stars + review count */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.05 }}
-          className="flex flex-col items-center gap-3 shrink-0"
+          transition={{ duration: 0.55, delay: 0.05 }}
+          className="flex flex-wrap items-center justify-center gap-4 sm:flex-nowrap sm:justify-start"
         >
-          <div className="flex items-center gap-4 rounded-2xl bg-main px-5 py-3 shadow-sm border border-bark/15">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center border-2 border-bark/80 bg-leaf/95 shadow-md">
-              <span className="font-cta text-lg font-medium text-main">
-                {RATING}
-              </span>
-            </div>
-            <div>
-              <Headline as="h3" size="sub" align="left" className="!text-xl md:!text-2xl leading-tight">
-                {t("ratingLabel")}
-              </Headline>
-              <div className="flex items-center gap-1 mt-0.5 flex-wrap">
-                {[...Array(5)].map((_, i) =>
-                  i < FULL_STARS ? (
-                    <Star
-                      key={i}
-                      className="w-3.5 h-3.5 fill-sun text-sun"
-                    />
-                  ) : (
-                    <span key={i} className="relative w-3.5 h-3.5">
-                      <Star className="absolute inset-0 w-3.5 h-3.5 fill-sun/25 text-sun/25" />
-                      <span className="absolute inset-0 overflow-hidden" style={{ width: "90%" }}>
-                        <Star className="w-3.5 h-3.5 fill-sun text-sun" />
-                      </span>
+          <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[#1F2A23] shadow-sm">
+            <span className="font-cta text-base font-medium text-main">
+              {RATING}
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-editorial-en italic text-xl md:text-2xl text-ink leading-tight">
+              {t("ratingLabel")}
+            </span>
+            <div className="flex items-center gap-1 mt-1">
+              {[...Array(5)].map((_, i) =>
+                i < FULL_STARS ? (
+                  <Star
+                    key={i}
+                    className="w-3.5 h-3.5 fill-[#E0A82E] text-[#E0A82E]"
+                  />
+                ) : (
+                  <span key={i} className="relative w-3.5 h-3.5">
+                    <Star className="absolute inset-0 w-3.5 h-3.5 fill-[#E0A82E]/25 text-[#E0A82E]/25" />
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 overflow-hidden"
+                      style={{ width: "90%" }}
+                    >
+                      <Star className="w-3.5 h-3.5 fill-[#E0A82E] text-[#E0A82E]" />
                     </span>
-                  )
-                )}
-                <span className="ml-2 font-cta text-xs font-medium text-ink/65">
-                  {t("reviewCount")}
-                </span>
-              </div>
+                  </span>
+                )
+              )}
+              <span className="ml-2 font-body text-xs text-ink/55">
+                {t("reviewCount")}
+              </span>
             </div>
           </div>
         </motion.div>
 
-        {/* Centered paper card — cream with bark text + deckle-edge inner border */}
-        <div className="flex-1 flex items-center justify-center py-10 md:py-12 min-h-0">
-          <FadeInWhenVisible
-            className="relative w-full max-w-[min(90vw,56rem)] md:w-[min(62vw,56rem)] px-8 sm:px-12 md:px-16 py-12 md:py-14 bg-[#F4EBD9] text-bark shadow-[0_18px_40px_-18px_rgba(149,121,78,0.35),0_2px_6px_rgba(0,0,0,0.06)]"
-            y={26}
-            duration={0.65}
-            amount={0.12}
-          >
-            {/* Deckle-edge inner border — letterpress platemark */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-3 sm:inset-4 border border-bark/35"
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-[0.375rem] sm:inset-[0.625rem] border border-bark/15"
-            />
+        {/* Quote — in-flow height so long copy (e.g. MN locale) is never clipped */}
+        <div className="relative w-full mt-12 md:mt-16">
+          <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={reviewId}
+                className="flex w-full flex-col items-center justify-start px-2 text-center"
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 0, x: 0 }
+                    : { opacity: 0, x: "8%" }
+                }
+                animate={{ opacity: 1, x: 0 }}
+                exit={
+                  prefersReducedMotion
+                    ? { opacity: 0, x: 0 }
+                    : { opacity: 0, x: "-8%" }
+                }
+                transition={slideTransition}
+              >
+                <blockquote
+                  className={[
+                    "mx-auto max-w-3xl break-words text-pretty",
+                    "font-editorial-en italic text-water-deep",
+                    "text-2xl sm:text-3xl md:text-[2rem] lg:text-[2.25rem]",
+                    "leading-snug md:leading-[1.35]",
+                  ].join(" ")}
+                >
+                  &ldquo;{t(`${reviewId}.text`)}&rdquo;
+                </blockquote>
 
-            <div className="relative">
-              <div className="text-center mb-8 md:mb-10">
-                <Eyebrow className="!text-bark/65">
-                  {t("cardEyebrow")}
-                </Eyebrow>
-              </div>
-
-              <div className="relative min-h-[200px] sm:min-h-[220px] md:min-h-[240px] overflow-hidden">
-                <AnimatePresence mode="sync" initial={false}>
-                  <motion.div
-                    key={reviewId}
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center px-1"
-                    initial={
-                      prefersReducedMotion
-                        ? { opacity: 0, x: 0 }
-                        : { opacity: 1, x: "100%" }
-                    }
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={
-                      prefersReducedMotion
-                        ? { opacity: 0, x: 0 }
-                        : { opacity: 1, x: "-100%" }
-                    }
-                    transition={slideTransition}
+                <div className="mt-8 md:mt-10 flex flex-col items-center gap-1">
+                  <p
+                    className={[
+                      "font-body text-ink",
+                      locale === "mn" ? "text-sm font-light" : "text-sm font-medium",
+                    ].join(" ")}
                   >
-                    <Headline
-                      as="h3"
-                      size="sub"
-                      className="!text-xl sm:!text-2xl md:!text-3xl lg:!text-[1.75rem] !text-bark leading-relaxed mb-6 md:mb-8"
-                    >
-                      &ldquo;{t(`${reviewId}.text`)}&rdquo;
-                    </Headline>
-                    <p
-                      className={[
-                        "font-cta uppercase text-bark/75",
-                        locale === "mn"
-                          ? "text-[10px] sm:text-xs font-light tracking-[0.18em]"
-                          : "text-[10px] sm:text-xs font-medium tracking-[0.2em]",
-                      ].join(" ")}
-                    >
-                      {attributionLine}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              <div className="flex justify-center gap-3 mt-10 md:mt-12">
-                {REVIEW_IDS.map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => handleDotClick(index)}
-                    className={`w-2.5 h-2.5 rounded-full border-2 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4EBD9] focus-visible:ring-bark ${
-                      index === activeIndex
-                        ? "bg-bark border-bark"
-                        : "bg-transparent border-bark/40 hover:border-bark"
-                    }`}
-                    aria-label={`Go to review ${index + 1}`}
-                    aria-current={index === activeIndex ? "true" : undefined}
-                  />
-                ))}
-              </div>
-            </div>
-          </FadeInWhenVisible>
+                    {author}
+                  </p>
+                  {source && (
+                    <p className="font-body text-xs text-ink/50">{source}</p>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
         </div>
 
-        {/* Heritage line — outside card */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="flex items-center justify-center gap-3 shrink-0 pb-2 md:pb-4 max-w-2xl mx-auto text-center"
-        >
-          <ShieldCheck className="w-4.5 h-4.5 flex-shrink-0 text-bark" />
-          <BodyText size="sm" align="center" className="!text-ink/70">
-            {t("heritage")}
-          </BodyText>
-        </motion.div>
+        {/* Pagination — pill for active, dots for inactive */}
+        <div className="flex items-center justify-center gap-2 mt-10 md:mt-12">
+          {REVIEW_IDS.map((_, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleDotClick(index)}
+                className={[
+                  "h-2 rounded-full transition-all duration-300",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:ring-water-deep",
+                  isActive
+                    ? "w-6 bg-water-deep"
+                    : "w-2 bg-water-deep/15 hover:bg-water-deep/30",
+                ].join(" ")}
+                aria-label={`Go to review ${index + 1}`}
+                aria-current={isActive ? "true" : undefined}
+              />
+            );
+          })}
+        </div>
+
+        {/* Visually hidden heritage line — kept for SEO/screen readers */}
+        <BodyText size="sm" align="center" className="sr-only">
+          {t("heritage")}
+        </BodyText>
       </div>
     </section>
   );

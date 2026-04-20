@@ -22,7 +22,7 @@ export default function EditorialIntro() {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: reduceMotion ? 0 : 0.6 }}
         >
-          <Eyebrow>
+          <Eyebrow className="!text-water-deep/70">
             {locale === 'mn'
               ? "Монгол орны хоймор хязгаарт"
               : "In the far north of Mongolia"}
@@ -64,7 +64,10 @@ export default function EditorialIntro() {
             delay: reduceMotion ? 0 : 0.2,
           }}
         >
-          <CTALink href={storyHref}>
+          <CTALink
+            href={storyHref}
+            className="!text-water-deep [&>span]:!border-water-deep/40 [&>span]:group-hover:!border-water-deep"
+          >
             {locale === "mn" ? "Бидний тухай" : "About us"}
           </CTALink>
         </motion.div>
