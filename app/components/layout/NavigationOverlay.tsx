@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { CTAButton } from "../ui/Typography";
 
 /**
  * NavigationOverlay — Hoteller-styled fullscreen menu.
@@ -217,26 +218,30 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 <Link
                   href={localePrefix || "/"}
                   onClick={onClose}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pt-[calc(5rem*0.10/2)] transition-opacity hover:opacity-90"
+                  className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
                   <Image
                     src="/images/logo-white.png"
                     alt="Dalai Eej Resort"
                     width={180}
                     height={50}
-                    className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-11"
+                    className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
                     priority
                   />
                 </Link>
 
                 {/* Right cluster: Book your stay */}
-                <Link
-                  href={`${localePrefix}/booking`}
-                  onClick={onClose}
-                  className="ml-auto font-cta text-[11px] font-medium uppercase tracking-[0.3em] text-main/80 transition-colors hover:text-main"
-                >
-                  {isMn ? "Захиалах" : "Book your stay"}
-                </Link>
+                <div className="ml-auto">
+                  <CTAButton
+                    href={`${localePrefix}/booking`}
+                    variant="secondary"
+                    size="sm"
+                    onClick={onClose}
+                    className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
+                  >
+                    {isMn ? "Захиалах" : "Book your stay"}
+                  </CTAButton>
+                </div>
               </div>
             </div>
 
