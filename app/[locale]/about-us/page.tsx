@@ -87,7 +87,7 @@ const content = {
     heroCloseFullscreen: "Close full screen",
   },
   mn: {
-    heroTitle: "Бидний түүх",
+    heroTitle: "Бидний тухай",
     heroCaption:
       "Рашааны домог, Хөвсгөлийн тайгад хадгалагдсан гэр бүлийн өргөө.",
     historySectionLabel: "Модонд сийлэгдсэн түүх",

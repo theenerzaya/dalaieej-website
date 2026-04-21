@@ -41,7 +41,7 @@ export default function EssenceTagline({ locale = 'en' }: EssenceTaglineProps) {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <Link
-            href={`${localePrefix}/about`}
+            href={`${localePrefix}/about-us`}
             className="text-water-deep font-serif uppercase text-sm inline-block border-b border-ink pb-1 hover:opacity-75 transition-opacity tracking-wide"
           >
             {isMn ? "Дэлгэрэнгүй" : "Discover More"}

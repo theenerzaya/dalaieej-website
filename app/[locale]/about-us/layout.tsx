@@ -1,8 +1,18 @@
+import type { Viewport } from 'next';
 import { generatePageMetadata } from '@/lib/metadata';
+import AboutUsDocumentPaper from '@/app/components/about-us/AboutUsDocumentPaper';
 
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
+};
+
+/** Warm paper tone for browser chrome (status bar / tab bar) on mobile; matches multiplied paper.jpg over white. */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#E9E2D6',
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -11,5 +21,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function AboutUsLayout({ children }: Props) {
-  return children;
+  return (
+    <>
+      <AboutUsDocumentPaper />
+      {children}
+    </>
+  );
 }

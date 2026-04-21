@@ -62,43 +62,6 @@
     "story": "STORY",
     "location": "VISIT"
   },
-  "about": {
-    "hero": {
-      "title": "A Heritage Site on the Blue Pearl",
-      "subtitle": "Preserving the spirit of Khuvsgul through timber, tradition, and time."
-    },
-    "story": {
-      "title": "Our Heritage",
-      "subtitle": "From Pioneer Beginnings to a Lakeside Sanctuary",
-      "content": "Dalai Eej is more than a destination; it is a legacy. Rooted in the history of Khuvsgul’s early days, our resort stands as a testament to the enduring beauty of the Mongolian wilderness. What began as a pioneering spirit on these shores has evolved into a heritage site where the stories of the past meet the quiet stillness of the present."
-    },
-    "mission": {
-      "label": "Our Stewardship",
-      "quote": "To protect the sanctity of the shoreline and share the honest beauty of our home with the world.",
-      "content": "We are the keepers of this corner of the National Park. Our mission is to honor Mongolian heritage by providing a stay that is both raw and refined—where the warmth of a wood-burning stove and the clarity of the lake water remind us of what is true and lasting."
-    },
-    "experience": {
-      "title": "The Heritage Experience",
-      "subtitle": "A sensory journey through the textures of the north",
-      "nature": {
-        "title": "Living Landscapes",
-        "desc": "An immersive encounter with ancient larch forests and the rhythmic pulse of the crystal-clear shoreline."
-      },
-      "culture": {
-        "title": "Nomadic Legacy",
-        "desc": "Connect with the timeless wisdom of Khuvsgul’s people through authentic hospitality and local craftsmanship."
-      },
-      "escape": {
-        "title": "A Timeless Refuge",
-        "desc": "A place to disconnect from the digital noise and re-anchor yourself in the elemental truth of the Earth."
-      }
-    },
-    "cta": {
-      "title": "Begin Your Journey",
-      "subtitle": "Experience the magic of Khuvsgul Lake and create memories that will last a lifetime.",
-      "button": "Experience Khuvsgul With Us"
-    }
-  },
   "amenities": {
     "hero": {
       "title": "A Sanctuary on the Shoreline",

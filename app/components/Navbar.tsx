@@ -58,6 +58,7 @@ export default function Navbar() {
         style={
           paperNav
             ? {
+                paddingTop: "env(safe-area-inset-top, 0px)",
                 backgroundImage:
                   'url("/images/about-us/decorations/paper.jpg")',
                 backgroundRepeat: "repeat",
