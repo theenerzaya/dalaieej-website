@@ -119,18 +119,42 @@ export default function Navbar() {
               />
             </div>
 
-            <CTAButton
-              href={`${localePrefix}/booking`}
-              variant={paperNav ? "ghost" : "secondary"}
-              size="sm"
-              className={`!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)] ${
-                paperNav
-                  ? "!border-black/45 !text-black hover:!bg-black/[0.06] focus-visible:!ring-black/30"
-                  : ""
-              }`}
-            >
-              {locale === 'mn' ? "Захиалах" : "Book"}
-            </CTAButton>
+            {paperNav ? (
+              <Link
+                href={`${localePrefix}/booking`}
+                className="group relative inline-flex items-center justify-center px-8 py-4 sm:px-10 sm:py-5"
+                aria-label={locale === 'mn' ? 'Захиалах' : 'Book'}
+              >
+                <Image
+                  src="/images/about-us/decorations/accent-3.svg"
+                  alt=""
+                  fill
+                  aria-hidden
+                  className="pointer-events-none select-none object-contain transition-opacity duration-200 group-hover:opacity-0"
+                  sizes="(min-width: 640px) 200px, 170px"
+                />
+                <Image
+                  src="/images/about-us/decorations/accent-4.svg"
+                  alt=""
+                  fill
+                  aria-hidden
+                  className="pointer-events-none select-none object-contain text-black opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                  sizes="(min-width: 640px) 200px, 170px"
+                />
+                <span className="relative font-cta text-[11px] font-light uppercase tracking-[0.18em] text-black transition-colors duration-200 group-hover:text-white sm:text-xs">
+                  {locale === 'mn' ? 'Захиалах' : 'Book'}
+                </span>
+              </Link>
+            ) : (
+              <CTAButton
+                href={`${localePrefix}/booking`}
+                variant="secondary"
+                size="sm"
+                className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
+              >
+                {locale === 'mn' ? 'Захиалах' : 'Book'}
+              </CTAButton>
+            )}
           </div>
         </div>
       </nav>
