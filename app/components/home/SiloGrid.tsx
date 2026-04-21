@@ -93,7 +93,7 @@ function SiloOverlay({
             : "text-[10px] font-medium tracking-[0.4em]",
         ].join(" ")}
       >
-        {isMongolian ? "ТАНИЛЦАХ" : "DISCOVER"}
+        {isMongolian ? "СОНИРХОХ" : "DISCOVER"}
       </span>
     </div>
   );

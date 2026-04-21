@@ -34,9 +34,9 @@ const personas = [
       href: /*"/suites"*/ "/#",
     },
     mn: {
-      title: "ЭРХЭМСЭГ АЯЛАЛ",
+      title: "ТАВ ТУХТАЙ АМРАЛТ",
       description:
-        "Тав тух, аюулгүй байдал, тансаг зэрэглэл. Таны гэр бүлд зориулсан дээд зэрэглэлийн үйлчилгээ.",
+        "Байгаль дунд тав тухтай амарч, хэрэгтэй бүхнээ нэг дороос авах тайван сонголт.",
       image: "/images/personas/sanctuary-mn.jpg",
       href: /*"/suites"*/ "/#",
     },
@@ -52,9 +52,9 @@ const personas = [
       href: /*"/experiences"*/ "/#",
     },
     mn: {
-      title: "ХӨХ СУВДЫН АЯЛАЛ",
+      title: "БАЙГАЛИЙН АДАЛ ЯВДАЛ",
       description:
-        "Хязгааргүй эрх чөлөө, онгон байгаль. Морьт аялал, явган алхалт, байгалийн гэрэл зураг.",
+        "Хөх сувдын эрэг, тайгын жимээр алхаж, морь унан, Хөвсгөлийн жинхэнэ өнгийг мэдрэх аялал.",
       image: "/images/personas/frontier-mn.jpg",
       href: /*"/experiences"*/ "/#",
     },
@@ -70,9 +70,9 @@ const personas = [
       href: /*"/retreats"*/ "/#",
     },
     mn: {
-      title: "ХИЙМОРЬ СЭРГЭЭХ АЯН",
+      title: "АМЬСГАА АВАХ ЗАВСАР",
       description:
-        "Амжилттай яваа эрхмүүдийн алжаал тайлах цэг. Чимээгүй орчин, хувийн орон зай.",
+        "Хотын хэмнэлээс түр холдож, чимээгүй орчинд өөртөө эргэн төвлөрөх нам гүм хугацаа.",
       image: "/images/personas/disconnect-mn.jpg",
       href: /*"/retreats"*/ "/#",
     },
@@ -88,9 +88,9 @@ const personas = [
       href: /*"/offers"*/ "/#",
     },
     mn: {
-      title: "ХАЙРЫН ДИВААЖИН",
+      title: "ХОЁУЛАХНЫ АМРАЛТ",
       description:
-        "Хоёулаа төгс цагийг өнгөрүүлэх. Хувийн оройн хоол, жаргах нар, нандин мөчүүд.",
+        "Хувийн уур амьсгалтай орчинд жаргах нарыг хамт үзэж, дурсамж бүтээх дулаан аялал.",
       image: "/images/personas/seclusion.jpg",
       href: /*"/offers"*/ "/#",
     },
@@ -236,7 +236,7 @@ export default function PersonaSlider() {
       <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col items-center gap-6 mb-10 md:mb-12">
         <FadeInWhenVisible y={14} duration={0.5}>
           <Eyebrow>
-            {locale === "mn" ? "Таны Аялал, Таны Түүх" : "Find Your Journey"}
+            {locale === "mn" ? "Танд тохирох аяллаа сонгоорой" : "Find Your Journey"}
           </Eyebrow>
         </FadeInWhenVisible>
         <motion.div
@@ -251,7 +251,7 @@ export default function PersonaSlider() {
         >
           <Headline as="h2" size="section">
             {locale === "mn"
-              ? "Аялагч бүр өөрийн түүхтэй ирдэг. Танийх аль нь вэ?"
+              ? "Аялагч бүр өөр өөр хүслээр ирдэг. Таных аль нь вэ?"
               : "Every traveler arrives with a different story. Which is yours?"}
           </Headline>
         </motion.div>

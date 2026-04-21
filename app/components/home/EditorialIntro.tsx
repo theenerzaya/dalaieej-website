@@ -24,7 +24,7 @@ export default function EditorialIntro() {
         >
           <Eyebrow className="!text-water-deep/70">
             {locale === 'mn'
-              ? "Монгол орны хоймор хязгаарт"
+              ? "Монголын хоймор нутагт"
               : "In the far north of Mongolia"}
           </Eyebrow>
         </motion.div>
@@ -41,9 +41,9 @@ export default function EditorialIntro() {
           <Headline as="h2" size="section">
             {locale === 'mn' ? (
               <>
-                Ариун дагшин, хосгүй, үнэт өв
+                Анир нам, ариун дагшин
                 <br />
-                — ЗҮҮН ЭРГИЙН АМИН ЗҮРХ.
+                — ХӨВСГӨЛИЙН ЗҮРХЭН ЦЭГ.
               </>
             ) : (
               <>
@@ -68,7 +68,7 @@ export default function EditorialIntro() {
             href={storyHref}
             className="!text-water-deep [&>span]:!border-water-deep/40 [&>span]:group-hover:!border-water-deep"
           >
-            {locale === "mn" ? "Бидний тухай" : "About us"}
+            {locale === "mn" ? "Бидний түүх" : "About us"}
           </CTALink>
         </motion.div>
       </div>
