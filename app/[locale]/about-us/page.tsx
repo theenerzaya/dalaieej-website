@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { Pause, Play, X } from "lucide-react";
+import { X } from "lucide-react";
 
 const content = {
   en: {
@@ -174,33 +174,6 @@ const HERO_CURSOR_MAGNIFY_INK =
 const HERO_CURSOR_MAGNIFY_LIGHT =
   'url("/images/cursors/hero-magnify-light.png") 12 12, zoom-in';
 
-const founderSongLyrics = `Хөвсгөл далайн хөвөөнд хувь заяагаар төрж дээ
-Хөл нүцгэн гүйлдсээр хүүхэд насаа өнгөрүүлж дээ
-“Эх болсон зургаан зүйл хамаг амьтан”-ыг умдаалсан
-Эзэн Монголын рашаан минь-Далай ээж минь
-Ижий минь ээж далайдаа даатгаж дээ
-Аавын минь аав тэнгэртээ залбирч дээ
-Эр биеийг минь гүйцээж энх тунхтай золгуулж дээ
-Ижий цэнхэр далай ээж минь-эзэн Монголын амин сүнс минь
-    Уул уулсын эзэн Хорьдол сарьдаг минь
-    Ус усны хатан гоо эх далай ээж минь
-    Энэ Монголдоо ганц, эх дэлхийдээ ганцхан
-    Гүн цэнхэрхэн далай ижий минь
-Мөнх хөх тэнгэрээ тольдсон мөнх тэнгистээ мөргөөе
-Мөнхөд орших нутгийн минь мөнхийн амьдрал минь
-Мөнх тэнгэрийн хүчин дор мөнхөд цэлэлзээрэй
-Ижий цэнхэр Далай минь- эзэн Монголын амин сүнс минь
-Уул уулсын эзэн Хорьдол сарьдаг минь
-    Ус усны хатан гоо эх далай ээж минь
-    Энэ Монголдоо ганц, эх дэлхийдээ ганцхан
-    Гүн цэнхэрхэн далай ижий минь
-Гүн цэнхэрхэн
-Гүн цэнхэрхэн
-Гүн цэнхэрхэн далай ижий минь`;
-
-/** Set when an audio file is added to `public/audio/founders-song.mp3`. */
-const FOUNDER_AUDIO_SRC = "/audio/founders-song.mp3";
-
 // Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
 // `public/images/about-us/images/` (Heading.png … Heading-6 primaries; secondaries
 // on cards 1 and 5). Rotations can be tweaked; copy lives in `content[locale].history`.
@@ -320,214 +293,6 @@ function SectionAccent({
         }`}
         draggable={false}
       />
-    </div>
-  );
-}
-
-function FounderNote({
-  headline,
-  body,
-  playLabel,
-  lyrics,
-  closing,
-}: {
-  headline: string;
-  body: string[];
-  playLabel: string;
-  lyrics: string;
-  closing: string;
-}) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
-    const onEnded = () => setIsPlaying(false);
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onEnded);
-    return () => {
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnded);
-    };
-  }, []);
-
-  const toggle = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
-      void audio.play().catch(() => setIsPlaying(false));
-    } else {
-      audio.pause();
-    }
-  };
-
-  // Grid-based, overlapping scrapbook layout
-  return (
-    <div className="relative mx-auto max-w-[1180px]">
-      {/* soft base shadow under the whole composition */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-10 bottom-2 h-10 rounded-full bg-black/25 blur-2xl"
-      />
-
-      <div className="relative grid grid-cols-12 gap-0">
-        {/* ---------- Envelope + Letter (right side) ---------- */}
-        <div className="relative col-span-12 md:col-span-8 md:col-start-5 order-1 md:order-2">
-          {/* Stacking grid: every child occupies the same cell. The letter is
-              the only child without absolute positioning, so its intrinsic
-              size drives the composition's height. The envelope back and flap
-              sit behind it and extend slightly beyond the letter's edges. */}
-          <div className="relative grid w-full [&>*]:[grid-area:1/1]">
-            {/* Envelope back body */}
-            <div
-              className="relative m-[-3%_-1%_-5%_-1%] rounded-[4px] rotate-[-2deg] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.45)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, #e6d9bd 0%, #d8c9a7 45%, #c9b88e 100%)",
-                backgroundImage:
-                  "url(\"data:image/svg+xml,%3Csvg width='160' height='160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E\"), linear-gradient(180deg, #e8dbc0 0%, #d6c7a3 55%, #c6b48a 100%)",
-                border: "1px solid rgba(70, 52, 30, 0.22)",
-              }}
-              aria-hidden
-            >
-              {/* Postage stamp */}
-              <div
-                className="absolute right-[6%] top-[6%] w-[16%] aspect-[4/5] bg-[#c99a78] border-[3px] border-dashed border-[#b27a55] shadow-sm"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0.12) 100%)",
-                }}
-              />
-              {/* Circular postmark */}
-              <div
-                className="absolute right-[24%] top-[10%] w-[14%] aspect-square rounded-full border-2 border-[#8a5c3a]/60 rotate-[-12deg]"
-                style={{
-                  backgroundImage:
-                    "repeating-radial-gradient(circle, rgba(138,92,58,0.35) 0 1px, transparent 1px 6px)",
-                }}
-              />
-              {/* Address lines (bottom right) */}
-              <div className="absolute right-[8%] bottom-[8%] w-[40%] space-y-[0.35rem] opacity-70">
-                <div className="h-[2px] bg-[#5a3e22]/50" />
-                <div className="h-[2px] w-[85%] bg-[#5a3e22]/45" />
-                <div className="h-[2px] w-[65%] bg-[#5a3e22]/40" />
-              </div>
-            </div>
-
-            {/* Envelope flap (sits above back, below letter) */}
-            <div className="pointer-events-none relative">
-              <div
-                className="absolute left-[-1%] right-[-1%] top-[-3%] rotate-[-2deg] aspect-[2.4/1]"
-                style={{
-                  clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                  background:
-                    "linear-gradient(180deg, #eadcbf 0%, #d5c49d 100%)",
-                  borderTop: "1px solid rgba(70, 52, 30, 0.18)",
-                  boxShadow: "inset 0 -6px 12px -4px rgba(0,0,0,0.2)",
-                }}
-                aria-hidden
-              />
-            </div>
-
-            {/* Letter paper — drives the natural height of the composition */}
-            <motion.div
-              initial={{ opacity: 0, y: 24, rotate: 0 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 2 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="relative mx-auto w-[84%] bg-[#fbf7ee] shadow-[0_18px_40px_-12px_rgba(0,0,0,0.35)] px-[6%] py-[6%]"
-              style={{
-                backgroundImage:
-                  "url(\"data:image/svg+xml,%3Csvg width='160' height='160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\"), linear-gradient(180deg, #fdfaf1 0%, #f5ead4 100%)",
-                border: "1px solid rgba(70, 52, 30, 0.14)",
-              }}
-            >
-              <pre className="font-editorial-mn not-italic whitespace-pre-wrap leading-[1.55] text-[clamp(0.82rem,1.35vw,1.15rem)] text-[#1c2340]/85 [text-shadow:0_0_1px_rgba(28,35,64,0.12)]">
-{lyrics}
-              </pre>
-
-              <p className="font-body mt-5 md:mt-6 text-[clamp(0.95rem,1.2vw,1.3rem)] text-[#1c2340]/80">
-                {closing}
-              </p>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* ---------- Note from the Family (left card) ---------- */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.25 }}
-          className="relative col-span-12 md:col-span-5 md:col-start-1 md:row-start-1 order-2 md:order-1 mt-6 md:mt-0 md:self-end md:translate-y-[-8%] md:translate-x-[-2%] z-10"
-        >
-          <div
-            className="relative mx-auto w-full max-w-[22rem] -rotate-[3deg] px-7 pt-10 pb-8 shadow-[0_22px_40px_-16px_rgba(0,0,0,0.5)]"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E\"), linear-gradient(180deg, #e9dcbd 0%, #d9c59a 100%)",
-              border: "1px solid rgba(70, 52, 30, 0.2)",
-              // Torn/deckle edge on the bottom
-              clipPath:
-                "polygon(0% 0%, 100% 0%, 100% 96%, 96% 99%, 92% 95%, 88% 99%, 82% 94%, 76% 99%, 70% 95%, 64% 99%, 58% 94%, 52% 99%, 46% 95%, 40% 99%, 34% 95%, 28% 99%, 22% 95%, 16% 99%, 10% 95%, 4% 99%, 0% 96%)",
-            }}
-          >
-            {/* Play button "taped" on top */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 rotate-[-2deg]">
-              {/* piece of tape */}
-              <span
-                aria-hidden
-                className="absolute left-1/2 -top-2 h-4 w-16 -translate-x-1/2 rotate-[-6deg] bg-[#f1e6c8]/70 shadow-sm"
-              />
-              <button
-                type="button"
-                onClick={toggle}
-                aria-pressed={isPlaying}
-                aria-label={playLabel}
-                className="relative inline-flex items-center gap-2 rounded-sm bg-[#111418] px-3 py-1.5 text-[#efe7d0] shadow-md ring-1 ring-black/40 transition-transform hover:-translate-y-[1px]"
-              >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#efe7d0] text-[#111418]">
-                  {isPlaying ? (
-                    <Pause className="h-3.5 w-3.5" strokeWidth={2.5} />
-                  ) : (
-                    <Play className="h-3.5 w-3.5 translate-x-[1px]" strokeWidth={2.5} />
-                  )}
-                </span>
-                <span className="font-body text-sm tracking-wide">
-                  {playLabel}
-                </span>
-              </button>
-            </div>
-
-            <h3 className="font-editorial-mn text-[1.9rem] leading-[1.1] text-[#2a2416]">
-              {headline}
-            </h3>
-
-            <div className="mt-5 space-y-4 font-body text-[0.95rem] leading-[1.7] text-[#2a2416]/85">
-              {body.map((p, i) => {
-                const isCredit = i === body.length - 1 && body.length > 1;
-                return isCredit ? (
-                  <p
-                    key={i}
-                    className="font-body italic text-[0.9rem] tracking-wide text-[#2a2416]/70"
-                  >
-                    {p}
-                  </p>
-                ) : (
-                  <p key={i}>{p}</p>
-                );
-              })}
-            </div>
-
-            <audio ref={audioRef} preload="metadata" src={FOUNDER_AUDIO_SRC} />
-          </div>
-        </motion.div>
-      </div>
     </div>
   );
 }
@@ -838,41 +603,17 @@ export default function AboutUsPage() {
 
       <SectionAccent />
 
-      <section className="relative overflow-hidden py-20 md:py-32">
-        {/* Background photo with soft blue atmosphere */}
-        <div className="absolute inset-0 -z-10">
+      <section className="relative py-20 md:py-32">
+        <div className="max-w-6xl mx-auto px-6">
           <img
-            src={HERO_IMAGE_SRC}
-            alt=""
-            aria-hidden
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(180deg, rgba(64,98,142,0.55) 0%, rgba(46,70,105,0.45) 45%, rgba(32,49,74,0.65) 100%)",
-            }}
-          />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="font-editorial-mn text-[#f3ead3] text-5xl md:text-7xl leading-tight mb-12 md:mb-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
-          >
-            {t.founderSectionLabel}
-          </motion.h2>
-
-          <FounderNote
-            headline={t.founderHeadline}
-            body={t.founderBody}
-            playLabel={t.founderListenLabel}
-            lyrics={founderSongLyrics}
-            closing={t.founderClosing}
+            src={
+              isMn
+                ? "/images/about-us/images/founders-note-mn.svg"
+                : "/images/about-us/images/founders-note.svg"
+            }
+            alt={t.founderSectionLabel}
+            className="w-full h-auto select-none"
+            draggable={false}
           />
         </div>
       </section>

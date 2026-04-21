@@ -31,11 +31,15 @@ export default function Footer() {
 
   return (
     <footer className="sticky bottom-0 z-0 bg-ink text-main font-body">
-      <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-20 md:pb-28 lg:pb-36">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-6 pt-8 md:pt-20 pb-10 md:pb-28 lg:pb-36">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6 md:gap-x-8 md:gap-y-10 lg:gap-8">
 
           {/* Column 1: Brand */}
-          <div className="col-span-2 lg:col-span-1">
+          <div
+            className={`col-span-2 lg:col-span-1 ${
+              isAboutUs ? "text-center md:text-left" : ""
+            }`}
+          >
             <Link
               href={localePrefix || "/"}
               className="relative inline-grid place-items-center hover:opacity-90 transition-opacity"
@@ -55,22 +59,26 @@ export default function Footer() {
                 alt="Dalai Eej Resort"
                 className={
                   isAboutUs
-                    ? "col-start-1 row-start-1 h-9 w-auto"
-                    : "col-start-1 row-start-1 h-12 w-auto"
+                    ? "col-start-1 row-start-1 h-8 md:h-9 w-auto"
+                    : "col-start-1 row-start-1 h-10 md:h-12 w-auto"
                 }
               />
             </Link>
-            <p className="mt-4 text-sm text-main/70 leading-relaxed max-w-xs">
+            <p
+              className={`mt-3 md:mt-4 text-sm text-main/70 leading-relaxed max-w-xs ${
+                isAboutUs ? "mx-auto md:mx-0" : ""
+              }`}
+            >
               {t("bio")}
             </p>
           </div>
 
           {/* Column 2: Experience */}
           <div className="min-w-0">
-            <h4 className="mb-4 md:mb-6">
+            <h4 className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("experience")}</Eyebrow>
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2 md:space-y-3">
               {experienceLinks.map((item) => (
                 <li key={item.key}>
                   <Link
@@ -86,10 +94,10 @@ export default function Footer() {
 
           {/* Column 3: Resort */}
           <div className="min-w-0">
-            <h4 className="mb-4 md:mb-6">
+            <h4 className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("resort")}</Eyebrow>
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2 md:space-y-3">
               {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
                 <li key={item.key}>
                   {item.external ? (
@@ -116,10 +124,10 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div className="col-span-2 lg:col-span-1">
-            <h4 className="mb-4 md:mb-6">
+            <h4 className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("contact")}</Eyebrow>
             </h4>
-            <ul className="space-y-4">
+            <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-main/50 mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-main/80">
@@ -149,12 +157,12 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR: Copyright & Agency Credits */}
-        <div className="mt-8 pt-6 md:mt-12 md:pt-8 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-main/40">
+        <div className="mt-6 pt-4 md:mt-12 md:pt-8 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-main/40">
           <p>
             &copy; 2026 Dalai Eej Resort. {t("rights")}
           </p>
 
-          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6 mt-4 md:mt-0 text-center md:text-right">
+          <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-6 mt-3 md:mt-0 text-center md:text-right">
 
             {/* The London Flex */}
             <div className="group">
