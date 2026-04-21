@@ -3,18 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { Minus, Pause, Play, Plus } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 
 const content = {
   en: {
     heroCaption:
       "The legend of the source—and a family sanctuary in the Khuvsgul taiga.",
-    storySectionLabel: "Our Story",
-    storyHeading: "The Legend of the Source",
-    storyParagraphs: [
-      "Northern folklore speaks of a traveler led by a deer to a hidden spring—a source of water so pure it could restore the human spirit. For our family, Dalai Eej is that spring.",
-      "We did not start with a business plan; we started with our native home. With ancestral roots in Rinchinlkhumbe, we transformed a historic pioneer camp in the Khaich Valley into a sanctuary to protect the Khuvsgul taiga. When you stay with us, you actively participate in preserving this ecosystem.",
-    ],
     historySectionLabel: "A History Carved in Timber",
     historyScrollHint: "Scroll the years",
     history: [
@@ -86,31 +80,10 @@ const content = {
     ],
     founderClosing:
       "From the heart of our founder at Dalai Eej Resort—our family welcomes you to our northern home.",
-    accordionTitle: "Corporate Identity",
-    accordion: [
-      {
-        title: "Vision",
-        body: "Khuvsgul Lake is globally recognized and preserved as an ecological masterpiece.",
-      },
-      {
-        title: "Mission",
-        body: "To turn travelers into lifelong champions of Khuvsgul through transparent, sustainable hospitality.",
-      },
-      {
-        title: "Values",
-        body: "Beauty: We protect the untouched elegance of the taiga.\n\nFriendship: We foster genuine connections between global travelers and locals.\n\nTruth: We operate with absolute integrity, from local sourcing to our community pledge.",
-      },
-    ],
   },
   mn: {
     heroCaption:
       "Рашааны домог, Хөвсгөлийн тайгад хадгалагдсан гэр бүлийн өргөө.",
-    storySectionLabel: "Бидний түүх",
-    storyHeading: "Рашааны домог ба бидний түүх",
-    storyParagraphs: [
-      'Эртний домогт тайгын буга аялагчийг сэтгэл сэргээгч шидэт рашаан руу хөтөлдөг тухай өгүүлдэг. "Далай ээж" бол бидний хувьд тэрхүү рашаан юм.',
-      "Бид бизнесийн төлөвлөгөөнөөс бус, төрөлх нутгаасаа эхэлсэн. Ренчинлхүмбэ нутагтай холбогдох бид Хайчийн амны түүхт пионерийн зусланг тайгыг хамгаалах өргөө болгон хувиргасан. Та манайд саатсанаар энэхүү экосистемийг хамгаалахад бодитоор хувь нэмэр оруулах болно.",
-    ],
     historySectionLabel: "Модонд сийлэгдсэн түүх",
     historyScrollHint: "Жилүүдийг гүйлгэх",
     history: [
@@ -182,21 +155,6 @@ const content = {
     ],
     founderClosing:
       "– Далай ээж ресортын үүсгэн байгуулагчийн зүрхний үгнээс. Бидний гэр бүлийн зүгээс таныг хоймор нутагт минь тавтай морилохыг урьж байна.",
-    accordionTitle: "Байгууллагын дүр төрх",
-    accordion: [
-      {
-        title: "Алсын хараа",
-        body: "Хөвсгөл нуурыг дэлхий нийтээр үнэлж баршгүй өв хэмээн хүлээн зөвшөөрч, унаган төрхөөр нь өвлүүлэх.",
-      },
-      {
-        title: "Эрхэм зорилго",
-        body: "Тогтвортой, ил тод үйлчилгээгээр дамжуулан зочдоо энэ нутгийн үнэнч хамгаалагч болгон хувиргах.",
-      },
-      {
-        title: "Үнэт зүйлс",
-        body: "Гоо зүй: Тайгын онгон дагшин гоо үзэсгэлэнг дээдэлж, хамгаална.\n\nНөхөрлөл: Аялагчид болон нутгийн иргэдийн хооронд бат бөх нөхөрлөлийг бүтээнэ.\n\nҮнэн мөн чанар: Орон нутгаа дэмжихээс эхлээд бүх үйл ажиллагаандаа үнэнч шударга байдлыг баримтална.",
-      },
-    ],
   },
 };
 
@@ -289,12 +247,6 @@ const historyVisuals: Array<{
     secondary: { src: "/images/about-scrapbook-lake.png", rotate: "rotate-[2deg]" },
     annotation: { en: "...with you.", mn: "...тантай хамт." },
   },
-];
-
-const scrapbookImages = [
-  { src: "/images/about-scrapbook-deer.png", alt: "Khuvsgul Lake", rotate: "rotate-2", size: "w-64 h-80" },
-  { src: "/images/about-scrapbook-lake.png", alt: "Wooden cabin", rotate: "-rotate-3", size: "w-56 h-72" },
-  { src: "/images/about-scrapbook-founder.jpg", alt: "Forest path", rotate: "rotate-1", size: "w-52 h-64" },
 ];
 
 function CampfireMark({ className }: { className?: string }) {
@@ -564,52 +516,75 @@ function FounderNote({
   );
 }
 
-function AccordionItem({
-  title,
-  body,
-  isOpen,
-  onToggle,
-}: {
-  title: string;
-  body: string;
-  isOpen: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div className="border-b border-ink/15">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="w-full flex items-center justify-between py-6 md:py-8 text-left group"
-      >
-        <h3 className="font-editorial-mn text-xl md:text-2xl text-ink group-hover:text-leaf transition-colors">{title}</h3>
-        <span className="flex-shrink-0 ml-4 w-8 h-8 flex items-center justify-center rounded-full border border-ink/20">
-          {isOpen ? <Minus className="w-4 h-4 text-ink" /> : <Plus className="w-4 h-4 text-ink" />}
-        </span>
-      </button>
-      <motion.div
-        initial={false}
-        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="overflow-hidden"
-      >
-        <div className="pb-8 pr-12">
-          {body.split("\n\n").map((paragraph, i) => (
-            <p key={i} className="font-body text-base md:text-lg leading-relaxed text-ink/80 mb-4 last:mb-0">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 export default function AboutUsPage() {
   const locale = useLocale();
   const isMn = locale === "mn";
   const t = isMn ? content.mn : content.en;
-  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
+  const historyScrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Translate vertical wheel input into horizontal scroll while the timeline
+  // still has room to scroll, so users don't need to find a trackpad gesture
+  // or literally scroll left-to-right. Once an edge is reached, we release so
+  // the page continues scrolling vertically and the user is never trapped.
+  useEffect(() => {
+    const el = historyScrollRef.current;
+    if (!el) return;
+
+    let target = el.scrollLeft;
+    let rafId: number | null = null;
+
+    const step = () => {
+      rafId = null;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      target = Math.max(0, Math.min(maxScroll, target));
+      const current = el.scrollLeft;
+      const diff = target - current;
+      if (Math.abs(diff) < 0.5) {
+        el.scrollLeft = target;
+        return;
+      }
+      el.scrollLeft = current + diff * 0.22;
+      rafId = requestAnimationFrame(step);
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) return;
+
+      const absX = Math.abs(e.deltaX);
+      const absY = Math.abs(e.deltaY);
+      // Leave horizontal gestures alone so native trackpad momentum keeps working.
+      if (absY <= absX) return;
+
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const delta = e.deltaY;
+      const current = el.scrollLeft;
+      const atStart = current <= 0;
+      const atEnd = current >= maxScroll - 1;
+
+      // If we're already past the edge in the direction of travel, let the
+      // page scroll vertically instead of hijacking.
+      if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+
+      e.preventDefault();
+      target = Math.max(0, Math.min(maxScroll, target + delta));
+      if (rafId == null) rafId = requestAnimationFrame(step);
+    };
+
+    const onScroll = () => {
+      // Keep target in sync if the user drags the scrollbar or snap adjusts.
+      if (rafId == null) target = el.scrollLeft;
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("scroll", onScroll);
+      if (rafId != null) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   return (
     <main
@@ -650,78 +625,6 @@ export default function AboutUsPage() {
 
       <section className="py-24 md:py-36">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-center"
-          >
-            <h2 className="font-editorial-mn text-5xl md:text-7xl text-ink leading-tight">
-              {t.storySectionLabel}
-            </h2>
-            <SectionAccent
-              src="/images/about-us/decorations/accent-2.svg"
-              width="w-36 md:w-44 lg:w-48"
-              className="py-4 md:py-6"
-            />
-          </motion.div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-24 items-start mt-4 md:mt-6">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h3 className="font-editorial-mn text-4xl md:text-6xl text-ink mb-10 md:mb-14 leading-tight">
-                {t.storyHeading}
-              </h3>
-              <div className="space-y-6">
-                {t.storyParagraphs.map((p, i) => (
-                  <p key={i} className="font-body text-base md:text-lg leading-[1.9] text-ink/85">
-                    {p}
-                  </p>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative h-[400px] md:h-[550px] hidden lg:block"
-            >
-              {scrapbookImages.map((img, i) => (
-                <div
-                  key={i}
-                  className={`absolute ${img.rotate} ${img.size} shadow-xl border-[3px] border-white overflow-hidden transition-transform duration-500 hover:scale-105 hover:z-20`}
-                  style={{
-                    top: i === 0 ? "0" : i === 1 ? "60px" : "180px",
-                    left: i === 0 ? "10%" : i === 1 ? "45%" : "5%",
-                    zIndex: i === 1 ? 10 : i === 2 ? 5 : 1,
-                  }}
-                >
-                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </motion.div>
-
-            <div className="lg:hidden grid grid-cols-2 gap-4 mt-6">
-              {scrapbookImages.slice(0, 2).map((img, i) => (
-                <div key={i} className={`${img.rotate} shadow-xl border-[3px] border-white overflow-hidden`}>
-                  <img src={img.src} alt={img.alt} className="w-full h-48 object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SectionAccent />
-
-      <section className="py-24 md:py-36">
-        <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-end justify-between gap-6 mb-2">
             <div className="flex items-center gap-6 flex-1">
               <h2 className="font-editorial-mn text-4xl md:text-6xl text-ink leading-tight whitespace-nowrap">
@@ -736,7 +639,10 @@ export default function AboutUsPage() {
           </div>
         </div>
 
-        <div className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain scroll-smooth snap-x snap-mandatory [scrollbar-width:thin]">
+        <div
+          ref={historyScrollRef}
+          className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain snap-x snap-proximity [scrollbar-width:thin]"
+        >
           <div className="flex flex-row items-start gap-6 md:gap-10 w-max pl-6 pr-6 md:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] md:pr-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] pt-6 pb-16">
             {t.history.map((item, i) => {
               const visuals = historyVisuals[i];
@@ -827,7 +733,7 @@ export default function AboutUsPage() {
             {t.pillarsTitle}
           </motion.h2>
 
-          <div className="space-y-4 md:space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-5">
             {t.pillars.map((pillar, i) => {
               const isLast = i === t.pillars.length - 1;
               return (
@@ -837,40 +743,22 @@ export default function AboutUsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-10% 0px" }}
                   transition={{ duration: 0.5, delay: Math.min(i * 0.06, 0.3) }}
-                  className="rounded-sm bg-black/15 backdrop-blur-[2px] border border-[#EDE3CC]/10 px-6 py-7 md:px-10 md:py-9"
+                  className="rounded-sm bg-black/15 backdrop-blur-[2px] border border-[#EDE3CC]/10 px-6 py-7 md:px-8 md:py-8 flex flex-col h-full"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
-                    <div className="md:col-span-5">
-                      <span className="block font-editorial-mn not-italic text-lg md:text-xl text-[#EDE3CC]/70 mb-2 tracking-wide">
-                        {pillar.num}
-                      </span>
-                      <h3 className="font-editorial-mn text-2xl md:text-[2rem] leading-tight text-[#EDE3CC]">
-                        {pillar.title}
-                      </h3>
+                  <span className="block font-editorial-mn not-italic text-lg md:text-xl text-[#EDE3CC]/70 mb-2 tracking-wide">
+                    {pillar.num}
+                  </span>
+                  <h3 className="font-editorial-mn text-2xl md:text-[1.75rem] leading-tight text-[#EDE3CC] mb-4">
+                    {pillar.title}
+                  </h3>
+                  <p className="font-body text-base md:text-[1.02rem] leading-[1.75] text-[#EDE3CC]/80 flex-1">
+                    {pillar.body}
+                  </p>
+                  {isLast ? (
+                    <div className="flex justify-center mt-6 pt-2">
+                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-[#EDE3CC]/80" />
                     </div>
-
-                    {isLast ? (
-                      <div className="hidden md:flex md:col-span-2 justify-center">
-                        <CampfireMark className="w-20 h-20 text-[#EDE3CC]/80" />
-                      </div>
-                    ) : (
-                      <div className="hidden md:block md:col-span-2" aria-hidden />
-                    )}
-
-                    <p
-                      className={`md:col-span-5 font-body text-base md:text-[1.05rem] leading-[1.75] text-[#EDE3CC]/80 ${
-                        isLast ? "" : "md:col-start-8"
-                      }`}
-                    >
-                      {pillar.body}
-                    </p>
-                  </div>
-
-                  {isLast && (
-                    <div className="md:hidden flex justify-center mt-2">
-                      <CampfireMark className="w-16 h-16 text-[#EDE3CC]/80" />
-                    </div>
-                  )}
+                  ) : null}
                 </motion.div>
               );
             })}
@@ -916,38 +804,6 @@ export default function AboutUsPage() {
             lyrics={founderSongLyrics}
             closing={t.founderClosing}
           />
-        </div>
-      </section>
-
-      <SectionAccent />
-
-      <section className="py-24 md:py-36">
-        <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-14 md:mb-20"
-          >
-            <div className="flex items-center gap-6 mb-2">
-              <div className="h-px flex-1 bg-ink/15" />
-              <h2 className="font-editorial-mn text-3xl md:text-4xl text-ink tracking-wide text-center">{t.accordionTitle}</h2>
-              <div className="h-px flex-1 bg-ink/15" />
-            </div>
-          </motion.div>
-
-          <div className="border-t border-ink/15">
-            {t.accordion.map((item, i) => (
-              <AccordionItem
-                key={i}
-                title={item.title}
-                body={item.body}
-                isOpen={openAccordion === i}
-                onToggle={() => setOpenAccordion(openAccordion === i ? null : i)}
-              />
-            ))}
-          </div>
         </div>
       </section>
 
