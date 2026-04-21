@@ -30,7 +30,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sticky bottom-0 z-0 bg-ink text-main font-body">
+    <footer className="relative lg:sticky lg:bottom-0 z-0 bg-ink text-main font-body">
       <div className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-20 md:pb-28 lg:pb-36">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10 lg:gap-8">
 

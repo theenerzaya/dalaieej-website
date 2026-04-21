@@ -66,21 +66,24 @@ export default function AvailabilityBar() {
     }
   };
 
+  const inputClasses =
+    "box-border w-full max-w-full min-w-0 px-3 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-base md:text-base !rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer [color-scheme:dark] appearance-none [&::-webkit-date-and-time-value]:text-left [&::-webkit-calendar-picker-indicator]:opacity-60 [&::-webkit-calendar-picker-indicator]:cursor-pointer";
+
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-50 bg-ink pt-2 pb-[calc(1.25rem+env(safe-area-inset-bottom,0px))] px-8 md:pt-2.5 md:pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:px-12 transition-all duration-500 ease-out ${
+      className={`fixed bottom-0 left-0 right-0 z-50 bg-ink pt-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] px-4 sm:px-6 md:pt-2.5 md:pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:px-12 transition-all duration-500 ease-out ${
         scrolledPast
           ? "translate-y-0 opacity-100"
           : "translate-y-full opacity-0 pointer-events-none"
       }`}
       inert={!scrolledPast ? true : undefined}
     >
-      <div className="max-w-6xl mx-auto flex flex-col items-center md:flex-row md:items-center justify-center gap-4 md:gap-6 min-w-0">
-        <p className="font-cta text-main text-[11px] sm:text-xs font-medium uppercase tracking-[0.18em] text-center md:text-left shrink-0">
+      <div className="max-w-6xl mx-auto flex flex-col items-stretch md:flex-row md:items-center justify-center gap-3 md:gap-6 min-w-0">
+        <p className="hidden md:block font-cta text-main text-[11px] sm:text-xs font-medium uppercase tracking-[0.18em] text-center md:text-left shrink-0">
           {t('planYourStay')}
         </p>
 
-        <div className="w-full min-w-0 max-w-full md:w-auto md:max-w-none grid gap-2.5 md:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
+        <div className="w-full min-w-0 max-w-full md:w-auto md:max-w-none grid gap-2 md:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
           <div className="min-w-0 flex flex-col">
             <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
               {t('checkIn')}
@@ -90,7 +93,7 @@ export default function AvailabilityBar() {
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
               min={minDate}
-              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base !rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
+              className={inputClasses}
             />
           </div>
 
@@ -103,7 +106,7 @@ export default function AvailabilityBar() {
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
               min={checkIn || minDate}
-              className="box-border w-full max-w-full min-w-0 px-2 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-sm md:text-base !rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer"
+              className={inputClasses}
             />
           </div>
         </div>
@@ -112,7 +115,7 @@ export default function AvailabilityBar() {
           variant="secondary"
           size="sm"
           onClick={handleCheckAvailability}
-          className="group !px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)] w-full sm:w-auto md:w-auto"
+          className="group !px-5 sm:!px-6 !py-3 sm:!py-[calc(0.75rem*1.6)] w-full md:w-auto"
         >
           {t('checkAvailability')}
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
