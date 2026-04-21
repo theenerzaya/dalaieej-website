@@ -14,6 +14,10 @@ function isHomePathname(pathname: string) {
   return pathname === "/" || pathname === "/mn" || pathname === "/mn/";
 }
 
+function isAboutUsPathname(pathname: string) {
+  return pathname === "/about-us" || pathname.startsWith("/about-us/") || pathname.includes("/mn/about-us");
+}
+
 export default function Navbar() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
@@ -22,8 +26,10 @@ export default function Navbar() {
 
   const isBookingPage = pathname.includes('/booking') || pathname.includes('/checkout') || pathname.includes('/payment');
   const isHome = isHomePathname(pathname);
+  const isAboutUs = isAboutUsPathname(pathname);
   const heroPast = useHeroPastForNav(isHome);
   const showFullChrome = isBookingPage || heroPast;
+  const paperNav = isAboutUs && !isBookingPage;
 
   useEffect(() => {
     if (menuOpen) {
@@ -41,14 +47,35 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-        isBookingPage || heroPast ? 'bg-ink shadow-lg' : 'bg-transparent'
-      }`}>
-        <div className="relative flex min-h-[calc(5rem*1.10)] w-full items-stretch pt-[calc(5rem*0.10)]">
+      <nav
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+          paperNav
+            ? "bg-main text-ink"
+            : isBookingPage || heroPast
+              ? "bg-ink shadow-lg"
+              : "bg-transparent"
+        }`}
+        style={
+          paperNav
+            ? {
+                backgroundImage:
+                  'url("/images/about-us/decorations/paper.jpg")',
+                backgroundRepeat: "repeat",
+                backgroundSize: "720px 720px",
+                backgroundBlendMode: "multiply",
+              }
+            : undefined
+        }
+      >
+        <div className="relative flex min-h-[calc(5rem*1.05)] w-full items-stretch pt-[calc(5rem*0.05)]">
           <div className="flex items-center pl-8 md:pl-12 z-10">
             <button
               onClick={() => setMenuOpen(true)}
-              className="text-main hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-surface/50 rounded-lg px-2 py-3"
+              className={`transition-colors focus:outline-none focus:ring-2 rounded-lg px-2 py-3 ${
+                paperNav
+                  ? "text-black hover:text-black/70 focus:ring-black/25"
+                  : "text-main hover:text-white focus:ring-surface/50"
+              }`}
               aria-label="Open menu"
               aria-expanded={menuOpen}
               aria-controls="navigation-overlay"
@@ -63,7 +90,7 @@ export default function Navbar() {
 
           <Link
             href={localePrefix || "/"}
-            className={`absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 hover:opacity-90 transition-all duration-500 ${
+            className={`absolute left-1/2 top-[calc(50%+5rem*0.05/2)] z-10 -translate-x-1/2 -translate-y-1/2 hover:opacity-90 transition-all duration-500 ${
               showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             aria-hidden={!showFullChrome}
@@ -74,21 +101,33 @@ export default function Navbar() {
               alt="Dalai Eej Resort"
               width={180}
               height={50}
-              className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
+              className={`h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12 ${
+                paperNav ? "brightness-0" : ""
+              }`}
               priority
             />
           </Link>
 
           <div className="ml-auto flex items-center pr-8 md:pr-12 z-10">
             <div className="hidden md:flex items-center gap-4 md:gap-6 pr-3 md:pr-5">
-              <LanguageSwitcher />
+              <LanguageSwitcher
+                className={
+                  paperNav
+                    ? "font-cta text-xs font-medium uppercase tracking-[0.18em] px-2 py-1 rounded text-black/70 hover:text-black transition-colors"
+                    : undefined
+                }
+              />
             </div>
 
             <CTAButton
               href={`${localePrefix}/booking`}
-              variant="secondary"
+              variant={paperNav ? "ghost" : "secondary"}
               size="sm"
-              className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
+              className={`!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)] ${
+                paperNav
+                  ? "!border-black/45 !text-black hover:!bg-black/[0.06] focus-visible:!ring-black/30"
+                  : ""
+              }`}
             >
               {locale === 'mn' ? "Захиалах" : "Book"}
             </CTAButton>

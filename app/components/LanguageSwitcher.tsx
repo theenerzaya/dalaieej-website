@@ -4,7 +4,12 @@ import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
-export default function LanguageSwitcher() {
+type Props = {
+  /** Replaces default light-on-dark link colors (e.g. paper / light hero). */
+  className?: string;
+};
+
+export default function LanguageSwitcher({ className }: Props) {
   const pathname = usePathname();
   const currentLocale = useLocale();
 
@@ -28,7 +33,10 @@ export default function LanguageSwitcher() {
     <Link
       href={pathWithoutLocale}
       locale={targetLocale}
-      className="font-cta text-xs font-medium uppercase tracking-[0.18em] px-2 py-1 rounded text-main/70 hover:text-main transition-colors"
+      className={
+        className ??
+        "font-cta text-xs font-medium uppercase tracking-[0.18em] px-2 py-1 rounded text-main/70 hover:text-main transition-colors"
+      }
       aria-label={ariaLabel}
     >
       {label}

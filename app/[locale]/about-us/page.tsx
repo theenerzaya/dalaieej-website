@@ -283,7 +283,7 @@ function CampfireMark({ className }: { className?: string }) {
 }
 
 function SectionAccent({
-  className = "py-8 md:py-12",
+  className = "py-1 md:py-2",
   width = "w-20 md:w-24",
   invert = false,
   src = "/images/about-us/decorations/accent.svg",
@@ -618,7 +618,7 @@ export default function AboutUsPage() {
         backgroundBlendMode: "multiply",
       }}
     >
-      <section className="pt-28 md:pt-36 pb-20 md:pb-28">
+      <section className="pt-40 md:pt-56 lg:pt-64 pb-20 md:pb-28">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -626,15 +626,17 @@ export default function AboutUsPage() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <h1 className="font-editorial-mn text-4xl md:text-6xl text-ink text-center leading-tight tracking-wide mb-2 md:mb-3">
-              {t.heroTitle}
-            </h1>
-            <SectionAccent
-              src="/images/about-us/decorations/accent-2.svg"
-              className="py-3 md:py-4"
-              width="w-full max-w-lg md:max-w-2xl"
-            />
-            <div className="overflow-hidden rounded-sm border border-ink/10 shadow-lg bg-ink/[0.04]">
+            <div className="mx-auto w-max max-w-full flex flex-col items-stretch gap-2 md:gap-3">
+              <h1 className="font-editorial-mn text-4xl md:text-6xl text-ink text-center leading-tight tracking-wide">
+                {t.heroTitle}
+              </h1>
+              <SectionAccent
+                src="/images/about-us/decorations/accent-2.svg"
+                className="py-0"
+                width="w-[min(58%,22rem)] min-w-[10.5rem] md:min-w-[13rem] mx-auto"
+              />
+            </div>
+            <div className="mt-16 md:mt-24 lg:mt-28 overflow-hidden rounded-sm border border-ink/10 shadow-lg bg-ink/[0.04]">
               <img
                 src="/images/about-hero.webp"
                 alt="Illustrated map of Khuvsgul region"
@@ -671,7 +673,7 @@ export default function AboutUsPage() {
 
         <div
           ref={historyScrollRef}
-          className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain [scrollbar-width:thin]"
+          className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain scrollbar-hide"
         >
           <div className="flex flex-row items-start gap-6 md:gap-10 w-max pl-6 pr-6 md:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] md:pr-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] pt-6 pb-16">
             {t.history.map((item, i) => {
