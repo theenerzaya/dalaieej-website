@@ -165,7 +165,11 @@ export default function VideoHero() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          {locale === 'mn' ? "Хөвсгөл далайн хөвөөнд" : "On the shores of Lake Khuvsgul"}
+          <Eyebrow tone="dark" className="text-white text-overlay-glow">
+            {locale === "mn"
+              ? "Хөвсгөл далайн хөвөөнд"
+              : "On the shores of Lake Khuvsgul"}
+          </Eyebrow>
         </motion.div>
       </div>
 
