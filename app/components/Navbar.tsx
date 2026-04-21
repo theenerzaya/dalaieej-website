@@ -68,7 +68,7 @@ export default function Navbar() {
         }
       >
         <div className="relative flex min-h-[calc(5rem*1.05)] w-full items-stretch pt-[calc(5rem*0.05)]">
-          <div className="flex items-center pl-8 md:pl-12 z-10">
+          <div className="flex items-center pl-5 md:pl-12 z-10">
             <button
               onClick={() => setMenuOpen(true)}
               className={`transition-colors focus:outline-none focus:ring-2 rounded-lg px-2 py-3 ${
@@ -80,7 +80,7 @@ export default function Navbar() {
               aria-expanded={menuOpen}
               aria-controls="navigation-overlay"
             >
-              <span className="flex w-9 flex-col justify-center gap-[5px] md:w-[2.925rem] md:gap-1.5" aria-hidden>
+              <span className="flex w-7 flex-col justify-center gap-[5px] md:w-[2.925rem] md:gap-1.5" aria-hidden>
                 <span className="h-px w-full bg-current" />
                 <span className="h-px w-full bg-current" />
                 <span className="h-px w-full bg-current" />
@@ -101,14 +101,14 @@ export default function Navbar() {
               alt="Dalai Eej Resort"
               width={180}
               height={50}
-              className={`h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12 ${
+              className={`h-7 w-auto max-w-[6.5rem] sm:h-10 sm:max-w-none md:h-12 ${
                 paperNav ? "brightness-0" : ""
               }`}
               priority
             />
           </Link>
 
-          <div className="ml-auto flex items-center pr-8 md:pr-12 z-10">
+          <div className="ml-auto flex items-center pr-5 md:pr-12 z-10">
             <div className="hidden md:flex items-center gap-4 md:gap-6 pr-3 md:pr-5">
               <LanguageSwitcher
                 className={
@@ -122,7 +122,7 @@ export default function Navbar() {
             {paperNav ? (
               <Link
                 href={`${localePrefix}/booking`}
-                className="group relative inline-flex items-center justify-center px-8 py-4 sm:px-10 sm:py-5"
+                className="group relative inline-flex items-center justify-center px-5 py-2.5 sm:px-10 sm:py-5"
                 aria-label={locale === 'mn' ? 'Захиалах' : 'Book'}
               >
                 <Image
@@ -131,7 +131,7 @@ export default function Navbar() {
                   fill
                   aria-hidden
                   className="pointer-events-none select-none object-contain transition-opacity duration-200 group-hover:opacity-0"
-                  sizes="(min-width: 640px) 200px, 170px"
+                  sizes="(min-width: 640px) 200px, 120px"
                 />
                 <Image
                   src="/images/about-us/decorations/accent-4.svg"
@@ -139,9 +139,9 @@ export default function Navbar() {
                   fill
                   aria-hidden
                   className="pointer-events-none select-none object-contain text-black opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                  sizes="(min-width: 640px) 200px, 170px"
+                  sizes="(min-width: 640px) 200px, 120px"
                 />
-                <span className="relative font-cta text-[11px] font-light uppercase tracking-[0.18em] text-black transition-colors duration-200 group-hover:text-white sm:text-xs">
+                <span className="relative font-cta text-[10px] font-light uppercase tracking-[0.16em] text-black transition-colors duration-200 group-hover:text-white sm:text-xs sm:tracking-[0.18em]">
                   {locale === 'mn' ? 'Захиалах' : 'Book'}
                 </span>
               </Link>
@@ -150,7 +150,7 @@ export default function Navbar() {
                 href={`${localePrefix}/booking`}
                 variant="secondary"
                 size="sm"
-                className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
+                className="!px-3.5 sm:!px-6 !py-2.5 sm:!py-[calc(0.75rem*1.6)] !text-[10px] sm:!text-xs !tracking-[0.16em] sm:!tracking-[0.18em]"
               >
                 {locale === 'mn' ? 'Захиалах' : 'Book'}
               </CTAButton>
