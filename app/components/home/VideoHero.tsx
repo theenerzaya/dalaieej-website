@@ -166,7 +166,7 @@ export default function VideoHero() {
           }}
         >
           {locale === 'mn' ? "Хөвсгөл далайн хөвөөнд" : "On the shores of Lake Khuvsgul"}
-        </motion.p>
+        </motion.div>
       </div>
 
       <motion.div
