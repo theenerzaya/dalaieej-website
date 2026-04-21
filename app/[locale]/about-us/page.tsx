@@ -7,6 +7,7 @@ import { Pause, Play } from "lucide-react";
 
 const content = {
   en: {
+    heroTitle: "Our Story",
     heroCaption:
       "The legend of the source—and a family sanctuary in the Khuvsgul taiga.",
     historySectionLabel: "A History Carved in Timber",
@@ -82,6 +83,7 @@ const content = {
       "From the heart of our founder at Dalai Eej Resort—our family welcomes you to our northern home.",
   },
   mn: {
+    heroTitle: "Бидний түүх",
     heroCaption:
       "Рашааны домог, Хөвсгөлийн тайгад хадгалагдсан гэр бүлийн өргөө.",
     historySectionLabel: "Модонд сийлэгдсэн түүх",
@@ -281,7 +283,7 @@ function CampfireMark({ className }: { className?: string }) {
 }
 
 function SectionAccent({
-  className = "",
+  className = "py-8 md:py-12",
   width = "w-20 md:w-24",
   invert = false,
   src = "/images/about-us/decorations/accent.svg",
@@ -294,7 +296,7 @@ function SectionAccent({
   return (
     <div
       aria-hidden
-      className={`flex justify-center items-center py-8 md:py-12 ${className}`}
+      className={`flex justify-center items-center ${className}`}
     >
       <img
         src={src}
@@ -618,13 +620,20 @@ export default function AboutUsPage() {
     >
       <section className="pt-28 md:pt-36 pb-20 md:pb-28">
         <div className="max-w-5xl mx-auto px-6">
-          <h1 className="sr-only">{isMn ? "Бидний тухай" : "About Us"}</h1>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="relative"
           >
+            <h1 className="font-editorial-mn text-4xl md:text-6xl text-ink text-center leading-tight tracking-wide mb-2 md:mb-3">
+              {t.heroTitle}
+            </h1>
+            <SectionAccent
+              src="/images/about-us/decorations/accent-2.svg"
+              className="py-3 md:py-4"
+              width="w-full max-w-lg md:max-w-2xl"
+            />
             <div className="overflow-hidden rounded-sm border border-ink/10 shadow-lg bg-ink/[0.04]">
               <img
                 src="/images/about-hero.webp"
@@ -736,20 +745,14 @@ export default function AboutUsPage() {
 
       <SectionAccent />
 
-      <section
-        className="relative py-24 md:py-36 bg-[#4B5A3E] text-[#EDE3CC] overflow-hidden"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%23EDE3CC' stroke-opacity='0.07' stroke-width='1'%3E%3Cpath d='M0 110 Q55 55 110 110 T220 110'/%3E%3Cpath d='M0 60 Q55 5 110 60 T220 60'/%3E%3Cpath d='M0 160 Q55 105 110 160 T220 160'/%3E%3Ccircle cx='55' cy='110' r='4'/%3E%3Ccircle cx='165' cy='110' r='4'/%3E%3Ccircle cx='110' cy='60' r='3'/%3E%3Ccircle cx='110' cy='160' r='3'/%3E%3Cpath d='M95 95 L125 125 M125 95 L95 125'/%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: "220px 220px",
-        }}
-      >
+      <section className="relative py-24 md:py-36 overflow-hidden">
         <div className="relative max-w-5xl mx-auto px-6">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="font-editorial-mn text-4xl md:text-5xl text-center text-[#EDE3CC] mb-14 md:mb-20 tracking-wide"
+            className="font-editorial-mn text-4xl md:text-5xl text-center text-ink mb-14 md:mb-20 tracking-wide"
           >
             {t.pillarsTitle}
           </motion.h2>
@@ -764,20 +767,20 @@ export default function AboutUsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-10% 0px" }}
                   transition={{ duration: 0.5, delay: Math.min(i * 0.06, 0.3) }}
-                  className="rounded-sm bg-black/15 backdrop-blur-[2px] border border-[#EDE3CC]/10 px-6 py-7 md:px-8 md:py-8 flex flex-col h-full"
+                  className="rounded-sm bg-ink/[0.04] border border-ink/10 px-6 py-7 md:px-8 md:py-8 flex flex-col h-full shadow-sm"
                 >
-                  <span className="block font-editorial-mn not-italic text-lg md:text-xl text-[#EDE3CC]/70 mb-2 tracking-wide">
+                  <span className="block font-editorial-mn not-italic text-lg md:text-xl text-ink/60 mb-2 tracking-wide">
                     {pillar.num}
                   </span>
-                  <h3 className="font-editorial-mn text-2xl md:text-[1.75rem] leading-tight text-[#EDE3CC] mb-4">
+                  <h3 className="font-editorial-mn text-2xl md:text-[1.75rem] leading-tight text-ink mb-4">
                     {pillar.title}
                   </h3>
-                  <p className="font-body text-base md:text-[1.02rem] leading-[1.75] text-[#EDE3CC]/80 flex-1">
+                  <p className="font-body text-base md:text-[1.02rem] leading-[1.75] text-ink/80 flex-1">
                     {pillar.body}
                   </p>
                   {isLast ? (
                     <div className="flex justify-center mt-6 pt-2">
-                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-[#EDE3CC]/80" />
+                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-ink/70" />
                     </div>
                   ) : null}
                 </motion.div>

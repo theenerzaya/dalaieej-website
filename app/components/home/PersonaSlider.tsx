@@ -222,9 +222,9 @@ export default function PersonaSlider() {
   const currentPersona = personas[activeIndex];
   const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
   const sideFrameClass =
-    "relative w-[28%] max-w-[220px] md:max-w-[300px] shrink-0 aspect-[5/4] md:aspect-[3/2] overflow-hidden shadow-2xl ring-1 ring-white/10";
+    "relative w-[20vw] max-w-[260px] shrink-0 aspect-[3/4] overflow-hidden shadow-2xl ring-1 ring-white/10";
   const centerFrameClass =
-    "relative w-[min(52vw,720px)] shrink-0 aspect-[16/10] md:aspect-[2.2/1] overflow-hidden shadow-2xl ring-1 ring-white/10 z-10";
+    "relative w-[min(52vw,780px)] shrink-0 aspect-[1.4/1] md:aspect-[1.45/1] overflow-hidden shadow-2xl ring-1 ring-white/10 z-10";
 
   const cardMotionStyle = reduceMotion ? undefined : { scale: revealScale };
 
@@ -279,8 +279,8 @@ export default function PersonaSlider() {
               />
             </FadeInWhenVisible>
           ) : (
-            <div className="w-full overflow-x-hidden">
-              <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 py-2 -mx-4 sm:-mx-8">
+            <div className="-mx-6 sm:-mx-8 md:-mx-10 overflow-x-hidden">
+              <div className="flex items-center justify-between py-2">
                 <FadeInWhenVisible
                   className={sideFrameClass}
                   delay={0}
@@ -293,7 +293,7 @@ export default function PersonaSlider() {
                     persona={personas[leftIdx]}
                     locale={locale}
                     direction={direction}
-                    sizes="(max-width: 768px) 40vw, 300px"
+                    sizes="(max-width: 768px) 20vw, 260px"
                   />
                 </FadeInWhenVisible>
                 <FadeInWhenVisible
@@ -309,7 +309,7 @@ export default function PersonaSlider() {
                     locale={locale}
                     direction={direction}
                     priority
-                    sizes="(max-width: 768px) 85vw, 720px"
+                    sizes="(max-width: 768px) 52vw, 780px"
                   />
                 </FadeInWhenVisible>
                 <FadeInWhenVisible
@@ -324,7 +324,7 @@ export default function PersonaSlider() {
                     persona={personas[rightIdx]}
                     locale={locale}
                     direction={direction}
-                    sizes="(max-width: 768px) 40vw, 300px"
+                    sizes="(max-width: 768px) 20vw, 260px"
                   />
                 </FadeInWhenVisible>
               </div>
