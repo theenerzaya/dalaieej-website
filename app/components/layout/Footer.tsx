@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import { usePathname } from "next/navigation";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Eyebrow } from "../ui/Typography";
 
@@ -10,6 +11,8 @@ export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
   const localePrefix = locale === 'mn' ? '/mn' : '';
+  const pathname = usePathname();
+  const isAboutUs = pathname?.includes("/about-us");
 
   const experienceLinks = [
     { key: "stay", href: "#" },
@@ -33,11 +36,28 @@ export default function Footer() {
 
           {/* Column 1: Brand */}
           <div className="col-span-2 lg:col-span-1">
-            <Link href={localePrefix || "/"} className="inline-block hover:opacity-90 transition-opacity">
+            <Link
+              href={localePrefix || "/"}
+              className="relative inline-grid place-items-center hover:opacity-90 transition-opacity"
+              aria-label="Dalai Eej Resort"
+            >
+              {isAboutUs ? (
+                <img
+                  src="/images/about-us/decorations/accent-5.png"
+                  alt=""
+                  aria-hidden
+                  draggable={false}
+                  className="col-start-1 row-start-1 w-[18rem] h-auto select-none pointer-events-none opacity-50"
+                />
+              ) : null}
               <img
-                src="/images/logo-white.png"
+                src={isAboutUs ? "/images/logo-white-text.png" : "/images/logo-white.png"}
                 alt="Dalai Eej Resort"
-                className="h-12 w-auto"
+                className={
+                  isAboutUs
+                    ? "col-start-1 row-start-1 h-9 w-auto"
+                    : "col-start-1 row-start-1 h-12 w-auto"
+                }
               />
             </Link>
             <p className="mt-4 text-sm text-main/70 leading-relaxed max-w-xs">
