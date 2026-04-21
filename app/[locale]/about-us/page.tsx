@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { Pause, Play } from "lucide-react";
+import { Pause, Play, X } from "lucide-react";
 
 const content = {
   en: {
@@ -81,6 +82,9 @@ const content = {
     ],
     founderClosing:
       "From the heart of our founder at Dalai Eej Resort—our family welcomes you to our northern home.",
+    heroImageAlt: "Dalai Eej Resort",
+    heroExpandImage: "View image full screen",
+    heroCloseFullscreen: "Close full screen",
   },
   mn: {
     heroTitle: "Бидний түүх",
@@ -157,8 +161,18 @@ const content = {
     ],
     founderClosing:
       "– Далай ээж ресортын үүсгэн байгуулагчийн зүрхний үгнээс. Бидний гэр бүлийн зүгээс таныг хоймор нутагт минь тавтай морилохыг урьж байна.",
+    heroImageAlt: "Далай ээж ресорт",
+    heroExpandImage: "Зургийг бүтэн дэлгэцээр харах",
+    heroCloseFullscreen: "Хаах",
   },
 };
+
+const HERO_IMAGE_SRC = "/images/about-us/images/Heading-6.png";
+/** Magnifying-glass cursor (PNG for Safari + Chrome; hotspot at lens center). */
+const HERO_CURSOR_MAGNIFY_INK =
+  'url("/images/cursors/hero-magnify-ink.png") 12 12, zoom-in';
+const HERO_CURSOR_MAGNIFY_LIGHT =
+  'url("/images/cursors/hero-magnify-light.png") 12 12, zoom-in';
 
 const founderSongLyrics = `Хөвсгөл далайн хөвөөнд хувь заяагаар төрж дээ
 Хөл нүцгэн гүйлдсээр хүүхэд насаа өнгөрүүлж дээ
@@ -187,9 +201,9 @@ const founderSongLyrics = `Хөвсгөл далайн хөвөөнд хувь �
 /** Set when an audio file is added to `public/audio/founders-song.mp3`. */
 const FOUNDER_AUDIO_SRC = "/audio/founders-song.mp3";
 
-// Scrapbook visuals for the timeline—one entry per era (5 total). Swap `src`s
-// or tweak rotations to change the layout; the text/year/title/body live on
-// the localized `content[locale].history` array above.
+// Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
+// `public/images/about-us/images/` (Heading.png … Heading-6 primaries; secondaries
+// on cards 1 and 5). Rotations can be tweaked; copy lives in `content[locale].history`.
 const historyVisuals: Array<{
   primary: { src: string; rotate: string; caption?: { en: string; mn: string } };
   secondary?: { src: string; rotate: string };
@@ -197,11 +211,11 @@ const historyVisuals: Array<{
 }> = [
   {
     primary: {
-      src: "/images/about-bw.jpg",
+      src: "/images/about-us/images/Heading.png",
       rotate: "-rotate-[3deg]",
       caption: { en: "Khatgal's son.", mn: "Хатгалын хүү." },
     },
-    secondary: { src: "/images/about-scrapbook-lake.png", rotate: "rotate-[4deg]" },
+    secondary: { src: "/images/about-us/images/Heading-7.png", rotate: "rotate-[4deg]" },
     annotation: {
       en: "Auction day\u2014a year of civil service wages.",
       mn: "Дуудлагын өдөр — жилийн цалин.",
@@ -209,7 +223,7 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-scrapbook-lake.png",
+      src: "/images/about-us/images/Heading-3.png",
       rotate: "rotate-[2deg]",
       caption: { en: "First winters.", mn: "Анхны өвлүүд." },
     },
@@ -220,7 +234,7 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-scrapbook-founder.jpg",
+      src: "/images/about-us/images/Heading-4.png",
       rotate: "-rotate-[2deg]",
       caption: { en: "Middle Eastern royalty", mn: "Ойрхи Дорнодын хаад" },
     },
@@ -231,7 +245,7 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-scrapbook-deer.png",
+      src: "/images/about-us/images/Heading-5.png",
       rotate: "rotate-[3deg]",
       caption: { en: "Musk deer.", mn: "Хүдэр." },
     },
@@ -242,11 +256,11 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-scrapbook-founder.jpg",
+      src: "/images/about-us/images/Heading-6.png",
       rotate: "-rotate-[4deg]",
       caption: { en: "Third generation.", mn: "Гурав дахь үе." },
     },
-    secondary: { src: "/images/about-scrapbook-lake.png", rotate: "rotate-[2deg]" },
+    secondary: { src: "/images/about-us/images/Heading-8.png", rotate: "rotate-[2deg]" },
     annotation: { en: "...with you.", mn: "...тантай хамт." },
   },
 ];
@@ -524,6 +538,26 @@ export default function AboutUsPage() {
   const t = isMn ? content.mn : content.en;
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
   const historyHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const [heroFullscreenOpen, setHeroFullscreenOpen] = useState(false);
+  const [portalMounted, setPortalMounted] = useState(false);
+
+  useEffect(() => {
+    setPortalMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!heroFullscreenOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setHeroFullscreenOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [heroFullscreenOpen]);
 
   // Translate vertical wheel input into horizontal scroll on the timeline.
   // The hijack only activates once the section heading has settled near the
@@ -607,6 +641,7 @@ export default function AboutUsPage() {
   }, []);
 
   return (
+    <>
     <main
       id="main-content"
       className="bg-main text-ink min-h-screen"
@@ -636,13 +671,20 @@ export default function AboutUsPage() {
                 width="w-[min(58%,22rem)] min-w-[10.5rem] md:min-w-[13rem] mx-auto"
               />
             </div>
-            <div className="mt-16 md:mt-24 lg:mt-28 overflow-hidden rounded-sm border border-ink/10 shadow-lg bg-ink/[0.04]">
+            <button
+              type="button"
+              onClick={() => setHeroFullscreenOpen(true)}
+              aria-label={t.heroExpandImage}
+              style={{ cursor: HERO_CURSOR_MAGNIFY_INK }}
+              className="group mt-16 md:mt-24 lg:mt-28 w-full overflow-hidden rounded-sm border border-ink/10 shadow-lg bg-ink/[0.04] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/40"
+            >
               <img
-                src="/images/about-hero.webp"
-                alt="Illustrated map of Khuvsgul region"
-                className="w-full h-auto"
+                src={HERO_IMAGE_SRC}
+                alt={t.heroImageAlt}
+                style={{ cursor: HERO_CURSOR_MAGNIFY_INK }}
+                className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02] group-active:scale-[0.99]"
               />
-            </div>
+            </button>
             <p className="text-center mt-8 font-body text-sm md:text-base italic text-ink/60 tracking-wide max-w-2xl mx-auto leading-relaxed">
               {t.heroCaption}
             </p>
@@ -692,19 +734,21 @@ export default function AboutUsPage() {
                   {/* Secondary polaroid (tucked behind) */}
                   {visuals?.secondary ? (
                     <div
-                      className={`absolute top-2 left-2 ${visuals.secondary.rotate} w-40 md:w-44 bg-white p-2 pb-4 shadow-lg border border-ink/5`}
+                      className={`absolute top-2 left-2 ${visuals.secondary.rotate} w-40 md:w-44 overflow-hidden rounded-sm`}
                       aria-hidden
                     >
-                      <img src={visuals.secondary.src} alt="" className="w-full h-40 md:h-44 object-cover" />
+                      <img src={visuals.secondary.src} alt="" className="w-full h-40 md:h-44 object-contain" />
                     </div>
                   ) : null}
 
-                  {/* Primary polaroid */}
+                  {/* Primary photo + caption */}
                   {visuals ? (
                     <div
-                      className={`absolute top-0 ${visuals.secondary ? "left-28 md:left-32" : "left-6 md:left-10"} ${visuals.primary.rotate} w-56 md:w-64 bg-white p-3 pb-10 shadow-xl border border-ink/5`}
+                      className={`absolute top-0 ${visuals.secondary ? "left-28 md:left-32" : "left-6 md:left-10"} ${visuals.primary.rotate} w-56 md:w-64 flex flex-col`}
                     >
-                      <img src={visuals.primary.src} alt={item.title} className="w-full h-56 md:h-64 object-cover" />
+                      <div className="overflow-hidden rounded-sm">
+                        <img src={visuals.primary.src} alt={item.title} className="w-full h-56 md:h-64 object-contain" />
+                      </div>
                       {caption ? (
                         <p className="font-editorial-mn text-base md:text-lg text-ink/75 text-center mt-2 leading-tight">
                           {caption}
@@ -715,7 +759,7 @@ export default function AboutUsPage() {
 
                   {/* Aged-paper note card */}
                   <div
-                    className={`absolute bottom-0 ${i % 2 === 0 ? "left-0 md:left-2 rotate-[-1deg]" : "right-0 md:right-2 rotate-[1.5deg]"} w-[17rem] md:w-[18rem] bg-[#efe3c9] border border-ink/10 shadow-lg px-6 py-6 md:px-7 md:py-7`}
+                    className={`absolute bottom-0 ${i % 2 === 0 ? "left-0 md:left-2 rotate-[-1deg]" : "right-0 md:right-2 rotate-[1.5deg]"} w-[17rem] md:w-[18rem] bg-[#efe3c9] border border-ink/10 px-6 py-6 md:px-7 md:py-7`}
                     style={{
                       backgroundImage:
                         "url(\"data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E\")",
@@ -798,7 +842,7 @@ export default function AboutUsPage() {
         {/* Background photo with soft blue atmosphere */}
         <div className="absolute inset-0 -z-10">
           <img
-            src="/images/about-hero.webp"
+            src={HERO_IMAGE_SRC}
             alt=""
             aria-hidden
             className="absolute inset-0 h-full w-full object-cover"
@@ -835,5 +879,41 @@ export default function AboutUsPage() {
 
       <div className="pb-24 md:pb-32" />
     </main>
+    {portalMounted && heroFullscreenOpen
+      ? createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.heroImageAlt}
+            className="fixed inset-0 z-[200]"
+          >
+            <button
+              type="button"
+              className="absolute inset-0 cursor-default bg-black/90"
+              aria-label={t.heroCloseFullscreen}
+              onClick={() => setHeroFullscreenOpen(false)}
+            />
+            <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center p-4 pt-16 md:p-8">
+              <img
+                src={HERO_IMAGE_SRC}
+                alt={t.heroImageAlt}
+                onClick={() => setHeroFullscreenOpen(false)}
+                style={{ cursor: HERO_CURSOR_MAGNIFY_LIGHT }}
+                className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setHeroFullscreenOpen(false)}
+              className="absolute top-4 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
+              aria-label={t.heroCloseFullscreen}
+            >
+              <X className="h-5 w-5" strokeWidth={2} />
+            </button>
+          </div>,
+          document.body
+        )
+      : null}
+    </>
   );
 }
