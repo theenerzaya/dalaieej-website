@@ -521,39 +521,46 @@ export default function AboutUsPage() {
   const isMn = locale === "mn";
   const t = isMn ? content.mn : content.en;
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
+  const historyHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
-  // Translate vertical wheel input into horizontal scroll while the timeline
-  // still has room to scroll, so users don't need to find a trackpad gesture
-  // or literally scroll left-to-right. Once an edge is reached, we release so
-  // the page continues scrolling vertically and the user is never trapped.
+  // Translate vertical wheel input into horizontal scroll on the timeline.
+  // The hijack only activates once the section heading has settled near the
+  // top of the viewport. At each edge (start and end) we absorb a little wheel
+  // delta before either starting the horizontal scroll or releasing to the
+  // page, giving a tactile "delay" at the beginning and end of the cards.
   useEffect(() => {
     const el = historyScrollRef.current;
     if (!el) return;
 
-    let target = el.scrollLeft;
-    let rafId: number | null = null;
-
-    const step = () => {
-      rafId = null;
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      target = Math.max(0, Math.min(maxScroll, target));
-      const current = el.scrollLeft;
-      const diff = target - current;
-      if (Math.abs(diff) < 0.5) {
-        el.scrollLeft = target;
-        return;
-      }
-      el.scrollLeft = current + diff * 0.22;
-      rafId = requestAnimationFrame(step);
-    };
+    const state = { released: false, buffer: 0 };
+    const EDGE_DELAY = 300; // accumulated |deltaY| required to cross an edge
 
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey || e.metaKey) return;
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
 
-      const absX = Math.abs(e.deltaX);
-      const absY = Math.abs(e.deltaY);
-      // Leave horizontal gestures alone so native trackpad momentum keeps working.
-      if (absY <= absX) return;
+      const heading = historyHeadingRef.current;
+      if (!heading) return;
+      const rect = heading.getBoundingClientRect();
+      const threshold = Math.min(140, window.innerHeight * 0.15);
+
+      // Heading hasn't settled into position yet (user still approaching from
+      // below) — let the page scroll and reset state.
+      if (rect.top > threshold) {
+        state.released = false;
+        state.buffer = 0;
+        return;
+      }
+      // Heading has fully scrolled above the viewport — we're past the
+      // section, don't hijack anymore and allow re-entry later.
+      if (rect.bottom < 0) {
+        state.released = false;
+        state.buffer = 0;
+        return;
+      }
+      // Already released past this section in the current pass — don't
+      // re-hijack while the heading is still inside the activation zone.
+      if (state.released) return;
 
       const maxScroll = el.scrollWidth - el.clientWidth;
       if (maxScroll <= 0) return;
@@ -563,27 +570,38 @@ export default function AboutUsPage() {
       const atStart = current <= 0;
       const atEnd = current >= maxScroll - 1;
 
-      // If we're already past the edge in the direction of travel, let the
-      // page scroll vertically instead of hijacking.
-      if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+      if (atStart || atEnd) {
+        // Reset buffer when the user reverses direction at the edge.
+        if (state.buffer !== 0 && Math.sign(state.buffer) !== Math.sign(delta)) {
+          state.buffer = 0;
+        }
+        state.buffer += delta;
+        if (Math.abs(state.buffer) < EDGE_DELAY) {
+          // Still absorbing—hold position, don't move page or cards.
+          e.preventDefault();
+          return;
+        }
+        state.buffer = 0;
+        const wantsToExit =
+          (atStart && delta < 0) || (atEnd && delta > 0);
+        if (wantsToExit) {
+          state.released = true;
+          return; // let the page scroll vertically
+        }
+        // Threshold crossed while entering the cards—start moving them.
+        e.preventDefault();
+        el.scrollLeft = current + delta;
+        return;
+      }
 
+      // In the middle of the timeline—direct 1:1 scroll, no resistance.
+      state.buffer = 0;
       e.preventDefault();
-      target = Math.max(0, Math.min(maxScroll, target + delta));
-      if (rafId == null) rafId = requestAnimationFrame(step);
+      el.scrollLeft = current + delta;
     };
 
-    const onScroll = () => {
-      // Keep target in sync if the user drags the scrollbar or snap adjusts.
-      if (rafId == null) target = el.scrollLeft;
-    };
-
-    el.addEventListener("wheel", onWheel, { passive: false });
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      el.removeEventListener("wheel", onWheel);
-      el.removeEventListener("scroll", onScroll);
-      if (rafId != null) cancelAnimationFrame(rafId);
-    };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
   }, []);
 
   return (
@@ -627,7 +645,10 @@ export default function AboutUsPage() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-end justify-between gap-6 mb-2">
             <div className="flex items-center gap-6 flex-1">
-              <h2 className="font-editorial-mn text-4xl md:text-6xl text-ink leading-tight whitespace-nowrap">
+              <h2
+                ref={historyHeadingRef}
+                className="font-editorial-mn text-4xl md:text-6xl text-ink leading-tight whitespace-nowrap"
+              >
                 {t.historySectionLabel}
               </h2>
               <div className="h-px flex-1 bg-ink/15" />
@@ -641,7 +662,7 @@ export default function AboutUsPage() {
 
         <div
           ref={historyScrollRef}
-          className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain snap-x snap-proximity [scrollbar-width:thin]"
+          className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain [scrollbar-width:thin]"
         >
           <div className="flex flex-row items-start gap-6 md:gap-10 w-max pl-6 pr-6 md:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] md:pr-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] pt-6 pb-16">
             {t.history.map((item, i) => {
