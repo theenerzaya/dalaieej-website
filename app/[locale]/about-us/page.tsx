@@ -178,15 +178,16 @@ const historyCardTextures = [
 ];
 
 // Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
-// `public/images/about-us/images/` (Heading.png … Heading-6 primaries; secondaries
-// on 1990s, 2000s, 2010s, 2022—2009 is primary only). Rotations can be tweaked;
-// copy lives in `content[locale].history`.
+// `public/images/about-us/images/` using descriptive timeline names (primary and
+// optional secondary by era). Rotations can be tweaked; copy lives in
+// `content[locale].history`.
 const historyVisuals: Array<{
   primary: { src: string; rotate: string; caption?: { en: string; mn: string } };
   secondary?: {
     src: string;
     rotate: string;
     overlayOnPrimary?: boolean;
+    overlayPositionClass?: string;
     /** Multiplier on 5.25rem / 6rem base; default 1.08 */
     overlayScaleFromOriginal?: number;
   };
@@ -194,11 +195,11 @@ const historyVisuals: Array<{
 }> = [
   {
     primary: {
-      src: "/images/about-us/images/Heading.png",
+      src: "/images/about-us/images/timeline-1990s-primary.png",
       rotate: "-rotate-[3deg]",
       caption: { en: "Khatgal's son.", mn: "Хатгалын хүү." },
     },
-    secondary: { src: "/images/about-us/images/Heading-7.png", rotate: "rotate-[4deg]" },
+    secondary: { src: "/images/about-us/images/timeline-1990s-secondary.png", rotate: "rotate-[4deg]" },
     annotation: {
       en: "Auction day\u2014a year of civil service wages.",
       mn: "Дуудлагын өдөр — жилийн цалин.",
@@ -206,14 +207,15 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/Heading-3.png",
+      src: "/images/about-us/images/timeline-2000s-primary.png",
       rotate: "rotate-[2deg]",
       caption: { en: "First winters.", mn: "Анхны өвлүүд." },
     },
     secondary: {
-      src: "/images/about-us/images/Heading-8.png",
+      src: "/images/about-us/images/timeline-2000s-secondary.png",
       rotate: "rotate-[4deg]",
       overlayOnPrimary: true,
+      overlayPositionClass: "bottom-2 right-2",
       overlayScaleFromOriginal: 1.12,
     },
     annotation: {
@@ -223,7 +225,7 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/Heading-4.png",
+      src: "/images/about-us/images/timeline-2009-primary.png",
       rotate: "-rotate-[2deg]",
       caption: { en: "Middle Eastern royalty", mn: "Ойрхи Дорнодын хаад" },
     },
@@ -234,12 +236,12 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/Heading-5.png",
+      src: "/images/about-us/images/timeline-2010s-primary.png",
       rotate: "rotate-[3deg]",
       caption: { en: "Musk deer.", mn: "Хүдэр." },
     },
     secondary: {
-      src: "/images/about-us/images/Heading-2.png",
+      src: "/images/about-us/images/timeline-2010s-secondary.png",
       rotate: "-rotate-[3deg]",
       overlayOnPrimary: true,
     },
@@ -250,11 +252,11 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/Heading-6.png",
+      src: "/images/about-us/images/timeline-2022-primary.png",
       rotate: "-rotate-[4deg]",
       caption: { en: "Third generation.", mn: "Гурав дахь үе." },
     },
-    secondary: { src: "/images/about-us/images/Heading-9.png", rotate: "rotate-[2deg]" },
+    secondary: { src: "/images/about-us/images/timeline-2022-secondary.png", rotate: "rotate-[2deg]" },
     annotation: { en: "...with you.", mn: "...тантай хамт." },
   },
 ];
@@ -577,7 +579,7 @@ export default function AboutUsPage() {
                         <img src={visuals.primary.src} alt={item.title} className="w-full h-52 md:h-56 object-contain" />
                         {secondaryOverlay ? (
                           <div
-                            className={`absolute bottom-2 left-2 z-10 ${secondaryOverlay.rotate} overflow-hidden rounded-sm ${
+                            className={`absolute z-10 ${secondaryOverlay.overlayPositionClass ?? "bottom-2 left-2"} ${secondaryOverlay.rotate} overflow-hidden rounded-sm ${
                               secondaryOverlay.overlayScaleFromOriginal === 1.12
                                 ? "w-[5.88rem] md:w-[6.72rem]"
                                 : "w-[5.67rem] md:w-[6.48rem]"
