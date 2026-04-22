@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
 import { CTAButton } from "./ui/Typography";
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
+import { siteOriginForLocale } from "@/lib/site-urls";
 
 function isHomePathname(pathname: string) {
   return pathname === "/" || pathname === "/mn" || pathname === "/mn/";
@@ -21,7 +22,9 @@ function isAboutUsPathname(pathname: string) {
 
 export default function Navbar() {
   const locale = useLocale();
+  const tNav = useTranslations("nav");
   const localePrefix = locale === 'mn' ? '/mn' : '';
+  const siteHost = new URL(siteOriginForLocale(locale)).hostname;
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -92,7 +95,7 @@ export default function Navbar() {
 
           <Link
             href={localePrefix || "/"}
-            className={`absolute left-1/2 top-[calc(50%+5rem*0.05/2)] z-10 -translate-x-1/2 -translate-y-1/2 hover:opacity-90 transition-all duration-500 ${
+            className={`group/brand absolute left-1/2 top-[calc(50%+5rem*0.05/2)] z-10 -translate-x-1/2 -translate-y-1/2 hover:opacity-90 transition-all duration-500 ${
               showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             aria-hidden={!showFullChrome}
@@ -108,6 +111,15 @@ export default function Navbar() {
               }`}
               priority
             />
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute left-1/2 top-[calc(100%+0.5rem)] z-50 min-w-[10rem] -translate-x-1/2 rounded-xl bg-zinc-800/95 px-3 py-2 text-left shadow-lg opacity-0 shadow-black/40 transition-opacity duration-150 group-hover/brand:opacity-100 group-focus-visible/brand:opacity-100"
+            >
+              <span className="block font-semibold text-sm text-white">
+                {tNav("brandShort")}
+              </span>
+              <span className="mt-0.5 block text-xs text-zinc-400">{siteHost}</span>
+            </span>
           </Link>
 
           <div className="ml-auto flex items-center pr-5 md:pr-12 z-10">

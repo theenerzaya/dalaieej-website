@@ -13,10 +13,12 @@ import Footer from "../components/layout/Footer";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata.index' });
+  const tNav = await getTranslations({ locale, namespace: 'nav' });
 
   const canonical = absoluteSiteUrl(locale, '');
 
   return {
+    applicationName: tNav('brandShort'),
     title: t('title'),
     description: t('description'),
     metadataBase: new URL(siteOriginForLocale(locale)),

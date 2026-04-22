@@ -12,6 +12,7 @@ const routes = [
   '/catalogue',
   '/contact',
   '/dining',
+  '/restaurant',
   '/experiences',
   '/wellness',
   '/offers',
