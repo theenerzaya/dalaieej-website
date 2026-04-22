@@ -151,6 +151,37 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
     });
   };
 
+  const languageToggle = (
+    <button
+      type="button"
+      onClick={toggleLanguage}
+      className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left text-main transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50"
+      aria-label="Toggle language"
+    >
+      <span
+        className={
+          !isMn
+            ? "text-main"
+            : "text-main/40 hover:text-main/70 transition-colors"
+        }
+      >
+        EN
+      </span>
+      <span className="mx-2 text-main/30" aria-hidden="true">
+        /
+      </span>
+      <span
+        className={
+          isMn
+            ? "text-main"
+            : "text-main/40 hover:text-main/70 transition-colors"
+        }
+      >
+        MN
+      </span>
+    </button>
+  );
+
   return (
     <>
       {/* Preload nav-strip images so the overlay opens fully populated */}
@@ -179,6 +210,10 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
             aria-modal="true"
             aria-label="Navigation menu"
             className="fixed inset-0 z-[100] flex flex-col bg-ink text-main"
+            style={{
+              paddingTop: "env(safe-area-inset-top, 0px)",
+              paddingBottom: "env(safe-area-inset-bottom, 0px)",
+            }}
           >
             {/* ───────── Header row ─────────
                 Close stays viewport-aligned (matches navbar hamburger). EN/MN sits in
@@ -187,7 +222,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
               <div className="relative flex min-h-[calc(5rem*1.10)] w-full items-stretch pt-[calc(5rem*0.10)]">
                 <button
                   onClick={onClose}
-                  className="absolute left-8 top-[calc(50%+5rem*0.10/2)] z-20 -translate-y-1/2 rounded-lg px-2 py-3 text-main transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50 md:left-12"
+                  className="absolute left-5 top-[calc(50%+5rem*0.10/2)] z-20 -translate-y-1/2 rounded-lg px-2 py-3 text-main transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50 md:left-12"
                   aria-label="Close menu"
                 >
                   <span
@@ -219,37 +254,10 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                   />
                 </Link>
 
-                <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-6 md:px-12">
+                <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12">
                   {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
-                  <div className="flex min-w-0 flex-1 items-center md:w-[35%] md:max-w-[35%] md:flex-none">
-                    <button
-                      type="button"
-                      onClick={toggleLanguage}
-                      className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left text-main transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50"
-                      aria-label="Toggle language"
-                    >
-                      <span
-                        className={
-                          !isMn
-                            ? "text-main"
-                            : "text-main/40 hover:text-main/70 transition-colors"
-                        }
-                      >
-                        EN
-                      </span>
-                      <span className="mx-2 text-main/30" aria-hidden="true">
-                        /
-                      </span>
-                      <span
-                        className={
-                          isMn
-                            ? "text-main"
-                            : "text-main/40 hover:text-main/70 transition-colors"
-                        }
-                      >
-                        MN
-                      </span>
-                    </button>
+                  <div className="hidden min-w-0 flex-1 items-center md:flex md:w-[35%] md:max-w-[35%] md:flex-none">
+                    {languageToggle}
                   </div>
 
                   <div className="ml-auto flex shrink-0 items-center">
@@ -258,33 +266,37 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       variant="secondary"
                       size="sm"
                       onClick={onClose}
-                      className="!px-5 sm:!px-6 !py-[calc(0.625rem*1.6)] sm:!py-[calc(0.75rem*1.6)]"
+                      className="!px-3.5 sm:!px-6 !py-2.5 sm:!py-[calc(0.75rem*1.6)] !text-[10px] sm:!text-xs !tracking-[0.16em] sm:!tracking-[0.18em]"
                     >
                       {isMn ? "Захиалах" : "Book your stay"}
                     </CTAButton>
                   </div>
                 </div>
               </div>
+
+              <div className="px-5 pb-4 md:hidden">
+                {languageToggle}
+              </div>
             </div>
 
             {/* ───────── Main body ───────── */}
             <div className="flex-1 overflow-y-auto">
-              <div className="mx-auto flex h-full w-full max-w-7xl flex-col gap-10 px-6 py-10 md:flex-row md:gap-8 md:px-12 md:py-14 lg:gap-10">
+              <div className="mx-auto flex h-full w-full max-w-7xl flex-col gap-8 px-5 py-8 md:flex-row md:gap-8 md:px-12 md:py-14 lg:gap-10">
 
                 {/* LEFT COLUMN — nav links + contact */}
                 <div className="flex w-full shrink-0 flex-col md:w-[35%]">
                   <nav
                     aria-label="Primary"
-                    className="flex flex-col gap-3 md:gap-4"
+                    className="flex flex-col gap-2.5 md:gap-4"
                   >
                     {mainNavItems.map((item, i) => {
                       const label = isMn ? item.label.mn : item.label.en;
                       const linkClass = [
-                        "group inline-flex items-baseline gap-3",
+                        "group inline-flex items-center gap-3",
                         "leading-[1.05]",
                         isMn
-                          ? "font-editorial-mn italic text-4xl md:text-5xl lg:text-[3.25rem]"
-                          : "font-editorial-en italic text-4xl md:text-5xl lg:text-[3.25rem]",
+                          ? "font-editorial-mn italic text-[2.35rem] md:text-5xl lg:text-[3.25rem]"
+                          : "font-editorial-en italic text-[2.35rem] md:text-5xl lg:text-[3.25rem]",
                         item.available
                           ? "text-main/90 hover:text-main transition-colors"
                           : "cursor-default text-main/50",
@@ -313,7 +325,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           ) : (
                             <span role="link" aria-disabled="true" className={linkClass}>
                               <span>{label}</span>
-                              <span className="font-cta text-[10px] font-medium uppercase tracking-[0.22em] text-main/40 not-italic">
+                              <span className="mt-1 font-cta text-[9px] font-medium uppercase tracking-[0.2em] text-main/40 not-italic md:mt-0 md:text-[10px] md:tracking-[0.22em]">
                                 {isMn ? "Тун удахгүй" : "Soon"}
                               </span>
                             </span>
@@ -328,7 +340,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     initial={reduceMotion ? { scaleX: 1 } : { scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: reduceMotion ? 0 : 0.5, delay: 0.5 }}
-                    className="my-10 h-px w-16 origin-left bg-main/20"
+                    className="my-8 h-px w-16 origin-left bg-main/20 md:my-10"
                   />
 
                   {/* Call us + socials */}
@@ -369,7 +381,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 </div>
 
                 {/* RIGHT COLUMN — horizontal image strip */}
-                <div className="relative -mx-6 flex-1 md:mx-0">
+                <div className="relative -mx-6 mt-2 h-44 shrink-0 md:mx-0 md:mt-0 md:h-auto md:flex-1">
                   <motion.div
                     ref={stripRef}
                     initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
