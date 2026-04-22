@@ -471,7 +471,10 @@ export default function AboutUsPage() {
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
   const historyHeadingRef = useRef<HTMLHeadingElement | null>(null);
   const founderParallaxRef = useRef<HTMLElement | null>(null);
-  const [heroFullscreenOpen, setHeroFullscreenOpen] = useState(false);
+  const [fullscreenImage, setFullscreenImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
   const [portalMounted, setPortalMounted] = useState(false);
   const founderParallaxScrollTarget = parallaxSectionEnabled
     ? founderParallaxRef
@@ -546,18 +549,18 @@ export default function AboutUsPage() {
   }, []);
 
   useEffect(() => {
-    if (!heroFullscreenOpen) return;
+    if (!fullscreenImage) return;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setHeroFullscreenOpen(false);
+      if (e.key === "Escape") setFullscreenImage(null);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [heroFullscreenOpen]);
+  }, [fullscreenImage]);
 
   // Translate vertical wheel input into horizontal scroll on the timeline.
   // The hijack only activates once the section heading has settled near the
@@ -675,7 +678,9 @@ export default function AboutUsPage() {
               src={HERO_IMAGE_SRC}
               alt={t.heroImageAlt}
               expandLabel={t.heroExpandImage}
-              onRequestFullscreen={() => setHeroFullscreenOpen(true)}
+              onRequestFullscreen={() =>
+                setFullscreenImage({ src: HERO_IMAGE_SRC, alt: t.heroImageAlt })
+              }
               className="mt-16 md:mt-24 lg:mt-28"
             />
             <p className="text-center mt-8 font-body text-sm md:text-base italic text-ink/60 tracking-wide max-w-2xl mx-auto leading-relaxed">
@@ -756,20 +761,31 @@ export default function AboutUsPage() {
                   {/* Era-specific scene image behind the note card */}
                   {visuals?.background ? (
                     <div
-                      className={`absolute z-0 pointer-events-none select-none ${
+                      className={`absolute z-0 select-none ${
                         visuals.background.positionClass ??
                         "top-[-0.25rem] left-[-1.4rem] md:top-[-0.5rem] md:left-[-1.8rem]"
                       } ${visuals.background.rotate ?? ""} ${
                         visuals.background.sizeClass ?? "w-[20.8rem] md:w-[22.8rem] h-[39rem] md:h-[41rem]"
                       }`}
-                      aria-hidden
                     >
-                      <img
-                        src={visuals.background.src}
-                        alt=""
-                        className="w-full h-full object-cover opacity-[0.96]"
-                        draggable={false}
-                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFullscreenImage({
+                            src: visuals.background!.src,
+                            alt: `${item.year}. ${item.title}`,
+                          })
+                        }
+                        className="block h-full w-full cursor-zoom-in border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/50"
+                        aria-label={`${t.heroExpandImage}: ${item.title}`}
+                      >
+                        <img
+                          src={visuals.background.src}
+                          alt=""
+                          className="pointer-events-none h-full w-full object-cover opacity-[0.96]"
+                          draggable={false}
+                        />
+                      </button>
                     </div>
                   ) : null}
 
@@ -777,9 +793,25 @@ export default function AboutUsPage() {
                   {behindSecondary ? (
                     <div
                       className={`absolute top-2 left-2 z-20 ${behindSecondary.rotate} w-36 md:w-40 overflow-hidden rounded-sm`}
-                      aria-hidden
                     >
-                      <img src={behindSecondary.src} alt="" className="w-full h-36 md:h-40 object-contain" />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFullscreenImage({
+                            src: behindSecondary.src,
+                            alt: item.title,
+                          })
+                        }
+                        className="block h-36 w-full cursor-zoom-in border-0 bg-transparent p-0 md:h-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/50"
+                        aria-label={`${t.heroExpandImage}: ${item.title}`}
+                      >
+                        <img
+                          src={behindSecondary.src}
+                          alt=""
+                          className="pointer-events-none h-36 w-full object-contain md:h-40"
+                          draggable={false}
+                        />
+                      </button>
                     </div>
                   ) : null}
 
@@ -791,7 +823,24 @@ export default function AboutUsPage() {
                       } ${visuals.primary.rotate} w-52 md:w-56 flex flex-col`}
                     >
                       <div className="overflow-hidden rounded-sm relative">
-                        <img src={visuals.primary.src} alt={item.title} className="w-full h-52 md:h-56 object-contain" />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setFullscreenImage({
+                              src: visuals.primary.src,
+                              alt: caption ? `${item.title}. ${caption}` : item.title,
+                            })
+                          }
+                          className="block w-full cursor-zoom-in border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/50"
+                          aria-label={`${t.heroExpandImage}: ${item.title}`}
+                        >
+                          <img
+                            src={visuals.primary.src}
+                            alt=""
+                            className="pointer-events-none h-52 w-full object-contain md:h-56"
+                            draggable={false}
+                          />
+                        </button>
                         {caption ? (
                           <p
                             className="absolute left-2 right-2 bottom-2 z-20 font-editorial-mn text-sm md:text-base text-ink/85 leading-tight text-center px-3 py-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.16)] backdrop-blur-[1px]"
@@ -816,19 +865,31 @@ export default function AboutUsPage() {
                                 ? "w-[5.88rem] md:w-[6.72rem]"
                                 : "w-[5.67rem] md:w-[6.48rem]"
                             }`}
-                            aria-hidden
                           >
-                            <img
-                              src={secondaryOverlay.src}
-                              alt=""
-                              className={`w-full object-contain ${
-                                secondaryOverlay.overlaySizeClass
-                                  ? secondaryOverlay.overlaySizeClass
-                                  : secondaryOverlay.overlayScaleFromOriginal === 1.12
-                                  ? "h-[5.88rem] md:h-[6.72rem]"
-                                  : "h-[5.67rem] md:h-[6.48rem]"
-                              }`}
-                            />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setFullscreenImage({
+                                  src: secondaryOverlay.src,
+                                  alt: caption ? `${item.title}. ${caption}` : item.title,
+                                })
+                              }
+                              className="block h-full w-full cursor-zoom-in border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/50"
+                              aria-label={`${t.heroExpandImage}: ${item.title}`}
+                            >
+                              <img
+                                src={secondaryOverlay.src}
+                                alt=""
+                                className={`pointer-events-none w-full object-contain ${
+                                  secondaryOverlay.overlaySizeClass
+                                    ? secondaryOverlay.overlaySizeClass
+                                    : secondaryOverlay.overlayScaleFromOriginal === 1.12
+                                    ? "h-[5.88rem] md:h-[6.72rem]"
+                                    : "h-[5.67rem] md:h-[6.48rem]"
+                                }`}
+                                draggable={false}
+                              />
+                            </button>
                           </div>
                         ) : null}
                       </div>
@@ -867,19 +928,31 @@ export default function AboutUsPage() {
                   {secondaryCardOverlay ? (
                     <div
                       className={`absolute z-40 ${secondaryCardOverlay.overlayPositionClass ?? "bottom-3 right-3"} ${secondaryCardOverlay.rotate} overflow-hidden rounded-sm`}
-                      aria-hidden
                     >
-                      <img
-                        src={secondaryCardOverlay.src}
-                        alt=""
-                        className={`w-full object-contain ${
-                          secondaryCardOverlay.overlaySizeClass
-                            ? secondaryCardOverlay.overlaySizeClass
-                            : secondaryCardOverlay.overlayScaleFromOriginal === 1.12
-                            ? "h-[5.88rem] md:h-[6.72rem] w-[5.88rem] md:w-[6.72rem]"
-                            : "h-[5.67rem] md:h-[6.48rem] w-[5.67rem] md:w-[6.48rem]"
-                        }`}
-                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFullscreenImage({
+                            src: secondaryCardOverlay.src,
+                            alt: caption ? `${item.title}. ${caption}` : item.title,
+                          })
+                        }
+                        className="block cursor-zoom-in border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/50"
+                        aria-label={`${t.heroExpandImage}: ${item.title}`}
+                      >
+                        <img
+                          src={secondaryCardOverlay.src}
+                          alt=""
+                          className={`pointer-events-none w-full object-contain ${
+                            secondaryCardOverlay.overlaySizeClass
+                              ? secondaryCardOverlay.overlaySizeClass
+                              : secondaryCardOverlay.overlayScaleFromOriginal === 1.12
+                              ? "h-[5.88rem] md:h-[6.72rem] w-[5.88rem] md:w-[6.72rem]"
+                              : "h-[5.67rem] md:h-[6.48rem] w-[5.67rem] md:w-[6.48rem]"
+                          }`}
+                          draggable={false}
+                        />
+                      </button>
                     </div>
                   ) : null}
 
@@ -1059,31 +1132,31 @@ export default function AboutUsPage() {
 
       <div className="pb-24 md:pb-32" />
     </main>
-    {portalMounted && heroFullscreenOpen
+    {portalMounted && fullscreenImage
       ? createPortal(
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={t.heroImageAlt}
+            aria-label={fullscreenImage.alt}
             className="fixed inset-0 z-[200]"
           >
             <button
               type="button"
               className="absolute inset-0 cursor-default bg-black/90"
               aria-label={t.heroCloseFullscreen}
-              onClick={() => setHeroFullscreenOpen(false)}
+              onClick={() => setFullscreenImage(null)}
             />
             <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center p-4 pt-16 md:p-8">
               <img
-                src={HERO_IMAGE_SRC}
-                alt={t.heroImageAlt}
-                onClick={() => setHeroFullscreenOpen(false)}
+                src={fullscreenImage.src}
+                alt={fullscreenImage.alt}
+                onClick={() => setFullscreenImage(null)}
                 className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl cursor-zoom-in"
               />
             </div>
             <button
               type="button"
-              onClick={() => setHeroFullscreenOpen(false)}
+              onClick={() => setFullscreenImage(null)}
               className="absolute top-4 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
               aria-label={t.heroCloseFullscreen}
             >
