@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
-import { motion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
 
@@ -187,7 +187,9 @@ const historyVisuals: Array<{
     src: string;
     rotate: string;
     overlayOnPrimary?: boolean;
+    overlayOnCard?: boolean;
     overlayPositionClass?: string;
+    overlaySizeClass?: string;
     /** Multiplier on 5.25rem / 6rem base; default 1.08 */
     overlayScaleFromOriginal?: number;
   };
@@ -215,7 +217,9 @@ const historyVisuals: Array<{
       src: "/images/about-us/images/timeline-2000s-secondary.png",
       rotate: "rotate-[4deg]",
       overlayOnPrimary: true,
-      overlayPositionClass: "bottom-2 right-2",
+      overlayOnCard: true,
+      overlayPositionClass: "bottom-3 right-3 md:bottom-4 md:right-4",
+      overlaySizeClass: "h-[7.04rem] md:h-[8.06rem] w-[7.04rem] md:w-[8.06rem]",
       overlayScaleFromOriginal: 1.12,
     },
     annotation: {
@@ -320,6 +324,49 @@ function SectionAccent({
   );
 }
 
+function TimelineCard({
+  index,
+  scrollRootRef,
+  reduceMotion,
+  className,
+  children,
+}: {
+  index: number;
+  scrollRootRef: React.RefObject<HTMLDivElement | null>;
+  reduceMotion: boolean;
+  className: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLElement | null>(null);
+  // Observe intersection with the horizontal scroll container as root so cards
+  // fade/slide in as they enter the visible horizontal area.
+  const inView = useInView(ref, {
+    root: scrollRootRef as React.RefObject<Element>,
+    amount: 0.25,
+    margin: "0px -8% 0px 0px",
+    once: true,
+  });
+
+  return (
+    <motion.article
+      ref={ref}
+      initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+      animate={
+        reduceMotion || inView || index === 0
+          ? { opacity: 1, x: 0 }
+          : { opacity: 0, x: 40 }
+      }
+      transition={{
+        duration: reduceMotion ? 0 : 0.5,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className={className}
+    >
+      {children}
+    </motion.article>
+  );
+}
+
 function FounderAudio({ label, src }: { label: string; src: string }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -360,6 +407,7 @@ function FounderAudio({ label, src }: { label: string; src: string }) {
 
 export default function AboutUsPage() {
   const locale = useLocale();
+  const reduceMotion = useReducedMotion();
   const isMn = locale === "mn";
   const t = isMn ? content.mn : content.en;
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
@@ -482,9 +530,9 @@ export default function AboutUsPage() {
       <section className="pt-40 md:pt-56 lg:pt-64 pb-20 md:pb-28">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="relative"
           >
             <div className="mx-auto w-max max-w-full flex flex-col items-stretch gap-2 md:gap-3">
@@ -515,7 +563,13 @@ export default function AboutUsPage() {
 
       <section className="py-24 md:py-36">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-end justify-between gap-6 mb-2">
+          <motion.div
+            className="flex items-end justify-between gap-6 mb-2"
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div className="flex items-center gap-6 flex-1">
               <h2
                 ref={historyHeadingRef}
@@ -529,7 +583,7 @@ export default function AboutUsPage() {
               {t.historyScrollHint}
               <span aria-hidden>→</span>
             </span>
-          </div>
+          </motion.div>
         </div>
 
         <div
@@ -548,16 +602,19 @@ export default function AboutUsPage() {
                 visuals?.secondary && !visuals.secondary.overlayOnPrimary
                   ? visuals.secondary
                   : null;
-              const secondaryOverlay = visuals?.secondary?.overlayOnPrimary
+              const secondaryOverlay =
+                visuals?.secondary?.overlayOnPrimary && !visuals.secondary.overlayOnCard
+                  ? visuals.secondary
+                  : null;
+              const secondaryCardOverlay = visuals?.secondary?.overlayOnCard
                 ? visuals.secondary
                 : null;
               return (
-                <motion.article
+                <TimelineCard
                   key={item.title}
-                  initial={{ opacity: 0, x: 32 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-5% 0px -5% 0px" }}
-                  transition={{ duration: 0.5, delay: Math.min(i * 0.06, 0.25) }}
+                  index={i}
+                  scrollRootRef={historyScrollRef}
+                  reduceMotion={!!reduceMotion}
                   className={`snap-center shrink-0 relative w-[min(92vw,20rem)] md:w-[23rem] h-[39rem] md:h-[41rem] ${shiftLeftClass}`}
                 >
                   {/* Secondary polaroid (tucked behind primary) */}
@@ -579,7 +636,11 @@ export default function AboutUsPage() {
                         <img src={visuals.primary.src} alt={item.title} className="w-full h-52 md:h-56 object-contain" />
                         {secondaryOverlay ? (
                           <div
-                            className={`absolute z-10 ${secondaryOverlay.overlayPositionClass ?? "bottom-2 left-2"} ${secondaryOverlay.rotate} overflow-hidden rounded-sm ${
+                            className={`absolute z-10 ${
+                              secondaryOverlay.overlayOnCard
+                                ? "bottom-2 left-2"
+                                : secondaryOverlay.overlayPositionClass ?? "bottom-2 left-2"
+                            } ${secondaryOverlay.rotate} overflow-hidden rounded-sm ${
                               secondaryOverlay.overlayScaleFromOriginal === 1.12
                                 ? "w-[5.88rem] md:w-[6.72rem]"
                                 : "w-[5.67rem] md:w-[6.48rem]"
@@ -590,7 +651,9 @@ export default function AboutUsPage() {
                               src={secondaryOverlay.src}
                               alt=""
                               className={`w-full object-contain ${
-                                secondaryOverlay.overlayScaleFromOriginal === 1.12
+                                secondaryOverlay.overlaySizeClass
+                                  ? secondaryOverlay.overlaySizeClass
+                                  : secondaryOverlay.overlayScaleFromOriginal === 1.12
                                   ? "h-[5.88rem] md:h-[6.72rem]"
                                   : "h-[5.67rem] md:h-[6.48rem]"
                               }`}
@@ -608,7 +671,7 @@ export default function AboutUsPage() {
 
                   {/* Aged-paper note card */}
                   <div
-                    className={`absolute bottom-0 z-10 ${i % 2 === 0 ? "left-0 md:left-1 rotate-[-1deg]" : "right-0 md:right-1 rotate-[1.5deg]"} w-[16rem] md:w-[17rem] h-[28rem] md:h-[29rem] bg-[#efe3c9] border border-ink/10 px-6 ${cardTopPadding} pb-6 md:px-7 md:pb-7 flex flex-col`}
+                    className={`absolute bottom-0 z-10 ${i % 2 === 0 ? "left-0 md:left-1 rotate-[-1deg]" : "right-0 md:right-1 rotate-[1.5deg]"} w-[16rem] md:w-[17rem] h-[28rem] md:h-[29rem] bg-[#efe3c9] px-6 ${cardTopPadding} pb-6 md:px-7 md:pb-7 flex flex-col`}
                     style={{
                       backgroundImage: cardTexture ? `url("${cardTexture}")` : undefined,
                       backgroundSize: "cover",
@@ -626,6 +689,24 @@ export default function AboutUsPage() {
                       {item.body}
                     </p>
                   </div>
+                  {secondaryCardOverlay ? (
+                    <div
+                      className={`absolute z-40 ${secondaryCardOverlay.overlayPositionClass ?? "bottom-3 right-3"} ${secondaryCardOverlay.rotate} overflow-hidden rounded-sm`}
+                      aria-hidden
+                    >
+                      <img
+                        src={secondaryCardOverlay.src}
+                        alt=""
+                        className={`w-full object-contain ${
+                          secondaryCardOverlay.overlaySizeClass
+                            ? secondaryCardOverlay.overlaySizeClass
+                            : secondaryCardOverlay.overlayScaleFromOriginal === 1.12
+                            ? "h-[5.88rem] md:h-[6.72rem] w-[5.88rem] md:w-[6.72rem]"
+                            : "h-[5.67rem] md:h-[6.48rem] w-[5.67rem] md:w-[6.48rem]"
+                        }`}
+                      />
+                    </div>
+                  ) : null}
 
                   {/* Handwritten annotation */}
                   {annotation ? (
@@ -635,7 +716,7 @@ export default function AboutUsPage() {
                       {annotation}
                     </p>
                   ) : null}
-                </motion.article>
+                </TimelineCard>
               );
             })}
           </div>
@@ -647,10 +728,10 @@ export default function AboutUsPage() {
       <section className="relative py-24 md:py-36 overflow-hidden">
         <div className="relative max-w-5xl mx-auto px-6">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: reduceMotion ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="font-editorial-mn text-4xl md:text-5xl text-center text-ink mb-14 md:mb-20 tracking-wide"
           >
             {t.pillarsTitle}
@@ -663,10 +744,14 @@ export default function AboutUsPage() {
               return (
                 <motion.div
                   key={pillar.num}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-10% 0px" }}
-                  transition={{ duration: 0.5, delay: Math.min(i * 0.06, 0.3) }}
+                  viewport={{ once: true, amount: 0.2, margin: "-10% 0px" }}
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.45,
+                    delay: reduceMotion ? 0 : Math.min(i * 0.04, 0.16),
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   className="rounded-sm bg-ink/[0.04] border border-ink/10 px-6 py-7 md:px-8 md:py-8 flex flex-col h-full shadow-sm"
                 >
                   <span className="block font-editorial-mn not-italic text-lg md:text-xl text-ink/60 mb-2 tracking-wide">
@@ -703,7 +788,13 @@ export default function AboutUsPage() {
       <SectionAccent />
 
       <section className="relative py-20 md:py-32">
-        <div className="max-w-6xl mx-auto px-6">
+        <motion.div
+          className="max-w-6xl mx-auto px-6"
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
+        >
           <img
             src={
               isMn
@@ -715,7 +806,7 @@ export default function AboutUsPage() {
             draggable={false}
           />
           <FounderAudio label={t.founderListenLabel} src="/audio/gun-tsenherhen.mp3" />
-        </div>
+        </motion.div>
       </section>
 
       <div className="pb-24 md:pb-32" />
