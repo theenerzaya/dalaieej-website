@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
 
@@ -83,6 +89,12 @@ const content = {
     ],
     founderClosing:
       "From the heart of our founder at Dalai Eej Resort—our family welcomes you to our northern home.",
+    founderParallaxLines: [
+      "At Nordå, we create spaces",
+      "that blend seamlessly with their surroundings,",
+      "enhancing both functionality and aesthetic appeal.",
+      "Our process is thoughtful, collaborative, and tailored to bring your vision to life.",
+    ],
     heroImageAlt: "Dalai Eej Resort",
     heroExpandImage: "View image full screen",
     heroCloseFullscreen: "Close full screen",
@@ -162,6 +174,12 @@ const content = {
     ],
     founderClosing:
       "Үүсгэн байгуулагчийн сэтгэлийн үгтэй хамт бидний гэр бүл таныг Хөвсгөлийн хойморт халуун дотноор угтана.",
+    founderParallaxLines: [
+      "At Nordå, we create spaces",
+      "that blend seamlessly with their surroundings,",
+      "enhancing both functionality and aesthetic appeal.",
+      "Our process is thoughtful, collaborative, and tailored to bring your vision to life.",
+    ],
     heroImageAlt: "Далай ээж ресорт",
     heroExpandImage: "Зургийг бүтэн дэлгэцээр харах",
     heroCloseFullscreen: "Хаах",
@@ -391,7 +409,7 @@ function TimelineCard({
       ref={ref}
       initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
       animate={
-        reduceMotion || inView || index === 0
+        reduceMotion || inView || index === 0 || index === 3
           ? { opacity: 1, x: 0 }
           : { opacity: 0, x: 40 }
       }
@@ -448,11 +466,80 @@ export default function AboutUsPage() {
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const isMn = locale === "mn";
+  const parallaxSectionEnabled = false;
   const t = isMn ? content.mn : content.en;
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
   const historyHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const founderParallaxRef = useRef<HTMLElement | null>(null);
   const [heroFullscreenOpen, setHeroFullscreenOpen] = useState(false);
   const [portalMounted, setPortalMounted] = useState(false);
+  const founderParallaxScrollTarget = parallaxSectionEnabled
+    ? founderParallaxRef
+    : undefined;
+  const { scrollYProgress: founderParallaxProgress } = useScroll({
+    target: founderParallaxScrollTarget,
+    offset: ["start end", "end start"],
+  });
+  const founderParallaxY = useTransform(
+    founderParallaxProgress,
+    [0, 1],
+    reduceMotion ? [0, 0] : [-18, 18]
+  );
+  const founderParallaxWidth = useTransform(
+    founderParallaxProgress,
+    [0, 0.42],
+    reduceMotion ? ["100vw", "100vw"] : ["50vw", "100vw"]
+  );
+  const founderParallaxHeight = useTransform(
+    founderParallaxProgress,
+    [0, 0.42],
+    reduceMotion ? ["100vh", "100vh"] : ["50vh", "100vh"]
+  );
+  const founderParallaxRadius = useTransform(
+    founderParallaxProgress,
+    [0, 0.42],
+    reduceMotion ? [0, 0] : [28, 0]
+  );
+  const founderTextOpacity = useTransform(
+    founderParallaxProgress,
+    [0.42, 0.55],
+    reduceMotion ? [1, 1] : [0, 1]
+  );
+  const founderLine1Y = useTransform(
+    founderParallaxProgress,
+    [0.46, 0.58],
+    reduceMotion ? [0, 0] : [240, 0]
+  );
+  const founderLine2Opacity = useTransform(
+    founderParallaxProgress,
+    [0.54, 0.66],
+    reduceMotion ? [1, 1] : [0, 1]
+  );
+  const founderLine2Y = useTransform(
+    founderParallaxProgress,
+    [0.54, 0.66],
+    reduceMotion ? [0, 0] : [240, 0]
+  );
+  const founderLine3Opacity = useTransform(
+    founderParallaxProgress,
+    [0.62, 0.74],
+    reduceMotion ? [1, 1] : [0, 1]
+  );
+  const founderLine3Y = useTransform(
+    founderParallaxProgress,
+    [0.62, 0.74],
+    reduceMotion ? [0, 0] : [240, 0]
+  );
+  const founderLine4Opacity = useTransform(
+    founderParallaxProgress,
+    [0.7, 0.82],
+    reduceMotion ? [1, 1] : [0, 1]
+  );
+  const founderLine4Y = useTransform(
+    founderParallaxProgress,
+    [0.7, 0.82],
+    reduceMotion ? [0, 0] : [240, 0]
+  );
 
   useEffect(() => {
     setPortalMounted(true);
@@ -805,14 +892,22 @@ export default function AboutUsPage() {
 
       <SectionAccent />
 
-      <section className="relative py-24 md:py-36 overflow-hidden">
+      <section
+        className="relative py-24 md:py-36 overflow-hidden"
+        style={{
+          backgroundImage: 'url("/images/about-us/images/pillars-background.png")',
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="relative max-w-5xl mx-auto px-6">
           <motion.h2
             initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: reduceMotion ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="font-editorial-mn text-4xl md:text-5xl text-center text-ink mb-14 md:mb-20 tracking-wide"
+            className="font-editorial-mn text-4xl md:text-5xl text-center text-white mb-14 md:mb-20 tracking-wide"
           >
             {t.pillarsTitle}
           </motion.h2>
@@ -832,32 +927,32 @@ export default function AboutUsPage() {
                     delay: reduceMotion ? 0 : Math.min(i * 0.04, 0.16),
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="rounded-sm bg-ink/[0.04] border border-ink/10 px-6 py-7 md:px-8 md:py-8 flex flex-col h-full shadow-sm"
+                  className="bg-[#4B4D40] px-6 py-7 md:px-8 md:py-8 flex flex-col h-full"
                 >
-                  <span className="block font-editorial-mn not-italic text-lg md:text-xl text-ink/60 mb-2 tracking-wide">
-                    {pillar.num}
-                  </span>
-                  <h3 className="font-editorial-mn text-2xl md:text-[1.75rem] leading-tight text-ink mb-4">
-                    {pillar.title}
-                  </h3>
-                  <p className="font-body text-base md:text-[1.02rem] leading-[1.75] text-ink/80 flex-1">
-                    {pillar.body}
-                  </p>
                   {isHospitalityPillar ? (
-                    <div className="flex justify-center mt-6 pt-2">
+                    <div className="flex justify-center mb-5 pt-1">
                       <img
                         src="/images/about-us/decorations/icon-dombo.svg"
                         alt=""
-                        className="w-16 h-16 md:w-20 md:h-20 object-contain select-none pointer-events-none"
+                        className="w-16 h-16 md:w-20 md:h-20 object-contain select-none pointer-events-none brightness-0 invert"
                         draggable={false}
                       />
                     </div>
                   ) : null}
                   {isLast ? (
-                    <div className="flex justify-center mt-6 pt-2">
-                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-ink/70" />
+                    <div className="flex justify-center mb-5 pt-1">
+                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-white/80" />
                     </div>
                   ) : null}
+                  <span className="block font-editorial-mn not-italic text-lg md:text-xl text-white/70 mb-2 tracking-wide">
+                    {pillar.num}
+                  </span>
+                  <h3 className="font-editorial-mn text-2xl md:text-[1.75rem] leading-tight text-white mb-4">
+                    {pillar.title}
+                  </h3>
+                  <p className="font-body text-base md:text-[1.02rem] leading-[1.75] text-white/90 flex-1">
+                    {pillar.body}
+                  </p>
                 </motion.div>
               );
             })}
@@ -888,6 +983,79 @@ export default function AboutUsPage() {
           <FounderAudio label={t.founderListenLabel} src="/audio/gun-tsenherhen.mp3" />
         </motion.div>
       </section>
+
+      {/*
+      <section
+        ref={founderParallaxRef}
+        className="relative h-[360vh] bg-[#0f100f]"
+      >
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              className="relative overflow-hidden will-change-transform"
+              style={{
+                width: founderParallaxWidth,
+                height: founderParallaxHeight,
+                borderRadius: founderParallaxRadius,
+              }}
+            >
+              <motion.img
+                src="/images/about-us/images/founder-parallax-hallway.png"
+                alt={t.founderSectionLabel}
+                aria-hidden
+                className="absolute inset-0 h-[106%] w-full object-cover opacity-80 will-change-transform"
+                style={{ y: founderParallaxY }}
+                draggable={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/75" />
+            </motion.div>
+          </div>
+
+          <motion.div
+            className="relative z-10 mx-auto flex h-full max-w-5xl items-end px-6 pb-16 md:pb-24 pointer-events-none"
+            style={{ opacity: founderTextOpacity }}
+          >
+            <div className="max-w-6xl space-y-2 md:space-y-3 font-body text-white/90">
+              <motion.p
+                className="text-[1.95rem] leading-[1.03] md:text-[5.6rem] md:leading-[0.98]"
+                style={{ y: founderLine1Y }}
+              >
+                {t.founderParallaxLines[0]}
+              </motion.p>
+              <motion.p
+                className="text-[1.95rem] leading-[1.03] md:text-[5.6rem] md:leading-[0.98]"
+                style={{ opacity: founderLine2Opacity, y: founderLine2Y }}
+              >
+                {t.founderParallaxLines[1]}
+              </motion.p>
+              <motion.p
+                className="text-[1.95rem] leading-[1.03] md:text-[5.6rem] md:leading-[0.98]"
+                style={{ opacity: founderLine3Opacity, y: founderLine3Y }}
+              >
+                {t.founderParallaxLines[2]}
+              </motion.p>
+              <motion.p
+                className="max-w-5xl text-[1.55rem] leading-[1.08] md:text-[4.3rem] md:leading-[1]"
+                style={{ opacity: founderLine4Opacity, y: founderLine4Y }}
+              >
+                {t.founderParallaxLines[3]}
+              </motion.p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <div
+        className="relative z-20 -mt-[100vh] h-screen bg-main"
+        style={{
+          backgroundImage: 'url("/images/about-us/decorations/paper.jpg")',
+          backgroundRepeat: "repeat",
+          backgroundSize: "720px 720px",
+          backgroundBlendMode: "multiply",
+        }}
+        aria-hidden
+      />
+      */}
 
       <div className="pb-24 md:pb-32" />
     </main>
