@@ -251,7 +251,7 @@ const historyVisuals: Array<{
       rotate: "-rotate-[4deg]",
       caption: { en: "Third generation.", mn: "Гурав дахь үе." },
     },
-    secondary: { src: "/images/about-us/images/Heading-8.png", rotate: "rotate-[2deg]" },
+    secondary: { src: "/images/about-us/images/Heading-9.png", rotate: "rotate-[2deg]" },
     annotation: { en: "...with you.", mn: "...тантай хамт." },
   },
 ];
