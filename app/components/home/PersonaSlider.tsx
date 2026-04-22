@@ -79,7 +79,7 @@ const personas = [
   },
   {
     id: 4,
-    quoteKey: "review2",
+    quoteKey: "review4",
     en: {
       title: "THE SECLUSION",
       description:
@@ -356,7 +356,7 @@ export default function PersonaSlider() {
                     <ChevronLeft className="w-5 h-5" />
                   </button>
 
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 min-h-[4.5rem] md:min-h-[5.25rem] lg:min-h-[6.25rem] flex items-center justify-center">
                     <AnimatePresence mode="wait" custom={direction}>
                       <motion.div
                         key={`${currentPersona.id}-${locale}`}
@@ -383,21 +383,22 @@ export default function PersonaSlider() {
                   </button>
                 </div>
 
-                <AnimatePresence mode="wait" custom={direction}>
-                  <motion.div
-                    key={`${currentPersona.id}-${locale}-desc`}
-                    custom={direction}
-                    initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-4"
-                  >
-                    <BodyText tone="dark" size="md" className="max-w-xl mx-auto">
-                      {content.description}
-                    </BodyText>
-                  </motion.div>
-                </AnimatePresence>
+                <div className="mt-4 min-h-[7.5rem] sm:min-h-[6.5rem] md:min-h-[6rem] relative">
+                  <AnimatePresence mode="wait" custom={direction}>
+                    <motion.div
+                      key={`${currentPersona.id}-${locale}-desc`}
+                      custom={direction}
+                      initial={{ opacity: 0, x: direction > 0 ? 24 : -24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: direction > 0 ? -24 : 24 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <BodyText tone="dark" size="md" className="max-w-xl mx-auto">
+                        {content.description}
+                      </BodyText>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
                   <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
@@ -427,10 +428,17 @@ export default function PersonaSlider() {
                         "italic font-light",
                         "text-xl sm:text-2xl md:text-[1.6rem]",
                         "leading-[1.5] md:leading-[1.55]",
+                        "min-h-[8rem] sm:min-h-[9.5rem] md:min-h-[10.5rem]",
+                        "flex items-center justify-center",
                       ].join(" ")}
                     >
-                      &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                      <span>
+                        &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                      </span>
                     </blockquote>
+                    <figcaption className="mt-5 font-cta text-main/70 text-xs tracking-[0.3em] uppercase">
+                      &mdash;&nbsp;{tTestimonials(`${currentPersona.quoteKey}.author`)}
+                    </figcaption>
                   </motion.figure>
                 </AnimatePresence>
               </div>
@@ -475,10 +483,17 @@ export default function PersonaSlider() {
                     "italic font-light",
                     "text-xl sm:text-2xl md:text-[1.6rem]",
                     "leading-[1.5] md:leading-[1.55]",
+                    "min-h-[8rem] sm:min-h-[9.5rem] md:min-h-[10.5rem]",
+                    "flex items-center justify-center",
                   ].join(" ")}
                 >
-                  &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                  <span>
+                    &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                  </span>
                 </blockquote>
+                <figcaption className="mt-5 font-cta text-main/70 text-xs tracking-[0.3em] uppercase">
+                  &mdash;&nbsp;{tTestimonials(`${currentPersona.quoteKey}.author`)}
+                </figcaption>
               </figure>
             </div>
           )}

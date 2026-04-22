@@ -45,7 +45,6 @@ export default function Testimonials() {
 
   const reviewId = REVIEW_IDS[activeIndex];
   const author = t(`${reviewId}.author`);
-  const source = t.has(`${reviewId}.source`) ? t(`${reviewId}.source`) : null;
 
   const slideTransition = prefersReducedMotion
     ? { duration: 0.2, ease: "easeOut" as const }
@@ -160,9 +159,6 @@ export default function Testimonials() {
                 >
                   {author}
                 </p>
-                {source && (
-                  <p className="font-body text-xs text-ink/50">{source}</p>
-                )}
               </div>
             </motion.div>
           </AnimatePresence>

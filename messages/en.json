@@ -113,8 +113,7 @@
       "reviewCount": "Based on 35 reviews",
       "review1": {
         "text": "A peaceful, lovely stay on the quieter side of the lake. Family-run, with walking trails, a private sauna at the water's edge, and great food.",
-        "author": "Michael R.",
-        "source": "TripAdvisor"
+        "author": "Michael R."
       },
       "review2": {
         "text": "Maria was overwhelmed. Had a wonderful time with you and the family. Bless you.",
@@ -122,8 +121,11 @@
       },
       "review3": {
         "text": "The hospitality of the owner and staff was the most wonderful thing. I spent a quiet, peaceful time — a wonderful memory of Mongolia.",
-        "author": "Makoto",
-        "source": "Agoda"
+        "author": "Makoto"
+      },
+      "review4": {
+        "text": "Three unforgettable days with my partner. The setting beside the lake, the warmth of the owners, the quiet afternoons — easily the most memorable trip we've ever had.",
+        "author": "Billy P."
       }
     },
     "policies": {
