@@ -176,10 +176,17 @@ const HERO_CURSOR_MAGNIFY_LIGHT =
 
 // Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
 // `public/images/about-us/images/` (Heading.png … Heading-6 primaries; secondaries
-// on cards 1 and 5). Rotations can be tweaked; copy lives in `content[locale].history`.
+// on 1990s, 2000s, 2010s, 2022—2009 is primary only). Rotations can be tweaked;
+// copy lives in `content[locale].history`.
 const historyVisuals: Array<{
   primary: { src: string; rotate: string; caption?: { en: string; mn: string } };
-  secondary?: { src: string; rotate: string };
+  secondary?: {
+    src: string;
+    rotate: string;
+    overlayOnPrimary?: boolean;
+    /** Multiplier on 5.25rem / 6rem base; default 1.08 */
+    overlayScaleFromOriginal?: number;
+  };
   annotation?: { en: string; mn: string };
 }> = [
   {
@@ -199,6 +206,12 @@ const historyVisuals: Array<{
       src: "/images/about-us/images/Heading-3.png",
       rotate: "rotate-[2deg]",
       caption: { en: "First winters.", mn: "Анхны өвлүүд." },
+    },
+    secondary: {
+      src: "/images/about-us/images/Heading-8.png",
+      rotate: "rotate-[4deg]",
+      overlayOnPrimary: true,
+      overlayScaleFromOriginal: 1.12,
     },
     annotation: {
       en: "Water by yak, light by candle.",
@@ -221,6 +234,11 @@ const historyVisuals: Array<{
       src: "/images/about-us/images/Heading-5.png",
       rotate: "rotate-[3deg]",
       caption: { en: "Musk deer.", mn: "Хүдэр." },
+    },
+    secondary: {
+      src: "/images/about-us/images/Heading-2.png",
+      rotate: "-rotate-[3deg]",
+      overlayOnPrimary: true,
     },
     annotation: {
       en: "Conservation program \u2014\u2192",
@@ -441,7 +459,7 @@ export default function AboutUsPage() {
               onClick={() => setHeroFullscreenOpen(true)}
               aria-label={t.heroExpandImage}
               style={{ cursor: HERO_CURSOR_MAGNIFY_INK }}
-              className="group mt-16 md:mt-24 lg:mt-28 w-full overflow-hidden rounded-sm border border-ink/10 shadow-lg bg-ink/[0.04] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/40"
+              className="group mt-16 md:mt-24 lg:mt-28 w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/40"
             >
               <img
                 src={HERO_IMAGE_SRC}
@@ -487,6 +505,13 @@ export default function AboutUsPage() {
               const visuals = historyVisuals[i];
               const caption = visuals?.primary.caption?.[isMn ? "mn" : "en"];
               const annotation = visuals?.annotation?.[isMn ? "mn" : "en"];
+              const behindSecondary =
+                visuals?.secondary && !visuals.secondary.overlayOnPrimary
+                  ? visuals.secondary
+                  : null;
+              const secondaryOverlay = visuals?.secondary?.overlayOnPrimary
+                ? visuals.secondary
+                : null;
               return (
                 <motion.article
                   key={item.title}
@@ -496,23 +521,43 @@ export default function AboutUsPage() {
                   transition={{ duration: 0.5, delay: Math.min(i * 0.06, 0.25) }}
                   className="snap-center shrink-0 relative w-[min(92vw,22rem)] md:w-[26rem] h-[34rem] md:h-[36rem]"
                 >
-                  {/* Secondary polaroid (tucked behind) */}
-                  {visuals?.secondary ? (
+                  {/* Secondary polaroid (tucked behind primary) */}
+                  {behindSecondary ? (
                     <div
-                      className={`absolute top-2 left-2 ${visuals.secondary.rotate} w-40 md:w-44 overflow-hidden rounded-sm`}
+                      className={`absolute top-2 left-2 ${behindSecondary.rotate} w-40 md:w-44 overflow-hidden rounded-sm`}
                       aria-hidden
                     >
-                      <img src={visuals.secondary.src} alt="" className="w-full h-40 md:h-44 object-contain" />
+                      <img src={behindSecondary.src} alt="" className="w-full h-40 md:h-44 object-contain" />
                     </div>
                   ) : null}
 
                   {/* Primary photo + caption */}
                   {visuals ? (
                     <div
-                      className={`absolute top-0 ${visuals.secondary ? "left-28 md:left-32" : "left-6 md:left-10"} ${visuals.primary.rotate} w-56 md:w-64 flex flex-col`}
+                      className={`absolute top-0 ${behindSecondary ? "left-28 md:left-32" : "left-6 md:left-10"} ${visuals.primary.rotate} w-56 md:w-64 flex flex-col`}
                     >
-                      <div className="overflow-hidden rounded-sm">
+                      <div className="overflow-hidden rounded-sm relative">
                         <img src={visuals.primary.src} alt={item.title} className="w-full h-56 md:h-64 object-contain" />
+                        {secondaryOverlay ? (
+                          <div
+                            className={`absolute bottom-2 left-2 z-10 ${secondaryOverlay.rotate} overflow-hidden rounded-sm ${
+                              secondaryOverlay.overlayScaleFromOriginal === 1.12
+                                ? "w-[5.88rem] md:w-[6.72rem]"
+                                : "w-[5.67rem] md:w-[6.48rem]"
+                            }`}
+                            aria-hidden
+                          >
+                            <img
+                              src={secondaryOverlay.src}
+                              alt=""
+                              className={`w-full object-contain ${
+                                secondaryOverlay.overlayScaleFromOriginal === 1.12
+                                  ? "h-[5.88rem] md:h-[6.72rem]"
+                                  : "h-[5.67rem] md:h-[6.48rem]"
+                              }`}
+                            />
+                          </div>
+                        ) : null}
                       </div>
                       {caption ? (
                         <p className="font-editorial-mn text-base md:text-lg text-ink/75 text-center mt-2 leading-tight">
