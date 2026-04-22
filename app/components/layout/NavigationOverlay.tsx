@@ -132,15 +132,11 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
     };
   }, [isOpen]);
 
-  const toggleLanguage = () => {
-    const pathWithoutLocale = isMn
-      ? pathname.replace("/mn", "") || "/"
-      : pathname;
-    const newPath = isMn
-      ? pathWithoutLocale
-      : `/mn${pathWithoutLocale}`.replace("//", "/");
-    window.location.href = newPath;
-  };
+  const pathWithoutLocale = isMn
+    ? pathname.replace("/mn", "") || "/"
+    : pathname;
+  const enPath = pathWithoutLocale;
+  const mnPath = `/mn${pathWithoutLocale}`.replace("//", "/");
 
   const scrollCardIntoView = (id: string) => {
     const el = stripRef.current?.querySelector<HTMLElement>(`[data-card="${id}"]`);
@@ -152,34 +148,33 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
   };
 
   const languageToggle = (
-    <button
-      type="button"
-      onClick={toggleLanguage}
-      className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left text-main transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50"
-      aria-label="Toggle language"
-    >
-      <span
-        className={
-          !isMn
-            ? "text-main"
-            : "text-main/40 hover:text-main/70 transition-colors"
-        }
+    <div className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left">
+      <Link
+        href={enPath}
+        onClick={onClose}
+        aria-label="Switch to English"
+        className={[
+          "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50",
+          !isMn ? "text-main" : "text-main/40 hover:text-main/70",
+        ].join(" ")}
       >
         EN
-      </span>
+      </Link>
       <span className="mx-2 text-main/30" aria-hidden="true">
         /
       </span>
-      <span
-        className={
-          isMn
-            ? "text-main"
-            : "text-main/40 hover:text-main/70 transition-colors"
-        }
+      <Link
+        href={mnPath}
+        onClick={onClose}
+        aria-label="Switch to Mongolian"
+        className={[
+          "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50",
+          isMn ? "text-main" : "text-main/40 hover:text-main/70",
+        ].join(" ")}
       >
         MN
-      </span>
-    </button>
+      </Link>
+    </div>
   );
 
   return (

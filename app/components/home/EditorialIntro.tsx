@@ -8,7 +8,7 @@ export default function EditorialIntro() {
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
   const reduceMotion = useReducedMotion();
-  const storyHref = `${localePrefix}/#`;
+  const storyHref = `${localePrefix}/about-us`;
 
   return (
     <section
