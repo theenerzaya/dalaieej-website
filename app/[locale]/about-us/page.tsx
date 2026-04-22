@@ -629,7 +629,7 @@ export default function AboutUsPage() {
                       <img
                         src="/images/about-us/decorations/icon-dombo.svg"
                         alt=""
-                        className="w-16 h-16 md:w-20 md:h-20 object-contain opacity-70 select-none pointer-events-none"
+                        className="w-16 h-16 md:w-20 md:h-20 object-contain select-none pointer-events-none"
                         draggable={false}
                       />
                     </div>
