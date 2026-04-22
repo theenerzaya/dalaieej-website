@@ -9,34 +9,41 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-/** Closer to iOS text loupe (subtle) vs. retail “product zoom” */
-const ZOOM = 1.45;
+/** iOS text-loupe feel: gentle zoom, not product zoom. */
+const ZOOM = 1.4;
 const LENS_PX = 240;
 const GAP = 20;
 
-const LENS_RIM = "rgba(255, 255, 255, 0.92)";
+/**
+ * Soft, low-contrast float — closer to the iOS loupe where the shadow reads as
+ * a diffuse glow pooling below the lens rather than a hard drop shadow. No
+ * bright white ring; just a cool-gray hairline sits on the edge.
+ */
 const LENS_OUTER: CSSProperties["boxShadow"] = [
-  "0 0 0 0.5px rgba(0, 0, 0, 0.07)",
-  "0 0 0 1px rgba(255, 255, 255, 0.45)",
-  "0 1px 1px rgba(0, 0, 0, 0.04)",
-  "0 3px 8px rgba(0, 0, 0, 0.08)",
-  "0 10px 28px rgba(0, 0, 0, 0.12)",
-  "0 20px 48px rgba(0, 0, 0, 0.14)",
+  "0 0 0 0.5px rgba(60, 65, 80, 0.18)",
+  "0 1px 2px rgba(0, 0, 0, 0.05)",
+  "0 6px 14px rgba(0, 0, 0, 0.07)",
+  "0 18px 34px rgba(0, 0, 0, 0.09)",
+  "0 34px 60px rgba(0, 0, 0, 0.08)",
 ].join(", ");
 
+/** Inner glass edge: faint top highlight + very faint full inner hairline. */
+const LENS_INNER: CSSProperties["boxShadow"] = [
+  "inset 0 1px 0 rgba(255, 255, 255, 0.55)",
+  "inset 0 -0.5px 0 rgba(0, 0, 0, 0.04)",
+  "inset 0 0 0 0.5px rgba(255, 255, 255, 0.12)",
+].join(", ");
+
+/** Top crescent — subtle, not a strong reflection. */
 const GLASS_TOP = `linear-gradient(
   180deg,
-  rgba(255, 255, 255, 0.5) 0%,
-  rgba(255, 255, 255, 0.16) 14%,
-  rgba(255, 255, 255, 0.04) 32%,
-  rgba(255, 255, 255, 0) 50%
+  rgba(255, 255, 255, 0.22) 0%,
+  rgba(255, 255, 255, 0.06) 18%,
+  rgba(255, 255, 255, 0) 38%
 )`;
 
-const GLASS_SPEC = `radial-gradient(
-  85% 45% at 50% 8%,
-  rgba(255, 255, 255, 0.55) 0%,
-  rgba(255, 255, 255, 0) 55%
-)`;
+/** Slight frost over the content — that real-glass "slightly washed" look. */
+const GLASS_FROST = "rgba(255, 255, 255, 0.08)";
 
 type LoupeState = {
   left: number;
@@ -113,44 +120,33 @@ export function AboutHeroLoupe({
       style={{ left: loupe.left, top: loupe.top, width: LENS_PX, height: LENS_PX }}
       aria-hidden
     >
-      {/* Outer shell: iOS float shadow + light rim; inner clips content to a perfect circle. */}
+      {/* Lens: circle with soft float shadow + cool-gray hairline rim. */}
       <div
-        className="h-full w-full overflow-visible rounded-full p-[0.4px] sm:p-px"
-        style={{
-          background: `radial-gradient(circle at 50% 0%, ${LENS_RIM} 0%, rgba(210, 215, 225, 0.55) 100%)`,
-          boxShadow: LENS_OUTER,
-        }}
+        className="relative h-full w-full overflow-hidden rounded-full"
+        style={{ boxShadow: LENS_OUTER }}
       >
-        <div
-          className="relative h-full w-full overflow-hidden rounded-full"
+        <img
+          src={src}
+          alt=""
+          className="absolute max-w-none select-none will-change-transform"
+          draggable={false}
           style={{
-            boxShadow: [
-              "inset 0 1.5px 0 rgba(255, 255, 255, 0.7)",
-              "inset 0 0 0 0.5px rgba(0, 0, 0, 0.04)",
-            ].join(", "),
+            width: loupe.w * ZOOM,
+            height: loupe.h * ZOOM,
+            left: LENS_PX / 2 - loupe.relX * ZOOM,
+            top: LENS_PX / 2 - loupe.relY * ZOOM,
           }}
-        >
-          <img
-            src={src}
-            alt=""
-            className="absolute max-w-none select-none will-change-transform"
-            draggable={false}
-            style={{
-              width: loupe.w * ZOOM,
-              height: loupe.h * ZOOM,
-              left: LENS_PX / 2 - loupe.relX * ZOOM,
-              top: LENS_PX / 2 - loupe.relY * ZOOM,
-            }}
-          />
-          {/* “Glass” — top-down specular + edge highlight (readability + Apple-like sheen) */}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{
-              background: [GLASS_SPEC, GLASS_TOP].join(", "),
-            }}
-            aria-hidden
-          />
-        </div>
+        />
+        {/* Glass: subtle frost wash + top crescent reflection + inner bevel. */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-full"
+          style={{
+            backgroundColor: GLASS_FROST,
+            backgroundImage: GLASS_TOP,
+            boxShadow: LENS_INNER,
+          }}
+          aria-hidden
+        />
       </div>
     </div>
   );
