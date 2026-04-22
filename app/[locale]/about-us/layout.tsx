@@ -7,12 +7,12 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
-/** Warm paper tone for browser chrome (status bar / tab bar) on mobile; matches multiplied paper.jpg over white. */
+/** Warm paper tone for browser chrome (status bar / tab bar) on mobile. */
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#E9E2D6',
+  themeColor: '#f7f4e6',
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {

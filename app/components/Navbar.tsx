@@ -15,7 +15,8 @@ function isHomePathname(pathname: string) {
 }
 
 function isAboutUsPathname(pathname: string) {
-  return pathname === "/about-us" || pathname.startsWith("/about-us/") || pathname.includes("/mn/about-us");
+  // localePrefix is always: /{locale}/about-us (en | mn)
+  return /\/about-us(\/|$)/.test(pathname);
 }
 
 export default function Navbar() {
