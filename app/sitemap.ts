@@ -7,7 +7,6 @@ const routes = [
   '/gallery',
   '/about-us',
   '/amenities',
-  '/accommodation',
   '/cabins',
   '/lodge',
   '/catalogue',

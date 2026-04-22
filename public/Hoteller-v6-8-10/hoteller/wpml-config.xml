@@ -1,0 +1,22 @@
+<wpml-config>
+  <custom-types>
+    <custom-type translate="0">header</custom-type>
+    <custom-type translate="0">footer</custom-type>
+    <custom-type translate="0">megamenu</custom-type>
+    <custom-type translate="0">fullmenu</custom-type>
+  </custom-types>
+  <custom-fields>
+    <custom-field action="ignore">page_menu_transparent</custom-field>
+    <custom-field action="ignore">page_show_title</custom-field>
+    <custom-field action="ignore">page_tagline</custom-field>
+    <custom-field action="ignore">page_boxed_layout</custom-field>
+    <custom-field action="ignore">page_hide_footer</custom-field>
+    <custom-field action="ignore">page_header</custom-field>
+    <custom-field action="ignore">page_sticky_header</custom-field>
+    <custom-field action="ignore">page_transparent_header</custom-field>
+    <custom-field action="ignore">page_sidebar</custom-field>
+    <custom-field action="ignore">page_footer</custom-field>
+    <custom-field action="ignore">post_layout</custom-field>
+    <custom-field action="ignore">post_video_embed</custom-field>
+  </custom-fields>
+</wpml-config>

@@ -125,10 +125,13 @@ function BookingContent() {
 
   const getRoomDetailPath = (roomTypeName: string) => {
     const name = (roomTypeName || '').toLowerCase();
+    if (name.includes('superior')) {
+      return `${localePrefix}/superior-cabin`;
+    }
     if (name.includes('cabin') || name.includes('байшин') || name.includes('шинэс') || name.includes('larch')) {
       return `${localePrefix}/cabins`;
     }
-    return `${localePrefix}/accommodation`;
+    return `${localePrefix}/cabins`;
   };
 
   const [checkin, setCheckin] = useState("");

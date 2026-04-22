@@ -54,6 +54,9 @@ const nextConfig: NextConfig = {
       { source: '/faqs-kr', destination: '/', permanent: true },
       { source: '/virtual-tour', destination: '/', permanent: true },
       { source: '/aerial-360', destination: '/', permanent: true },
+      // Accommodations index → all-rooms listing (same content, new canonical path)
+      { source: '/en/accommodation', destination: '/en/cabins', permanent: true },
+      { source: '/mn/accommodation', destination: '/mn/cabins', permanent: true },
       { source: '/mongolia-itinerary-planner', destination: '/', permanent: true },
       { source: '/mongolia-itinerary-planner-gobi-khuvsgul', destination: '/', permanent: true },
     ];

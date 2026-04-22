@@ -14,7 +14,7 @@ import { Headline } from "../ui/Typography";
 const silos = [
   {
     id: "stay",
-    href: /*"/accommodation",*/ "#",
+    href: "/cabins",
     en: "Cabins",
     mn: "Өрөөнүүд",
     image: "/images/silogrid/sanctuary.webp"
