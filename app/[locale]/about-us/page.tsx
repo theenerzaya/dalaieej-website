@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
 
 const content = {
@@ -169,6 +169,13 @@ const content = {
 };
 
 const HERO_IMAGE_SRC = "/images/about-hero.webp";
+const historyCardTextures = [
+  "/images/about-us/decorations/1990s.png",
+  "/images/about-us/decorations/2000s.png",
+  "/images/about-us/decorations/2009.png",
+  "/images/about-us/decorations/2010s.png",
+  "/images/about-us/decorations/2022.png",
+];
 
 // Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
 // `public/images/about-us/images/` (Heading.png … Heading-6 primaries; secondaries
@@ -306,6 +313,44 @@ function SectionAccent({
           invert ? "invert brightness-0 opacity-60" : ""
         }`}
         draggable={false}
+      />
+    </div>
+  );
+}
+
+function FounderAudio({ label, src }: { label: string; src: string }) {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggle = () => {
+    if (!audioRef.current) return;
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      // Start at 0:20 on the first play, then keep normal resume behavior.
+      if (audioRef.current.currentTime < 0.1) {
+        audioRef.current.currentTime = 20;
+      }
+      audioRef.current.play();
+    }
+    setPlaying(!playing);
+  };
+
+  return (
+    <div className="flex justify-center mt-10 md:mt-14">
+      <button
+        onClick={toggle}
+        className="flex items-center gap-3 px-6 py-3 rounded-full border border-ink/20 bg-ink/[0.03] hover:bg-ink/[0.08] transition-colors text-ink font-editorial-mn text-lg md:text-xl tracking-wide"
+      >
+        {playing ? <Pause className="w-5 h-5 opacity-70" /> : <Play className="w-5 h-5 opacity-70" />}
+        <span>{label}</span>
+      </button>
+      <audio
+        ref={audioRef}
+        src={src}
+        preload="metadata"
+        onEnded={() => setPlaying(false)}
+        className="hidden"
       />
     </div>
   );
@@ -489,9 +534,12 @@ export default function AboutUsPage() {
           ref={historyScrollRef}
           className="mt-12 md:mt-16 w-full overflow-x-auto overflow-y-visible overscroll-x-contain scrollbar-hide"
         >
-          <div className="flex flex-row items-start gap-6 md:gap-10 w-max pl-6 pr-6 md:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] md:pr-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] pt-6 pb-16">
+          <div className="flex flex-row items-start gap-3 md:gap-4 w-max pl-6 pr-6 md:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] md:pr-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))] pt-6 pb-16">
             {t.history.map((item, i) => {
               const visuals = historyVisuals[i];
+              const cardTexture = historyCardTextures[i];
+              const cardTopPadding = i === 0 ? "pt-6 md:pt-7" : "pt-20 md:pt-24";
+              const shiftLeftClass = i === 1 || i === 3 ? "-translate-x-4 md:-translate-x-5" : "";
               const caption = visuals?.primary.caption?.[isMn ? "mn" : "en"];
               const annotation = visuals?.annotation?.[isMn ? "mn" : "en"];
               const behindSecondary =
@@ -508,25 +556,25 @@ export default function AboutUsPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-5% 0px -5% 0px" }}
                   transition={{ duration: 0.5, delay: Math.min(i * 0.06, 0.25) }}
-                  className="snap-center shrink-0 relative w-[min(92vw,22rem)] md:w-[26rem] h-[34rem] md:h-[36rem]"
+                  className={`snap-center shrink-0 relative w-[min(92vw,20rem)] md:w-[23rem] h-[39rem] md:h-[41rem] ${shiftLeftClass}`}
                 >
                   {/* Secondary polaroid (tucked behind primary) */}
                   {behindSecondary ? (
                     <div
-                      className={`absolute top-2 left-2 ${behindSecondary.rotate} w-40 md:w-44 overflow-hidden rounded-sm`}
+                      className={`absolute top-2 left-2 z-20 ${behindSecondary.rotate} w-36 md:w-40 overflow-hidden rounded-sm`}
                       aria-hidden
                     >
-                      <img src={behindSecondary.src} alt="" className="w-full h-40 md:h-44 object-contain" />
+                      <img src={behindSecondary.src} alt="" className="w-full h-36 md:h-40 object-contain" />
                     </div>
                   ) : null}
 
                   {/* Primary photo + caption */}
                   {visuals ? (
                     <div
-                      className={`absolute top-0 ${behindSecondary ? "left-28 md:left-32" : "left-6 md:left-10"} ${visuals.primary.rotate} w-56 md:w-64 flex flex-col`}
+                      className={`absolute top-0 z-30 ${behindSecondary ? "left-24 md:left-28" : "left-5 md:left-7"} ${visuals.primary.rotate} w-52 md:w-56 flex flex-col`}
                     >
                       <div className="overflow-hidden rounded-sm relative">
-                        <img src={visuals.primary.src} alt={item.title} className="w-full h-56 md:h-64 object-contain" />
+                        <img src={visuals.primary.src} alt={item.title} className="w-full h-52 md:h-56 object-contain" />
                         {secondaryOverlay ? (
                           <div
                             className={`absolute bottom-2 left-2 z-10 ${secondaryOverlay.rotate} overflow-hidden rounded-sm ${
@@ -558,10 +606,12 @@ export default function AboutUsPage() {
 
                   {/* Aged-paper note card */}
                   <div
-                    className={`absolute bottom-0 ${i % 2 === 0 ? "left-0 md:left-2 rotate-[-1deg]" : "right-0 md:right-2 rotate-[1.5deg]"} w-[17rem] md:w-[18rem] bg-[#efe3c9] border border-ink/10 px-6 py-6 md:px-7 md:py-7`}
+                    className={`absolute bottom-0 z-10 ${i % 2 === 0 ? "left-0 md:left-1 rotate-[-1deg]" : "right-0 md:right-1 rotate-[1.5deg]"} w-[16rem] md:w-[17rem] h-[28rem] md:h-[29rem] bg-[#efe3c9] border border-ink/10 px-6 ${cardTopPadding} pb-6 md:px-7 md:pb-7 flex flex-col`}
                     style={{
-                      backgroundImage:
-                        "url(\"data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E\")",
+                      backgroundImage: cardTexture ? `url("${cardTexture}")` : undefined,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
                     }}
                   >
                     <p className="font-body italic text-[0.7rem] md:text-xs uppercase tracking-[0.2em] text-ink/55 mb-1">
@@ -570,13 +620,15 @@ export default function AboutUsPage() {
                     <h3 className="font-editorial-mn text-2xl md:text-[1.7rem] text-ink mb-3 leading-tight">
                       {item.title}
                     </h3>
-                    <p className="font-body text-sm md:text-[0.95rem] leading-[1.65] text-ink/80">{item.body}</p>
+                    <p className="font-body text-sm md:text-[0.95rem] leading-[1.65] text-ink/80">
+                      {item.body}
+                    </p>
                   </div>
 
                   {/* Handwritten annotation */}
                   {annotation ? (
                     <p
-                      className={`absolute ${i % 2 === 0 ? "bottom-[-1.5rem] right-2 rotate-[-4deg]" : "bottom-[-1.5rem] left-2 rotate-[3deg]"} font-editorial-mn text-base md:text-lg text-ink/65 leading-tight max-w-[12rem]`}
+                      className={`absolute z-40 ${i % 2 === 0 ? "bottom-[-1.5rem] right-2 rotate-[-4deg]" : "bottom-[-1.5rem] left-2 rotate-[3deg]"} font-editorial-mn text-base md:text-lg text-ink/65 leading-tight max-w-[12rem]`}
                     >
                       {annotation}
                     </p>
@@ -660,6 +712,7 @@ export default function AboutUsPage() {
             className="w-full h-auto select-none"
             draggable={false}
           />
+          <FounderAudio label={t.founderListenLabel} src="/audio/gun-tsenherhen.mp3" />
         </div>
       </section>
 
