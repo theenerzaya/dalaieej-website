@@ -2,9 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { Facebook, Instagram, Mail } from "lucide-react";
-import Link from "next/link";
+import NextLink from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { Link as I18nLink } from "@/i18n/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
 
@@ -113,10 +114,26 @@ interface NavigationOverlayProps {
   onClose: () => void;
 }
 
+function getPathWithoutLocale(pathname: string): string {
+  if (pathname.startsWith("/mn")) {
+    return pathname.replace(/^\/mn/, "") || "/";
+  }
+  if (pathname.startsWith("/en")) {
+    return pathname.replace(/^\/en/, "") || "/";
+  }
+  return pathname;
+}
+
 export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
   const pathname = usePathname();
-  const isMn = pathname.startsWith("/mn");
-  const localePrefix = isMn ? "/mn" : "";
+  const locale = pathname.startsWith("/mn")
+    ? "mn"
+    : pathname.startsWith("/en")
+      ? "en"
+      : "mn";
+  const isMn = locale === "mn";
+  const localePrefix = isMn ? "/mn" : "/en";
+  const pathWithoutLocale = getPathWithoutLocale(pathname);
   const reduceMotion = useReducedMotion();
 
   const stripRef = useRef<HTMLDivElement>(null);
@@ -132,12 +149,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
     };
   }, [isOpen]);
 
-  const pathWithoutLocale = isMn
-    ? pathname.replace("/mn", "") || "/"
-    : pathname;
-  const enPath = pathWithoutLocale;
-  const mnPath = `/mn${pathWithoutLocale}`.replace("//", "/");
-
   const scrollCardIntoView = (id: string) => {
     const el = stripRef.current?.querySelector<HTMLElement>(`[data-card="${id}"]`);
     if (!el || !stripRef.current) return;
@@ -149,31 +160,33 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
 
   const languageToggle = (
     <div className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left">
-      <Link
-        href={enPath}
+      <I18nLink
+        href={pathWithoutLocale}
+        locale="en"
         onClick={onClose}
         aria-label="Switch to English"
         className={[
           "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50",
-          !isMn ? "text-main" : "text-main/40 hover:text-main/70",
+          locale === "en" ? "text-main" : "text-main/40 hover:text-main/70",
         ].join(" ")}
       >
         EN
-      </Link>
+      </I18nLink>
       <span className="mx-2 text-main/30" aria-hidden="true">
         /
       </span>
-      <Link
-        href={mnPath}
+      <I18nLink
+        href={pathWithoutLocale}
+        locale="mn"
         onClick={onClose}
         aria-label="Switch to Mongolian"
         className={[
           "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50",
-          isMn ? "text-main" : "text-main/40 hover:text-main/70",
+          locale === "mn" ? "text-main" : "text-main/40 hover:text-main/70",
         ].join(" ")}
       >
         MN
-      </Link>
+      </I18nLink>
     </div>
   );
 
@@ -234,7 +247,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 </button>
 
                 {/* Centered wordmark — matches Navbar positioning exactly */}
-                <Link
+                <NextLink
                   href={localePrefix || "/"}
                   onClick={onClose}
                   className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
@@ -247,7 +260,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
                     priority
                   />
-                </Link>
+                </NextLink>
 
                 <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12">
                   {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
@@ -310,13 +323,13 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           onFocus={() => scrollCardIntoView(item.id)}
                         >
                           {item.available ? (
-                            <Link
+                            <NextLink
                               href={`${localePrefix}${item.href}`}
                               onClick={onClose}
                               className={linkClass}
                             >
                               <span>{label}</span>
-                            </Link>
+                            </NextLink>
                           ) : (
                             <span role="link" aria-disabled="true" className={linkClass}>
                               <span>{label}</span>
@@ -438,14 +451,14 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       }
 
                       return (
-                        <Link
+                        <NextLink
                           key={item.id}
                           href={`${localePrefix}${item.href}`}
                           onClick={onClose}
                           className="shrink-0"
                         >
                           {card}
-                        </Link>
+                        </NextLink>
                       );
                     })}
 
