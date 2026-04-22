@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
 
 const content = {
   en: {
@@ -167,12 +168,7 @@ const content = {
   },
 };
 
-const HERO_IMAGE_SRC = "/images/about-us/images/Heading-6.png";
-/** Magnifying-glass cursor (PNG for Safari + Chrome; hotspot at lens center). */
-const HERO_CURSOR_MAGNIFY_INK =
-  'url("/images/cursors/hero-magnify-ink.png") 12 12, zoom-in';
-const HERO_CURSOR_MAGNIFY_LIGHT =
-  'url("/images/cursors/hero-magnify-light.png") 12 12, zoom-in';
+const HERO_IMAGE_SRC = "/images/about-hero.webp";
 
 // Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
 // `public/images/about-us/images/` (Heading.png … Heading-6 primaries; secondaries
@@ -454,20 +450,13 @@ export default function AboutUsPage() {
                 width="w-[min(58%,22rem)] min-w-[10.5rem] md:min-w-[13rem] mx-auto"
               />
             </div>
-            <button
-              type="button"
-              onClick={() => setHeroFullscreenOpen(true)}
-              aria-label={t.heroExpandImage}
-              style={{ cursor: HERO_CURSOR_MAGNIFY_INK }}
-              className="group mt-16 md:mt-24 lg:mt-28 w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/40"
-            >
-              <img
-                src={HERO_IMAGE_SRC}
-                alt={t.heroImageAlt}
-                style={{ cursor: HERO_CURSOR_MAGNIFY_INK }}
-                className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02] group-active:scale-[0.99]"
-              />
-            </button>
+            <AboutHeroLoupe
+              src={HERO_IMAGE_SRC}
+              alt={t.heroImageAlt}
+              expandLabel={t.heroExpandImage}
+              onRequestFullscreen={() => setHeroFullscreenOpen(true)}
+              className="mt-16 md:mt-24 lg:mt-28"
+            />
             <p className="text-center mt-8 font-body text-sm md:text-base italic text-ink/60 tracking-wide max-w-2xl mx-auto leading-relaxed">
               {t.heroCaption}
             </p>
@@ -616,6 +605,7 @@ export default function AboutUsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-5">
             {t.pillars.map((pillar, i) => {
               const isLast = i === t.pillars.length - 1;
+              const isHospitalityPillar = i === 2;
               return (
                 <motion.div
                   key={pillar.num}
@@ -634,6 +624,16 @@ export default function AboutUsPage() {
                   <p className="font-body text-base md:text-[1.02rem] leading-[1.75] text-ink/80 flex-1">
                     {pillar.body}
                   </p>
+                  {isHospitalityPillar ? (
+                    <div className="flex justify-center mt-6 pt-2">
+                      <img
+                        src="/images/about-us/decorations/icon-dombo.svg"
+                        alt=""
+                        className="w-16 h-16 md:w-20 md:h-20 object-contain opacity-70 select-none pointer-events-none"
+                        draggable={false}
+                      />
+                    </div>
+                  ) : null}
                   {isLast ? (
                     <div className="flex justify-center mt-6 pt-2">
                       <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-ink/70" />
@@ -684,8 +684,7 @@ export default function AboutUsPage() {
                 src={HERO_IMAGE_SRC}
                 alt={t.heroImageAlt}
                 onClick={() => setHeroFullscreenOpen(false)}
-                style={{ cursor: HERO_CURSOR_MAGNIFY_LIGHT }}
-                className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl"
+                className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl cursor-zoom-in"
               />
             </div>
             <button
