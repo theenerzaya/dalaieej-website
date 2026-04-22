@@ -183,6 +183,12 @@ const historyCardTextures = [
 // `content[locale].history`.
 const historyVisuals: Array<{
   primary: { src: string; rotate: string; caption?: { en: string; mn: string } };
+  background?: {
+    src: string;
+    rotate?: string;
+    positionClass?: string;
+    sizeClass?: string;
+  };
   secondary?: {
     src: string;
     rotate: string;
@@ -201,6 +207,12 @@ const historyVisuals: Array<{
       rotate: "-rotate-[3deg]",
       caption: { en: "Khatgal's son.", mn: "Хатгалын хүү." },
     },
+    background: {
+      src: "/images/about-us/images/timeline-1990s-background.png",
+      rotate: "-rotate-[1deg]",
+      positionClass: "top-[-0.2rem] left-[-1.35rem] md:top-[-0.45rem] md:left-[-1.75rem]",
+      sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
+    },
     secondary: { src: "/images/about-us/images/timeline-1990s-secondary.png", rotate: "rotate-[4deg]" },
     annotation: {
       en: "Auction day\u2014a year of civil service wages.",
@@ -213,13 +225,19 @@ const historyVisuals: Array<{
       rotate: "rotate-[2deg]",
       caption: { en: "First winters.", mn: "Анхны өвлүүд." },
     },
+    background: {
+      src: "/images/about-us/images/timeline-2000s-background.jpeg",
+      rotate: "rotate-[0.8deg]",
+      positionClass: "top-[-0.2rem] left-[-1.3rem] md:top-[-0.45rem] md:left-[-1.7rem]",
+      sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
+    },
     secondary: {
       src: "/images/about-us/images/timeline-2000s-secondary.png",
       rotate: "rotate-[4deg]",
       overlayOnPrimary: true,
       overlayOnCard: true,
-      overlayPositionClass: "bottom-3 right-3 md:bottom-4 md:right-4",
-      overlaySizeClass: "h-[7.04rem] md:h-[8.06rem] w-[7.04rem] md:w-[8.06rem]",
+      overlayPositionClass: "bottom-7 right-3 md:bottom-8 md:right-4",
+      overlaySizeClass: "h-[7.56rem] md:h-[8.64rem] w-[7.56rem] md:w-[8.64rem]",
       overlayScaleFromOriginal: 1.12,
     },
     annotation: {
@@ -233,6 +251,12 @@ const historyVisuals: Array<{
       rotate: "-rotate-[2deg]",
       caption: { en: "Middle Eastern royalty", mn: "Ойрхи Дорнодын хаад" },
     },
+    background: {
+      src: "/images/about-us/images/timeline-2009-background.png",
+      rotate: "-rotate-[1.5deg]",
+      positionClass: "top-[-0.25rem] left-[-1.5rem] md:top-[-0.5rem] md:left-[-1.9rem]",
+      sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
+    },
     annotation: {
       en: "Plumbing in two weeks flat.",
       mn: "Хоёр долоо хоногт нойл боссон.",
@@ -244,10 +268,19 @@ const historyVisuals: Array<{
       rotate: "rotate-[3deg]",
       caption: { en: "Musk deer.", mn: "Хүдэр." },
     },
+    background: {
+      src: "/images/about-us/images/timeline-2010s-background.png",
+      rotate: "rotate-[1deg]",
+      positionClass: "top-[-0.2rem] left-[-1.3rem] md:top-[-0.45rem] md:left-[-1.7rem]",
+      sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
+    },
     secondary: {
       src: "/images/about-us/images/timeline-2010s-secondary.png",
       rotate: "-rotate-[3deg]",
       overlayOnPrimary: true,
+      overlayOnCard: true,
+      overlayPositionClass: "bottom-8 left-3 md:bottom-10 md:left-4",
+      overlaySizeClass: "h-[7.04rem] md:h-[8.06rem] w-[7.04rem] md:w-[8.06rem]",
     },
     annotation: {
       en: "Conservation program \u2014\u2192",
@@ -259,6 +292,12 @@ const historyVisuals: Array<{
       src: "/images/about-us/images/timeline-2022-primary.png",
       rotate: "-rotate-[4deg]",
       caption: { en: "Third generation.", mn: "Гурав дахь үе." },
+    },
+    background: {
+      src: "/images/about-us/images/timeline-2022-background.jpg",
+      rotate: "-rotate-[0.8deg]",
+      positionClass: "top-[-0.15rem] left-[-1.25rem] md:top-[-0.4rem] md:left-[-1.65rem]",
+      sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
     },
     secondary: { src: "/images/about-us/images/timeline-2022-secondary.png", rotate: "rotate-[2deg]" },
     annotation: { en: "...with you.", mn: "...тантай хамт." },
@@ -596,6 +635,16 @@ export default function AboutUsPage() {
               const cardTexture = historyCardTextures[i];
               const cardTopPadding = i === 0 ? "pt-6 md:pt-7" : "pt-20 md:pt-24";
               const shiftLeftClass = i === 1 || i === 3 ? "-translate-x-4 md:-translate-x-5" : "";
+              const primaryPositionClass =
+                i === 0
+                  ? "top-2 md:top-3"
+                  : i === 1
+                  ? "top-8 md:top-9"
+                  : i === 2
+                  ? "top-9 md:top-10"
+                  : i === 3
+                  ? "top-8 md:top-10"
+                  : "top-7 md:top-9";
               const caption = visuals?.primary.caption?.[isMn ? "mn" : "en"];
               const annotation = visuals?.annotation?.[isMn ? "mn" : "en"];
               const behindSecondary =
@@ -617,6 +666,26 @@ export default function AboutUsPage() {
                   reduceMotion={!!reduceMotion}
                   className={`snap-center shrink-0 relative w-[min(92vw,20rem)] md:w-[23rem] h-[39rem] md:h-[41rem] ${shiftLeftClass}`}
                 >
+                  {/* Era-specific scene image behind the note card */}
+                  {visuals?.background ? (
+                    <div
+                      className={`absolute z-0 pointer-events-none select-none ${
+                        visuals.background.positionClass ??
+                        "top-[-0.25rem] left-[-1.4rem] md:top-[-0.5rem] md:left-[-1.8rem]"
+                      } ${visuals.background.rotate ?? ""} ${
+                        visuals.background.sizeClass ?? "w-[20.8rem] md:w-[22.8rem] h-[39rem] md:h-[41rem]"
+                      }`}
+                      aria-hidden
+                    >
+                      <img
+                        src={visuals.background.src}
+                        alt=""
+                        className="w-full h-full object-cover opacity-[0.96]"
+                        draggable={false}
+                      />
+                    </div>
+                  ) : null}
+
                   {/* Secondary polaroid (tucked behind primary) */}
                   {behindSecondary ? (
                     <div
@@ -630,10 +699,25 @@ export default function AboutUsPage() {
                   {/* Primary photo + caption */}
                   {visuals ? (
                     <div
-                      className={`absolute top-0 z-30 ${behindSecondary ? "left-24 md:left-28" : "left-5 md:left-7"} ${visuals.primary.rotate} w-52 md:w-56 flex flex-col`}
+                      className={`absolute z-30 ${primaryPositionClass} ${
+                        behindSecondary ? "left-24 md:left-28" : "left-5 md:left-7"
+                      } ${visuals.primary.rotate} w-52 md:w-56 flex flex-col`}
                     >
                       <div className="overflow-hidden rounded-sm relative">
                         <img src={visuals.primary.src} alt={item.title} className="w-full h-52 md:h-56 object-contain" />
+                        {caption ? (
+                          <p
+                            className="absolute left-2 right-2 bottom-2 z-20 font-editorial-mn text-sm md:text-base text-ink/85 leading-tight text-center px-3 py-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.16)] backdrop-blur-[1px]"
+                            style={{
+                              backgroundColor: "rgba(255,255,255,0.52)",
+                              border: "1px solid rgba(255,255,255,0.38)",
+                              clipPath:
+                                "polygon(2% 20%, 8% 7%, 17% 12%, 27% 5%, 38% 10%, 51% 4%, 63% 11%, 76% 6%, 89% 12%, 97% 25%, 95% 80%, 88% 93%, 77% 88%, 66% 95%, 54% 90%, 43% 96%, 31% 89%, 20% 95%, 10% 87%, 3% 73%)",
+                            }}
+                          >
+                            {caption}
+                          </p>
+                        ) : null}
                         {secondaryOverlay ? (
                           <div
                             className={`absolute z-10 ${
@@ -661,11 +745,6 @@ export default function AboutUsPage() {
                           </div>
                         ) : null}
                       </div>
-                      {caption ? (
-                        <p className="font-editorial-mn text-base md:text-lg text-ink/75 text-center mt-2 leading-tight">
-                          {caption}
-                        </p>
-                      ) : null}
                     </div>
                   ) : null}
 
@@ -688,6 +767,15 @@ export default function AboutUsPage() {
                     <p className="font-body text-sm md:text-[0.95rem] leading-[1.65] text-ink/80">
                       {item.body}
                     </p>
+                    {annotation ? (
+                      <p
+                        className={`mt-auto pt-4 font-editorial-mn text-base md:text-lg text-ink/65 leading-tight ${
+                          i % 2 === 0 ? "text-right rotate-[-2deg]" : "text-left rotate-[2deg]"
+                        }`}
+                      >
+                        {annotation}
+                      </p>
+                    ) : null}
                   </div>
                   {secondaryCardOverlay ? (
                     <div
@@ -708,14 +796,6 @@ export default function AboutUsPage() {
                     </div>
                   ) : null}
 
-                  {/* Handwritten annotation */}
-                  {annotation ? (
-                    <p
-                      className={`absolute z-40 ${i % 2 === 0 ? "bottom-[-1.5rem] right-2 rotate-[-4deg]" : "bottom-[-1.5rem] left-2 rotate-[3deg]"} font-editorial-mn text-base md:text-lg text-ink/65 leading-tight max-w-[12rem]`}
-                    >
-                      {annotation}
-                    </p>
-                  ) : null}
                 </TimelineCard>
               );
             })}
