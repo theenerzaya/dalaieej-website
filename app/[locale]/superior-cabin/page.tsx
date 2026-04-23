@@ -38,6 +38,7 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
+import { AnimatedText, ImageReveal, Reveal } from "@/app/components/cabins/animations";
 
 // Client-only WebGL component shared with /cabins. Dynamic import keeps the
 // shader code out of the server bundle and off any other route.
@@ -48,6 +49,8 @@ const MirageImage = dynamic(
 import {
   ArrowRight,
   BedDouble,
+  ChevronLeft,
+  ChevronRight,
   Minus,
   Mountain,
   Plus,
@@ -91,6 +94,7 @@ type CopyKey =
   | "bookCta"
   | "tagline1"
   | "tagline2"
+  | "aboutCta"
   | "experiencesEyebrow"
   | "experiencesHeading"
   | "spaTitle"
@@ -130,6 +134,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookCta: "Check Availability",
     tagline1: "The best people to take care of",
     tagline2: "our most valuable asset: you.",
+    aboutCta: "More About Us",
     experiencesEyebrow: "Stay Well",
     experiencesHeading: "Paired with the forest",
     spaTitle: "Relax Spa",
@@ -170,6 +175,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookCta: "Боломжит өрөө шалгах",
     tagline1: "Таны хамгийн үнэт зүйлд —",
     tagline2: "өөрт тань, бид анхаарна.",
+    aboutCta: "Бидний тухай",
     experiencesEyebrow: "Сайхан амар",
     experiencesHeading: "Ойтой уялдсан туршлага",
     spaTitle: "Relax Spa",
@@ -201,25 +207,50 @@ const SPA_IMAGE_BEFORE = "/images/rooms/superior-cabin/spa-mirage-before.webp";
 const SPA_IMAGE_AFTER = "/images/rooms/superior-cabin/spa-mirage-after.webp";
 const WELLNESS_IMAGE_BEFORE = "/images/rooms/superior-cabin/wellness-mirage-before.webp";
 const WELLNESS_IMAGE_AFTER = "/images/rooms/superior-cabin/wellness-mirage-after.webp";
+const TAGLINE_BG_MAIN = "/images/rooms/superior-cabin/00.webp";
 
 const OTHER_ROOMS = [
+  {
+    name: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
+    size: { en: "58 m² / 4 guests", mn: "58 м² / 4 зочин" },
+    image: "/images/cabins/room-triple-traditional.webp",
+    href: "/triple-traditional-cabin",
+  },
   {
     name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
     size: { en: "55 m² / 3 guests", mn: "55 м² / 3 зочин" },
     image: "/images/cabins/room-lakeside.webp",
-    href: "/cabins",
+    href: "/lakeside-cabin",
   },
   {
-    name: { en: "The Lodge", mn: "Гол байшин" },
-    size: { en: "70 m² / 3 guests", mn: "70 м² / 3 зочин" },
+    name: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
+    size: { en: "60 m² / 5 guests", mn: "60 м² / 5 зочин" },
+    image: "/images/cabins/room-triple-electric.webp",
+    href: "/triple-electric-cabin",
+  },
+  {
+    name: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
+    size: { en: "70 m² / 5 guests", mn: "70 м² / 5 зочин" },
     image: "/images/cabins/room-signature.webp",
-    href: "/lodge",
+    href: "/signature-cabin",
+  },
+  {
+    name: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
+    size: { en: "66 m² / 5 guests", mn: "66 м² / 5 зочин" },
+    image: "/images/cabins/room-quad-electric.webp",
+    href: "/quad-electric-cabin",
   },
   {
     name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
     size: { en: "120 m² / 4 guests", mn: "120 м² / 4 зочин" },
     image: "/images/cabins/room-grand-peninsula.webp",
-    href: "/cabins",
+    href: "/grand-peninsula-suite",
+  },
+  {
+    name: { en: "Camping", mn: "Кемпинг" },
+    size: { en: "Outdoor setup / 4 guests", mn: "Гадаа байрлал / 4 зочин" },
+    image: "/images/rooms/camping.webp",
+    href: "/booking",
   },
 ];
 
@@ -274,6 +305,26 @@ export default function SuperiorCabinPage() {
   }, [checkin, checkout, adults, children, localePrefix]);
 
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
+  const otherRoomsCarouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollOtherRooms = (direction: "prev" | "next") => {
+    const el = otherRoomsCarouselRef.current;
+    if (!el) return;
+
+    const maxScrollLeft = el.scrollWidth - el.clientWidth;
+    const isAtStart = el.scrollLeft <= 4;
+    const isAtEnd = el.scrollLeft >= maxScrollLeft - 4;
+
+    // Loop the track so arrow navigation can continue indefinitely.
+    if (direction === "next" && isAtEnd) {
+      el.scrollTo({ left: 0, behavior: "auto" });
+    } else if (direction === "prev" && isAtStart) {
+      el.scrollTo({ left: maxScrollLeft, behavior: "auto" });
+    }
+
+    const delta = Math.round(el.clientWidth * 0.86) * (direction === "next" ? 1 : -1);
+    el.scrollBy({ left: delta, behavior: "smooth" });
+  };
 
   /* --------------------- HERO scroll parallax ---------------------------- */
   const heroRef = useRef<HTMLElement>(null);
@@ -568,20 +619,84 @@ export default function SuperiorCabinPage() {
       </section>
 
       {/* ---------------------------------------------------- TAGLINE QUOTE */}
-      <section className="border-b border-main/10">
-        <motion.div
-          initial={reduce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto max-w-4xl px-6 py-24 md:py-32 text-center"
+      <section className="relative isolate overflow-hidden border-y border-main/10 bg-black min-h-[80vh] md:min-h-[92vh] flex items-center">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
         >
-          <h2 className={`${headlineFont} italic text-3xl md:text-5xl leading-[1.15] text-main`}>
-            {t.tagline1}
-            <br />
-            {t.tagline2}
-          </h2>
-        </motion.div>
+          <ImageReveal
+            className="absolute top-[8%] left-[4%] w-[22%] h-[78%] overflow-hidden hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="left"
+          >
+            <img
+              src={WELLNESS_IMAGE_BEFORE}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute top-[7%] left-[40%] w-[16%] aspect-[4/3] overflow-hidden hidden lg:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={SPA_IMAGE_BEFORE}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute top-[14%] right-[4%] w-[24%] h-[70%] overflow-hidden hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="right"
+          >
+            <img
+              src={TAGLINE_BG_MAIN}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute bottom-[6%] left-[38%] w-[18%] aspect-[4/3] overflow-hidden hidden lg:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={WELLNESS_IMAGE_AFTER}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+
+          <img
+            src={TAGLINE_BG_MAIN}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-20 md:hidden"
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:py-32 text-center w-full">
+          <AnimatedText
+            as="h2"
+            mode="line"
+            text={`${t.tagline1}\n${t.tagline2}`}
+            className={`block ${headlineFont} italic text-3xl md:text-5xl leading-[1.15] text-main mb-10 text-overlay-glow`}
+            stagger={0.18}
+            duration={1.0}
+          />
+          <Reveal delay={0.3} as="div" className="inline-block">
+            <Link
+              href={`${localePrefix}/about-us`}
+              className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-main/80 hover:text-main transition-colors"
+            >
+              <span className="border-b border-main/55 pb-0.5">{t.aboutCta}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </Reveal>
+        </div>
       </section>
 
       {/* ------------------------------------------------- RELATED STAYS */}
@@ -658,36 +773,62 @@ export default function SuperiorCabinPage() {
             </motion.h2>
           </motion.div>
 
-          <motion.div
-            variants={staggerParent}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.15 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            {OTHER_ROOMS.map((room) => (
-              <motion.div key={room.name.en} variants={fadeUp}>
-                <Link
-                  href={`${localePrefix}${room.href}`}
-                  className="group block"
+          <div className="relative">
+            <div className="hidden md:flex items-center justify-end gap-3 mb-6">
+              <button
+                type="button"
+                onClick={() => scrollOtherRooms("prev")}
+                aria-label="Previous room"
+                className="inline-flex items-center justify-center w-10 h-10 border border-main/25 text-main/70 hover:text-main hover:border-main/45 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollOtherRooms("next")}
+                aria-label="Next room"
+                className="inline-flex items-center justify-center w-10 h-10 border border-main/25 text-main/70 hover:text-main hover:border-main/45 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            <motion.div
+              ref={otherRoomsCarouselRef}
+              variants={staggerParent}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+              className="flex gap-6 md:gap-8 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {OTHER_ROOMS.map((room) => (
+                <motion.div
+                  key={room.name.en}
+                  variants={fadeUp}
+                  className="snap-start shrink-0 w-[84%] sm:w-[56%] lg:w-[32%]"
                 >
-                  <div className="aspect-[4/5] overflow-hidden bg-white/5 mb-5">
-                    <img
-                      src={room.image}
-                      alt={room.name[isMn ? "mn" : "en"]}
-                      className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-                    />
-                  </div>
-                  <h3 className={`${headlineFont} italic text-2xl md:text-3xl text-main group-hover:text-bark transition-colors`}>
-                    {room.name[isMn ? "mn" : "en"]}
-                  </h3>
-                  <p className="font-body text-main/60 text-sm mt-2">
-                    {room.size[isMn ? "mn" : "en"]}
-                  </p>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+                  <Link
+                    href={`${localePrefix}${room.href}`}
+                    className="group block"
+                  >
+                    <div className="aspect-[4/5] overflow-hidden bg-white/5 mb-5">
+                      <img
+                        src={room.image}
+                        alt={room.name[isMn ? "mn" : "en"]}
+                        className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                      />
+                    </div>
+                    <h3 className={`${headlineFont} italic text-2xl md:text-3xl text-main group-hover:text-bark transition-colors`}>
+                      {room.name[isMn ? "mn" : "en"]}
+                    </h3>
+                    <p className="font-body text-main/60 text-sm mt-2">
+                      {room.size[isMn ? "mn" : "en"]}
+                    </p>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
 
           <motion.div
             initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}

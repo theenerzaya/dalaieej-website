@@ -11,6 +11,7 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
+import { AnimatedText, ImageReveal, Reveal } from "@/app/components/cabins/animations";
 import {
   ArrowRight,
   BedDouble,
@@ -153,6 +154,8 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
 ];
 
+const ROOM_IMAGE_POOL = ROOM_CONFIGS.map((config) => config.image);
+
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 28 },
   show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
@@ -179,6 +182,9 @@ const COPY = {
     children: "Children",
     required: "*",
     bookCta: "Check Availability",
+    tagline1: "The best people to take care of",
+    tagline2: "our most valuable asset: you.",
+    aboutCta: "More About Us",
     otherRoomsEyebrow: "Other Stays",
     otherRoomsHeading: "Find your cabin",
     viewAllRooms: "View all accommodations",
@@ -198,6 +204,9 @@ const COPY = {
     children: "Хүүхэд",
     required: "*",
     bookCta: "Боломжит өрөө шалгах",
+    tagline1: "Таны хамгийн үнэт зүйлд —",
+    tagline2: "өөрт тань, бид анхаарна.",
+    aboutCta: "Бидний тухай",
     otherRoomsEyebrow: "Бусад өрөө",
     otherRoomsHeading: "Өөрийн байшингаа сонго",
     viewAllRooms: "Бүх байрлах сонголт үзэх",
@@ -215,6 +224,17 @@ export default function RoomDetailPage() {
 
   const room = ROOM_CONFIGS.find((r) => r.slug === params.room);
   if (!room) return null;
+
+  const roomIndex = ROOM_CONFIGS.findIndex((r) => r.slug === room.slug);
+  const galleryImages = useMemo(() => {
+    const alternates = ROOM_IMAGE_POOL.filter((image) => image !== room.image);
+    if (alternates.length === 0) return [room.image, room.image, room.image, room.image];
+    const rotation = roomIndex % alternates.length;
+    const rotatedAlternates = [...alternates.slice(rotation), ...alternates.slice(0, rotation)];
+    return [room.image, rotatedAlternates[0], rotatedAlternates[1], rotatedAlternates[2]].map(
+      (image) => image ?? room.image,
+    );
+  }, [room.image, roomIndex]);
 
   const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== room.slug).slice(0, 3);
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
@@ -303,13 +323,40 @@ export default function RoomDetailPage() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-          className="mx-auto max-w-6xl px-6 py-16 md:py-24 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
+          className="mx-auto max-w-6xl px-6 py-16 md:py-24 grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6"
         >
-          {[room.image, "/images/cabins/room-lakeside.webp", "/images/cabins/room-signature.webp", "/images/cabins/room-superior.webp"].map((img, idx) => (
-            <motion.div key={`${img}-${idx}`} variants={fadeUp} className="aspect-[4/3] overflow-hidden bg-white/5 group">
-              <img src={img} alt={room.title[lang]} className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]" />
+          <div className="md:col-span-3 grid grid-cols-1 gap-4 md:gap-6">
+            <motion.div variants={fadeUp} className="aspect-[4/3] overflow-hidden bg-white/5 group">
+              <img
+                src={galleryImages[0]}
+                alt={room.title[lang]}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+              />
             </motion.div>
-          ))}
+            <motion.div variants={fadeUp} className="aspect-[4/3] overflow-hidden bg-white/5 group">
+              <img
+                src={galleryImages[1]}
+                alt={room.title[lang]}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+              />
+            </motion.div>
+          </div>
+          <div className="md:col-span-2 grid grid-cols-1 gap-4 md:gap-6">
+            <motion.div variants={fadeUp} className="aspect-[4/3] md:aspect-auto overflow-hidden bg-white/5 group">
+              <img
+                src={galleryImages[2]}
+                alt={room.title[lang]}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+              />
+            </motion.div>
+            <motion.div variants={fadeUp} className="aspect-[4/3] md:aspect-auto overflow-hidden bg-white/5 group">
+              <img
+                src={galleryImages[3]}
+                alt={room.title[lang]}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+              />
+            </motion.div>
+          </div>
         </motion.div>
       </section>
 
@@ -345,6 +392,86 @@ export default function RoomDetailPage() {
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="relative isolate overflow-hidden border-y border-main/10 bg-black min-h-[80vh] md:min-h-[92vh] flex items-center">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <ImageReveal
+            className="absolute top-[8%] left-[4%] w-[22%] h-[78%] overflow-hidden hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="left"
+          >
+            <img
+              src={galleryImages[1]}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute top-[7%] left-[40%] w-[16%] aspect-[4/3] overflow-hidden hidden lg:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={galleryImages[2]}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute top-[14%] right-[4%] w-[24%] h-[70%] overflow-hidden hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="right"
+          >
+            <img
+              src={room.image}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute bottom-[6%] left-[38%] w-[18%] aspect-[4/3] overflow-hidden hidden lg:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={galleryImages[3]}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+
+          <img
+            src={room.image}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-20 md:hidden"
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:py-32 text-center w-full">
+          <AnimatedText
+            as="h2"
+            mode="line"
+            text={`${t.tagline1}\n${t.tagline2}`}
+            className={`block ${headlineFont} italic text-3xl md:text-5xl leading-[1.15] text-main mb-10 text-overlay-glow`}
+            stagger={0.18}
+            duration={1.0}
+          />
+          <Reveal delay={0.3} as="div" className="inline-block">
+            <Link
+              href={`${localePrefix}/about-us`}
+              className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-main/80 hover:text-main transition-colors"
+            >
+              <span className="border-b border-main/55 pb-0.5">{t.aboutCta}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </Reveal>
         </div>
       </section>
 
