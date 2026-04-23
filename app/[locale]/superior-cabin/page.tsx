@@ -25,7 +25,7 @@
  *   • All motion is gated on `useReducedMotion()`.
  */
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useLocale } from "next-intl";
 import Link from "next/link";
@@ -306,23 +306,42 @@ export default function SuperiorCabinPage() {
 
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
   const otherRoomsCarouselRef = useRef<HTMLDivElement>(null);
+  const otherRoomsTrack = useMemo(
+    () => [...OTHER_ROOMS, ...OTHER_ROOMS, ...OTHER_ROOMS],
+    [],
+  );
+  const otherRoomsLoopReadyRef = useRef(false);
+
+  useEffect(() => {
+    const el = otherRoomsCarouselRef.current;
+    if (!el || otherRoomsLoopReadyRef.current) return;
+
+    // Start on the middle copy so both directions can scroll seamlessly.
+    const loopWidth = el.scrollWidth / 3;
+    el.scrollLeft = loopWidth;
+    otherRoomsLoopReadyRef.current = true;
+  }, []);
+
+  const normalizeOtherRoomsScroll = () => {
+    const el = otherRoomsCarouselRef.current;
+    if (!el) return;
+    const loopWidth = el.scrollWidth / 3;
+
+    if (el.scrollLeft <= loopWidth * 0.5) {
+      el.scrollLeft += loopWidth;
+    } else if (el.scrollLeft >= loopWidth * 1.5) {
+      el.scrollLeft -= loopWidth;
+    }
+  };
 
   const scrollOtherRooms = (direction: "prev" | "next") => {
     const el = otherRoomsCarouselRef.current;
     if (!el) return;
-
-    const maxScrollLeft = el.scrollWidth - el.clientWidth;
-    const isAtStart = el.scrollLeft <= 4;
-    const isAtEnd = el.scrollLeft >= maxScrollLeft - 4;
-
-    // Loop the track so arrow navigation can continue indefinitely.
-    if (direction === "next" && isAtEnd) {
-      el.scrollTo({ left: 0, behavior: "auto" });
-    } else if (direction === "prev" && isAtStart) {
-      el.scrollTo({ left: maxScrollLeft, behavior: "auto" });
-    }
-
-    const delta = Math.round(el.clientWidth * 0.86) * (direction === "next" ? 1 : -1);
+    const firstCard = el.querySelector<HTMLElement>("[data-room-card]");
+    const cardWidth = firstCard?.offsetWidth ?? Math.round(el.clientWidth * 0.86);
+    const styles = typeof window !== "undefined" ? window.getComputedStyle(el) : null;
+    const gap = styles ? Number.parseFloat(styles.columnGap || styles.gap || "0") : 0;
+    const delta = Math.round(cardWidth + gap) * (direction === "next" ? 1 : -1);
     el.scrollBy({ left: delta, behavior: "smooth" });
   };
 
@@ -795,16 +814,18 @@ export default function SuperiorCabinPage() {
 
             <motion.div
               ref={otherRoomsCarouselRef}
+              onScroll={normalizeOtherRoomsScroll}
               variants={staggerParent}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.15 }}
               className="flex gap-6 md:gap-8 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
-              {OTHER_ROOMS.map((room) => (
+              {otherRoomsTrack.map((room, idx) => (
                 <motion.div
-                  key={room.name.en}
+                  key={`${room.name.en}-${idx}`}
                   variants={fadeUp}
+                  data-room-card
                   className="snap-start shrink-0 w-[84%] sm:w-[56%] lg:w-[32%]"
                 >
                   <Link

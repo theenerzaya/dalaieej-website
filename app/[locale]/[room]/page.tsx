@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import Link from "next/link";
@@ -15,6 +15,8 @@ import { AnimatedText, ImageReveal, Reveal } from "@/app/components/cabins/anima
 import {
   ArrowRight,
   BedDouble,
+  ChevronLeft,
+  ChevronRight,
   Minus,
   Mountain,
   Plus,
@@ -236,7 +238,11 @@ export default function RoomDetailPage() {
     );
   }, [room.image, roomIndex]);
 
-  const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== room.slug).slice(0, 3);
+  const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== room.slug);
+  const otherRoomsTrack = useMemo(
+    () => [...otherRooms, ...otherRooms, ...otherRooms],
+    [otherRooms],
+  );
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
 
   const defaults = useMemo(() => getDefaultJulyStayDates(), []);
@@ -251,6 +257,7 @@ export default function RoomDetailPage() {
   }, [checkin, checkout, adults, children, localePrefix]);
 
   const heroRef = useRef<HTMLElement>(null);
+  const otherRoomsCarouselRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const titleOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
@@ -265,6 +272,38 @@ export default function RoomDetailPage() {
     { icon: Tv, label: t.tv },
     { icon: Wifi, label: t.wifi },
   ];
+
+  useEffect(() => {
+    const el = otherRoomsCarouselRef.current;
+    if (!el) return;
+
+    // Keep the user in the middle copy to allow seamless looping both ways.
+    const loopWidth = el.scrollWidth / 3;
+    el.scrollLeft = loopWidth;
+  }, [room.slug]);
+
+  const normalizeOtherRoomsScroll = () => {
+    const el = otherRoomsCarouselRef.current;
+    if (!el) return;
+    const loopWidth = el.scrollWidth / 3;
+
+    if (el.scrollLeft <= loopWidth * 0.5) {
+      el.scrollLeft += loopWidth;
+    } else if (el.scrollLeft >= loopWidth * 1.5) {
+      el.scrollLeft -= loopWidth;
+    }
+  };
+
+  const scrollOtherRooms = (direction: "prev" | "next") => {
+    const el = otherRoomsCarouselRef.current;
+    if (!el) return;
+    const firstCard = el.querySelector<HTMLElement>("[data-room-card]");
+    const cardWidth = firstCard?.offsetWidth ?? Math.round(el.clientWidth * 0.86);
+    const styles = typeof window !== "undefined" ? window.getComputedStyle(el) : null;
+    const gap = styles ? Number.parseFloat(styles.columnGap || styles.gap || "0") : 0;
+    const delta = Math.round(cardWidth + gap) * (direction === "next" ? 1 : -1);
+    el.scrollBy({ left: delta, behavior: "smooth" });
+  };
 
   return (
     <main id="main-content" className="min-h-screen bg-ink text-main overflow-hidden">
@@ -481,9 +520,36 @@ export default function RoomDetailPage() {
             <p className="font-cta uppercase tracking-[0.32em] text-[10px] text-bark mb-4">{t.otherRoomsEyebrow}</p>
             <h2 className={`${headlineFont} italic text-3xl md:text-5xl text-main`}>{t.otherRoomsHeading}</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {otherRooms.map((other) => (
-              <div key={other.slug}>
+          <div className="relative">
+            <div className="hidden md:flex items-center justify-end gap-3 mb-6">
+              <button
+                type="button"
+                onClick={() => scrollOtherRooms("prev")}
+                aria-label="Previous room"
+                className="inline-flex items-center justify-center w-10 h-10 border border-main/25 text-main/70 hover:text-main hover:border-main/45 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollOtherRooms("next")}
+                aria-label="Next room"
+                className="inline-flex items-center justify-center w-10 h-10 border border-main/25 text-main/70 hover:text-main hover:border-main/45 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            <div
+              ref={otherRoomsCarouselRef}
+              onScroll={normalizeOtherRoomsScroll}
+              className="flex gap-6 md:gap-8 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {otherRoomsTrack.map((other, idx) => (
+                <div
+                  key={`${other.slug}-${idx}`}
+                  data-room-card
+                  className="snap-start shrink-0 w-[84%] sm:w-[56%] lg:w-[32%]"
+                >
                 <Link href={`${localePrefix}/${other.slug}`} className="group block">
                   <div className="aspect-[4/5] overflow-hidden bg-white/5 mb-5">
                     <img src={other.image} alt={other.title[lang]} className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
@@ -493,6 +559,7 @@ export default function RoomDetailPage() {
                 </Link>
               </div>
             ))}
+            </div>
           </div>
           <div className="text-center mt-14">
             <Link href={`${localePrefix}/cabins`} className="group inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-main/70 hover:text-main transition-colors">
