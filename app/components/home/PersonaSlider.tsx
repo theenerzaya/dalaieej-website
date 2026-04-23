@@ -178,18 +178,9 @@ export default function PersonaSlider() {
 
   const paginate = useCallback(
     (newDirection: number) => {
-      setActiveIndex(([currentIndex]) => {
-        const newIndex = currentIndex + newDirection;
-        if (newIndex < 0) {
-          return [personas.length - 1, newDirection];
-        }
-        if (newIndex >= personas.length) {
-          return [0, newDirection];
-        }
-        return [newIndex, newDirection];
-      });
+      setActiveIndex(([currentIndex]) => [currentIndex + newDirection, newDirection]);
     },
-    [personas.length]
+    []
   );
 
   const resetTimer = useCallback(() => {
@@ -216,10 +207,11 @@ export default function PersonaSlider() {
   };
 
   const n = personas.length;
-  const leftIdx = (activeIndex - 1 + n) % n;
-  const rightIdx = (activeIndex + 1) % n;
+  const normalizedIndex = ((activeIndex % n) + n) % n;
+  const leftIdx = ((activeIndex - 1) % n + n) % n;
+  const rightIdx = ((activeIndex + 1) % n + n) % n;
 
-  const currentPersona = personas[activeIndex];
+  const currentPersona = personas[normalizedIndex];
   const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
   const sideFrameClass =
     "relative w-[20vw] max-w-[260px] shrink-0 aspect-[3/4] overflow-hidden shadow-2xl ring-1 ring-white/10";
@@ -306,7 +298,7 @@ export default function PersonaSlider() {
                   amount={0.08}
                 >
                   <PersonaPushFrame
-                    persona={personas[activeIndex]}
+                    persona={personas[normalizedIndex]}
                     locale={locale}
                     direction={direction}
                     priority
@@ -343,7 +335,7 @@ export default function PersonaSlider() {
             >
               <div className="w-full max-w-3xl text-center mx-auto">
                 <p className="font-cta text-main/60 text-xs tracking-[0.3em] uppercase tabular-nums mb-4">
-                  {String(activeIndex + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+                  {String(normalizedIndex + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
                 </p>
 
                 <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
