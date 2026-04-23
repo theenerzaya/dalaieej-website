@@ -192,7 +192,6 @@ const TAGLINE_BG_MAIN = "/images/cabins/room-grand-peninsula.webp";
 type CopyKey =
   | "eyebrow"
   | "title"
-  | "lead"
   | "bookingHeading"
   | "bookingSubtitle"
   | "checkIn"
@@ -226,7 +225,6 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   en: {
     eyebrow: "Stay with us · feel like home",
     title: "Our Rooms",
-    lead: "Redefine your expectations. A lakeside experience unlike the rest — we invite you to try it.",
     bookingHeading: "Check availability",
     bookingSubtitle: "Required fields are followed by *",
     checkIn: "Check-in Date",
@@ -262,7 +260,6 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   mn: {
     eyebrow: "Гэрэл шиг уух · гэр шиг амар",
     title: "Манай өрөөнүүд",
-    lead: "Таны төсөөллийг эргэн сэргээх нуурын эргийн онцгой туршлага — та бидэнтэй хамт мэдрэхийг урьж байна.",
     bookingHeading: "Боломжит өрөө шалгах",
     bookingSubtitle: "Заавал бөглөх талбарыг * тэмдэглэв",
     checkIn: "Ирэх огноо",
@@ -457,15 +454,6 @@ export default function CabinsPage() {
             </div>
           </div>
         </motion.div>
-      </section>
-
-      {/* ----------------------------------------------------- INTRO LEAD */}
-      <section className="border-b border-main/10">
-        <div className="mx-auto max-w-3xl px-6 py-16 md:py-24 text-center">
-          <Reveal as="p" className="font-body text-main/75 text-base md:text-lg leading-relaxed">
-            {t.lead}
-          </Reveal>
-        </div>
       </section>
 
       {/* --------------------------------------------------- SECTION INTRO */}

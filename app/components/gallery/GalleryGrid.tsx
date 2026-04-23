@@ -7,7 +7,7 @@
  * (https://www.meritageresort.com/gallery), restyled with the Dalai Eej voice.
  *
  * Layout register:
- *   1. HEADER — centred italic serif "Gallery" on a warm cream ground with
+ *   1. HEADER — centred italic serif "Gallery" on the surface-alt ground with
  *      an underline-on-active horizontal filter nav (no pill chips).
  *   2. STAGGERED 3-COLUMN GRID — square-ish tiles where the middle column is
  *      offset downward (Meritage's signature rhythm). Tile heights vary so
@@ -198,8 +198,7 @@ export default function GalleryGrid() {
   return (
     <main
       id="main-content"
-      className="min-h-screen pt-24 md:pt-32 pb-24 md:pb-32"
-      style={{ backgroundColor: "#faf8f2" }}
+      className="min-h-screen bg-surface-alt pt-24 md:pt-32 pb-24 md:pb-32"
     >
       {/* =============================================================== HEAD */}
       <section className="px-6">
@@ -291,7 +290,7 @@ export default function GalleryGrid() {
                     }}
                     onClick={() => setLightboxIndex(index)}
                     aria-label={image.alt}
-                    className={`group relative block w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#223127] focus-visible:ring-offset-4 focus-visible:ring-offset-[#faf8f2] ${columnOffset}`}
+                    className={`group relative block w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#223127] focus-visible:ring-offset-4 focus-visible:ring-offset-surface-alt ${columnOffset}`}
                   >
                     <div
                       className={`${RATIO_CLASS[image.ratio]} w-full overflow-hidden bg-[#e7dfce]`}
