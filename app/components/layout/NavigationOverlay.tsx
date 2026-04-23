@@ -253,7 +253,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                   className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
                   <Image
-                    src="/images/logo-white.png"
+                    src="/branding/logos/logo-white.png"
                     alt="Dalai Eej Resort"
                     width={180}
                     height={50}

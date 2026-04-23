@@ -1,153 +1,379 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+/**
+ * /gallery — Visual Journey.
+ *
+ * A close visual port of the Meritage Resort gallery
+ * (https://www.meritageresort.com/gallery), restyled with the Dalai Eej voice.
+ *
+ * Layout register:
+ *   1. HEADER — centred italic serif "Gallery" on a warm cream ground with
+ *      an underline-on-active horizontal filter nav (no pill chips).
+ *   2. STAGGERED 3-COLUMN GRID — square-ish tiles where the middle column is
+ *      offset downward (Meritage's signature rhythm). Tile heights vary so
+ *      the columns interlock into a quiet staircase.
+ *   3. LIGHTBOX — full-bleed overlay with prev/next/close, keyboard-navigable
+ *      (ArrowLeft / ArrowRight / Escape).
+ *
+ * All gallery imagery is served from /images/gallery and grouped by
+ * gallery category folders for easier content management.
+ */
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+
+/* -------------------------------------------------------------------------- */
+/*  Types                                                                     */
+/* -------------------------------------------------------------------------- */
+
+type FilterId =
+  | "all"
+  | "resort"
+  | "rooms"
+  | "dining"
+  | "wellness"
+  | "adventures"
+  | "lake";
+
+type GalleryImage = {
+  src: string;
+  category: Exclude<FilterId, "all">;
+  alt: string;
+  /** Aspect ratio used by the tile — creates the Meritage rhythm. */
+  ratio: "portrait" | "landscape" | "square";
+};
+
+/* -------------------------------------------------------------------------- */
+/*  Curated images (all hosted under /public/images/gallery)                  */
+/* -------------------------------------------------------------------------- */
+
+const IMAGES: GalleryImage[] = [
+  // Row 1
+  { src: "/images/gallery/the-resort/lodge-first-light-shore.jpg", category: "resort", alt: "Lodge at first light, seen from the shore", ratio: "landscape" },
+  { src: "/images/gallery/wine-and-dine/chefs-table-lake-dining.jpg", category: "dining", alt: "Chef's table in the lake-facing dining room", ratio: "portrait" },
+  { src: "/images/gallery/the-lake/eastern-ridge-sunset.jpg", category: "lake", alt: "Eastern ridge at sunset over Lake Khuvsgul", ratio: "landscape" },
+
+  // Row 2
+  { src: "/images/gallery/accommodations/lakeside-cabin-morning-light.jpg", category: "rooms", alt: "Lakeside cabin — morning light through linen", ratio: "portrait" },
+  { src: "/images/gallery/wine-and-dine/house-made-bread-wild-herb-butter.jpg", category: "dining", alt: "House-made bread and wild-herb butter", ratio: "landscape" },
+  { src: "/images/gallery/spa-and-wellness/birch-steam-sauna-afternoon.jpg", category: "wellness", alt: "Birch-steam sauna, afternoon session", ratio: "portrait" },
+
+  // Row 3
+  { src: "/images/gallery/accommodations/superior-cabin-living-room-firelit.jpg", category: "rooms", alt: "Superior cabin living room, fire lit", ratio: "landscape" },
+  { src: "/images/gallery/the-resort/main-lodge-low-cloud.jpg", category: "resort", alt: "Main lodge exterior under low cloud", ratio: "portrait" },
+  { src: "/images/gallery/wine-and-dine/evening-service-deck.jpg", category: "dining", alt: "Evening service on the deck", ratio: "landscape" },
+
+  // Row 4
+  { src: "/images/gallery/spa-and-wellness/warm-stone-massage-candlelight.jpg", category: "wellness", alt: "Warm-stone massage room, candlelight", ratio: "square" },
+  { src: "/images/gallery/adventures/horseback-haichin-valley.png", category: "adventures", alt: "Horseback ride along the Haichin valley", ratio: "portrait" },
+  { src: "/images/gallery/accommodations/grand-peninsula-suite-lake-view.jpg", category: "rooms", alt: "Grand Peninsula suite, lake view", ratio: "landscape" },
+
+  // Row 5
+  { src: "/images/gallery/wine-and-dine/hand-plated-seasonal-entree.jpg", category: "dining", alt: "Hand-plated seasonal entrée", ratio: "landscape" },
+  { src: "/images/gallery/wine-and-dine/dining-room-at-dusk.jpg", category: "dining", alt: "Dining room at dusk", ratio: "portrait" },
+  { src: "/images/gallery/accommodations/grand-peninsula-bedroom-sunrise.jpg", category: "rooms", alt: "Grand Peninsula bedroom at sunrise", ratio: "landscape" },
+
+  // Row 6
+  { src: "/images/gallery/accommodations/bath-suite-stone-cedar.jpg", category: "rooms", alt: "Bath suite, stone and cedar", ratio: "portrait" },
+  { src: "/images/gallery/the-resort/lodge-walkway-late-summer.png", category: "resort", alt: "Walkway to the lodge in late summer", ratio: "landscape" },
+  { src: "/images/gallery/wine-and-dine/late-evening-dessert-course.jpg", category: "dining", alt: "Late-evening dessert course", ratio: "portrait" },
+
+  // Row 7
+  { src: "/images/gallery/the-lake/shoreline-mergens-ridge.jpg", category: "lake", alt: "Shoreline at the foot of Mergen's Ridge", ratio: "landscape" },
+  { src: "/images/gallery/wine-and-dine/mongolian-wine-pairing.jpg", category: "dining", alt: "Wine pairing, Mongolian vineyard selection", ratio: "square" },
+  { src: "/images/gallery/accommodations/grand-peninsula-facing-peninsula.jpg", category: "rooms", alt: "Grand Peninsula, facing the peninsula", ratio: "landscape" },
+];
+
+const FILTERS_EN: Record<FilterId, string> = {
+  all: "All",
+  resort: "The Resort",
+  rooms: "Accommodations",
+  dining: "Wine & Dine",
+  wellness: "Spa & Wellness",
+  adventures: "Adventures",
+  lake: "The Lake",
+};
+
+const FILTERS_MN: Record<FilterId, string> = {
+  all: "Бүгд",
+  resort: "Ресорт",
+  rooms: "Байр",
+  dining: "Хоол & Дарс",
+  wellness: "Спа & Сайн сайхан",
+  adventures: "Адал явдал",
+  lake: "Хөвсгөл",
+};
+
+const FILTER_ORDER: FilterId[] = [
+  "all",
+  "resort",
+  "rooms",
+  "dining",
+  "wellness",
+  "adventures",
+  "lake",
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Meritage staircase — tiles step up/down, middle column sits offset.       */
+/* -------------------------------------------------------------------------- */
+
+const RATIO_CLASS: Record<GalleryImage["ratio"], string> = {
+  portrait: "aspect-[3/4]",
+  landscape: "aspect-[4/3]",
+  square: "aspect-square",
+};
+
+/* -------------------------------------------------------------------------- */
+/*  Component                                                                 */
+/* -------------------------------------------------------------------------- */
 
 export default function GalleryGrid() {
   const locale = useLocale();
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const isMn = locale === "mn";
+  const labels = isMn ? FILTERS_MN : FILTERS_EN;
+  const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
 
-  const filters = [
-    { id: "all", label: locale === 'mn' ? "Бүгд" : "All" },
-    { id: "resort", label: locale === 'mn' ? "ресорт" : "The Resort" },
-    { id: "rooms", label: locale === 'mn' ? "Байр" : "Accommodations" },
-    { id: "dining", label: locale === 'mn' ? "Хоол" : "Culinary" },
-    { id: "wellness", label: locale === 'mn' ? "Эрүүл мэнд" : "Wellness" },
-    { id: "adventures", label: locale === 'mn' ? "Адал явдал" : "Adventures" },
-    { id: "landscape", label: locale === 'mn' ? "Нуур" : "The Lake" },
-  ];
+  const [activeFilter, setActiveFilter] = useState<FilterId>("all");
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const images = [
-    { src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80", category: "landscape", alt: "Lake Khuvsgul panoramic view" },
-    { src: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&auto=format&fit=crop&q=80", category: "rooms", alt: "Luxury cabin bedroom" },
-    { src: "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=800&auto=format&fit=crop&q=80", category: "adventures", alt: "Cultural experience" },
-    { src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&auto=format&fit=crop&q=80", category: "landscape", alt: "Mountain reflection on lake" },
-    { src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=80", category: "resort", alt: "Resort main building" },
-    { src: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&auto=format&fit=crop&q=80", category: "adventures", alt: "Horseback riding" },
-    { src: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?w=800&auto=format&fit=crop&q=80", category: "landscape", alt: "Winter landscape" },
-    { src: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&auto=format&fit=crop&q=80", category: "dining", alt: "Fine dining setup" },
-    { src: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=800&auto=format&fit=crop&q=80", category: "adventures", alt: "Horse riding excursion" },
-    { src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&auto=format&fit=crop&q=80", category: "landscape", alt: "Night sky over lake" },
-    { src: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800&auto=format&fit=crop&q=80", category: "rooms", alt: "Cabin interior view" },
-    { src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=80", category: "dining", alt: "Local cuisine" },
-    { src: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&auto=format&fit=crop&q=80", category: "landscape", alt: "Sunset over Khuvsgul" },
-    { src: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=800&auto=format&fit=crop&q=80", category: "rooms", alt: "Forest cabin exterior" },
-    { src: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&auto=format&fit=crop&q=80", category: "wellness", alt: "Spa treatment" },
-    { src: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80", category: "resort", alt: "Resort exterior" },
-    { src: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80", category: "wellness", alt: "Relaxation area" },
-  ];
+  const filteredImages = useMemo(
+    () =>
+      activeFilter === "all"
+        ? IMAGES
+        : IMAGES.filter((img) => img.category === activeFilter),
+    [activeFilter]
+  );
 
-  const filteredImages = activeFilter === "all" 
-    ? images 
-    : images.filter(img => img.category === activeFilter);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+
+  const showPrev = useCallback(() => {
+    setLightboxIndex((i) =>
+      i === null ? null : (i - 1 + filteredImages.length) % filteredImages.length
+    );
+  }, [filteredImages.length]);
+
+  const showNext = useCallback(() => {
+    setLightboxIndex((i) =>
+      i === null ? null : (i + 1) % filteredImages.length
+    );
+  }, [filteredImages.length]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") showPrev();
+      if (e.key === "ArrowRight") showNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxIndex, closeLightbox, showPrev, showNext]);
+
+  // Lock body scroll while the lightbox is open.
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [lightboxIndex]);
+
+  const activeImage =
+    lightboxIndex === null ? null : filteredImages[lightboxIndex];
 
   return (
-    <main id="main-content" className="min-h-screen bg-white pt-24 md:pt-16">
-      <section className="py-12 px-4 bg-ink">
-        <div className="max-w-6xl mx-auto text-center">
+    <main
+      id="main-content"
+      className="min-h-screen pt-24 md:pt-32 pb-24 md:pb-32"
+      style={{ backgroundColor: "#f4efe6" }}
+    >
+      {/* =============================================================== HEAD */}
+      <section className="px-6">
+        <div className="mx-auto max-w-6xl text-center">
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-serif text-4xl md:text-5xl text-main mb-4"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className={`${headlineFont} italic text-[#223127] text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.02] font-normal`}
           >
-            {locale === 'mn' ? "Дурсамж Гэрэл Зурагт" : "Visual Journey"}
+            {isMn ? "Галерей" : "Gallery"}
           </motion.h1>
+
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="font-body text-main/70 max-w-2xl mx-auto"
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 font-body text-[#223127]/60 max-w-xl mx-auto text-sm md:text-base leading-relaxed"
           >
-            {locale === 'mn' 
-              ? "Хөвсгөлийн хэмнэлд автаарай"
-              : "Immerse yourself in the rhythm of Khuvsgul."}
+            {isMn
+              ? "Хөвсгөлийн хэмнэл — бууц, нуур, хоол, тайван агшнууд."
+              : "A visual journey through the lodge, the lake, and the quiet hours between."}
           </motion.p>
+
+          {/* ========================================================= FILTERS */}
+          <nav
+            aria-label={isMn ? "Галерейн ангилал" : "Gallery categories"}
+            className="mt-12 md:mt-16"
+          >
+            <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-x-10">
+              {FILTER_ORDER.map((id) => {
+                const isActive = activeFilter === id;
+                return (
+                  <li key={id}>
+                    <button
+                      type="button"
+                      onClick={() => setActiveFilter(id)}
+                      aria-pressed={isActive}
+                      className={`font-cta uppercase text-[11px] md:text-xs tracking-[0.22em] transition-colors duration-300 pb-1 border-b ${
+                        isActive
+                          ? "text-[#223127] border-[#223127]"
+                          : "text-[#223127]/55 border-transparent hover:text-[#223127]"
+                      }`}
+                    >
+                      {labels[id]}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
       </section>
 
-      <section className="py-8 px-4 bg-surface sticky top-16 z-40">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-wrap justify-center gap-3">
-            {filters.map((filter) => (
-              <button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                className={`px-5 py-2 font-body text-sm rounded-full transition-all ${
-                  activeFilter === filter.id
-                    ? "bg-ink text-main"
-                    : "bg-white text-water-deep hover:bg-ink/10"
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <motion.div 
+      {/* ================================================================= GRID */}
+      <section className="px-4 md:px-8 mt-14 md:mt-20">
+        <div className="mx-auto max-w-[1280px]">
+          <motion.div
             layout
-            className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
             <AnimatePresence mode="popLayout">
-              {filteredImages.map((image, index) => (
-                <motion.div
-                  key={image.src}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                  className="break-inside-avoid cursor-pointer group"
-                  onClick={() => setSelectedImage(image.src)}
-                >
-                  <div className="relative overflow-hidden rounded-lg">
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className={`w-full object-cover group-hover:scale-105 transition-transform duration-500 ${
-                        index % 3 === 0 ? "h-80" : index % 3 === 1 ? "h-64" : "h-72"
-                      }`}
-                    />
-                    <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/20 transition-colors" />
-                  </div>
-                </motion.div>
-              ))}
+              {filteredImages.map((image, index) => {
+                // Middle column is offset downward (Meritage staircase).
+                const columnOffset =
+                  index % 3 === 1 ? "lg:mt-16 xl:mt-24" : "lg:mt-0";
+
+                return (
+                  <motion.button
+                    key={`${image.src}-${activeFilter}`}
+                    type="button"
+                    layout
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{
+                      duration: 0.55,
+                      delay: Math.min(index * 0.04, 0.35),
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    onClick={() => setLightboxIndex(index)}
+                    aria-label={image.alt}
+                    className={`group relative block w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#223127] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4efe6] ${columnOffset}`}
+                  >
+                    <div
+                      className={`${RATIO_CLASS[image.ratio]} w-full overflow-hidden bg-[#e7dfce]`}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+                      />
+                    </div>
+                    <div className="pointer-events-none absolute inset-0 bg-[#223127]/0 transition-colors duration-500 group-hover:bg-[#223127]/10" />
+                  </motion.button>
+                );
+              })}
             </AnimatePresence>
           </motion.div>
+
+          {filteredImages.length === 0 && (
+            <p className="mt-20 text-center font-body text-[#223127]/60">
+              {isMn
+                ? "Энэ ангилалд одоогоор зураг байхгүй байна."
+                : "No images in this collection yet."}
+            </p>
+          )}
         </div>
       </section>
 
+      {/* ============================================================ LIGHTBOX */}
       <AnimatePresence>
-        {selectedImage && (
+        {activeImage && lightboxIndex !== null && (
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={isMn ? "Гэрэл зургийн дэлгэрэнгүй" : "Gallery viewer"}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-            onClick={() => setSelectedImage(null)}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-[#0b0f0c]/95 backdrop-blur-sm p-4 md:p-10"
+            onClick={closeLightbox}
           >
             <button
-              onClick={() => setSelectedImage(null)}
-              aria-label={locale === 'mn' ? 'Хаах' : 'Close lightbox'}
-              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                closeLightbox();
+              }}
+              aria-label={isMn ? "Хаах" : "Close"}
+              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-full p-2"
             >
-              <X className="w-8 h-8" aria-hidden="true" />
+              <X className="h-7 w-7" aria-hidden="true" />
             </button>
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              src={selectedImage.replace("w=800", "w=1600")}
-              alt={images.find(img => img.src === selectedImage)?.alt || 'Gallery image'}
-              className="max-w-full max-h-[90vh] object-contain rounded-lg"
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                showPrev();
+              }}
+              aria-label={isMn ? "Өмнөх" : "Previous image"}
+              className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-full p-2"
+            >
+              <ChevronLeft className="h-8 w-8 md:h-10 md:w-10" aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                showNext();
+              }}
+              aria-label={isMn ? "Дараах" : "Next image"}
+              className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-full p-2"
+            >
+              <ChevronRight className="h-8 w-8 md:h-10 md:w-10" aria-hidden="true" />
+            </button>
+
+            <motion.figure
+              key={activeImage.src}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="relative flex max-h-full max-w-6xl flex-col items-center gap-4"
               onClick={(e) => e.stopPropagation()}
-            />
+            >
+              <img
+                src={activeImage.src}
+                alt={activeImage.alt}
+                className="max-h-[80vh] w-auto max-w-full object-contain"
+              />
+              <figcaption className="flex w-full items-center justify-between gap-6 font-cta uppercase tracking-[0.22em] text-[11px] text-white/70">
+                <span>{labels[activeImage.category]}</span>
+                <span>
+                  {String(lightboxIndex + 1).padStart(2, "0")} /{" "}
+                  {String(filteredImages.length).padStart(2, "0")}
+                </span>
+              </figcaption>
+            </motion.figure>
           </motion.div>
         )}
       </AnimatePresence>

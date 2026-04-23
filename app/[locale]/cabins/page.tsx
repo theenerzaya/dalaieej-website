@@ -74,7 +74,7 @@ const ROOMS: Room[] = [
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
     },
     priceFrom: 300,
-    image: "/cabins/room-superior.jpg",
+    image: "/images/cabins/room-superior.jpg",
   },
   {
     slug: "lakeside-cabin",
@@ -88,7 +88,7 @@ const ROOMS: Room[] = [
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
     priceFrom: 420,
-    image: "/cabins/room-lakeside.jpg",
+    image: "/images/cabins/room-lakeside.jpg",
   },
   {
     slug: "signature-cabin",
@@ -102,7 +102,7 @@ const ROOMS: Room[] = [
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
     },
     priceFrom: 560,
-    image: "/cabins/room-signature.jpg",
+    image: "/images/cabins/room-signature.jpg",
   },
   {
     slug: "grand-peninsula-suite",
@@ -116,20 +116,20 @@ const ROOMS: Room[] = [
       mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
     },
     priceFrom: 1200,
-    image: "/cabins/room-grand-peninsula.jpg",
+    image: "/images/cabins/room-grand-peninsula.jpg",
   },
 ];
 
-const HERO_IMAGE = "/cabins/hero-our-rooms.jpg";
+const HERO_IMAGE = "/images/cabins/hero-our-rooms.jpg";
 
 // Paired images for the Hoteller-style "mirage" crossfade.
 // `before` is the resting state; `after` is revealed with a WebGL liquid
 // distortion on hover. Each pair is two visually related but distinct shots
 // so the morph reads as a mood shift rather than a flicker.
-const SPA_IMAGE_BEFORE = "/cabins/spa-mirage-before.jpg";
-const SPA_IMAGE_AFTER = "/cabins/spa-mirage-after.jpg";
-const WELLNESS_IMAGE_BEFORE = "/cabins/wellness-mirage-before.jpg";
-const WELLNESS_IMAGE_AFTER = "/cabins/wellness-mirage-after.jpg";
+const SPA_IMAGE_BEFORE = "/images/cabins/spa-mirage-before.jpg";
+const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.jpg";
+const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.jpg";
+const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.jpg";
 
 type CopyKey =
   | "eyebrow"

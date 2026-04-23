@@ -102,7 +102,7 @@ export default function Navbar() {
             tabIndex={showFullChrome ? undefined : -1}
           >
             <Image
-              src="/images/logo-white.png"
+              src="/branding/logos/logo-white.png"
               alt="Dalai Eej Resort"
               width={180}
               height={50}

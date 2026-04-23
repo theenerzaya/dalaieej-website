@@ -186,38 +186,38 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   },
 };
 
-const HERO_IMAGE = "/superior-cabin/hero.jpg";
+const HERO_IMAGE = "/images/gallery/the-resort/lodge-first-light-shore.jpg";
 
 const GALLERY_IMAGES = [
-  "/superior-cabin/gallery-1.jpg",
-  "/superior-cabin/gallery-2.jpg",
-  "/superior-cabin/gallery-3.jpg",
+  "/images/gallery/accommodations/superior-cabin-living-room-firelit.jpg",
+  "/images/gallery/accommodations/grand-peninsula-suite-lake-view.jpg",
+  "/images/gallery/accommodations/bath-suite-stone-cedar.jpg",
 ];
 
 // Mirage effect pairs — identical set used on /cabins so the crossfade reads
 // consistently across the site.
-const SPA_IMAGE_BEFORE = "/superior-cabin/spa-mirage-before.jpg";
-const SPA_IMAGE_AFTER = "/superior-cabin/spa-mirage-after.jpg";
-const WELLNESS_IMAGE_BEFORE = "/superior-cabin/wellness-mirage-before.jpg";
-const WELLNESS_IMAGE_AFTER = "/superior-cabin/wellness-mirage-after.jpg";
+const SPA_IMAGE_BEFORE = "/images/gallery/spa-and-wellness/spa-treatment-room-before.jpg";
+const SPA_IMAGE_AFTER = "/images/gallery/spa-and-wellness/birch-steam-sauna-afternoon.jpg";
+const WELLNESS_IMAGE_BEFORE = "/images/gallery/spa-and-wellness/wellness-deck-before.jpg";
+const WELLNESS_IMAGE_AFTER = "/images/gallery/spa-and-wellness/warm-stone-massage-candlelight.jpg";
 
 const OTHER_ROOMS = [
   {
     name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
     size: { en: "55 m² / 3 guests", mn: "55 м² / 3 зочин" },
-    image: "/superior-cabin/other-lakeside.jpg",
+    image: "/images/gallery/the-lake/shoreline-mergens-ridge.jpg",
     href: "/cabins",
   },
   {
     name: { en: "The Lodge", mn: "Гол байшин" },
     size: { en: "70 m² / 3 guests", mn: "70 м² / 3 зочин" },
-    image: "/superior-cabin/other-lodge.jpg",
+    image: "/images/gallery/the-resort/main-lodge-low-cloud.jpg",
     href: "/lodge",
   },
   {
     name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
     size: { en: "120 m² / 4 guests", mn: "120 м² / 4 зочин" },
-    image: "/superior-cabin/other-grand-peninsula.jpg",
+    image: "/images/gallery/accommodations/grand-peninsula-facing-peninsula.jpg",
     href: "/cabins",
   },
 ];

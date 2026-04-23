@@ -171,7 +171,7 @@ export default function InteractiveMap() {
           }}
         >
           <Image
-            src="/images/resort-map.jpg"
+            src="/images/map/resort-map.jpg"
             alt="Dalai Eej Resort Map"
             fill
             priority

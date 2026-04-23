@@ -25,15 +25,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
     icons: {
       icon: [
-        { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
-        { url: '/favicon.svg', type: 'image/svg+xml' },
+        { url: '/branding/favicons/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+        { url: '/branding/favicons/favicon.svg', type: 'image/svg+xml' },
       ],
-      shortcut: '/favicon.ico',
+      shortcut: '/branding/favicons/favicon.ico',
       apple: [
-        { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+        { url: '/branding/favicons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
       ],
     },
-    manifest: '/site.webmanifest',
+    manifest: '/branding/favicons/site.webmanifest',
 
     alternates: {
       canonical,
@@ -96,7 +96,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             '@context': 'https://schema.org',
             '@type': 'Resort',
             name: 'Dalai Eej Heritage Site',
-            image: `${resortImageBase}/images/hero.jpg`,
+            image: `${resortImageBase}/images/og-heritage.jpg`,
             telephone: '+976-9500-5595',
             email: 'hello@dalaieej.com',
             address: {

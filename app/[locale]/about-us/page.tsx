@@ -186,7 +186,7 @@ const content = {
   },
 };
 
-const HERO_IMAGE_SRC = "/images/about-hero.webp";
+const HERO_IMAGE_SRC = "/images/about-us/images/about-hero.webp";
 const historyCardTextures = [
   "/images/about-us/decorations/1990s.png",
   "/images/about-us/decorations/2000s.png",

@@ -55,7 +55,7 @@ export default function Footer() {
                 />
               ) : null}
               <img
-                src={isAboutUs ? "/images/logo-white-text.png" : "/images/logo-white.png"}
+                src={isAboutUs ? "/branding/logos/logo-white-text.png" : "/branding/logos/logo-white.png"}
                 alt="Dalai Eej Resort"
                 className={
                   isAboutUs

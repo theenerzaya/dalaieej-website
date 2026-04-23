@@ -40,7 +40,7 @@ const offers = [
       title: "Зун 2026 Эрт Захиалга", 
       description: "3-р сарын 31-ээс өмнө захиалаад 2025 оны үнээр амраарай." 
     },
-  image: "images/specialoffers/early-bird.jpg"
+  image: "/images/specialoffers/early-bird.jpg"
   },
   {
     id: 3,
