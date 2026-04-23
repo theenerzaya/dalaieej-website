@@ -88,7 +88,7 @@ const mainNavItems: MainNavItem[] = [
   {
     id: "contact",
     href: "/contact",
-    image: "/images/address.jpeg",
+    image: "/images/address.webp",
     label: { en: "Contact", mn: "Холбоо барих" },
     meta: { en: "Plan your stay with us", mn: "Бидэнтэй төлөвлөөрэй" },
     available: true,

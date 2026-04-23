@@ -83,7 +83,7 @@ export default function AddressSection() {
 
             <div className="relative mt-8 w-full aspect-[4/3] overflow-hidden">
               <Image
-                src="/images/address.jpeg"
+                src="/images/address.webp"
                 alt={t("visitCta")}
                 fill
                 sizes="(min-width: 768px) 33vw, 100vw"
