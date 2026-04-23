@@ -186,12 +186,13 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   },
 };
 
-const HERO_IMAGE = "/images/gallery/the-resort/lodge-first-light-shore.webp";
+const HERO_IMAGE = "/images/superior-cabin/00.webp";
 
 const GALLERY_IMAGES = [
-  "/images/gallery/accommodations/superior-cabin-living-room-firelit.webp",
-  "/images/gallery/accommodations/grand-peninsula-suite-lake-view.webp",
-  "/images/gallery/accommodations/bath-suite-stone-cedar.webp",
+  "/images/superior-cabin/01.webp",
+  "/images/superior-cabin/02.webp",
+  "/images/superior-cabin/03.webp",
+  "/images/superior-cabin/004.webp",
 ];
 
 // Mirage effect pairs — identical set used on /cabins so the crossfade reads
@@ -205,19 +206,19 @@ const OTHER_ROOMS = [
   {
     name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
     size: { en: "55 m² / 3 guests", mn: "55 м² / 3 зочин" },
-    image: "/images/gallery/the-lake/shoreline-mergens-ridge.webp",
+    image: "/images/cabins/room-lakeside.webp",
     href: "/cabins",
   },
   {
     name: { en: "The Lodge", mn: "Гол байшин" },
     size: { en: "70 m² / 3 guests", mn: "70 м² / 3 зочин" },
-    image: "/images/gallery/the-resort/main-lodge-low-cloud.webp",
+    image: "/images/cabins/room-signature.webp",
     href: "/lodge",
   },
   {
     name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
     size: { en: "120 m² / 4 guests", mn: "120 м² / 4 зочин" },
-    image: "/images/gallery/accommodations/grand-peninsula-facing-peninsulawebp",
+    image: "/images/cabins/room-grand-peninsula.webp",
     href: "/cabins",
   },
 ];
