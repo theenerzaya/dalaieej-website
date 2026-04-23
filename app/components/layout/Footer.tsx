@@ -24,7 +24,7 @@ export default function Footer() {
   const resortLinks: { key: string; href: string; external?: boolean; enOnly?: boolean }[] = [
     { key: "about", href: "/about-us" },
     { key: "catalogue", href: "https://online.fliphtml5.com/scxec/iewd/", external: true },
-    { key: "gallery", href: "#" },
+    { key: "gallery", href: "/gallery" },
     { key: "faq", href: "#" },
     { key: "route-finder", href: "#", enOnly: true }
   ];

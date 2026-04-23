@@ -15,10 +15,8 @@
  *   3. LIGHTBOX — full-bleed overlay with prev/next/close, keyboard-navigable
  *      (ArrowLeft / ArrowRight / Escape).
  *
- * Gallery tiles reference existing photography already in /public/images
- * (restaurant, resort map, silogrid, lake, etc.). Paths under
- * /images/cabins and /images/rooms are intentionally omitted so this page
- * does not repeat cabin-detail galleries.
+ * Image list: all .webp under /public/images (except /about-us), plus .jpg/.jpeg
+ * under 900 KiB — see app/data/galleryImages.ts. Regenerate: npm run sync-gallery-images
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -26,6 +24,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
+import { GALLERY_IMAGES } from "@/app/data/galleryImages";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -49,45 +48,10 @@ type GalleryImage = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Curated images — wired to existing /public assets (no /cabins or /rooms)  */
+/*  Image manifest — app/data/galleryImages.ts                                */
 /* -------------------------------------------------------------------------- */
 
-const IMAGES: GalleryImage[] = [
-  // Row 1
-  { src: "/images/gallery/the-resort/lodge-first-light-shore.jpg", category: "resort", alt: "Lodge at first light, seen from the shore", ratio: "landscape" },
-  { src: "/images/restaurant/hero-food-beverage.webp", category: "dining", alt: "Food and beverage — hero scene from the restaurant", ratio: "landscape" },
-  { src: "/images/gallery/the-lake/eastern-ridge-sunset.jpg", category: "lake", alt: "Eastern ridge at sunset over Lake Khuvsgul", ratio: "landscape" },
-
-  // Row 2
-  { src: "/images/map/annex.jpg", category: "rooms", alt: "Annex cabin on the resort map", ratio: "portrait" },
-  { src: "/images/restaurant/collage-tl.webp", category: "dining", alt: "Restaurant collage — detail", ratio: "portrait" },
-  { src: "/images/gallery/spa-and-wellness/birch-steam-sauna-afternoon.jpg", category: "wellness", alt: "Birch-steam sauna, afternoon session", ratio: "portrait" },
-
-  // Row 3
-  { src: "/images/silogrid/hearth.webp", category: "rooms", alt: "Hearth and gathering space", ratio: "landscape" },
-  { src: "/images/gallery/the-resort/main-lodge-low-cloud.jpg", category: "resort", alt: "Main lodge exterior under low cloud", ratio: "portrait" },
-  { src: "/images/restaurant/collage-bl.webp", category: "dining", alt: "Restaurant collage — lower scene", ratio: "landscape" },
-
-  // Row 4
-  { src: "/images/gallery/spa-and-wellness/warm-stone-massage-candlelight.jpg", category: "wellness", alt: "Warm-stone massage room, candlelight", ratio: "square" },
-  { src: "/images/gallery/adventures/horseback-haichin-valley.png", category: "adventures", alt: "Horseback ride along the Haichin valley", ratio: "portrait" },
-  { src: "/images/map/grand.jpg", category: "rooms", alt: "Grand Peninsula suite — map view", ratio: "landscape" },
-
-  // Row 5
-  { src: "/images/restaurant/carousel/02.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "landscape" },
-  { src: "/images/restaurant/carousel/04.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "portrait" },
-  { src: "/images/map/heritage.jpg", category: "rooms", alt: "Heritage cabin on the resort map", ratio: "landscape" },
-
-  // Row 6
-  { src: "/images/map/ensuite.jpg", category: "rooms", alt: "Ensuite cabin on the resort map", ratio: "portrait" },
-  { src: "/images/map/reception.jpg", category: "resort", alt: "Reception and arrival", ratio: "landscape" },
-  { src: "/images/restaurant/carousel/06.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "landscape" },
-
-  // Row 7
-  { src: "/images/gallery/the-lake/shoreline-mergens-ridge.jpg", category: "lake", alt: "Shoreline at the foot of Mergen's Ridge", ratio: "landscape" },
-  { src: "/images/restaurant/collage-r.webp", category: "dining", alt: "Restaurant collage — lakeside panel", ratio: "portrait" },
-  { src: "/images/silogrid/sanctuary.webp", category: "rooms", alt: "Sanctuary — quiet stay", ratio: "landscape" },
-];
+const IMAGES: GalleryImage[] = GALLERY_IMAGES;
 
 const FILTERS_EN: Record<FilterId, string> = {
   all: "All",
