@@ -26,6 +26,9 @@ import {
   Wifi,
 } from "lucide-react";
 
+const SHARED_SPA_IMAGE_BEFORE = "/images/rooms/superior-cabin/spa-mirage-before.webp";
+const SHARED_WELLNESS_IMAGE_BEFORE = "/images/rooms/superior-cabin/wellness-mirage-before.webp";
+
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
   const now = new Date();
   let year = now.getFullYear();
@@ -227,8 +230,10 @@ export default function RoomDetailPage() {
   const room = ROOM_CONFIGS.find((r) => r.slug === params.room);
   if (!room) return null;
 
+  const roomImageBasePath = `/images/rooms/${room.slug}`;
+  const heroImage = `${roomImageBasePath}/00.webp`;
   const roomIndex = ROOM_CONFIGS.findIndex((r) => r.slug === room.slug);
-  const galleryImages = useMemo(() => {
+  const galleryFallbackImages = useMemo(() => {
     const alternates = ROOM_IMAGE_POOL.filter((image) => image !== room.image);
     if (alternates.length === 0) return [room.image, room.image, room.image, room.image];
     const rotation = roomIndex % alternates.length;
@@ -237,6 +242,10 @@ export default function RoomDetailPage() {
       (image) => image ?? room.image,
     );
   }, [room.image, roomIndex]);
+  const localGalleryImages = useMemo(
+    () => ["01", "02", "03", "04"].map((index) => `${roomImageBasePath}/${index}.webp`),
+    [roomImageBasePath],
+  );
 
   const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== room.slug);
   const otherRoomsTrack = useMemo(
@@ -315,7 +324,12 @@ export default function RoomDetailPage() {
           animate={{ scale: 1 }}
           transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img src={room.image} alt={room.title[lang]} className="absolute inset-0 h-full w-full object-cover" />
+          <FallbackImage
+            src={heroImage}
+            fallbackSrc={room.image}
+            alt={room.title[lang]}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/20 to-ink/80" />
         <motion.div className="relative z-10 flex h-full items-end" style={reduce ? undefined : { opacity: titleOpacity, y: titleY }}>
@@ -367,14 +381,16 @@ export default function RoomDetailPage() {
           <div className="md:col-span-3 grid grid-cols-1 gap-4 md:gap-6">
             <motion.div variants={fadeUp} className="aspect-[4/3] overflow-hidden bg-white/5 group">
               <img
-                src={galleryImages[0]}
+                src={localGalleryImages[0]}
+                onError={createImageFallbackHandler(galleryFallbackImages[0])}
                 alt={room.title[lang]}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
               />
             </motion.div>
             <motion.div variants={fadeUp} className="aspect-[4/3] overflow-hidden bg-white/5 group">
               <img
-                src={galleryImages[1]}
+                src={localGalleryImages[1]}
+                onError={createImageFallbackHandler(galleryFallbackImages[1])}
                 alt={room.title[lang]}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
               />
@@ -383,14 +399,16 @@ export default function RoomDetailPage() {
           <div className="md:col-span-2 grid grid-cols-1 gap-4 md:gap-6">
             <motion.div variants={fadeUp} className="aspect-[4/3] md:aspect-auto overflow-hidden bg-white/5 group">
               <img
-                src={galleryImages[2]}
+                src={localGalleryImages[2]}
+                onError={createImageFallbackHandler(galleryFallbackImages[2])}
                 alt={room.title[lang]}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
               />
             </motion.div>
             <motion.div variants={fadeUp} className="aspect-[4/3] md:aspect-auto overflow-hidden bg-white/5 group">
               <img
-                src={galleryImages[3]}
+                src={localGalleryImages[3]}
+                onError={createImageFallbackHandler(galleryFallbackImages[3])}
                 alt={room.title[lang]}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
               />
@@ -446,7 +464,7 @@ export default function RoomDetailPage() {
             direction="left"
           >
             <img
-              src={galleryImages[1]}
+              src={SHARED_WELLNESS_IMAGE_BEFORE}
               alt=""
               className="h-full w-full object-cover opacity-55 saturate-[0.65]"
             />
@@ -457,7 +475,7 @@ export default function RoomDetailPage() {
             from={1.1}
           >
             <img
-              src={galleryImages[2]}
+              src={SHARED_SPA_IMAGE_BEFORE}
               alt=""
               className="h-full w-full object-cover opacity-55 saturate-[0.65]"
             />
@@ -469,7 +487,8 @@ export default function RoomDetailPage() {
             direction="right"
           >
             <img
-              src={room.image}
+              src={heroImage}
+              onError={createImageFallbackHandler(room.image)}
               alt=""
               className="h-full w-full object-cover opacity-55 saturate-[0.65]"
             />
@@ -480,14 +499,16 @@ export default function RoomDetailPage() {
             from={1.1}
           >
             <img
-              src={galleryImages[3]}
+              src={localGalleryImages[3]}
+              onError={createImageFallbackHandler(galleryFallbackImages[3])}
               alt=""
               className="h-full w-full object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
 
           <img
-            src={room.image}
+            src={heroImage}
+            onError={createImageFallbackHandler(room.image)}
             alt=""
             className="absolute inset-0 h-full w-full object-cover opacity-20 md:hidden"
           />
@@ -570,6 +591,35 @@ export default function RoomDetailPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function createImageFallbackHandler(fallbackSrc: string) {
+  return (event: React.SyntheticEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+    image.onerror = null;
+    image.src = fallbackSrc;
+  };
+}
+
+function FallbackImage({
+  src,
+  fallbackSrc,
+  alt,
+  className,
+}: {
+  src: string;
+  fallbackSrc: string;
+  alt: string;
+  className: string;
+}) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onError={createImageFallbackHandler(fallbackSrc)}
+    />
   );
 }
 

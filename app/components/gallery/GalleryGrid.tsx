@@ -199,7 +199,7 @@ export default function GalleryGrid() {
     <main
       id="main-content"
       className="min-h-screen pt-24 md:pt-32 pb-24 md:pb-32"
-      style={{ backgroundColor: "#f4efe6" }}
+      style={{ backgroundColor: "#faf8f2" }}
     >
       {/* =============================================================== HEAD */}
       <section className="px-6">
@@ -291,7 +291,7 @@ export default function GalleryGrid() {
                     }}
                     onClick={() => setLightboxIndex(index)}
                     aria-label={image.alt}
-                    className={`group relative block w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#223127] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4efe6] ${columnOffset}`}
+                    className={`group relative block w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#223127] focus-visible:ring-offset-4 focus-visible:ring-offset-[#faf8f2] ${columnOffset}`}
                   >
                     <div
                       className={`${RATIO_CLASS[image.ratio]} w-full overflow-hidden bg-[#e7dfce]`}
