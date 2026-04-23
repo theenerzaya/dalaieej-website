@@ -186,38 +186,38 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   },
 };
 
-const HERO_IMAGE = "/images/gallery/the-resort/lodge-first-light-shore.jpg";
+const HERO_IMAGE = "/images/gallery/the-resort/lodge-first-light-shore.webp";
 
 const GALLERY_IMAGES = [
-  "/images/gallery/accommodations/superior-cabin-living-room-firelit.jpg",
-  "/images/gallery/accommodations/grand-peninsula-suite-lake-view.jpg",
-  "/images/gallery/accommodations/bath-suite-stone-cedar.jpg",
+  "/images/gallery/accommodations/superior-cabin-living-room-firelit.webp",
+  "/images/gallery/accommodations/grand-peninsula-suite-lake-view.webp",
+  "/images/gallery/accommodations/bath-suite-stone-cedar.webp",
 ];
 
 // Mirage effect pairs — identical set used on /cabins so the crossfade reads
 // consistently across the site.
-const SPA_IMAGE_BEFORE = "/images/gallery/spa-and-wellness/spa-treatment-room-before.jpg";
-const SPA_IMAGE_AFTER = "/images/gallery/spa-and-wellness/birch-steam-sauna-afternoon.jpg";
-const WELLNESS_IMAGE_BEFORE = "/images/gallery/spa-and-wellness/wellness-deck-before.jpg";
-const WELLNESS_IMAGE_AFTER = "/images/gallery/spa-and-wellness/warm-stone-massage-candlelight.jpg";
+const SPA_IMAGE_BEFORE = "/images/superior-cabin/spa-mirage-before.webp";
+const SPA_IMAGE_AFTER = "/images/superior-cabin/spa-mirage-after.webp";
+const WELLNESS_IMAGE_BEFORE = "/images/superior-cabin/wellness-mirage-before.webp";
+const WELLNESS_IMAGE_AFTER = "/images/superior-cabin/wellness-mirage-after.webp";
 
 const OTHER_ROOMS = [
   {
     name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
     size: { en: "55 m² / 3 guests", mn: "55 м² / 3 зочин" },
-    image: "/images/gallery/the-lake/shoreline-mergens-ridge.jpg",
+    image: "/images/gallery/the-lake/shoreline-mergens-ridge.webp",
     href: "/cabins",
   },
   {
     name: { en: "The Lodge", mn: "Гол байшин" },
     size: { en: "70 m² / 3 guests", mn: "70 м² / 3 зочин" },
-    image: "/images/gallery/the-resort/main-lodge-low-cloud.jpg",
+    image: "/images/gallery/the-resort/main-lodge-low-cloud.webp",
     href: "/lodge",
   },
   {
     name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
     size: { en: "120 m² / 4 guests", mn: "120 м² / 4 зочин" },
-    image: "/images/gallery/accommodations/grand-peninsula-facing-peninsula.jpg",
+    image: "/images/gallery/accommodations/grand-peninsula-facing-peninsulawebp",
     href: "/cabins",
   },
 ];

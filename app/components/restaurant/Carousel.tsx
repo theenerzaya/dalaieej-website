@@ -16,6 +16,11 @@
  *   • Prev / next arrows are always visible (matches Hoteller).
  *   • Keyboard ←/→ when the slider is focused.
  *   • prefers-reduced-motion → strip jumps instantly between slides.
+ *   • Infinite loop: the strip always continues in the direction of travel
+ *     (never snaps back to slide 0). When the virtual index walks past the
+ *     real slide range, we silently rebase it AFTER the animation finishes —
+ *     the on-screen images are identical before/after the rebase, so the
+ *     rebase is invisible.
  */
 
 import { motion, useReducedMotion } from "framer-motion";
@@ -23,6 +28,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type KeyboardEvent,
@@ -41,31 +47,49 @@ export type RestaurantCarouselProps = {
 
 const EASE_OUT_EXPO = [0.22, 1, 0.36, 1] as const;
 
+// How many copies of the slide list to render. Needs to be odd so we can
+// centre on the middle copy; >=5 gives us 2 copies of headroom in each
+// direction, which is more than enough for a rebase cycle.
+const STRIP_COPIES = 5;
+const CENTRE_COPY = Math.floor(STRIP_COPIES / 2); // 2 for 5 copies
+
 export default function RestaurantCarousel({
   slides,
   autoPlayMs = 6500,
   className = "",
 }: RestaurantCarouselProps) {
+  // `index` is a virtual, unbounded integer. The displayed image at any time
+  // is `slides[((index % n) + n) % n]`.
   const [index, setIndex] = useState(0);
+  const [animEnabled, setAnimEnabled] = useState(true);
   const [paused, setPaused] = useState(false);
   const reduce = useReducedMotion();
   const rootRef = useRef<HTMLDivElement | null>(null);
 
-  const go = useCallback(
-    (delta: number) => {
-      setIndex((i) => (i + delta + slides.length) % slides.length);
-    },
-    [slides.length],
-  );
+  const n = slides.length;
+
+  const go = useCallback((delta: number) => {
+    setAnimEnabled(true);
+    setIndex((i) => i + delta);
+  }, []);
 
   useEffect(() => {
-    if (reduce || paused || slides.length <= 1) return;
+    if (reduce || paused || n <= 1) return;
     const id = window.setInterval(() => {
       if (document.hidden) return;
-      setIndex((i) => (i + 1) % slides.length);
+      setAnimEnabled(true);
+      setIndex((i) => i + 1);
     }, autoPlayMs);
     return () => window.clearInterval(id);
-  }, [paused, reduce, autoPlayMs, slides.length]);
+  }, [paused, reduce, autoPlayMs, n]);
+
+  // After a silent rebase (animEnabled=false), re-enable animation on the
+  // very next frame so the subsequent transition is smooth again.
+  useEffect(() => {
+    if (animEnabled) return;
+    const raf = window.requestAnimationFrame(() => setAnimEnabled(true));
+    return () => window.cancelAnimationFrame(raf);
+  }, [animEnabled]);
 
   const onKey = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -80,23 +104,38 @@ export default function RestaurantCarousel({
     [go],
   );
 
-  if (slides.length === 0) return null;
+  const repeatedSlides = useMemo(() => {
+    if (n <= 1) return slides;
+    return Array.from({ length: STRIP_COPIES }, () => slides).flat();
+  }, [slides, n]);
+
+  if (n === 0) return null;
 
   // Each slide occupies SLIDE_W of the strip; the strip is shifted so that the
   // active slide centres in the viewport.
   // SLIDE_W=55 → ~22.5% peek on each side (left + right).
-  const SLIDE_W = 55; // percent of viewport per slide
+  const SLIDE_W = 55;
 
-  // To get a peek on BOTH edges (including at index 0 and the last index) we
-  // render the slide list three times in a row and centre on the middle copy.
-  // The visible active slide is always at position `slides.length + index`
-  // inside the tripled strip, so a peek of the previous + next slides is
-  // guaranteed at every step. When the index wraps, the apparent translation
-  // jumps by exactly one set, which we hide by detecting wrap and snapping the
-  // strip without animation on that frame.
-  const tripled = slides.length > 1 ? [...slides, ...slides, ...slides] : slides;
-  const visibleIndex = slides.length > 1 ? slides.length + index : index;
+  // Position of the active slide in the repeated strip. We centre on the
+  // middle copy so the virtual index can walk one full set in either
+  // direction before it needs to be rebased.
+  const visibleIndex = n > 1 ? CENTRE_COPY * n + index : 0;
   const stripOffsetPct = 50 - (visibleIndex + 0.5) * SLIDE_W;
+
+  // After an animation finishes, if we've drifted out of the canonical
+  // [0, n) window, silently rebase `index` by one full set. The strip's
+  // on-screen images don't change (we just shift the reference copy),
+  // so the rebase is invisible to the user.
+  const handleAnimationComplete = () => {
+    if (n <= 1) return;
+    if (index >= n) {
+      setAnimEnabled(false);
+      setIndex((i) => i - n);
+    } else if (index < 0) {
+      setAnimEnabled(false);
+      setIndex((i) => i + n);
+    }
+  };
 
   return (
     <div
@@ -117,13 +156,14 @@ export default function RestaurantCarousel({
         className="flex h-[58vh] min-h-[380px] md:h-[68vh] md:min-h-[460px] items-stretch"
         animate={{ x: `${stripOffsetPct}%` }}
         transition={
-          reduce
+          reduce || !animEnabled
             ? { duration: 0 }
             : { duration: 1.05, ease: EASE_OUT_EXPO }
         }
+        onAnimationComplete={handleAnimationComplete}
         style={{ willChange: "transform" }}
       >
-        {tripled.map((s, i) => {
+        {repeatedSlides.map((s, i) => {
           const isActive = i === visibleIndex;
           return (
             <motion.div
@@ -154,7 +194,7 @@ export default function RestaurantCarousel({
       </motion.div>
 
       {/* Arrows ---------------------------------------------------------- */}
-      {slides.length > 1 ? (
+      {n > 1 ? (
         <>
           <button
             type="button"

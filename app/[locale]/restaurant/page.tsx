@@ -53,11 +53,11 @@ const MirageImage = dynamic(
 /*  Assets                                                                    */
 /* -------------------------------------------------------------------------- */
 
-const HERO_IMAGE = "/images/restaurant/hero-food-beverage.jpg";
+const HERO_IMAGE = "/images/restaurant/hero-food-beverage.webp";
 
-const COLLAGE_TOP_LEFT = "/images/restaurant/collage-tl.jpg";
-const COLLAGE_BOTTOM_LEFT = "/images/restaurant/collage-bl.jpg";
-const COLLAGE_RIGHT = "/images/restaurant/collage-r.jpg";
+const COLLAGE_TOP_LEFT = "/images/restaurant/collage-tl.webp";
+const COLLAGE_BOTTOM_LEFT = "/images/restaurant/collage-bl.webp";
+const COLLAGE_RIGHT = "/images/restaurant/collage-r.webp";
 
 const CAROUSEL_IMAGES = [
   "/images/restaurant/carousel/01.webp",
@@ -76,8 +76,8 @@ const SPA_IMAGE_AFTER = "/images/restaurant/spa-mirage-after.webp";
 const WELLNESS_IMAGE_BEFORE = "/images/restaurant/wellness-mirage-before.webp";
 const WELLNESS_IMAGE_AFTER = "/images/restaurant/wellness-mirage-after.webp";
 
-// Warm peach panel (matches the Hoteller "Visit Us" block).
-const PEACH = "#f0cda0";
+// Warm terracotta panel for the invitation cards.
+const TERRACOTTA = "var(--accent-earth)";
 
 /* -------------------------------------------------------------------------- */
 /*  Bilingual copy                                                            */
@@ -320,7 +320,7 @@ export default function RestaurantPage() {
             <StaggerItem className="col-span-12 md:col-span-4">
               <article
                 className="flex h-full flex-col justify-between p-8 md:p-10 min-h-[260px]"
-                style={{ backgroundColor: PEACH }}
+                style={{ backgroundColor: TERRACOTTA }}
               >
                 <Reveal
                   as="p"
@@ -340,7 +340,7 @@ export default function RestaurantPage() {
             <StaggerItem className="col-span-12 md:col-span-8">
               <article
                 className="flex h-full flex-col justify-between p-8 md:p-12 min-h-[260px]"
-                style={{ backgroundColor: PEACH }}
+                style={{ backgroundColor: TERRACOTTA }}
               >
                 <div>
                   <h2
