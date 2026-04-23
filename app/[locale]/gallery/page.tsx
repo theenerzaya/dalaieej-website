@@ -18,6 +18,7 @@ function galleryJsonLd(locale: string) {
     name: 'Dalai Eej Resort Photo Gallery',
     description: 'A visual journey through Dalai Eej Resort on Lake Khuvsgul, Mongolia',
     url: absoluteSiteUrl(locale, '/gallery'),
+    inLanguage: locale,
     about: {
       '@type': 'Resort',
       name: 'Dalai Eej Resort'
@@ -26,6 +27,23 @@ function galleryJsonLd(locale: string) {
       '@type': 'Organization',
       name: 'Dalai Eej Resort',
       url: siteOriginForLocale(locale),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: locale === 'mn' ? 'Нүүр' : 'Home',
+          item: absoluteSiteUrl(locale, '/')
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: locale === 'mn' ? 'Галерей' : 'Gallery',
+          item: absoluteSiteUrl(locale, '/gallery')
+        }
+      ]
     }
   };
 }

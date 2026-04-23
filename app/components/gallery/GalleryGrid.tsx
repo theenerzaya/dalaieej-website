@@ -23,6 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import Image from "next/image";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -126,6 +127,15 @@ const RATIO_CLASS: Record<GalleryImage["ratio"], string> = {
   square: "aspect-square",
 };
 
+const IMAGE_DIMENSIONS: Record<
+  GalleryImage["ratio"],
+  { width: number; height: number }
+> = {
+  portrait: { width: 900, height: 1200 },
+  landscape: { width: 1200, height: 900 },
+  square: { width: 1200, height: 1200 },
+};
+
 /* -------------------------------------------------------------------------- */
 /*  Component                                                                 */
 /* -------------------------------------------------------------------------- */
@@ -214,6 +224,12 @@ export default function GalleryGrid() {
               : "A visual journey through the lodge, the lake, and the quiet hours between."}
           </motion.p>
 
+          <p className="sr-only">
+            {isMn
+              ? "Энэхүү галерей нь Далай ээж ресортын өрөө, нуурын эрэг, спа, зоог, адал явдлын мөчүүдийг ангиллаар харуулна."
+              : "This resort gallery highlights accommodations, lakeside views, dining, spa and wellness, and adventure moments across Dalai Eej."}
+          </p>
+
           {/* ========================================================= FILTERS */}
           <nav
             aria-label={isMn ? "Галерейн ангилал" : "Gallery categories"}
@@ -256,6 +272,9 @@ export default function GalleryGrid() {
                 // Middle column is offset downward (Meritage staircase).
                 const columnOffset =
                   index % 3 === 1 ? "lg:mt-16 xl:mt-24" : "lg:mt-0";
+                const isPriorityImage =
+                  activeFilter === "all" && (index === 0 || index === 1);
+                const dimensions = IMAGE_DIMENSIONS[image.ratio];
 
                 return (
                   <motion.button
@@ -277,11 +296,14 @@ export default function GalleryGrid() {
                     <div
                       className={`${RATIO_CLASS[image.ratio]} w-full overflow-hidden bg-[#e7dfce]`}
                     >
-                      <img
+                      <Image
                         src={image.src}
                         alt={image.alt}
-                        loading="lazy"
-                        decoding="async"
+                        width={dimensions.width}
+                        height={dimensions.height}
+                        priority={isPriorityImage}
+                        loading={isPriorityImage ? "eager" : "lazy"}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
                       />
                     </div>
@@ -361,9 +383,12 @@ export default function GalleryGrid() {
               className="relative flex max-h-full max-w-6xl flex-col items-center gap-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
+              <Image
                 src={activeImage.src}
                 alt={activeImage.alt}
+                width={1600}
+                height={1200}
+                sizes="100vw"
                 className="max-h-[80vh] w-auto max-w-full object-contain"
               />
               <figcaption className="flex w-full items-center justify-between gap-6 font-cta uppercase tracking-[0.22em] text-[11px] text-white/70">
