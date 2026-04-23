@@ -16,11 +16,11 @@
  * single source of truth for availability, rates and checkout.
  */
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useLocale } from "next-intl";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, BedDouble, Minus, Plus, Ruler, Users } from "lucide-react";
 import {
   AnimatedText,
@@ -174,9 +174,6 @@ const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.webp";
 const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.webp";
 const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.webp";
 const TAGLINE_BG_MAIN = "/images/cabins/room-grand-peninsula.webp";
-const TAGLINE_BG_LEFT = "/images/cabins/room-superior.webp";
-const TAGLINE_BG_TOP = "/images/cabins/room-lakeside.webp";
-const TAGLINE_BG_BOTTOM = "/images/cabins/room-signature.webp";
 
 type CopyKey =
   | "eyebrow"
@@ -209,10 +206,7 @@ type CopyKey =
   | "spaDesc"
   | "wellnessTitle"
   | "wellnessDesc"
-  | "learnMore"
-  | "finalHeading"
-  | "finalSubtitle"
-  | "finalCta";
+  | "learnMore";
 
 const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   en: {
@@ -250,9 +244,6 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     wellnessDesc:
       "Morning movement on the deck, sauna at dusk, and a slow ritual of tea on the return from the lake.",
     learnMore: "Learn More",
-    finalHeading: "Book Your Stay",
-    finalSubtitle: "Pick your dates — the lake and the larch are waiting.",
-    finalCta: "Start Your Booking",
   },
   mn: {
     eyebrow: "Гэрэл шиг уух · гэр шиг амар",
@@ -289,9 +280,6 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     wellnessDesc:
       "Өглөөний дасгал тавцан дээр, үдшийн саун, нууранд очоод буцах замын цайны зан үйл.",
     learnMore: "Дэлгэрэнгүй",
-    finalHeading: "Захиалах",
-    finalSubtitle: "Өдрөө сонго — нуур, шинэсэн ой тань таныг хүлээж байна.",
-    finalCta: "Захиалга эхлүүлэх",
   },
 };
 
@@ -320,21 +308,30 @@ export default function CabinsPage() {
     return `${localePrefix}/booking?${params.toString()}`;
   }, [checkin, checkout, adults, children, localePrefix]);
 
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroImageY = useTransform(heroProgress, [0, 1], ["0%", "12%"]);
+
   return (
     <main id="main-content" className="min-h-screen bg-ink text-main">
       {/* ------------------------------------------------------------ HERO */}
-      <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
-        <ImageReveal
+      <section ref={heroRef} className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
+        <motion.div
           className="absolute inset-0 h-full w-full"
-          duration={1.6}
-          from={1.1}
+          style={reduce ? undefined : { y: heroImageY }}
         >
-          <img
+          <motion.img
             src={HERO_IMAGE}
             alt={t.title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover will-change-transform"
+            initial={reduce ? { scale: 1 } : { scale: 1.14 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.9, ease: [0.22, 1, 0.36, 1] }}
           />
-        </ImageReveal>
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/75" />
 
         <HeroFadeOut className="relative z-10 flex h-full items-center justify-center" rise={160}>
@@ -343,17 +340,17 @@ export default function CabinsPage() {
                 The drop-down-from-above on scroll-return-to-top is produced
                 by HeroFadeOut's scroll-linked transform reversing. */}
             <motion.p
-              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="block font-cta uppercase tracking-[0.32em] text-[11px] sm:text-xs text-main/85 mb-5"
             >
               {heroEyebrow}
             </motion.p>
             <motion.h1
-              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
+              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1.9, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className={`block ${headlineFont} italic font-normal text-main text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02]`}
             >
               {t.title}
@@ -363,9 +360,9 @@ export default function CabinsPage() {
 
         {/* Hero booking bar — overlaid at the bottom of the image. */}
         <motion.div
-          initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-x-0 bottom-0 z-20"
         >
           <div className="mx-auto w-full max-w-6xl px-6 pb-8 md:pb-10">
@@ -458,29 +455,89 @@ export default function CabinsPage() {
       </section>
 
       {/* --------------------------------------------------- SECTION INTRO */}
-      <section>
-        <div className="mx-auto max-w-4xl px-6 pt-24 md:pt-32 pb-6 text-center">
-          <AnimatedText
-            as="p"
-            text={t.sectionEyebrow}
-            className="block font-cta uppercase tracking-[0.32em] text-[10px] text-bark mb-4"
-            stagger={0.04}
-            duration={0.7}
-          />
-          <AnimatedText
-            as="h2"
-            text={t.sectionHeading}
-            className={`block ${headlineFont} italic text-3xl md:text-5xl leading-[1.15] text-main mb-6`}
-            delay={0.1}
-            stagger={0.06}
-          />
-          <Reveal
-            as="p"
-            className="font-body text-main/70 text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
-            delay={0.2}
+      {/* Collage layout modelled on Hoteller's "Our Rooms" intro — three
+          opaque photo frames spaced apart around the centered heading.
+          Each image is rendered over the ink-navy background with
+          `mix-blend-luminosity` so it reads as a navy-toned monochrome
+          tile, blending into the page backgroundColor rather than
+          introducing unrelated saturated color. */}
+      <section className="relative isolate overflow-hidden bg-ink">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+        >
+          {/* Upper-left — landscape frame */}
+          <ImageReveal
+            className="absolute top-[10%] left-[4%] w-[30%] aspect-[16/10] overflow-hidden bg-ink hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="left"
           >
-            {t.sectionIntro}
-          </Reveal>
+            <img
+              src={TAGLINE_BG_MAIN}
+              alt=""
+              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+            />
+            <div className="absolute inset-0 bg-ink/25" />
+          </ImageReveal>
+
+          {/* Upper-right — portrait frame */}
+          <ImageReveal
+            className="absolute top-[8%] right-[5%] w-[22%] aspect-[4/5] overflow-hidden bg-ink hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="right"
+          >
+            <img
+              src={WELLNESS_IMAGE_BEFORE}
+              alt=""
+              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+            />
+            <div className="absolute inset-0 bg-ink/25" />
+          </ImageReveal>
+
+          {/* Lower-center — small square accent */}
+          <ImageReveal
+            className="absolute bottom-[10%] left-[32%] w-[14%] aspect-square overflow-hidden bg-ink hidden md:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={SPA_IMAGE_BEFORE}
+              alt=""
+              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+            />
+            <div className="absolute inset-0 bg-ink/25" />
+          </ImageReveal>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pt-28 md:pt-40 pb-24 md:pb-36">
+          <div className="max-w-3xl mx-auto text-center">
+            <AnimatedText
+              as="p"
+              text={t.sectionEyebrow}
+              className="block font-cta uppercase tracking-[0.32em] text-[10px] text-bark mb-5"
+              stagger={0.04}
+              duration={0.7}
+            />
+            <AnimatedText
+              as="h2"
+              text={t.sectionHeading}
+              className={`block ${headlineFont} italic text-3xl md:text-5xl lg:text-6xl leading-[1.1] text-main text-overlay-glow`}
+              delay={0.1}
+              stagger={0.06}
+            />
+          </div>
+
+          <div className="mt-14 md:mt-24 md:ml-auto md:mr-[4%] md:max-w-xs md:text-left text-center">
+            <Reveal
+              as="p"
+              className="font-body text-main/70 text-sm leading-relaxed"
+              delay={0.25}
+            >
+              {t.sectionIntro}
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -503,36 +560,71 @@ export default function CabinsPage() {
       </section>
 
       {/* ------------------------------------------------- TAGLINE QUOTE */}
-      <section className="relative isolate overflow-hidden border-y border-main/10 bg-black">
-        <div className="pointer-events-none absolute inset-0">
+      {/* Collage layout inspired by Hoteller's "valuable asset: you." —
+          four discrete photo frames positioned around the centered quote.
+          Frames stay visible (not a blurred backdrop) so they read as a
+          gallery rather than decoration. */}
+      <section className="relative isolate overflow-hidden border-y border-main/10 bg-black min-h-[80vh] md:min-h-[92vh] flex items-center">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+        >
+          <ImageReveal
+            className="absolute top-[8%] left-[4%] w-[22%] h-[78%] overflow-hidden hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="left"
+          >
+            <img
+              src={WELLNESS_IMAGE_BEFORE}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute top-[7%] left-[40%] w-[16%] aspect-[4/3] overflow-hidden hidden lg:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={SPA_IMAGE_BEFORE}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute top-[14%] right-[4%] w-[24%] h-[70%] overflow-hidden hidden md:block"
+            duration={1.4}
+            from={1.08}
+            direction="right"
+          >
+            <img
+              src={TAGLINE_BG_MAIN}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+          <ImageReveal
+            className="absolute bottom-[6%] left-[38%] w-[18%] aspect-[4/3] overflow-hidden hidden lg:block"
+            duration={1.3}
+            from={1.1}
+          >
+            <img
+              src={WELLNESS_IMAGE_AFTER}
+              alt=""
+              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+            />
+          </ImageReveal>
+
+          {/* Mobile-only soft backdrop so text stays legible without frames. */}
           <img
             src={TAGLINE_BG_MAIN}
             alt=""
-            aria-hidden="true"
-            className="absolute right-0 top-0 h-full w-[70%] object-cover opacity-25"
+            className="absolute inset-0 h-full w-full object-cover opacity-20 md:hidden"
           />
-          <img
-            src={TAGLINE_BG_LEFT}
-            alt=""
-            aria-hidden="true"
-            className="absolute left-0 top-10 h-[48%] w-[28%] object-cover opacity-30 hidden md:block"
-          />
-          <img
-            src={TAGLINE_BG_TOP}
-            alt=""
-            aria-hidden="true"
-            className="absolute left-[34%] top-0 h-[36%] w-[24%] object-cover opacity-24 hidden lg:block"
-          />
-          <img
-            src={TAGLINE_BG_BOTTOM}
-            alt=""
-            aria-hidden="true"
-            className="absolute left-[38%] bottom-8 h-[32%] w-[22%] object-cover opacity-28 hidden lg:block"
-          />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.56)_52%,_rgba(0,0,0,0.88)_100%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/88 via-black/72 to-black/90" />
         </div>
-        <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
+
+        <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:py-32 text-center w-full">
           <AnimatedText
             as="h2"
             mode="line"
@@ -599,30 +691,6 @@ export default function CabinsPage() {
             />
           </StaggerItem>
         </StaggerGroup>
-      </section>
-
-      {/* ----------------------------------------------------- FINAL CTA */}
-      <section>
-        <div className="mx-auto max-w-3xl px-6 py-24 md:py-32 text-center">
-          <AnimatedText
-            as="h2"
-            text={t.finalHeading}
-            className={`block ${headlineFont} italic text-4xl md:text-5xl text-main mb-5`}
-            stagger={0.07}
-          />
-          <Reveal as="p" className="font-body text-main/70 mb-10 leading-relaxed" delay={0.15}>
-            {t.finalSubtitle}
-          </Reveal>
-          <Reveal as="div" className="inline-block" delay={0.25}>
-            <Link
-              href={bookingHref}
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-main text-ink font-cta uppercase tracking-[0.28em] text-xs hover:bg-main/90 transition-colors"
-            >
-              {t.finalCta}
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </Reveal>
-        </div>
       </section>
     </main>
   );

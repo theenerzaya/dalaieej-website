@@ -5,6 +5,7 @@ import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/s
 import "../globals.css";
 import { araboto, cormorantGaramondItalic, montserrat, playfairDisplayItalic } from "../fonts";
 import NavbarWrapper from "../components/NavbarWrapper";
+import Preloader from "../components/Preloader";
 import Footer from "../components/layout/Footer";
 
 // Dynamic SEO, Social Media, and Favicon Metadata
@@ -116,6 +117,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         }}
       />
       <NextIntlClientProvider messages={messages}>
+        <Preloader />
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
           Skip to main content
         </a>
