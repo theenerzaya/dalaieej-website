@@ -11,7 +11,8 @@
     "optimize-images:run": "node scripts/optimize-images.mjs --run",
     "sync-translations": "node scripts/sync-translations.mjs",
     "sync-translations:run": "node scripts/sync-translations.mjs --run",
-    "sync-gallery-images": "node scripts/sync-gallery-images.mjs"
+    "sync-gallery-images": "node scripts/sync-gallery-images.mjs",
+    "check-gallery-images": "node scripts/sync-gallery-images.mjs && git diff --exit-code app/data/galleryImages.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
