@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { X, ArrowUpRight, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
+import { assetUrl } from "@/lib/assetUrl";
 import { BodyText, Eyebrow, Headline } from "./ui/Typography";
 
 type CategoryId = "stays" | "amenities" | "gettingAround";
@@ -19,19 +20,19 @@ interface Location {
 }
 
 const locations: Location[] = [
-  { id: 'annex',     left: 54.44, top: 63.50, category: 'stays',         image: '/images/map/annex.jpg' },
-  { id: 'ensuite',   left: 28.32, top: 79.50, category: 'stays',         image: '/images/map/ensuite.jpg' },
-  { id: 'heritage',  left: 47.88, top: 63.43, category: 'stays',         image: '/images/map/heritage.jpg' },
-  { id: 'grand',     left: 41.23, top: 71.40, category: 'stays',         image: '/images/map/grand.jpg' },
+  { id: 'annex',     left: 54.44, top: 63.50, category: 'stays',         image: assetUrl('/images/map/annex.jpg') },
+  { id: 'ensuite',   left: 28.32, top: 79.50, category: 'stays',         image: assetUrl('/images/map/ensuite.jpg') },
+  { id: 'heritage',  left: 47.88, top: 63.43, category: 'stays',         image: assetUrl('/images/map/heritage.jpg') },
+  { id: 'grand',     left: 41.23, top: 71.40, category: 'stays',         image: assetUrl('/images/map/grand.jpg') },
 
-  { id: 'reception', left: 66.27, top: 66.20, category: 'amenities',     image: '/images/map/reception.jpg' },
-  { id: 'bathhouse', left: 69.01, top: 71.30, category: 'amenities',     image: '/images/map/bathhouse.jpg' },
-  { id: 'sauna',     left: 95.43, top: 75.53, category: 'amenities',     image: '/images/map/sauna.webp' },
-  { id: 'pier',      left: 93.37, top: 66.03, category: 'amenities',     image: '/images/map/pier.jpg' },
-  { id: 'courts',    left: 74.38, top: 63.20, category: 'amenities',     image: '/images/map/courts.jpg' },
+  { id: 'reception', left: 66.27, top: 66.20, category: 'amenities',     image: assetUrl('/images/map/reception.jpg') },
+  { id: 'bathhouse', left: 69.01, top: 71.30, category: 'amenities',     image: assetUrl('/images/map/bathhouse.jpg') },
+  { id: 'sauna',     left: 95.43, top: 75.53, category: 'amenities',     image: assetUrl('/images/map/sauna.webp') },
+  { id: 'pier',      left: 93.37, top: 66.03, category: 'amenities',     image: assetUrl('/images/map/pier.jpg') },
+  { id: 'courts',    left: 74.38, top: 63.20, category: 'amenities',     image: assetUrl('/images/map/courts.jpg') },
 
   { id: 'entrance',  left: 34.10, top: 51.30, category: 'gettingAround', noImage: true },
-  { id: 'overland',  left: 19.43, top: 99.70, category: 'gettingAround', image: '/images/map/overland.jpg' },
+  { id: 'overland',  left: 19.43, top: 99.70, category: 'gettingAround', image: assetUrl('/images/map/overland.jpg') },
   { id: 'parking',   left:  0.03, top: 58.10, category: 'gettingAround', noImage: true },
 ];
 
@@ -137,7 +138,7 @@ export default function InteractiveMap() {
     <section className="bg-surface pt-24 md:pt-32 pb-[3.45rem] md:pb-[4.6rem] mb-[3.45rem] md:mb-[4.6rem] px-6">
       <div className="hidden" aria-hidden="true">
         {locations.map((loc) => (
-           loc.image && <Image key={loc.id} src={loc.image} alt="" width={10} height={10} priority />
+           loc.image && <SiteImage key={loc.id} src={loc.image} alt="" width={10} height={10} priority />
         ))}
       </div>
 
@@ -170,8 +171,8 @@ export default function InteractiveMap() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          <Image
-            src="/images/map/resort-map.jpg"
+          <SiteImage
+            src={assetUrl("/images/map/resort-map.jpg")}
             alt="Dalai Eej Resort Map"
             fill
             priority
@@ -345,7 +346,7 @@ export default function InteractiveMap() {
               </button>
               {activeLocation.image && !activeLocation.noImage && (
                 <div className="relative aspect-video w-full">
-                  <Image
+                  <SiteImage
                     src={activeLocation.image}
                     alt={t(`map.${activeLocation.id}.title`)}
                     fill

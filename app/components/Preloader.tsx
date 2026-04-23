@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
 
 const MIN_VISIBLE_MS = 650;
 const FADE_MS = 600;
@@ -62,7 +62,7 @@ export default function Preloader() {
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <Image
+      <SiteImage
         src="/branding/logos/logo-white.png"
         alt=""
         width={240}

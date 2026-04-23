@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Eyebrow } from "../ui/Typography";
+import { assetUrl } from "@/lib/assetUrl";
 
 export default function Footer() {
   const locale = useLocale();
@@ -47,7 +48,7 @@ export default function Footer() {
             >
               {isAboutUs ? (
                 <img
-                  src="/images/about-us/decorations/accent-5.png"
+                  src={assetUrl("/images/about-us/decorations/accent-5.png")}
                   alt=""
                   aria-hidden
                   draggable={false}
@@ -55,7 +56,7 @@ export default function Footer() {
                 />
               ) : null}
               <img
-                src={isAboutUs ? "/branding/logos/logo-white-text.png" : "/branding/logos/logo-white.png"}
+                src={isAboutUs ? assetUrl("/branding/logos/logo-white-text.png") : assetUrl("/branding/logos/logo-white.png")}
                 alt="Dalai Eej Resort"
                 className={
                   isAboutUs

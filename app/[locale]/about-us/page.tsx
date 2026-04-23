@@ -12,6 +12,7 @@ import {
 } from "framer-motion";
 import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
+import { assetUrl } from "@/lib/assetUrl";
 
 const content = {
   en: {
@@ -186,13 +187,13 @@ const content = {
   },
 };
 
-const HERO_IMAGE_SRC = "/images/about-us/images/about-hero.webp";
+const HERO_IMAGE_SRC = assetUrl("/images/about-us/images/about-hero.webp");
 const historyCardTextures = [
-  "/images/about-us/decorations/1990s.png",
-  "/images/about-us/decorations/2000s.png",
-  "/images/about-us/decorations/2009.png",
-  "/images/about-us/decorations/2010s.png",
-  "/images/about-us/decorations/2022.png",
+  assetUrl("/images/about-us/decorations/1990s.png"),
+  assetUrl("/images/about-us/decorations/2000s.png"),
+  assetUrl("/images/about-us/decorations/2009.png"),
+  assetUrl("/images/about-us/decorations/2010s.png"),
+  assetUrl("/images/about-us/decorations/2022.png"),
 ];
 
 // Scrapbook visuals for the timeline—one entry per era (5 total). Assets live in
@@ -221,17 +222,17 @@ const historyVisuals: Array<{
 }> = [
   {
     primary: {
-      src: "/images/about-us/images/timeline-1990s-primary.png",
+      src: assetUrl("/images/about-us/images/timeline-1990s-primary.png"),
       rotate: "-rotate-[3deg]",
       caption: { en: "Khatgal's son.", mn: "Хатгалын хүү." },
     },
     background: {
-      src: "/images/about-us/images/timeline-1990s-background.png",
+      src: assetUrl("/images/about-us/images/timeline-1990s-background.png"),
       rotate: "-rotate-[1deg]",
       positionClass: "top-[-0.2rem] left-[-1.35rem] md:top-[-0.45rem] md:left-[-1.75rem]",
       sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
     },
-    secondary: { src: "/images/about-us/images/timeline-1990s-secondary.png", rotate: "rotate-[4deg]" },
+    secondary: { src: assetUrl("/images/about-us/images/timeline-1990s-secondary.png"), rotate: "rotate-[4deg]" },
     annotation: {
       en: "Auction day\u2014a year of civil service wages.",
       mn: "Дуудлагын өдөр — жилийн цалин.",
@@ -239,18 +240,18 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/timeline-2000s-primary.png",
+      src: assetUrl("/images/about-us/images/timeline-2000s-primary.png"),
       rotate: "rotate-[2deg]",
       caption: { en: "First winters.", mn: "Анхны өвлүүд." },
     },
     background: {
-      src: "/images/about-us/images/timeline-2000s-background.jpeg",
+      src: assetUrl("/images/about-us/images/timeline-2000s-background.jpeg"),
       rotate: "rotate-[0.8deg]",
       positionClass: "top-[-0.2rem] left-[-1.3rem] md:top-[-0.45rem] md:left-[-1.7rem]",
       sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
     },
     secondary: {
-      src: "/images/about-us/images/timeline-2000s-secondary.png",
+      src: assetUrl("/images/about-us/images/timeline-2000s-secondary.png"),
       rotate: "rotate-[4deg]",
       overlayOnPrimary: true,
       overlayOnCard: true,
@@ -265,12 +266,12 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/timeline-2009-primary.png",
+      src: assetUrl("/images/about-us/images/timeline-2009-primary.png"),
       rotate: "-rotate-[2deg]",
       caption: { en: "Middle Eastern royalty", mn: "Ойрхи Дорнодын хаад" },
     },
     background: {
-      src: "/images/about-us/images/timeline-2009-background.png",
+      src: assetUrl("/images/about-us/images/timeline-2009-background.png"),
       rotate: "-rotate-[1.5deg]",
       positionClass: "top-[-0.25rem] left-[-1.5rem] md:top-[-0.5rem] md:left-[-1.9rem]",
       sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
@@ -282,18 +283,18 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/timeline-2010s-primary.png",
+      src: assetUrl("/images/about-us/images/timeline-2010s-primary.png"),
       rotate: "rotate-[3deg]",
       caption: { en: "Musk deer.", mn: "Хүдэр." },
     },
     background: {
-      src: "/images/about-us/images/timeline-2010s-background.png",
+      src: assetUrl("/images/about-us/images/timeline-2010s-background.png"),
       rotate: "rotate-[1deg]",
       positionClass: "top-[-0.2rem] left-[-1.3rem] md:top-[-0.45rem] md:left-[-1.7rem]",
       sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
     },
     secondary: {
-      src: "/images/about-us/images/timeline-2010s-secondary.png",
+      src: assetUrl("/images/about-us/images/timeline-2010s-secondary.png"),
       rotate: "-rotate-[3deg]",
       overlayOnPrimary: true,
       overlayOnCard: true,
@@ -307,17 +308,17 @@ const historyVisuals: Array<{
   },
   {
     primary: {
-      src: "/images/about-us/images/timeline-2022-primary.png",
+      src: assetUrl("/images/about-us/images/timeline-2022-primary.png"),
       rotate: "-rotate-[4deg]",
       caption: { en: "Third generation.", mn: "Гурав дахь үе." },
     },
     background: {
-      src: "/images/about-us/images/timeline-2022-background.jpg",
+      src: assetUrl("/images/about-us/images/timeline-2022-background.jpg"),
       rotate: "-rotate-[0.8deg]",
       positionClass: "top-[-0.15rem] left-[-1.25rem] md:top-[-0.4rem] md:left-[-1.65rem]",
       sizeClass: "w-[21rem] md:w-[23rem] h-[39rem] md:h-[41rem]",
     },
-    secondary: { src: "/images/about-us/images/timeline-2022-secondary.png", rotate: "rotate-[2deg]" },
+    secondary: { src: assetUrl("/images/about-us/images/timeline-2022-secondary.png"), rotate: "rotate-[2deg]" },
     annotation: { en: "...with you.", mn: "...тантай хамт." },
   },
 ];
@@ -357,7 +358,7 @@ function SectionAccent({
   className = "py-1 md:py-2",
   width = "w-20 md:w-24",
   invert = false,
-  src = "/images/about-us/decorations/accent.svg",
+  src = assetUrl("/images/about-us/decorations/accent.svg"),
 }: {
   className?: string;
   width?: string;
@@ -650,7 +651,7 @@ export default function AboutUsPage() {
       className="bg-main text-ink min-h-screen"
       style={{
         backgroundImage:
-          'url("/images/about-us/decorations/paper.jpg")',
+          `url("${assetUrl("/images/about-us/decorations/paper.jpg")}")`,
         backgroundRepeat: "repeat",
         backgroundSize: "720px 720px",
         backgroundBlendMode: "multiply",
@@ -669,7 +670,7 @@ export default function AboutUsPage() {
                 {t.heroTitle}
               </h1>
               <SectionAccent
-                src="/images/about-us/decorations/accent-2.svg"
+                src={assetUrl("/images/about-us/decorations/accent-2.svg")}
                 className="py-0"
                 width="w-[min(58%,22rem)] min-w-[10.5rem] md:min-w-[13rem] mx-auto"
               />
@@ -968,7 +969,7 @@ export default function AboutUsPage() {
       <section
         className="relative py-24 md:py-36 overflow-hidden"
         style={{
-          backgroundImage: 'url("/images/about-us/images/pillars-background.png")',
+          backgroundImage: `url("${assetUrl("/images/about-us/images/pillars-background.png")}")`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -1005,7 +1006,7 @@ export default function AboutUsPage() {
                   {isHospitalityPillar ? (
                     <div className="flex justify-center mb-5 pt-1">
                       <img
-                        src="/images/about-us/decorations/icon-dombo.svg"
+                        src={assetUrl("/images/about-us/decorations/icon-dombo.svg")}
                         alt=""
                         className="w-16 h-16 md:w-20 md:h-20 object-contain select-none pointer-events-none brightness-0 invert"
                         draggable={false}
@@ -1046,8 +1047,8 @@ export default function AboutUsPage() {
           <img
             src={
               isMn
-                ? "/images/about-us/images/founders-note-mn.svg"
-                : "/images/about-us/images/founders-note.svg"
+                ? assetUrl("/images/about-us/images/founders-note-mn.svg")
+                : assetUrl("/images/about-us/images/founders-note.svg")
             }
             alt={t.founderSectionLabel}
             className="w-full h-auto select-none"
@@ -1073,7 +1074,7 @@ export default function AboutUsPage() {
               }}
             >
               <motion.img
-                src="/images/about-us/images/founder-parallax-hallway.png"
+                src={assetUrl("/images/about-us/images/founder-parallax-hallway.png")}
                 alt={t.founderSectionLabel}
                 aria-hidden
                 className="absolute inset-0 h-[106%] w-full object-cover opacity-80 will-change-transform"
@@ -1121,7 +1122,7 @@ export default function AboutUsPage() {
       <div
         className="relative z-20 -mt-[100vh] h-screen bg-main"
         style={{
-          backgroundImage: 'url("/images/about-us/decorations/paper.jpg")',
+          backgroundImage: `url("${assetUrl("/images/about-us/decorations/paper.jpg")}")`,
           backgroundRepeat: "repeat",
           backgroundSize: "720px 720px",
           backgroundBlendMode: "multiply",

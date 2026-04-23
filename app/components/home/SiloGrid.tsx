@@ -10,6 +10,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Headline } from "../ui/Typography";
+import { assetUrl } from "@/lib/assetUrl";
 
 const silos = [
   {
@@ -155,7 +156,7 @@ function MobileSilo({
       >
         <div className="absolute inset-0 z-0">
           <img
-            src={silo.image}
+            src={assetUrl(silo.image)}
             alt={isMongolian ? silo.mn : silo.en}
             className={
               silo.id === "stories"
@@ -237,7 +238,7 @@ export default function SiloGrid() {
               className="relative block w-full h-full"
             >
               <img
-                src={silo.image}
+                src={assetUrl(silo.image)}
                 alt={isMongolian ? silo.mn : silo.en}
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -268,7 +269,7 @@ export default function SiloGrid() {
             className="relative block w-full h-full"
           >
             <img
-              src={storiesSilo.image}
+              src={assetUrl(storiesSilo.image)}
               alt={isMongolian ? storiesSilo.mn : storiesSilo.en}
               className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
             />

@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
 import { CTAButton } from "./ui/Typography";
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
 import { siteOriginForLocale } from "@/lib/site-urls";
+import { assetUrl } from "@/lib/assetUrl";
 
 function isHomePathname(pathname: string) {
   return pathname === "/" || pathname === "/mn" || pathname === "/mn/";
@@ -63,8 +64,7 @@ export default function Navbar() {
           paperNav
             ? {
                 paddingTop: "env(safe-area-inset-top, 0px)",
-                backgroundImage:
-                  'url("/images/about-us/decorations/paper.jpg")',
+                backgroundImage: `url("${assetUrl("/images/about-us/decorations/paper.jpg")}")`,
                 backgroundRepeat: "repeat",
                 backgroundSize: "720px 720px",
                 backgroundBlendMode: "multiply",
@@ -101,7 +101,7 @@ export default function Navbar() {
             aria-hidden={!showFullChrome}
             tabIndex={showFullChrome ? undefined : -1}
           >
-            <Image
+            <SiteImage
               src="/branding/logos/logo-white.png"
               alt="Dalai Eej Resort"
               width={180}
@@ -139,7 +139,7 @@ export default function Navbar() {
                 className="group relative inline-flex items-center justify-center px-5 py-2.5 sm:px-10 sm:py-5"
                 aria-label={locale === 'mn' ? 'Захиалах' : 'Book'}
               >
-                <Image
+                <SiteImage
                   src="/images/about-us/decorations/accent-3.svg"
                   alt=""
                   fill
@@ -147,7 +147,7 @@ export default function Navbar() {
                   className="pointer-events-none select-none object-contain transition-opacity duration-200 group-hover:opacity-0"
                   sizes="(min-width: 640px) 200px, 120px"
                 />
-                <Image
+                <SiteImage
                   src="/images/about-us/decorations/accent-4.svg"
                   alt=""
                   fill

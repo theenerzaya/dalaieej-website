@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Facebook, Instagram, Mail } from "lucide-react";
 import NextLink from "next/link";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
 import { usePathname } from "next/navigation";
 import { Link as I18nLink } from "@/i18n/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -195,7 +195,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
       {/* Preload nav-strip images so the overlay opens fully populated */}
       <div className="hidden" aria-hidden="true">
         {mainNavItems.map((item) => (
-          <Image
+          <SiteImage
             key={item.id}
             src={item.image}
             alt=""
@@ -252,7 +252,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                   onClick={onClose}
                   className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
-                  <Image
+                  <SiteImage
                     src="/branding/logos/logo-white.png"
                     alt="Dalai Eej Resort"
                     width={180}
@@ -409,7 +409,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           className="group flex w-[62vw] shrink-0 flex-col sm:w-[40vw] md:w-[clamp(16rem,28vw,22rem)]"
                         >
                           <div className="relative aspect-[3/4] w-full overflow-hidden bg-main/5">
-                            <Image
+                            <SiteImage
                               src={item.image}
                               alt={label}
                               fill

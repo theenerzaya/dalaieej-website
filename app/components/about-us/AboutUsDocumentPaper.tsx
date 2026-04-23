@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect } from "react";
+import { assetUrl } from "@/lib/assetUrl";
 
 const BG_KEYS = [
   "backgroundColor",
@@ -12,7 +13,7 @@ const BG_KEYS = [
 
 const PAPER: Record<(typeof BG_KEYS)[number], string> = {
   backgroundColor: "#ffffff",
-  backgroundImage: 'url("/images/about-us/decorations/paper.jpg")',
+  backgroundImage: `url("${assetUrl("/images/about-us/decorations/paper.jpg")}")`,
   backgroundRepeat: "repeat",
   backgroundSize: "720px 720px",
   backgroundBlendMode: "multiply",

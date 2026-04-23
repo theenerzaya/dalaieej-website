@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import FadeInWhenVisible from "./FadeInWhenVisible";
+import { assetUrl } from "@/lib/assetUrl";
 
 // STRATEGY UPDATE:
 // 1. Erdenet 50th: Targeted local intent.
@@ -182,7 +183,7 @@ export default function OffersCarousel() {
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentOffer.id}
-                src={currentOffer.image}
+                src={assetUrl(currentOffer.image)}
                 alt={content.title}
                 initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}

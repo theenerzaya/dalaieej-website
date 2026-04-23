@@ -23,7 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
 import { GALLERY_IMAGES } from "@/app/data/galleryImages";
 
 /* -------------------------------------------------------------------------- */
@@ -261,7 +261,7 @@ export default function GalleryGrid() {
                     <div
                       className={`${RATIO_CLASS[image.ratio]} w-full overflow-hidden bg-[#e7dfce]`}
                     >
-                      <Image
+                      <SiteImage
                         src={image.src}
                         alt={image.alt}
                         width={dimensions.width}
@@ -348,7 +348,7 @@ export default function GalleryGrid() {
               className="relative flex max-h-full max-w-6xl flex-col items-center gap-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <SiteImage
                 src={activeImage.src}
                 alt={activeImage.alt}
                 width={1600}

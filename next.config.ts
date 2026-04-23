@@ -7,6 +7,31 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const turbopackRoot = path.dirname(fileURLToPath(import.meta.url));
 
+/** Allow next/image to load optimized images from optional CDN origins (R2, S3, Vercel Blob, etc.). */
+function cdnRemotePatterns(): { protocol: "http" | "https"; hostname: string; pathname: string }[] {
+  const raws = [process.env.NEXT_PUBLIC_IMAGES_CDN_URL, process.env.NEXT_PUBLIC_ASSET_CDN_URL].filter(
+    (v): v is string => Boolean(v),
+  );
+  const seen = new Set<string>();
+  const out: { protocol: "http" | "https"; hostname: string; pathname: string }[] = [];
+  for (const s of raws) {
+    try {
+      const u = new URL(s);
+      const key = `${u.protocol}//${u.hostname}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        protocol: u.protocol === "https:" ? "https" : "http",
+        hostname: u.hostname,
+        pathname: "/**",
+      });
+    } catch {
+      /* invalid URL in env */
+    }
+  }
+  return out;
+}
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: turbopackRoot,
@@ -71,6 +96,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      ...cdnRemotePatterns(),
     ],
   },
 };

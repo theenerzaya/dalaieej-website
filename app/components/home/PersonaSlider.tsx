@@ -10,7 +10,8 @@ import {
 } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
+import { assetUrl } from "@/lib/assetUrl";
 import FadeInWhenVisible from "./FadeInWhenVisible";
 import { BodyText, CTALink, Eyebrow, Headline } from "../ui/Typography";
 
@@ -30,14 +31,14 @@ const personas = [
       title: "THE SANCTUARY",
       description:
         "Refined comfort in the wild. A peaceful escape from the capital, with zero compromises.",
-      image: "/images/personas/sanctuary-en.jpg",
+      image: assetUrl("/images/personas/sanctuary-en.jpg"),
       href: /*"/suites"*/ "/#",
     },
     mn: {
       title: "ТАВ ТУХТАЙ АМРАЛТ",
       description:
         "Байгаль дунд тав тухтай амарч, хэрэгтэй бүхнээ нэг дороос авах тайван сонголт.",
-      image: "/images/personas/sanctuary-mn.jpg",
+      image: assetUrl("/images/personas/sanctuary-mn.jpg"),
       href: /*"/suites"*/ "/#",
     },
   },
@@ -48,14 +49,14 @@ const personas = [
       title: "THE FRONTIER",
       description:
         "For those who have been everywhere. Experience the untamed Taiga and the raw beauty of the Blue Pearl.",
-      image: "/images/personas/frontier-en.jpg",
+      image: assetUrl("/images/personas/frontier-en.jpg"),
       href: /*"/experiences"*/ "/#",
     },
     mn: {
       title: "БАЙГАЛИЙН АДАЛ ЯВДАЛ",
       description:
         "Хөх сувдын эрэг, тайгын жимээр алхаж, морь унан, Хөвсгөлийн жинхэнэ өнгийг мэдрэх аялал.",
-      image: "/images/personas/frontier-mn.jpg",
+      image: assetUrl("/images/personas/frontier-mn.jpg"),
       href: /*"/experiences"*/ "/#",
     },
   },
@@ -66,14 +67,14 @@ const personas = [
       title: "DISCONNECT TO RECONNECT",
       description:
         "Silence the noise. No Zoom calls, just crackling fires, lake sounds, and deep focus.",
-      image: "/images/personas/disconnect-en.jpg",
+      image: assetUrl("/images/personas/disconnect-en.jpg"),
       href: /*"/retreats"*/ "/#",
     },
     mn: {
       title: "АМЬСГАА АВАХ ЗАВСАР",
       description:
         "Хотын хэмнэлээс түр холдож, чимээгүй орчинд өөртөө эргэн төвлөрөх нам гүм хугацаа.",
-      image: "/images/personas/disconnect-mn.jpg",
+      image: assetUrl("/images/personas/disconnect-mn.jpg"),
       href: /*"/retreats"*/ "/#",
     },
   },
@@ -84,14 +85,14 @@ const personas = [
       title: "THE SECLUSION",
       description:
         "Intimate escapes designed for two. Private dining, sunset wine, and zero interruptions.",
-      image: "/images/personas/seclusion.jpg",
+      image: assetUrl("/images/personas/seclusion.jpg"),
       href: /*"/offers"*/ "/#",
     },
     mn: {
       title: "ХОЁУЛАХНЫ АМРАЛТ",
       description:
         "Хувийн уур амьсгалтай орчинд жаргах нарыг хамт үзэж, дурсамж бүтээх дулаан аялал.",
-      image: "/images/personas/seclusion.jpg",
+      image: assetUrl("/images/personas/seclusion.jpg"),
       href: /*"/offers"*/ "/#",
     },
   },
@@ -141,7 +142,7 @@ function PersonaPushFrame({
         transition={pushTransition}
         className="absolute inset-0"
       >
-        <Image
+        <SiteImage
           src={copy.image}
           alt={copy.title}
           fill

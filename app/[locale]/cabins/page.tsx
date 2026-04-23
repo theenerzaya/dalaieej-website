@@ -31,6 +31,7 @@ import {
   StaggerGroup,
   StaggerItem,
 } from "@/app/components/cabins/animations";
+import { assetUrl } from "@/lib/assetUrl";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
 // stays clean and no WebGL code ships to other routes.
@@ -75,7 +76,7 @@ const ROOMS: Room[] = [
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
     },
     priceFrom: 300,
-    image: "/images/cabins/room-superior.webp",
+    image: assetUrl("/images/cabins/room-superior.webp"),
   },
   {
     slug: "triple-traditional-cabin",
@@ -89,7 +90,7 @@ const ROOMS: Room[] = [
       mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
     },
     priceFrom: 470,
-    image: "/images/cabins/room-triple-traditional.webp",
+    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
   },
   {
     slug: "lakeside-cabin",
@@ -103,7 +104,7 @@ const ROOMS: Room[] = [
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
     priceFrom: 420,
-    image: "/images/cabins/room-lakeside.webp",
+    image: assetUrl("/images/cabins/room-lakeside.webp"),
   },
   {
     slug: "triple-electric-cabin",
@@ -117,7 +118,7 @@ const ROOMS: Room[] = [
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
     },
     priceFrom: 510,
-    image: "/images/cabins/room-triple-electric.webp",
+    image: assetUrl("/images/cabins/room-triple-electric.webp"),
   },
   {
     slug: "signature-cabin",
@@ -131,7 +132,7 @@ const ROOMS: Room[] = [
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
     },
     priceFrom: 560,
-    image: "/images/cabins/room-signature.webp",
+    image: assetUrl("/images/cabins/room-signature.webp"),
   },
   {
     slug: "quad-electric-cabin",
@@ -145,7 +146,7 @@ const ROOMS: Room[] = [
       mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
     },
     priceFrom: 540,
-    image: "/images/cabins/room-quad-electric.webp",
+    image: assetUrl("/images/cabins/room-quad-electric.webp"),
   },
   {
     slug: "grand-peninsula-suite",
@@ -159,7 +160,7 @@ const ROOMS: Room[] = [
       mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
     },
     priceFrom: 1200,
-    image: "/images/cabins/room-grand-peninsula.webp",
+    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
   },
   {
     slug: "camping",
@@ -173,21 +174,21 @@ const ROOMS: Room[] = [
       mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
     },
     priceFrom: 180,
-    image: "/images/rooms/camping.webp",
+    image: assetUrl("/images/rooms/camping.webp"),
   },
 ];
 
-const HERO_IMAGE = "/images/cabins/hero-our-rooms.webp";
+const HERO_IMAGE = assetUrl("/images/cabins/hero-our-rooms.webp");
 
 // Paired images for the Hoteller-style "mirage" crossfade.
 // `before` is the resting state; `after` is revealed with a WebGL liquid
 // distortion on hover. Each pair is two visually related but distinct shots
 // so the morph reads as a mood shift rather than a flicker.
-const SPA_IMAGE_BEFORE = "/images/cabins/spa-mirage-before.webp";
-const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.webp";
-const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.webp";
-const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.webp";
-const TAGLINE_BG_MAIN = "/images/cabins/room-grand-peninsula.webp";
+const SPA_IMAGE_BEFORE = assetUrl("/images/cabins/spa-mirage-before.webp");
+const SPA_IMAGE_AFTER = assetUrl("/images/cabins/spa-mirage-after.webp");
+const WELLNESS_IMAGE_BEFORE = assetUrl("/images/cabins/wellness-mirage-before.webp");
+const WELLNESS_IMAGE_AFTER = assetUrl("/images/cabins/wellness-mirage-after.webp");
+const TAGLINE_BG_MAIN = assetUrl("/images/cabins/room-grand-peninsula.webp");
 
 type CopyKey =
   | "eyebrow"

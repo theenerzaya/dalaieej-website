@@ -42,6 +42,7 @@ import {
   StaggerItem,
 } from "@/app/components/cabins/animations";
 import RestaurantCarousel from "@/app/components/restaurant/Carousel";
+import { assetUrl } from "@/lib/assetUrl";
 
 // Client-only WebGL distortion. Loaded only on this route.
 const MirageImage = dynamic(
@@ -53,29 +54,29 @@ const MirageImage = dynamic(
 /*  Assets                                                                    */
 /* -------------------------------------------------------------------------- */
 
-const HERO_IMAGE = "/images/restaurant/hero-food-beverage.webp";
+const HERO_IMAGE = assetUrl("/images/restaurant/hero-food-beverage.webp");
 
-const COLLAGE_TOP_LEFT = "/images/restaurant/collage-tl.webp";
-const COLLAGE_BOTTOM_LEFT = "/images/restaurant/collage-bl.webp";
-const COLLAGE_RIGHT = "/images/restaurant/collage-r.webp";
+const COLLAGE_TOP_LEFT = assetUrl("/images/restaurant/collage-tl.webp");
+const COLLAGE_BOTTOM_LEFT = assetUrl("/images/restaurant/collage-bl.webp");
+const COLLAGE_RIGHT = assetUrl("/images/restaurant/collage-r.webp");
 
 const CAROUSEL_IMAGES = [
-  "/images/restaurant/carousel/01.webp",
-  "/images/restaurant/carousel/02.webp",
-  "/images/restaurant/carousel/03.webp",
-  "/images/restaurant/carousel/04.webp",
-  "/images/restaurant/carousel/05.webp",
-  "/images/restaurant/carousel/06.webp",
-  "/images/restaurant/carousel/07.webp",
-  "/images/restaurant/carousel/08.webp",
-  "/images/restaurant/carousel/09.webp",
-  "/images/restaurant/carousel/10.webp",
-];
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+].map((i) => assetUrl(`/images/restaurant/carousel/${i}.webp`));
 
-const SPA_IMAGE_BEFORE = "/images/restaurant/spa-mirage-before.webp";
-const SPA_IMAGE_AFTER = "/images/restaurant/spa-mirage-after.webp";
-const WELLNESS_IMAGE_BEFORE = "/images/restaurant/wellness-mirage-before.webp";
-const WELLNESS_IMAGE_AFTER = "/images/restaurant/wellness-mirage-after.webp";
+const SPA_IMAGE_BEFORE = assetUrl("/images/restaurant/spa-mirage-before.webp");
+const SPA_IMAGE_AFTER = assetUrl("/images/restaurant/spa-mirage-after.webp");
+const WELLNESS_IMAGE_BEFORE = assetUrl("/images/restaurant/wellness-mirage-before.webp");
+const WELLNESS_IMAGE_AFTER = assetUrl("/images/restaurant/wellness-mirage-after.webp");
 
 // Warm terracotta panel for the invitation cards.
 const TERRACOTTA = "var(--accent-earth)";

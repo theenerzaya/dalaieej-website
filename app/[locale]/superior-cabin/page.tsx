@@ -59,6 +59,7 @@ import {
   Tv,
   Wifi,
 } from "lucide-react";
+import { assetUrl } from "@/lib/assetUrl";
 
 /** Jul 1–5 for the upcoming summer window (matches the booking page's default). */
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
@@ -192,64 +193,64 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   },
 };
 
-const HERO_IMAGE = "/images/rooms/superior-cabin/00.webp";
+const HERO_IMAGE = assetUrl("/images/rooms/superior-cabin/00.webp");
 
 const GALLERY_IMAGES = [
-  "/images/rooms/superior-cabin/01.webp",
-  "/images/rooms/superior-cabin/02.webp",
-  "/images/rooms/superior-cabin/03.webp",
-  "/images/rooms/superior-cabin/04.webp",
-];
+  "01",
+  "02",
+  "03",
+  "04",
+].map((i) => assetUrl(`/images/rooms/superior-cabin/${i}.webp`));
 
 // Mirage effect pairs — identical set used on /cabins so the crossfade reads
 // consistently across the site.
-const SPA_IMAGE_BEFORE = "/images/rooms/superior-cabin/spa-mirage-before.webp";
-const SPA_IMAGE_AFTER = "/images/rooms/superior-cabin/spa-mirage-after.webp";
-const WELLNESS_IMAGE_BEFORE = "/images/rooms/superior-cabin/wellness-mirage-before.webp";
-const WELLNESS_IMAGE_AFTER = "/images/rooms/superior-cabin/wellness-mirage-after.webp";
-const TAGLINE_BG_MAIN = "/images/rooms/superior-cabin/00.webp";
+const SPA_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/spa-mirage-before.webp");
+const SPA_IMAGE_AFTER = assetUrl("/images/rooms/superior-cabin/spa-mirage-after.webp");
+const WELLNESS_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/wellness-mirage-before.webp");
+const WELLNESS_IMAGE_AFTER = assetUrl("/images/rooms/superior-cabin/wellness-mirage-after.webp");
+const TAGLINE_BG_MAIN = assetUrl("/images/rooms/superior-cabin/00.webp");
 
 const OTHER_ROOMS = [
   {
     name: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
     size: { en: "58 m² / 4 guests", mn: "58 м² / 4 зочин" },
-    image: "/images/cabins/room-triple-traditional.webp",
+    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
     href: "/triple-traditional-cabin",
   },
   {
     name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
     size: { en: "55 m² / 3 guests", mn: "55 м² / 3 зочин" },
-    image: "/images/cabins/room-lakeside.webp",
+    image: assetUrl("/images/cabins/room-lakeside.webp"),
     href: "/lakeside-cabin",
   },
   {
     name: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
     size: { en: "60 m² / 5 guests", mn: "60 м² / 5 зочин" },
-    image: "/images/cabins/room-triple-electric.webp",
+    image: assetUrl("/images/cabins/room-triple-electric.webp"),
     href: "/triple-electric-cabin",
   },
   {
     name: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
     size: { en: "70 m² / 5 guests", mn: "70 м² / 5 зочин" },
-    image: "/images/cabins/room-signature.webp",
+    image: assetUrl("/images/cabins/room-signature.webp"),
     href: "/signature-cabin",
   },
   {
     name: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
     size: { en: "66 m² / 5 guests", mn: "66 м² / 5 зочин" },
-    image: "/images/cabins/room-quad-electric.webp",
+    image: assetUrl("/images/cabins/room-quad-electric.webp"),
     href: "/quad-electric-cabin",
   },
   {
     name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
     size: { en: "120 m² / 4 guests", mn: "120 м² / 4 зочин" },
-    image: "/images/cabins/room-grand-peninsula.webp",
+    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
     href: "/grand-peninsula-suite",
   },
   {
     name: { en: "Camping", mn: "Кемпинг" },
     size: { en: "Outdoor setup / 4 guests", mn: "Гадаа байрлал / 4 зочин" },
-    image: "/images/rooms/camping.webp",
+    image: assetUrl("/images/rooms/camping.webp"),
     href: "/booking",
   },
 ];

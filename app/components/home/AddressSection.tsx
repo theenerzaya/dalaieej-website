@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 import { BodyText, Headline } from "../ui/Typography";
@@ -82,7 +82,7 @@ export default function AddressSection() {
             </BodyText>
 
             <div className="relative mt-8 w-full aspect-[4/3] overflow-hidden">
-              <Image
+              <SiteImage
                 src="/images/address.webp"
                 alt={t("visitCta")}
                 fill

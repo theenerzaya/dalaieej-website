@@ -25,9 +25,12 @@ import {
   Tv,
   Wifi,
 } from "lucide-react";
+import { assetUrl } from "@/lib/assetUrl";
 
-const SHARED_SPA_IMAGE_BEFORE = "/images/rooms/superior-cabin/spa-mirage-before.webp";
-const SHARED_WELLNESS_IMAGE_BEFORE = "/images/rooms/superior-cabin/wellness-mirage-before.webp";
+const SHARED_SPA_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/spa-mirage-before.webp");
+const SHARED_WELLNESS_IMAGE_BEFORE = assetUrl(
+  "/images/rooms/superior-cabin/wellness-mirage-before.webp",
+);
 
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
   const now = new Date();
@@ -62,7 +65,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "Wood-fired warmth, handwoven textiles and a private forest view define the Superior Cabin. It is a quiet base for couples and small families who want to stay close to the lake and larch line.",
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдац Superior модон байшинг тодорхойлно. Нуур, шинэсэн ойд ойр амрахыг хүссэн хос болон жижиг гэр бүлд тохиромжтой.",
     },
-    image: "/images/cabins/room-superior.webp",
+    image: assetUrl("/images/cabins/room-superior.webp"),
     size: { en: "30 m²", mn: "30 м²" },
     bed: { en: "1 Queen Bed", mn: "1 том ор" },
     view: { en: "Forest View", mn: "Ойн харагдац" },
@@ -77,7 +80,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "A classic timber layout with three sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
       mn: "Гурван унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
     },
-    image: "/images/cabins/room-triple-traditional.webp",
+    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
     size: { en: "58 m²", mn: "58 м²" },
     bed: { en: "3 Sleeping Spaces", mn: "3 унтлагын хэсэг" },
     view: { en: "Forest Deck View", mn: "Ойн террасын харагдац" },
@@ -92,7 +95,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "A wider shoreline footprint with two sleeping spaces, a reading nook, and a deck that steps directly toward Lake Khuvsgul.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай, хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
-    image: "/images/cabins/room-lakeside.webp",
+    image: assetUrl("/images/cabins/room-lakeside.webp"),
     size: { en: "55 m²", mn: "55 м²" },
     bed: { en: "2 Sleeping Spaces", mn: "2 унтлагын хэсэг" },
     view: { en: "Lake View", mn: "Нуурын харагдац" },
@@ -107,7 +110,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "Designed for longer family stays with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой тав тух өгөх цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
     },
-    image: "/images/cabins/room-triple-electric.webp",
+    image: assetUrl("/images/cabins/room-triple-electric.webp"),
     size: { en: "60 m²", mn: "60 м²" },
     bed: { en: "3 Sleeping Zones", mn: "3 унтлагын бүс" },
     view: { en: "Shoreline View", mn: "Эргийн харагдац" },
@@ -122,7 +125,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "A separate living area, deep-soak tub, and private terrace opening onto the larch line make this the most requested room type.",
       mn: "Тусдаа зочны хэсэг, гүн ванн, шинэсэн ой руу нээгдэх хувийн террас нь энэ өрөөг хамгийн эрэлттэй сонголт болгодог.",
     },
-    image: "/images/cabins/room-signature.webp",
+    image: assetUrl("/images/cabins/room-signature.webp"),
     size: { en: "70 m²", mn: "70 м²" },
     bed: { en: "2 Bedrooms", mn: "2 унтлагын өрөө" },
     view: { en: "Larch Line View", mn: "Шинэсэн ойн харагдац" },
@@ -137,7 +140,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "A flexible mid-tier option with four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
       mn: "Дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тухын систем, эрэг рүү харсан том зочны хэсэг бүхий уян хатан дунд ангиллын сонголт.",
     },
-    image: "/images/cabins/room-quad-electric.webp",
+    image: assetUrl("/images/cabins/room-quad-electric.webp"),
     size: { en: "66 m²", mn: "66 м²" },
     bed: { en: "4 Sleeping Positions", mn: "4 унтлагын байрлал" },
     view: { en: "Shoreline View", mn: "Эргийн харагдац" },
@@ -152,7 +155,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
       en: "A standalone suite on its own peninsula with two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
       mn: "Өөрийн хойг дээр байрлах тусдаа хаус бөгөөд хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван талаараа тасралтгүй нуурын харагдацтай.",
     },
-    image: "/images/cabins/room-grand-peninsula.webp",
+    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
     size: { en: "120 m²", mn: "120 м²" },
     bed: { en: "2 Bedrooms", mn: "2 унтлагын өрөө" },
     view: { en: "Panoramic Lake View", mn: "Панорам нуурын харагдац" },
@@ -231,7 +234,7 @@ export default function RoomDetailPage() {
   if (!room) return null;
 
   const roomImageBasePath = `/images/rooms/${room.slug}`;
-  const heroImage = `${roomImageBasePath}/00.webp`;
+  const heroImage = assetUrl(`${roomImageBasePath}/00.webp`);
   const roomIndex = ROOM_CONFIGS.findIndex((r) => r.slug === room.slug);
   const galleryFallbackImages = useMemo(() => {
     const alternates = ROOM_IMAGE_POOL.filter((image) => image !== room.image);
@@ -243,7 +246,8 @@ export default function RoomDetailPage() {
     );
   }, [room.image, roomIndex]);
   const localGalleryImages = useMemo(
-    () => ["01", "02", "03", "04"].map((index) => `${roomImageBasePath}/${index}.webp`),
+    () =>
+      ["01", "02", "03", "04"].map((index) => assetUrl(`${roomImageBasePath}/${index}.webp`)),
     [roomImageBasePath],
   );
 
@@ -595,10 +599,11 @@ export default function RoomDetailPage() {
 }
 
 function createImageFallbackHandler(fallbackSrc: string) {
+  const resolved = assetUrl(fallbackSrc);
   return (event: React.SyntheticEvent<HTMLImageElement>) => {
     const image = event.currentTarget;
     image.onerror = null;
-    image.src = fallbackSrc;
+    image.src = resolved;
   };
 }
 
@@ -615,7 +620,7 @@ function FallbackImage({
 }) {
   return (
     <img
-      src={src}
+      src={assetUrl(src)}
       alt={alt}
       className={className}
       onError={createImageFallbackHandler(fallbackSrc)}

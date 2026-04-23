@@ -33,6 +33,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { assetUrl } from "@/lib/assetUrl";
 
 type Props = {
   before: string;
@@ -211,6 +212,8 @@ export default function MirageImage({
   speedIn = 1.2,
   speedOut = 1.4,
 }: Props) {
+  const beforeUrl = assetUrl(before);
+  const afterUrl = assetUrl(after);
   const hostRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const hoveringRef = useRef(false);
@@ -274,8 +277,8 @@ export default function MirageImage({
         gl.vertexAttribPointer(uvAttr, 2, gl.FLOAT, false, 16, 8);
 
         const [loaded1, loaded2] = await Promise.all([
-          loadImage(before),
-          loadImage(after),
+          loadImage(beforeUrl),
+          loadImage(afterUrl),
         ]);
         if (disposed || !gl) return;
 
@@ -384,7 +387,7 @@ export default function MirageImage({
         if (program) gl.deleteProgram(program);
       }
     };
-  }, [before, after, intensity, speedIn, speedOut]);
+  }, [beforeUrl, afterUrl, intensity, speedIn, speedOut]);
 
   const onEnter = () => {
     hoveringRef.current = true;
@@ -405,7 +408,7 @@ export default function MirageImage({
     >
       {/* Fallback / SEO image — always present, hidden once WebGL takes over. */}
       <img
-        src={before}
+        src={beforeUrl}
         alt={alt}
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
           ready && !failed ? "opacity-0" : "opacity-100"
@@ -414,7 +417,7 @@ export default function MirageImage({
       {/* CSS crossfade layer — used only when WebGL fails. */}
       {failed ? (
         <img
-          src={after}
+          src={afterUrl}
           alt=""
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1200ms] ease-out group-hover:opacity-100"
