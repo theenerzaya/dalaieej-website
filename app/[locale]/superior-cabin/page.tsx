@@ -192,7 +192,7 @@ const GALLERY_IMAGES = [
   "/images/superior-cabin/01.webp",
   "/images/superior-cabin/02.webp",
   "/images/superior-cabin/03.webp",
-  "/images/superior-cabin/004.webp",
+  "/images/superior-cabin/04.webp",
 ];
 
 // Mirage effect pairs — identical set used on /cabins so the crossfade reads
@@ -431,16 +431,28 @@ export default function SuperiorCabinPage() {
           viewport={{ once: true, amount: 0.2 }}
           className="mx-auto max-w-6xl px-6 py-16 md:py-24 grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6"
         >
-          <motion.div
-            variants={fadeUpSlow}
-            className="md:col-span-3 aspect-[4/3] overflow-hidden bg-white/5 group"
-          >
-            <img
-              src={GALLERY_IMAGES[0]}
-              alt={t.title}
-              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
-            />
-          </motion.div>
+          <div className="md:col-span-3 grid grid-cols-1 gap-4 md:gap-6">
+            <motion.div
+              variants={fadeUpSlow}
+              className="aspect-[4/3] overflow-hidden bg-white/5 group"
+            >
+              <img
+                src={GALLERY_IMAGES[0]}
+                alt={t.title}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+              />
+            </motion.div>
+            <motion.div
+              variants={fadeUpSlow}
+              className="aspect-[4/3] overflow-hidden bg-white/5 group"
+            >
+              <img
+                src={GALLERY_IMAGES[3]}
+                alt={t.title}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+              />
+            </motion.div>
+          </div>
           <div className="md:col-span-2 grid grid-cols-1 gap-4 md:gap-6">
             <motion.div
               variants={fadeUpSlow}
@@ -574,13 +586,13 @@ export default function SuperiorCabinPage() {
 
       {/* ------------------------------------------------- RELATED STAYS */}
       <section className="border-b border-main/10">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6 pt-20 md:pt-28 pb-14">
           <motion.div
             variants={staggerParent}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.5 }}
-            className="text-center mb-14"
+            className="text-center"
           >
             <motion.p
               variants={fadeUp}
@@ -595,34 +607,31 @@ export default function SuperiorCabinPage() {
               {t.experiencesHeading}
             </motion.h2>
           </motion.div>
-
-          <motion.div
-            variants={staggerParent}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14"
-          >
-            <ExperienceCard
-              imageBefore={SPA_IMAGE_BEFORE}
-              imageAfter={SPA_IMAGE_AFTER}
-              title={t.spaTitle}
-              description={t.spaDesc}
-              learnMore={t.learnMore}
-              href={`${localePrefix}/wellness`}
-              headlineFont={headlineFont}
-            />
-            <ExperienceCard
-              imageBefore={WELLNESS_IMAGE_BEFORE}
-              imageAfter={WELLNESS_IMAGE_AFTER}
-              title={t.wellnessTitle}
-              description={t.wellnessDesc}
-              learnMore={t.learnMore}
-              href={`${localePrefix}/wellness`}
-              headlineFont={headlineFont}
-            />
-          </motion.div>
         </div>
+        <motion.div
+          variants={staggerParent}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2"
+        >
+          <ExperienceCard
+            imageBefore={SPA_IMAGE_BEFORE}
+            imageAfter={SPA_IMAGE_AFTER}
+            title={t.spaTitle}
+            href={`${localePrefix}/wellness`}
+            headlineFont={headlineFont}
+          />
+          <ExperienceCard
+            imageBefore={WELLNESS_IMAGE_BEFORE}
+            imageAfter={WELLNESS_IMAGE_AFTER}
+            title={t.wellnessTitle}
+            body={t.wellnessDesc}
+            learnMore={t.learnMore}
+            href={`${localePrefix}/wellness`}
+            headlineFont={headlineFont}
+          />
+        </motion.div>
       </section>
 
       {/* ----------------------------------------------------- OTHER ROOMS */}
@@ -763,7 +772,7 @@ function ExperienceCard({
   imageBefore,
   imageAfter,
   title,
-  description,
+  body,
   learnMore,
   href,
   headlineFont,
@@ -771,74 +780,71 @@ function ExperienceCard({
   imageBefore: string;
   imageAfter: string;
   title: string;
-  description: string;
-  learnMore: string;
+  body?: string;
+  learnMore?: string;
   href: string;
   headlineFont: string;
 }) {
-  const reduce = useReducedMotion();
-  const tiltRef = useRef<HTMLDivElement>(null);
-
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const rxSpring = useSpring(rx, { stiffness: 140, damping: 16, mass: 0.4 });
-  const rySpring = useSpring(ry, { stiffness: 140, damping: 16, mass: 0.4 });
-
-  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (reduce || !tiltRef.current) return;
-    const rect = tiltRef.current.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width; // 0..1
-    const py = (e.clientY - rect.top) / rect.height; // 0..1
-    const max = 6; // degrees — matches `tilt.jquery.js` default intensity-ish
-    ry.set((px - 0.5) * 2 * max);
-    rx.set(-(py - 0.5) * 2 * max);
-  };
-
-  const handleLeave = () => {
-    rx.set(0);
-    ry.set(0);
+  const navigate = () => {
+    if (typeof window !== "undefined") window.location.href = href;
   };
 
   return (
-    <motion.article variants={fadeUp} className="group">
-      <motion.div
-        ref={tiltRef}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
-        style={
-          reduce
-            ? undefined
-            : {
-                rotateX: rxSpring,
-                rotateY: rySpring,
-                transformPerspective: 1200,
-                transformStyle: "preserve-3d",
-              }
+    <motion.article
+      variants={fadeUp}
+      role="link"
+      tabIndex={0}
+      aria-label={title}
+      onClick={navigate}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          navigate();
         }
-        className="block aspect-[5/3] overflow-hidden bg-white/5 mb-6 will-change-transform"
-      >
-        <Link href={href} className="block h-full w-full">
-          <MirageImage
-            before={imageBefore}
-            after={imageAfter}
-            alt={title}
-            className="h-full w-full"
-          />
-        </Link>
+      }}
+      className="group relative h-[78vh] min-h-[520px] w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40"
+    >
+      <motion.div className="absolute inset-0 h-full w-full z-0">
+        <MirageImage
+          before={imageBefore}
+          after={imageAfter}
+          alt={title}
+          className="h-full w-full"
+        />
       </motion.div>
-      <h3 className={`${headlineFont} italic text-2xl md:text-3xl text-main mb-3`}>
-        {title}
-      </h3>
-      <p className="font-body text-main/70 leading-relaxed mb-5">{description}</p>
-      <Link
-        href={href}
-        className="group/cta inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-bark hover:text-main transition-colors"
-      >
-        <span className="border-b border-bark/40 group-hover/cta:border-main pb-0.5">
-          {learnMore}
-        </span>
-        <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/cta:translate-x-1" />
-      </Link>
+
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-br from-ink/40 via-ink/0 to-ink/0" />
+      {body ? (
+        <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-ink/55 via-ink/0 to-ink/0" />
+      ) : null}
+
+      <div className="pointer-events-none absolute top-10 md:top-16 left-8 md:left-14 z-[3]">
+        <h3
+          className={`${headlineFont} italic text-main text-5xl md:text-6xl lg:text-7xl leading-[1.02] text-overlay-glow`}
+        >
+          {title}
+        </h3>
+      </div>
+
+      {body ? (
+        <div className="pointer-events-none absolute right-8 md:right-14 bottom-16 md:bottom-24 z-[3] max-w-md text-right">
+          <p className="font-body text-main/90 text-sm md:text-base leading-relaxed mb-5">
+            {body}
+          </p>
+          {learnMore ? (
+            <Link
+              href={href}
+              onClick={(e) => e.stopPropagation()}
+              className="pointer-events-auto inline-flex items-center gap-2 font-cta uppercase tracking-[0.32em] text-[11px] text-main"
+            >
+              <span className="border-b border-main/60 group-hover:border-main pb-0.5">
+                {learnMore}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
     </motion.article>
   );
 }

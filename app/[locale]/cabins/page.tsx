@@ -20,6 +20,7 @@ import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useLocale } from "next-intl";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, BedDouble, Minus, Plus, Ruler, Users } from "lucide-react";
 import {
   AnimatedText,
@@ -77,8 +78,22 @@ const ROOMS: Room[] = [
     image: "/images/cabins/room-superior.webp",
   },
   {
+    slug: "triple-traditional-cabin",
+    href: "/triple-traditional-cabin",
+    name: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
+    area: { en: "58 m²", mn: "58 м²" },
+    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
+    quantity: { en: "2 cabins", mn: "2 байшин" },
+    intro: {
+      en: "A classic timber cabin layout with three full sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
+      mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
+    },
+    priceFrom: 470,
+    image: "/images/cabins/room-triple-traditional.webp",
+  },
+  {
     slug: "lakeside-cabin",
-    href: "/cabins",
+    href: "/lakeside-cabin",
     name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
     area: { en: "55 m²", mn: "55 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
@@ -91,8 +106,22 @@ const ROOMS: Room[] = [
     image: "/images/cabins/room-lakeside.webp",
   },
   {
+    slug: "triple-electric-cabin",
+    href: "/triple-electric-cabin",
+    name: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
+    area: { en: "60 m²", mn: "60 м²" },
+    guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
+    quantity: { en: "2 cabins", mn: "2 байшин" },
+    intro: {
+      en: "Designed for longer family stays, with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
+      mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
+    },
+    priceFrom: 510,
+    image: "/images/cabins/room-triple-electric.webp",
+  },
+  {
     slug: "signature-cabin",
-    href: "/cabins",
+    href: "/signature-cabin",
     name: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
     area: { en: "70 m²", mn: "70 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
@@ -105,8 +134,22 @@ const ROOMS: Room[] = [
     image: "/images/cabins/room-signature.webp",
   },
   {
+    slug: "quad-electric-cabin",
+    href: "/quad-electric-cabin",
+    name: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
+    area: { en: "66 m²", mn: "66 м²" },
+    guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
+    quantity: { en: "2 cabins", mn: "2 байшин" },
+    intro: {
+      en: "Our flexible mid-tier option for groups — four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
+      mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
+    },
+    priceFrom: 540,
+    image: "/images/cabins/room-quad-electric.webp",
+  },
+  {
     slug: "grand-peninsula-suite",
-    href: "/cabins",
+    href: "/grand-peninsula-suite",
     name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
     area: { en: "120 m²", mn: "120 м²" },
     guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },
@@ -130,6 +173,10 @@ const SPA_IMAGE_BEFORE = "/images/cabins/spa-mirage-before.webp";
 const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.webp";
 const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.webp";
 const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.webp";
+const TAGLINE_BG_MAIN = "/images/cabins/room-grand-peninsula.webp";
+const TAGLINE_BG_LEFT = "/images/cabins/room-superior.webp";
+const TAGLINE_BG_TOP = "/images/cabins/room-lakeside.webp";
+const TAGLINE_BG_BOTTOM = "/images/cabins/room-signature.webp";
 
 type CopyKey =
   | "eyebrow"
@@ -252,8 +299,10 @@ export default function CabinsPage() {
   const locale = useLocale();
   const isMn = locale === "mn";
   const t = COPY[isMn ? "mn" : "en"];
+  const reduce = useReducedMotion();
   const localePrefix = isMn ? "/mn" : "";
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
+  const heroEyebrow = isMn ? t.eyebrow.toUpperCase() : "STAY WITH US FEEL LIKE HOME";
 
   const defaults = useMemo(() => getDefaultJulyStayDates(), []);
   const [checkin, setCheckin] = useState(defaults.checkin);
@@ -274,7 +323,7 @@ export default function CabinsPage() {
   return (
     <main id="main-content" className="min-h-screen bg-ink text-main">
       {/* ------------------------------------------------------------ HERO */}
-      <section className="relative h-[80vh] min-h-[520px] w-full overflow-hidden">
+      <section className="relative h-[92vh] min-h-[640px] w-full overflow-hidden">
         <ImageReveal
           className="absolute inset-0 h-full w-full"
           duration={1.6}
@@ -286,26 +335,117 @@ export default function CabinsPage() {
             className="h-full w-full object-cover"
           />
         </ImageReveal>
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/25 to-ink/80" />
-        <HeroFadeOut className="relative z-10 flex h-full items-end" rise={140}>
-          <div className="mx-auto w-full max-w-6xl px-6 pb-16 md:pb-24">
-            <AnimatedText
-              as="p"
-              text={t.eyebrow}
-              className="block font-cta uppercase tracking-[0.32em] text-[11px] sm:text-xs text-main/75 mb-5"
-              stagger={0.03}
-              duration={0.7}
-            />
-            <AnimatedText
-              as="h1"
-              text={t.title}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/75" />
+
+        <HeroFadeOut className="relative z-10 flex h-full items-center justify-center" rise={160}>
+          <div className="mx-auto w-full max-w-6xl px-6 text-center -mt-24 md:-mt-32">
+            {/* First-load entrance: subtle slide-up from below.
+                The drop-down-from-above on scroll-return-to-top is produced
+                by HeroFadeOut's scroll-linked transform reversing. */}
+            <motion.p
+              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="block font-cta uppercase tracking-[0.32em] text-[11px] sm:text-xs text-main/85 mb-5"
+            >
+              {heroEyebrow}
+            </motion.p>
+            <motion.h1
+              initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className={`block ${headlineFont} italic font-normal text-main text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02]`}
-              delay={0.15}
-              stagger={0.08}
-              duration={0.9}
-            />
+            >
+              {t.title}
+            </motion.h1>
           </div>
         </HeroFadeOut>
+
+        {/* Hero booking bar — overlaid at the bottom of the image. */}
+        <motion.div
+          initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-x-0 bottom-0 z-20"
+        >
+          <div className="mx-auto w-full max-w-6xl px-6 pb-8 md:pb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-5 items-end">
+              <div className="lg:col-span-1">
+                <label
+                  htmlFor="cbns-checkin"
+                  className="block font-body text-main text-sm mb-1"
+                >
+                  {t.checkIn} <span className="text-main/60">{t.required}</span>
+                </label>
+                <input
+                  id="cbns-checkin"
+                  type="date"
+                  value={checkin}
+                  onChange={(e) => setCheckin(e.target.value)}
+                  className="w-full bg-transparent border-0 border-b border-main/40 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none [color-scheme:dark]"
+                />
+              </div>
+
+              <div className="lg:col-span-1">
+                <label
+                  htmlFor="cbns-checkout"
+                  className="block font-body text-main text-sm mb-1"
+                >
+                  {t.checkOut} <span className="text-main/60">{t.required}</span>
+                </label>
+                <input
+                  id="cbns-checkout"
+                  type="date"
+                  value={checkout}
+                  onChange={(e) => setCheckout(e.target.value)}
+                  min={checkin}
+                  className="w-full bg-transparent border-0 border-b border-main/40 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none [color-scheme:dark]"
+                />
+              </div>
+
+              <div className="lg:col-span-1">
+                <span
+                  id="cbns-adults"
+                  className="block font-body text-main text-sm mb-1"
+                >
+                  {t.adults}
+                </span>
+                <Stepper
+                  value={adults}
+                  min={1}
+                  max={20}
+                  onChange={setAdults}
+                  ariaLabelledBy="cbns-adults"
+                />
+              </div>
+
+              <div className="lg:col-span-1">
+                <span
+                  id="cbns-children"
+                  className="block font-body text-main text-sm mb-1"
+                >
+                  {t.children}
+                </span>
+                <Stepper
+                  value={children}
+                  min={0}
+                  max={10}
+                  onChange={setChildren}
+                  ariaLabelledBy="cbns-children"
+                />
+              </div>
+
+              <div className="lg:col-span-1">
+                <Link
+                  href={bookingHref}
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-main text-ink font-cta uppercase tracking-[0.32em] text-[11px] hover:bg-main/90 transition-colors"
+                >
+                  {t.bookingCta}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* ----------------------------------------------------- INTRO LEAD */}
@@ -314,104 +454,6 @@ export default function CabinsPage() {
           <Reveal as="p" className="font-body text-main/75 text-base md:text-lg leading-relaxed">
             {t.lead}
           </Reveal>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------- BOOKING BAR */}
-      <section className="border-b border-main/10">
-        <div className="mx-auto max-w-5xl px-6 py-14 md:py-20">
-          <div className="text-center mb-10">
-            <AnimatedText
-              as="h2"
-              text={t.bookingHeading}
-              className={`block ${headlineFont} italic text-3xl md:text-4xl text-main mb-2`}
-              stagger={0.06}
-            />
-            <Reveal as="p" className="font-body text-main/50 text-xs" delay={0.15}>
-              {t.bookingSubtitle}
-            </Reveal>
-          </div>
-
-          <StaggerGroup
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-6 items-end"
-            stagger={0.07}
-            offsetY={18}
-          >
-            <StaggerItem className="lg:col-span-1">
-              <label
-                htmlFor="cbns-checkin"
-                className="block font-body text-main text-sm mb-1"
-              >
-                {t.checkIn} <span className="text-main/50">{t.required}</span>
-              </label>
-              <input
-                id="cbns-checkin"
-                type="date"
-                value={checkin}
-                onChange={(e) => setCheckin(e.target.value)}
-                className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
-              />
-            </StaggerItem>
-
-            <StaggerItem className="lg:col-span-1">
-              <label
-                htmlFor="cbns-checkout"
-                className="block font-body text-main text-sm mb-1"
-              >
-                {t.checkOut} <span className="text-main/50">{t.required}</span>
-              </label>
-              <input
-                id="cbns-checkout"
-                type="date"
-                value={checkout}
-                onChange={(e) => setCheckout(e.target.value)}
-                min={checkin}
-                className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
-              />
-            </StaggerItem>
-
-            <StaggerItem className="lg:col-span-1">
-              <span
-                id="cbns-adults"
-                className="block font-body text-main text-sm mb-1"
-              >
-                {t.adults}
-              </span>
-              <Stepper
-                value={adults}
-                min={1}
-                max={20}
-                onChange={setAdults}
-                ariaLabelledBy="cbns-adults"
-              />
-            </StaggerItem>
-
-            <StaggerItem className="lg:col-span-1">
-              <span
-                id="cbns-children"
-                className="block font-body text-main text-sm mb-1"
-              >
-                {t.children}
-              </span>
-              <Stepper
-                value={children}
-                min={0}
-                max={10}
-                onChange={setChildren}
-                ariaLabelledBy="cbns-children"
-              />
-            </StaggerItem>
-
-            <StaggerItem className="lg:col-span-1">
-              <Link
-                href={bookingHref}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-main text-ink font-cta uppercase tracking-[0.28em] text-[11px] hover:bg-main/90 transition-colors"
-              >
-                {t.bookingCta}
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </StaggerItem>
-          </StaggerGroup>
         </div>
       </section>
 
@@ -461,22 +503,50 @@ export default function CabinsPage() {
       </section>
 
       {/* ------------------------------------------------- TAGLINE QUOTE */}
-      <section className="border-y border-main/10">
-        <div className="mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
+      <section className="relative isolate overflow-hidden border-y border-main/10 bg-black">
+        <div className="pointer-events-none absolute inset-0">
+          <img
+            src={TAGLINE_BG_MAIN}
+            alt=""
+            aria-hidden="true"
+            className="absolute right-0 top-0 h-full w-[70%] object-cover opacity-25"
+          />
+          <img
+            src={TAGLINE_BG_LEFT}
+            alt=""
+            aria-hidden="true"
+            className="absolute left-0 top-10 h-[48%] w-[28%] object-cover opacity-30 hidden md:block"
+          />
+          <img
+            src={TAGLINE_BG_TOP}
+            alt=""
+            aria-hidden="true"
+            className="absolute left-[34%] top-0 h-[36%] w-[24%] object-cover opacity-24 hidden lg:block"
+          />
+          <img
+            src={TAGLINE_BG_BOTTOM}
+            alt=""
+            aria-hidden="true"
+            className="absolute left-[38%] bottom-8 h-[32%] w-[22%] object-cover opacity-28 hidden lg:block"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.56)_52%,_rgba(0,0,0,0.88)_100%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/88 via-black/72 to-black/90" />
+        </div>
+        <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
           <AnimatedText
             as="h2"
             mode="line"
             text={`${t.tagline1}\n${t.tagline2}`}
-            className={`block ${headlineFont} italic text-3xl md:text-5xl leading-[1.15] text-main mb-10`}
+            className={`block ${headlineFont} italic text-3xl md:text-5xl leading-[1.15] text-main mb-10 text-overlay-glow`}
             stagger={0.18}
             duration={1.0}
           />
           <Reveal delay={0.3} as="div" className="inline-block">
             <Link
               href={`${localePrefix}/about-us`}
-              className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-main/70 hover:text-main transition-colors"
+              className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-main/80 hover:text-main transition-colors"
             >
-              <span className="border-b border-main/30 pb-0.5">{t.aboutCta}</span>
+              <span className="border-b border-main/55 pb-0.5">{t.aboutCta}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </Reveal>
@@ -485,8 +555,8 @@ export default function CabinsPage() {
 
       {/* ------------------------------------------------- RELATED EXPERIENCES */}
       <section className="border-b border-main/10">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <div className="text-center mb-14">
+        <div className="mx-auto max-w-6xl px-6 pt-20 md:pt-28 pb-14">
+          <div className="text-center">
             <AnimatedText
               as="p"
               text={t.experiencesEyebrow}
@@ -502,28 +572,33 @@ export default function CabinsPage() {
               stagger={0.06}
             />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+        </div>
+        <StaggerGroup
+          className="grid grid-cols-1 md:grid-cols-2"
+          stagger={0.14}
+          offsetY={0}
+        >
+          <StaggerItem>
             <ExperienceCard
               imageBefore={SPA_IMAGE_BEFORE}
               imageAfter={SPA_IMAGE_AFTER}
               title={t.spaTitle}
-              description={t.spaDesc}
-              learnMore={t.learnMore}
               href={`${localePrefix}/wellness`}
               headlineFont={headlineFont}
             />
+          </StaggerItem>
+          <StaggerItem>
             <ExperienceCard
               imageBefore={WELLNESS_IMAGE_BEFORE}
               imageAfter={WELLNESS_IMAGE_AFTER}
               title={t.wellnessTitle}
-              description={t.wellnessDesc}
+              body={t.wellnessDesc}
               learnMore={t.learnMore}
               href={`${localePrefix}/wellness`}
               headlineFont={headlineFont}
             />
-          </div>
-        </div>
+          </StaggerItem>
+        </StaggerGroup>
       </section>
 
       {/* ----------------------------------------------------- FINAL CTA */}
@@ -766,7 +841,7 @@ function ExperienceCard({
   imageBefore,
   imageAfter,
   title,
-  description,
+  body,
   learnMore,
   href,
   headlineFont,
@@ -774,48 +849,81 @@ function ExperienceCard({
   imageBefore: string;
   imageAfter: string;
   title: string;
-  description: string;
-  learnMore: string;
+  body?: string;
+  learnMore?: string;
   href: string;
   headlineFont: string;
 }) {
+  const navigate = () => {
+    if (typeof window !== "undefined") window.location.href = href;
+  };
+
   return (
-    <article className="group">
+    <article
+      role="link"
+      tabIndex={0}
+      aria-label={title}
+      onClick={navigate}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          navigate();
+        }
+      }}
+      className="group relative h-[78vh] min-h-[520px] w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40"
+    >
       <ImageReveal
-        className="mb-6 aspect-[5/3] overflow-hidden bg-white/5"
-        duration={1.2}
-        from={1.06}
+        className="absolute inset-0 h-full w-full z-0"
+        duration={1.4}
+        from={1.08}
       >
-        <Link href={href} className="block h-full w-full">
-          <MirageImage
-            before={imageBefore}
-            after={imageAfter}
-            alt={title}
-            className="h-full w-full"
-          />
-        </Link>
+        <MirageImage
+          before={imageBefore}
+          after={imageAfter}
+          alt={title}
+          className="h-full w-full"
+        />
       </ImageReveal>
-      <AnimatedText
-        as="h3"
-        text={title}
-        className={`block ${headlineFont} italic text-2xl md:text-3xl text-main mb-3`}
-        stagger={0.06}
-        duration={0.8}
-      />
-      <Reveal as="p" className="font-body text-main/70 leading-relaxed mb-5" delay={0.15}>
-        {description}
-      </Reveal>
-      <Reveal as="div" className="inline-block" delay={0.25}>
-        <Link
-          href={href}
-          className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.28em] text-[11px] text-bark hover:text-main transition-colors"
-        >
-          <span className="border-b border-bark/40 group-hover:border-main pb-0.5">
-            {learnMore}
-          </span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
-      </Reveal>
+
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-br from-ink/40 via-ink/0 to-ink/0" />
+      {body ? (
+        <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-ink/55 via-ink/0 to-ink/0" />
+      ) : null}
+
+      <div className="pointer-events-none absolute top-10 md:top-16 left-8 md:left-14 z-[3]">
+        <AnimatedText
+          as="h3"
+          text={title}
+          className={`block ${headlineFont} italic text-main text-5xl md:text-6xl lg:text-7xl leading-[1.02] text-overlay-glow`}
+          stagger={0.07}
+          duration={0.9}
+        />
+      </div>
+
+      {body ? (
+        <div className="pointer-events-none absolute right-8 md:right-14 bottom-16 md:bottom-24 z-[3] max-w-md text-right">
+          <Reveal
+            as="p"
+            className="font-body text-main/90 text-sm md:text-base leading-relaxed mb-5"
+          >
+            {body}
+          </Reveal>
+          {learnMore ? (
+            <Reveal as="div" className="inline-block pointer-events-auto" delay={0.15}>
+              <Link
+                href={href}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.32em] text-[11px] text-main"
+              >
+                <span className="border-b border-main/60 group-hover:border-main pb-0.5">
+                  {learnMore}
+                </span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </Reveal>
+          ) : null}
+        </div>
+      ) : null}
     </article>
   );
 }

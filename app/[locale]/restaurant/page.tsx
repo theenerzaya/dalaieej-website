@@ -69,6 +69,7 @@ const CAROUSEL_IMAGES = [
   "/images/restaurant/carousel/07.webp",
   "/images/restaurant/carousel/08.webp",
   "/images/restaurant/carousel/09.webp",
+  "/images/restaurant/carousel/10.webp",
 ];
 
 const SPA_IMAGE_BEFORE = "/images/restaurant/spa-mirage-before.webp";
