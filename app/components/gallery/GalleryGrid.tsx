@@ -15,8 +15,10 @@
  *   3. LIGHTBOX — full-bleed overlay with prev/next/close, keyboard-navigable
  *      (ArrowLeft / ArrowRight / Escape).
  *
- * All gallery imagery is served from /images/gallery and grouped by
- * gallery category folders for easier content management.
+ * Gallery tiles reference existing photography already in /public/images
+ * (restaurant, resort map, silogrid, lake, etc.). Paths under
+ * /images/cabins and /images/rooms are intentionally omitted so this page
+ * does not repeat cabin-detail galleries.
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -47,44 +49,44 @@ type GalleryImage = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Curated images (all hosted under /public/images/gallery)                  */
+/*  Curated images — wired to existing /public assets (no /cabins or /rooms)  */
 /* -------------------------------------------------------------------------- */
 
 const IMAGES: GalleryImage[] = [
   // Row 1
   { src: "/images/gallery/the-resort/lodge-first-light-shore.jpg", category: "resort", alt: "Lodge at first light, seen from the shore", ratio: "landscape" },
-  { src: "/images/gallery/wine-and-dine/chefs-table-lake-dining.jpg", category: "dining", alt: "Chef's table in the lake-facing dining room", ratio: "portrait" },
+  { src: "/images/restaurant/hero-food-beverage.webp", category: "dining", alt: "Food and beverage — hero scene from the restaurant", ratio: "landscape" },
   { src: "/images/gallery/the-lake/eastern-ridge-sunset.jpg", category: "lake", alt: "Eastern ridge at sunset over Lake Khuvsgul", ratio: "landscape" },
 
   // Row 2
-  { src: "/images/gallery/accommodations/lakeside-cabin-morning-light.jpg", category: "rooms", alt: "Lakeside cabin — morning light through linen", ratio: "portrait" },
-  { src: "/images/gallery/wine-and-dine/house-made-bread-wild-herb-butter.jpg", category: "dining", alt: "House-made bread and wild-herb butter", ratio: "landscape" },
+  { src: "/images/map/annex.jpg", category: "rooms", alt: "Annex cabin on the resort map", ratio: "portrait" },
+  { src: "/images/restaurant/collage-tl.webp", category: "dining", alt: "Restaurant collage — detail", ratio: "portrait" },
   { src: "/images/gallery/spa-and-wellness/birch-steam-sauna-afternoon.jpg", category: "wellness", alt: "Birch-steam sauna, afternoon session", ratio: "portrait" },
 
   // Row 3
-  { src: "/images/gallery/accommodations/superior-cabin-living-room-firelit.jpg", category: "rooms", alt: "Superior cabin living room, fire lit", ratio: "landscape" },
+  { src: "/images/silogrid/hearth.webp", category: "rooms", alt: "Hearth and gathering space", ratio: "landscape" },
   { src: "/images/gallery/the-resort/main-lodge-low-cloud.jpg", category: "resort", alt: "Main lodge exterior under low cloud", ratio: "portrait" },
-  { src: "/images/gallery/wine-and-dine/evening-service-deck.jpg", category: "dining", alt: "Evening service on the deck", ratio: "landscape" },
+  { src: "/images/restaurant/collage-bl.webp", category: "dining", alt: "Restaurant collage — lower scene", ratio: "landscape" },
 
   // Row 4
   { src: "/images/gallery/spa-and-wellness/warm-stone-massage-candlelight.jpg", category: "wellness", alt: "Warm-stone massage room, candlelight", ratio: "square" },
   { src: "/images/gallery/adventures/horseback-haichin-valley.png", category: "adventures", alt: "Horseback ride along the Haichin valley", ratio: "portrait" },
-  { src: "/images/gallery/accommodations/grand-peninsula-suite-lake-view.jpg", category: "rooms", alt: "Grand Peninsula suite, lake view", ratio: "landscape" },
+  { src: "/images/map/grand.jpg", category: "rooms", alt: "Grand Peninsula suite — map view", ratio: "landscape" },
 
   // Row 5
-  { src: "/images/gallery/wine-and-dine/hand-plated-seasonal-entree.jpg", category: "dining", alt: "Hand-plated seasonal entrée", ratio: "landscape" },
-  { src: "/images/gallery/wine-and-dine/dining-room-at-dusk.jpg", category: "dining", alt: "Dining room at dusk", ratio: "portrait" },
-  { src: "/images/gallery/accommodations/grand-peninsula-bedroom-sunrise.jpg", category: "rooms", alt: "Grand Peninsula bedroom at sunrise", ratio: "landscape" },
+  { src: "/images/restaurant/carousel/02.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "landscape" },
+  { src: "/images/restaurant/carousel/04.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "portrait" },
+  { src: "/images/map/heritage.jpg", category: "rooms", alt: "Heritage cabin on the resort map", ratio: "landscape" },
 
   // Row 6
-  { src: "/images/gallery/accommodations/bath-suite-stone-cedar.jpg", category: "rooms", alt: "Bath suite, stone and cedar", ratio: "portrait" },
-  { src: "/images/gallery/the-resort/lodge-walkway-late-summer.png", category: "resort", alt: "Walkway to the lodge in late summer", ratio: "landscape" },
-  { src: "/images/gallery/wine-and-dine/late-evening-dessert-course.jpg", category: "dining", alt: "Late-evening dessert course", ratio: "portrait" },
+  { src: "/images/map/ensuite.jpg", category: "rooms", alt: "Ensuite cabin on the resort map", ratio: "portrait" },
+  { src: "/images/map/reception.jpg", category: "resort", alt: "Reception and arrival", ratio: "landscape" },
+  { src: "/images/restaurant/carousel/06.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "landscape" },
 
   // Row 7
   { src: "/images/gallery/the-lake/shoreline-mergens-ridge.jpg", category: "lake", alt: "Shoreline at the foot of Mergen's Ridge", ratio: "landscape" },
-  { src: "/images/gallery/wine-and-dine/mongolian-wine-pairing.jpg", category: "dining", alt: "Wine pairing, Mongolian vineyard selection", ratio: "square" },
-  { src: "/images/gallery/accommodations/grand-peninsula-facing-peninsula.jpg", category: "rooms", alt: "Grand Peninsula, facing the peninsula", ratio: "landscape" },
+  { src: "/images/restaurant/collage-r.webp", category: "dining", alt: "Restaurant collage — lakeside panel", ratio: "portrait" },
+  { src: "/images/silogrid/sanctuary.webp", category: "rooms", alt: "Sanctuary — quiet stay", ratio: "landscape" },
 ];
 
 const FILTERS_EN: Record<FilterId, string> = {
