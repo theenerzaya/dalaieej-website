@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-import { locales } from '@/i18n/request';
 import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
 import "../globals.css";
 import { araboto, cormorantGaramondItalic, montserrat, playfairDisplayItalic } from "../fonts";
@@ -78,21 +76,21 @@ interface Props {
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
 
-  if (!locales.includes(locale as any)) {
-    notFound();
-  }
-
   const messages = await getMessages();
   const resortCanonical = absoluteSiteUrl(locale, '');
   const resortImageBase = siteOriginForLocale(locale);
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head>
-        {/* Schema.org Markup for Search Engines */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+    <div
+      lang={locale}
+      className={`${araboto.variable} ${montserrat.variable} ${cormorantGaramondItalic.variable} ${playfairDisplayItalic.variable} antialiased`}
+      suppressHydrationWarning
+    >
+      {/* Schema.org Markup for Search Engines */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Resort',
             name: 'Dalai Eej Heritage Site',
@@ -114,19 +112,17 @@ export default async function LocaleLayout({ children, params }: Props) {
             },
             url: resortCanonical,
             priceRange: '$$$'
-          }) }}
-        />
-      </head>
-      <body className={`${araboto.variable} ${montserrat.variable} ${cormorantGaramondItalic.variable} ${playfairDisplayItalic.variable} antialiased`} suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages}>
-          <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
-            Skip to main content
-          </a>
-          <NavbarWrapper />
-          <div className="relative z-10">{children}</div>
-          <Footer />
-        </NextIntlClientProvider>
-      </body>
-    </html>
+          })
+        }}
+      />
+      <NextIntlClientProvider messages={messages}>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
+          Skip to main content
+        </a>
+        <NavbarWrapper />
+        <div className="relative z-10">{children}</div>
+        <Footer />
+      </NextIntlClientProvider>
+    </div>
   );
 }

@@ -60,16 +60,21 @@ const COLLAGE_BOTTOM_LEFT = "/images/restaurant/collage-bl.jpg";
 const COLLAGE_RIGHT = "/images/restaurant/collage-r.jpg";
 
 const CAROUSEL_IMAGES = [
-  "/images/restaurant/carousel/01.jpg",
-  "/images/restaurant/carousel/02.jpg",
-  "/images/restaurant/carousel/03.jpg",
-  "/images/restaurant/carousel/04.jpg",
+  "/images/restaurant/carousel/01.webp",
+  "/images/restaurant/carousel/02.webp",
+  "/images/restaurant/carousel/03.webp",
+  "/images/restaurant/carousel/04.webp",
+  "/images/restaurant/carousel/05.webp",
+  "/images/restaurant/carousel/06.webp",
+  "/images/restaurant/carousel/07.webp",
+  "/images/restaurant/carousel/08.webp",
+  "/images/restaurant/carousel/09.webp",
 ];
 
-const SPA_IMAGE_BEFORE = "/images/restaurant/spa-mirage-before.jpg";
-const SPA_IMAGE_AFTER = "/images/restaurant/spa-mirage-after.jpg";
-const WELLNESS_IMAGE_BEFORE = "/images/restaurant/wellness-mirage-before.jpg";
-const WELLNESS_IMAGE_AFTER = "/images/restaurant/wellness-mirage-after.jpg";
+const SPA_IMAGE_BEFORE = "/images/restaurant/spa-mirage-before.webp";
+const SPA_IMAGE_AFTER = "/images/restaurant/spa-mirage-after.webp";
+const WELLNESS_IMAGE_BEFORE = "/images/restaurant/wellness-mirage-before.webp";
+const WELLNESS_IMAGE_AFTER = "/images/restaurant/wellness-mirage-after.webp";
 
 // Warm peach panel (matches the Hoteller "Visit Us" block).
 const PEACH = "#f0cda0";

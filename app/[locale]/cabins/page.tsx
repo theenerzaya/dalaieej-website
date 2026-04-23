@@ -126,10 +126,10 @@ const HERO_IMAGE = "/images/cabins/hero-our-rooms.jpg";
 // `before` is the resting state; `after` is revealed with a WebGL liquid
 // distortion on hover. Each pair is two visually related but distinct shots
 // so the morph reads as a mood shift rather than a flicker.
-const SPA_IMAGE_BEFORE = "/images/cabins/spa-mirage-before.jpg";
-const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.jpg";
-const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.jpg";
-const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.jpg";
+const SPA_IMAGE_BEFORE = "/images/cabins/spa-mirage-before.webp";
+const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.webp";
+const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.webp";
+const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.webp";
 
 type CopyKey =
   | "eyebrow"
