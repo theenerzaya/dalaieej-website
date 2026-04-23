@@ -161,6 +161,20 @@ const ROOMS: Room[] = [
     priceFrom: 1200,
     image: "/images/cabins/room-grand-peninsula.webp",
   },
+  {
+    slug: "camping",
+    href: "/booking",
+    name: { en: "Camping", mn: "Кемпинг" },
+    area: { en: "Outdoor setup", mn: "Гадаа байрлал" },
+    guests: { en: "2 adults · 2 children", mn: "2 том хүн · 2 хүүхэд" },
+    quantity: { en: "Limited spots", mn: "Хязгаартай талбай" },
+    intro: {
+      en: "A nature-first stay under the open sky with essential camp comforts and direct access to the lakeside grounds.",
+      mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
+    },
+    priceFrom: 180,
+    image: "/images/rooms/camping.webp",
+  },
 ];
 
 const HERO_IMAGE = "/images/cabins/hero-our-rooms.webp";
@@ -675,7 +689,7 @@ export default function CabinsPage() {
               imageBefore={SPA_IMAGE_BEFORE}
               imageAfter={SPA_IMAGE_AFTER}
               title={t.spaTitle}
-              href={`${localePrefix}/wellness`}
+              href={`${localePrefix}/book-now`}
               headlineFont={headlineFont}
             />
           </StaggerItem>
