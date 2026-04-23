@@ -98,6 +98,24 @@ body {
   font-style: italic;
 }
 
+/* Non-italic serif editorial body — paragraphs where the surrounding text is
+   regular Playfair / Cormorant and only inline <em> phrases are italicised
+   (used by the magazine collage on /restaurant). */
+.font-serif-en {
+  font-family: var(--font-playfair-display-italic), Georgia, serif;
+  font-style: normal;
+}
+
+.font-serif-mn {
+  font-family: var(--font-cormorant-garamond-italic), Georgia, serif;
+  font-style: normal;
+}
+
+.font-serif-en em,
+.font-serif-mn em {
+  font-style: italic;
+}
+
 .font-signature {
   font-family: 'Sloops', cursive;
 }

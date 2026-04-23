@@ -31,10 +31,13 @@ export const cormorantGaramondItalic = Cormorant_Garamond({
   display: "swap",
 });
 
-/** EN editorial headlines (H1/H2/H3) — Playfair Display Italic. */
+/** EN editorial headlines (H1/H2/H3) — Playfair Display, both italic + regular.
+ *  Italic is the default editorial flourish; regular is reserved for body-style
+ *  serif paragraphs (e.g. the magazine collage on /restaurant) where italic is
+ *  used for inline emphasis only. */
 export const playfairDisplayItalic = Playfair_Display({
   subsets: ["latin", "cyrillic"],
-  style: ["italic"],
+  style: ["italic", "normal"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-playfair-display-italic",
   display: "swap",

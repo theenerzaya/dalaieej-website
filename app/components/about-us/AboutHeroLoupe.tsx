@@ -160,7 +160,7 @@ export function AboutHeroLoupe({
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
         aria-label={expandLabel}
-        className={`group about-hero w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/40 ${
+        className={`group about-hero w-[120%] max-w-none -ml-[10%] overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink/40 ${
           loupe && !reduced ? "cursor-none" : "cursor-zoom-in"
         } ${className}`}
       >
