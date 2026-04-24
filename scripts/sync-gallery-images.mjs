@@ -79,7 +79,7 @@ function betterDbrVariant(a, b) {
   const ra = rank(path.extname(a.rel).toLowerCase());
   const rb = rank(path.extname(b.rel).toLowerCase());
   if (ra !== rb) return ra < rb ? a : b;
-  return a.rel.localeCompare(b.rel, "en") <= 0 ? a : b;
+  return a.rel <= b.rel ? a : b;
 }
 
 /** @typedef {'resort' | 'rooms' | 'dining' | 'wellness' | 'adventures' | 'lake'} Category */
@@ -279,7 +279,8 @@ async function main() {
     }
   }
 
-  picked.sort((a, b) => a.rel.localeCompare(b.rel, "en"));
+  // Keep generation stable across OS/ICU differences used by localeCompare.
+  picked.sort((a, b) => (a.rel < b.rel ? -1 : a.rel > b.rel ? 1 : 0));
   const dbrDeduped = preferWebpForDbrDuplicates(picked);
   const unique = await dedupeByContent(dbrDeduped);
 
