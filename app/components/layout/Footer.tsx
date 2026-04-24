@@ -16,8 +16,8 @@ export default function Footer() {
   const isAboutUs = pathname?.includes("/about-us");
 
   const experienceLinks = [
-    { key: "stay", href: "#" },
-    { key: "dining", href: "#" },
+    { key: "stay", href: "/cabins" },
+    { key: "dining", href: "/restaurant" },
     { key: "wellness", href: "#" },
     { key: "adventures", href: "#" },
   ];
@@ -83,7 +83,7 @@ export default function Footer() {
               {experienceLinks.map((item) => (
                 <li key={item.key}>
                   <Link
-                    href="#"
+                    href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
                     className="text-sm text-main/80 hover:text-white transition-colors"
                   >
                     {t(item.key)}

@@ -22,7 +22,7 @@ const silos = [
   },
   {
     id: "dining",
-    href: /*"/dining",*/ "#",
+    href: "/restaurant",
     en: "Restaurant",
     mn: "Ресторан",
     image: "/images/silogrid/hearth.webp"
