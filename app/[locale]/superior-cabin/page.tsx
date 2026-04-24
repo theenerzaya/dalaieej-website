@@ -204,10 +204,10 @@ const GALLERY_IMAGES = [
 
 // Mirage effect pairs — identical set used on /cabins so the crossfade reads
 // consistently across the site.
-const SPA_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/spa-mirage-before.webp");
-const SPA_IMAGE_AFTER = assetUrl("/images/rooms/superior-cabin/spa-mirage-after.webp");
-const WELLNESS_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/wellness-mirage-before.webp");
-const WELLNESS_IMAGE_AFTER = assetUrl("/images/rooms/superior-cabin/wellness-mirage-after.webp");
+const SPA_IMAGE_BEFORE = assetUrl("/images/cabins/spa-mirage-before.webp");
+const SPA_IMAGE_AFTER = assetUrl("/images/cabins/spa-mirage-after.webp");
+const WELLNESS_IMAGE_BEFORE = assetUrl("/images/cabins/wellness-mirage-before.webp");
+const WELLNESS_IMAGE_AFTER = assetUrl("/images/cabins/wellness-mirage-after.webp");
 const TAGLINE_BG_MAIN = assetUrl("/images/rooms/superior-cabin/00.webp");
 
 const OTHER_ROOMS = [

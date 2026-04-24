@@ -164,7 +164,7 @@ export default function GalleryGrid() {
   return (
     <main
       id="main-content"
-      className="min-h-screen bg-surface-alt pt-24 md:pt-32 pb-24 md:pb-32"
+      className="min-h-screen bg-surface-alt text-water-deep pt-24 md:pt-32 pb-24 md:pb-32"
     >
       {/* =============================================================== HEAD */}
       <section className="px-6">
@@ -173,7 +173,7 @@ export default function GalleryGrid() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className={`${headlineFont} italic text-[#223127] text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.02] font-normal`}
+            className={`${headlineFont} italic text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.02] font-normal`}
           >
             {isMn ? "Галерей" : "Gallery"}
           </motion.h1>
@@ -182,7 +182,7 @@ export default function GalleryGrid() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 font-body text-[#223127]/60 max-w-xl mx-auto text-sm md:text-base leading-relaxed"
+            className="mt-6 font-body text-water-deep/60 max-w-xl mx-auto text-sm md:text-base leading-relaxed"
           >
             {isMn
               ? "Хөвсгөлийн хэмнэл — бууц, нуур, хоол, тайван агшнууд."
@@ -211,8 +211,8 @@ export default function GalleryGrid() {
                       aria-pressed={isActive}
                       className={`font-cta uppercase text-[11px] md:text-xs tracking-[0.22em] transition-colors duration-300 pb-1 border-b ${
                         isActive
-                          ? "text-[#223127] border-[#223127]"
-                          : "text-[#223127]/55 border-transparent hover:text-[#223127]"
+                          ? "text-water-deep border-water-deep"
+                          : "text-water-deep/55 border-transparent hover:text-water-deep"
                       }`}
                     >
                       {labels[id]}
@@ -280,7 +280,7 @@ export default function GalleryGrid() {
           </motion.div>
 
           {filteredImages.length === 0 && (
-            <p className="mt-20 text-center font-body text-[#223127]/60">
+            <p className="mt-20 text-center font-body text-water-deep/60">
               {isMn
                 ? "Энэ ангилалд одоогоор зураг байхгүй байна."
                 : "No images in this collection yet."}

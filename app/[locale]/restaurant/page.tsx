@@ -73,10 +73,10 @@ const CAROUSEL_IMAGES = [
   "10",
 ].map((i) => assetUrl(`/images/restaurant/carousel/${i}.webp`));
 
-const SPA_IMAGE_BEFORE = assetUrl("/images/restaurant/spa-mirage-before.webp");
-const SPA_IMAGE_AFTER = assetUrl("/images/restaurant/spa-mirage-after.webp");
-const WELLNESS_IMAGE_BEFORE = assetUrl("/images/restaurant/wellness-mirage-before.webp");
-const WELLNESS_IMAGE_AFTER = assetUrl("/images/restaurant/wellness-mirage-after.webp");
+const SPA_IMAGE_BEFORE = assetUrl("/images/cabins/spa-mirage-before.webp");
+const SPA_IMAGE_AFTER = assetUrl("/images/cabins/spa-mirage-after.webp");
+const WELLNESS_IMAGE_BEFORE = assetUrl("/images/cabins/wellness-mirage-before.webp");
+const WELLNESS_IMAGE_AFTER = assetUrl("/images/cabins/wellness-mirage-after.webp");
 
 // Warm terracotta panel for the invitation cards.
 const TERRACOTTA = "var(--accent-earth)";
