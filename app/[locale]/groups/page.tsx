@@ -23,7 +23,7 @@ export default function CelebratePage() {
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&auto=format&fit=crop&q=80"
+            src="/images/gallery/restaurant/DBR_7786.webp"
             alt="Celebration venue"
             className="w-full h-full object-cover"
           />
@@ -119,7 +119,7 @@ export default function CelebratePage() {
               </ul>
             </div>
             <img
-              src="https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=800&auto=format&fit=crop&q=80"
+              src="/images/gallery/restaurant/DBR_4932.webp"
               alt="Event setup"
               className="w-full h-96 object-cover rounded-lg"
             />

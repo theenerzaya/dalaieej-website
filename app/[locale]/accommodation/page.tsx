@@ -17,7 +17,7 @@ export default function AccommodationPage() {
       description: locale === 'mn' 
         ? "Шинэсэн ойн дунд байрлах 6 тусдаа модон байшин. Галын зуухтай, хувийн террастай."
         : "Six private log cabins tucked into the larch forest. Each with a wood-burning stove and private terrace.",
-      image: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=800&auto=format&fit=crop&q=80",
+      image: "/images/cabins/room-triple-traditional.webp",
       capacity: locale === 'mn' ? "2-4 зочин" : "2-4 Guests"
     },
     {
@@ -27,7 +27,7 @@ export default function AccommodationPage() {
       description: locale === 'mn' 
         ? "Хөвсгөл нуурын эрэг дээрх түүхэн гол байшин. Нуурын харагдац бүхий өрөөнүүд."
         : "Our historic main lodge overlooking the lake. Rooms with panoramic views of Lake Khuvsgul.",
-      image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_8136.webp",
       capacity: locale === 'mn' ? "2-3 зочин" : "2-3 Guests"
     }
   ];
@@ -37,7 +37,7 @@ export default function AccommodationPage() {
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-ink">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&auto=format&fit=crop&q=80"
+            src="/images/cabins/hero-our-rooms.webp"
             alt="Accommodation"
             className="w-full h-full object-cover opacity-40"
           />

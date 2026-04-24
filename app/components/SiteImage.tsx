@@ -8,10 +8,7 @@ function resolveSrc(src: ImageProps["src"]): ImageProps["src"] {
   return src;
 }
 
-/**
- * Next.js Image with optional CDN prefix for same-origin `/...` paths from `/public`
- * (see NEXT_PUBLIC_IMAGES_CDN_URL / NEXT_PUBLIC_ASSET_CDN_URL).
- */
+/** Next.js Image for same-origin `/public` assets. */
 export default function SiteImage(props: ImageProps) {
   return <NextImage {...props} src={resolveSrc(props.src)} />;
 }
