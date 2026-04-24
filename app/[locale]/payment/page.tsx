@@ -25,6 +25,7 @@ function StripePaymentForm({
   totalAmount,
   returnPathPrefix,
   paymentLocale,
+  editorialFont,
   onSuccess 
 }: { 
   amount: string; 
@@ -34,6 +35,7 @@ function StripePaymentForm({
   totalAmount?: string;
   returnPathPrefix: string;
   paymentLocale: "en" | "mn";
+  editorialFont: string;
   onSuccess: () => void;
 }) {
   const stripe = useStripe();
@@ -96,7 +98,7 @@ function StripePaymentForm({
         )}
         <div className="flex justify-between">
           <span className="text-main/60 text-sm font-body">{nights} {parseInt(nights) !== 1 ? 'nights' : 'night'}</span>
-          <span className="text-main font-serif text-xl">{formattedAmount} MNT</span>
+          <span className={`text-main ${editorialFont} italic text-xl`}>{formattedAmount} MNT</span>
         </div>
         {totalAmount && parseInt(totalAmount, 10) > parseInt(amount || "0", 10) && (
           <p className="text-main/50 text-xs font-body pt-2 border-t border-main/10">
@@ -124,7 +126,7 @@ function StripePaymentForm({
       <button
         type="submit"
         disabled={!stripe || loading}
-        className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark-hover cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors bg-main text-ink hover:bg-main/90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
@@ -150,6 +152,7 @@ function PaymentContent() {
   
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
   const localePrefix = currentLocale === 'mn' ? '/mn' : '';
+  const editorialFont = currentLocale === 'mn' ? 'font-editorial-mn' : 'font-editorial-en';
   
   const [bookingId, setBookingId] = useState("");
   const [amount, setAmount] = useState("");
@@ -467,14 +470,14 @@ function PaymentContent() {
       <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
+            <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
               {t('title')}
             </h1>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 border border-main/20 text-center">
             <Loader2 className="w-12 h-12 text-main animate-spin mx-auto mb-4" />
-            <p className="text-main font-serif text-xl mb-2">
+            <p className={`text-main ${editorialFont} italic text-xl mb-2`}>
               Төлбөрийн QR үүсгэж байна...
             </p>
             <p className="text-main/60 text-sm font-body">
@@ -492,14 +495,14 @@ function PaymentContent() {
         <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
+              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
                 Secure Payment
               </h1>
             </div>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 border border-main/20 text-center">
               <Loader2 className="w-12 h-12 text-main animate-spin mx-auto mb-4" />
-              <p className="text-main font-serif text-xl mb-2">
+              <p className={`text-main ${editorialFont} italic text-xl mb-2`}>
                 Initializing Payment...
               </p>
               <p className="text-main/60 text-sm font-body">
@@ -516,7 +519,7 @@ function PaymentContent() {
         <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
+              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
                 Secure Payment
               </h1>
             </div>
@@ -526,8 +529,9 @@ function PaymentContent() {
                 <p className="text-red-300 text-sm text-center font-body">{error}</p>
               </div>
               <button
+                type="button"
                 onClick={fetchStripeClientSecret}
-                className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark-hover cursor-pointer"
+                className="w-full py-3.5 font-cta uppercase tracking-[0.28em] text-xs bg-main text-ink hover:bg-main/90 cursor-pointer transition-colors"
               >
                 Try Again
               </button>
@@ -542,7 +546,7 @@ function PaymentContent() {
         <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
+              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
                 Secure Payment
               </h1>
               <p className="font-body text-main/70 text-sm">
@@ -572,6 +576,7 @@ function PaymentContent() {
                   totalAmount={bookingTotal || undefined}
                   returnPathPrefix={localePrefix}
                   paymentLocale={currentLocale}
+                  editorialFont={editorialFont}
                   onSuccess={() => handlePaymentConfirmed()}
                 />
               </Elements>
@@ -595,7 +600,7 @@ function PaymentContent() {
     <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="font-serif text-3xl md:text-4xl text-main mb-3">
+          <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
             {t('title')}
           </h1>
           <p className="font-body text-main/70 text-sm">
@@ -611,8 +616,9 @@ function PaymentContent() {
                   <p className="text-red-300 text-sm text-center font-body">{error}</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => generateQPayQR(bookingId, amount)}
-                  className="w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold bg-bark text-white hover:bg-bark-hover cursor-pointer"
+                  className="w-full py-3.5 font-cta uppercase tracking-[0.28em] text-xs bg-main text-ink hover:bg-main/90 cursor-pointer transition-colors"
                 >
                   {currentLocale === 'mn' ? 'Дахин оролдох' : 'Try Again'}
                 </button>
@@ -620,7 +626,7 @@ function PaymentContent() {
             ) : (
               <div className="space-y-5">
                 <div>
-                  <label className="block text-main/70 text-sm uppercase tracking-wider mb-2 font-body">
+                  <label className="block font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
                     {t('bookingRef')}
                   </label>
                   <input
@@ -628,12 +634,12 @@ function PaymentContent() {
                     value={bookingId}
                     onChange={(e) => setBookingId(e.target.value)}
                     placeholder={t('enterBookingId')}
-                    className="w-full px-4 py-3 bg-transparent border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 font-body"
+                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors placeholder:text-main/30"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-main/70 text-sm uppercase tracking-wider mb-2 font-body">
+                  <label className="block font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
                     {t('amount')}
                   </label>
                   <input
@@ -641,7 +647,7 @@ function PaymentContent() {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder={t('enterAmount')}
-                    className="w-full px-4 py-3 bg-transparent border border-main/50 text-main rounded-lg focus:outline-none focus:border-main transition-colors placeholder:text-main/30 font-body"
+                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors placeholder:text-main/30"
                   />
                 </div>
 
@@ -670,10 +676,10 @@ function PaymentContent() {
                 <button
                   onClick={generateQR}
                   disabled={loading || !termsAccepted}
-                  className={`w-full py-4 font-serif uppercase tracking-widest transition-all rounded-lg font-semibold ${
+                  className={`w-full py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
                     termsAccepted 
-                      ? 'bg-bark text-white hover:bg-bark-hover cursor-pointer' 
-                      : 'bg-bark/30 text-main/50 cursor-not-allowed'
+                      ? 'bg-main text-ink hover:bg-main/90 cursor-pointer' 
+                      : 'bg-main/10 text-main/40 cursor-not-allowed'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {loading ? t('generating') : t('generatePayment')}
@@ -692,7 +698,7 @@ function PaymentContent() {
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <p className="text-main/70 text-xs font-body">{t('bookingRef')}</p>
-                  <p className="text-main font-serif">{bookingId}</p>
+                  <p className={`text-main ${editorialFont} italic`}>{bookingId}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-main/70 text-xs font-body">{nights} {parseInt(nights) !== 1 ? tBooking('nights') : tBooking('night')}</p>
@@ -701,7 +707,7 @@ function PaymentContent() {
                       ? (currentLocale === "mn" ? "Урьдчилгаа" : "Deposit")
                       : (currentLocale === "mn" ? "Дүн" : "Amount")}
                   </p>
-                  <p className="text-main font-serif text-xl">{formattedAmount} MNT</p>
+                  <p className={`text-main ${editorialFont} italic text-xl`}>{formattedAmount} MNT</p>
                 </div>
               </div>
               {showPaymentSplit && (
@@ -722,7 +728,7 @@ function PaymentContent() {
               <div className="block md:hidden bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-main/20 mb-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Smartphone className="w-5 h-5 text-main" />
-                  <h2 className="font-serif text-lg text-main">{t('payWithApp')}</h2>
+                  <h2 className={`${editorialFont} italic text-lg text-main`}>{t('payWithApp')}</h2>
                 </div>
                 <p className="text-main/60 text-sm mb-4 font-body">
                   {t('tapBank')}
@@ -760,7 +766,7 @@ function PaymentContent() {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-main/20 mb-4">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <QrCode className="w-5 h-5 text-main" />
-                <h2 className="font-serif text-lg text-main">{t('scanQR')}</h2>
+                <h2 className={`${editorialFont} italic text-lg text-main`}>{t('scanQR')}</h2>
               </div>
               <p className="text-main/60 text-sm mb-4 text-center hidden md:block font-body">
                 {t('scanWithApp')}
@@ -792,7 +798,7 @@ function PaymentContent() {
                 className="w-full p-5 flex items-center justify-between text-left"
               >
                 <div>
-                  <h2 className="font-serif text-lg text-main">{t('manualTransfer')}</h2>
+                  <h2 className={`${editorialFont} italic text-lg text-main`}>{t('manualTransfer')}</h2>
                   <p className="text-main/60 text-sm font-body">{t('alternativePayment')}</p>
                 </div>
                 {manualExpanded ? (
@@ -832,7 +838,7 @@ function PaymentContent() {
                     </div>
                     <div>
                       <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('amount')}</p>
-                      <p className="text-main font-serif text-xl">{formattedAmount} MNT</p>
+                      <p className={`text-main ${editorialFont} italic text-xl`}>{formattedAmount} MNT</p>
                     </div>
                   </div>
                   
@@ -849,7 +855,7 @@ function PaymentContent() {
               <button
                 onClick={checkPaymentStatus}
                 disabled={checkingStatus}
-                className="w-full py-4 border-2 border-main text-main font-serif uppercase tracking-widest hover:bg-surface-alt/10 transition-all cursor-pointer rounded-lg font-semibold disabled:opacity-50"
+                className="w-full py-3.5 border border-main/40 text-main font-cta uppercase tracking-[0.28em] text-xs hover:bg-white/[0.06] transition-colors cursor-pointer disabled:opacity-50"
               >
                 {checkingStatus ? t('checking') : t('checkStatus')}
               </button>

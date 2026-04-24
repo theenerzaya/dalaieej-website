@@ -93,6 +93,11 @@ function resolveQPayWebhookUrl(
   if (trimmed) {
     return trimmed;
   }
+  /** Full webhook URL QPay must accept — use when the portal only allows an exact host (www vs apex). */
+  const envCallback = normalizeBaseUrl(process.env.QPAY_CALLBACK_URL || "").trim();
+  if (envCallback) {
+    return envCallback;
+  }
   const fromRequest = getPublicOriginFromRequest(request);
   if (fromRequest) {
     return `${fromRequest}/api/qpay/webhook`;
@@ -303,6 +308,13 @@ export async function POST(request: NextRequest) {
         userMessage = "QPay authentication failed - invalid credentials";
       } else if (statusCode === 400) {
         userMessage = `QPay rejected the request: ${errorDetail}`;
+        if (
+          /callback_url/i.test(errorDetail) &&
+          /invalid/i.test(errorDetail)
+        ) {
+          userMessage +=
+            " Register the exact callback URL in the QPay merchant settings (www vs non-www must match what you send). On the server, set QPAY_CALLBACK_URL to the full https URL QPay expects, e.g. https://www.dalaieej.mn/api/qpay/webhook";
+        }
       } else {
         userMessage = `QPay error (${statusCode}): ${errorDetail}`;
       }

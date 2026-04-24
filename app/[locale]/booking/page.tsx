@@ -364,6 +364,7 @@ function BookingContent() {
 
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
   const localePrefix = currentLocale === 'mn' ? '/mn' : '';
+  const editorialFont = currentLocale === 'mn' ? 'font-editorial-mn' : 'font-editorial-en';
 
   const getRoomDetailPath = (roomTypeName: string) => {
     const name = (roomTypeName || '').toLowerCase();
@@ -780,7 +781,7 @@ function BookingContent() {
                   {originalPerNight.toLocaleString()}
                 </p>
               )}
-              <p className="font-editorial-en italic text-lg text-main leading-tight">
+              <p className={`${editorialFont} italic text-lg text-main leading-tight`}>
                 {perNight.toLocaleString()}
               </p>
               <p className="font-cta uppercase text-[9px] tracking-[0.26em] text-main/40">
@@ -855,7 +856,7 @@ function BookingContent() {
       {/* Results header band */}
       <div className="px-6 pt-6 md:pt-10 pb-8 border-b border-main/10">
         <div className="max-w-7xl mx-auto">
-          <h1 className="font-editorial-en italic text-4xl md:text-5xl leading-tight text-main mb-3">
+          <h1 className={`${editorialFont} italic text-4xl md:text-5xl leading-tight text-main mb-3`}>
             {currentLocale === 'mn' ? 'Хайлтын үр дүн' : 'Search Results'}
           </h1>
           {!loading && searched && resultsCount > 0 && checkin && checkout && (
@@ -893,7 +894,7 @@ function BookingContent() {
           <div className="space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:overscroll-contain">
             {/* Book Your Stay form */}
             <section className="bg-white/[0.04] border border-main/10 p-6">
-              <h2 className="font-editorial-en italic text-2xl text-main mb-2">
+              <h2 className={`${editorialFont} italic text-2xl text-main mb-2`}>
                 {currentLocale === 'mn' ? 'Амралтаа захиалах' : 'Book Your Stay'}
               </h2>
               <p className="font-body text-main/50 text-xs mb-5">
@@ -1024,7 +1025,7 @@ function BookingContent() {
             {/* Reservation summary (shown only when cart has items) */}
             {cart.length > 0 && (
               <section className="bg-white/[0.04] border border-main/10 p-6">
-                <h2 className="font-editorial-en italic text-2xl text-main text-center mb-5">
+                <h2 className={`${editorialFont} italic text-2xl text-main text-center mb-5`}>
                   {currentLocale === 'mn' ? 'Захиалгын хураангуй' : 'Your Reservation'}
                 </h2>
 
@@ -1046,7 +1047,7 @@ function BookingContent() {
                           <p className="font-body text-main text-sm">{item.roomTypeName}</p>
                           <p className="text-main/50 text-xs font-body">{translateRateName(item.rateName, currentLocale)}</p>
                         </div>
-                        <p className="font-editorial-en italic text-sm text-main whitespace-nowrap">
+                        <p className={`${editorialFont} italic text-sm text-main whitespace-nowrap`}>
                           {(item.pricePerNight * item.quantity * numberOfNights).toLocaleString()}
                         </p>
                       </div>
@@ -1077,10 +1078,10 @@ function BookingContent() {
                     <span className="text-main">0.00</span>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-main/15">
-                    <span className="font-editorial-en italic text-base text-main">
+                    <span className={`${editorialFont} italic text-base text-main`}>
                       {currentLocale === 'mn' ? 'Нийт' : 'Total'}
                     </span>
-                    <span className="font-editorial-en italic text-base text-main">
+                    <span className={`${editorialFont} italic text-base text-main`}>
                       MNT {cartTotal.toLocaleString()}
                     </span>
                   </div>
@@ -1265,7 +1266,7 @@ function BookingContent() {
                       </Link>
 
                       <div className="p-6 md:p-8">
-                        <h2 className="font-editorial-en italic text-3xl md:text-[2.25rem] leading-tight text-main mb-2">
+                        <h2 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-2`}>
                           <Link
                             href={getRoomDetailPath(group.roomTypeName)}
                             className="hover:text-main/80 transition-colors"
@@ -1322,7 +1323,7 @@ function BookingContent() {
                               <span className="text-main/60">
                                 {currentLocale === "mn" ? "Үнэ эхлэх:" : "Prices start at:"}
                               </span>
-                              <span className="font-editorial-en italic text-xl text-main ml-2">
+                              <span className={`${editorialFont} italic text-xl text-main ml-2`}>
                                 {perNightFrom.toLocaleString()} {priceCurrency}
                               </span>
                               <span className="text-main/60 text-sm ml-1">
@@ -1384,7 +1385,7 @@ function BookingContent() {
               <div className="flex flex-wrap items-center gap-2 text-sm text-main font-body">
                 <span>{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
                 <span className="text-main/30">•</span>
-                <span className="font-editorial-en italic text-lg">{cartTotal.toLocaleString()} MNT</span>
+                <span className={`${editorialFont} italic text-lg text-main`}>{cartTotal.toLocaleString()} MNT</span>
               </div>
               <button
                 type="button"

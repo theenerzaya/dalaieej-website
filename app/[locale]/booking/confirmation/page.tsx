@@ -14,6 +14,7 @@ function ConfirmationContent() {
 
   const currentLocale = pathname.startsWith("/mn") ? "mn" : "en";
   const localePrefix = currentLocale === "mn" ? "/mn" : "";
+  const editorialFont = currentLocale === "mn" ? "font-editorial-mn" : "font-editorial-en";
 
   const bookingId = searchParams.get("bookingId") || searchParams.get("reservation_id") || "";
   const guestName = searchParams.get("guestName") || "";
@@ -93,7 +94,7 @@ function ConfirmationContent() {
               <CheckCircle className="w-20 h-20 text-bark mx-auto mb-6" strokeWidth={1.5} />
             </motion.div>
 
-            <h1 className="font-serif text-4xl md:text-5xl text-main mb-4">
+            <h1 className={`${editorialFont} italic text-4xl md:text-5xl text-main mb-4`}>
               {t("title")}
             </h1>
             <p className="font-body text-main/70 text-lg max-w-md mx-auto">
@@ -109,10 +110,10 @@ function ConfirmationContent() {
           >
             {bookingId && (
               <div className="bg-white/5 px-8 py-6 border-b border-main/10 text-center">
-                <p className="text-main/50 text-xs uppercase tracking-widest font-body mb-2">
+                <p className="font-cta uppercase text-[10px] tracking-[0.28em] text-main/50 mb-2">
                   {t("bookingReference")}
                 </p>
-                <p className="font-serif text-3xl text-main tracking-wide">
+                <p className={`${editorialFont} italic text-3xl text-main tracking-wide`}>
                   {bookingId}
                 </p>
               </div>
@@ -152,7 +153,7 @@ function ConfirmationContent() {
               {formattedAmount && !showSplit && (
                 <div className="flex items-center gap-3 pt-3 border-t border-main/10">
                   <span className="text-main/50 text-sm font-body">{t("totalPaid")}</span>
-                  <span className="text-main font-serif text-xl ml-auto">
+                  <span className={`text-main ${editorialFont} italic text-xl ml-auto`}>
                     {formattedAmount} MNT
                   </span>
                 </div>
@@ -168,7 +169,7 @@ function ConfirmationContent() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-main/50 text-sm font-body">{t("paidToday")}</span>
-                    <span className="text-main font-serif text-xl ml-auto">
+                    <span className={`text-main ${editorialFont} italic text-xl ml-auto`}>
                       {formattedAmount} MNT
                     </span>
                   </div>
@@ -189,7 +190,7 @@ function ConfirmationContent() {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mt-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-main/10 px-8 py-6"
           >
-            <h2 className="font-serif text-lg text-main mb-4">{t("whatNext")}</h2>
+            <h2 className={`${editorialFont} italic text-xl text-main mb-4`}>{t("whatNext")}</h2>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-main/40 mt-1 flex-shrink-0" />
@@ -210,7 +211,7 @@ function ConfirmationContent() {
           >
             <a
               href={localePrefix || "/"}
-              className="inline-block px-10 py-4 bg-bark text-white font-serif uppercase tracking-widest rounded-lg hover:bg-bark-hover transition-colors"
+              className="inline-block px-10 py-4 bg-main text-ink font-cta uppercase tracking-[0.28em] text-xs hover:bg-main/90 transition-colors"
             >
               {t("backToHome")}
             </a>
