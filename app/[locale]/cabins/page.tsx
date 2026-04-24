@@ -60,7 +60,6 @@ type Room = {
   guests: Bilingual;
   quantity: Bilingual;
   intro: Bilingual;
-  priceFrom: number;
   image: string;
 };
 
@@ -82,7 +81,6 @@ const ROOMS: Room[] = [
       en: "Wood-fired warmth, handwoven textiles and a private forest view — our entry-level cabin, sized for couples and small families.",
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("superior-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-superior.webp"),
   },
   {
@@ -96,7 +94,6 @@ const ROOMS: Room[] = [
       en: "A classic timber cabin layout with three full sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
       mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("triple-traditional-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-triple-traditional.webp"),
   },
   {
@@ -110,7 +107,6 @@ const ROOMS: Room[] = [
       en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khuvsgul.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("lakeside-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-lakeside.webp"),
   },
   {
@@ -124,7 +120,6 @@ const ROOMS: Room[] = [
       en: "Designed for longer family stays, with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("triple-electric-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-triple-electric.webp"),
   },
   {
@@ -138,7 +133,6 @@ const ROOMS: Room[] = [
       en: "Our most requested room — a separate living area, deep-soak tub, and a private terrace that opens onto the larch line.",
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("signature-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-signature.webp"),
   },
   {
@@ -152,7 +146,6 @@ const ROOMS: Room[] = [
       en: "Our flexible mid-tier option for groups — four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
       mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("quad-electric-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-quad-electric.webp"),
   },
   {
@@ -166,7 +159,6 @@ const ROOMS: Room[] = [
       en: "A standalone suite on its own peninsula — two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
       mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("grand-peninsula-suite").priceFrom,
     image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
   },
   {
@@ -180,7 +172,6 @@ const ROOMS: Room[] = [
       en: "A nature-first stay under the open sky with essential camp comforts and direct access to the lakeside grounds.",
       mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
     },
-    priceFrom: getRequiredCabinCatalogEntry("camping").priceFrom,
     image: assetUrl("/images/rooms/camping.webp"),
   },
 ];
@@ -214,8 +205,6 @@ type CopyKey =
   | "quantityLabel"
   | "guestsLabel"
   | "areaLabel"
-  | "fromLabel"
-  | "perNight"
   | "moreInfo"
   | "bookCta"
   | "tagline1"
@@ -248,8 +237,6 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     quantityLabel: "Quantity",
     guestsLabel: "Guests",
     areaLabel: "Average area",
-    fromLabel: "From",
-    perNight: "per night",
     moreInfo: "Get More Information",
     bookCta: "Book Your Stay",
     tagline1: "The best people to take care of",
@@ -283,8 +270,6 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     quantityLabel: "Тоо ширхэг",
     guestsLabel: "Зочид",
     areaLabel: "Дундаж талбай",
-    fromLabel: "Үнэ",
-    perNight: "1 шөнө",
     moreInfo: "Дэлгэрэнгүй",
     bookCta: "Захиалах",
     tagline1: "Таны хамгийн үнэт зүйлд —",
@@ -729,7 +714,6 @@ function RoomRow({
 }) {
   const lang = isMn ? "mn" : "en";
   const detailHref = `${localePrefix}${room.href}`;
-  const formattedPrice = `$${room.priceFrom.toLocaleString()}`;
 
   return (
     <article
@@ -799,23 +783,6 @@ function RoomRow({
           delay={0.15}
         >
           {room.intro[lang]}
-        </Reveal>
-
-        <Reveal
-          className="flex flex-wrap items-baseline gap-x-3 mb-8 border-t border-main/10 pt-6"
-          delay={0.25}
-        >
-          <span className="font-cta uppercase tracking-[0.28em] text-[10px] text-main/50">
-            {t.fromLabel}
-          </span>
-          <span
-            className={`${headlineFont} italic text-3xl md:text-4xl text-main`}
-          >
-            {formattedPrice}
-          </span>
-          <span className="font-body text-main/60 text-sm">
-            / {t.perNight}
-          </span>
         </Reveal>
 
         <StaggerGroup
