@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, ChevronRight, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
+import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 
@@ -67,6 +67,186 @@ interface AvailabilityData {
   checkout: string;
   rooms: Room[];
   propertyTermsAndConditions?: string | null;
+}
+
+type RoomSlug =
+  | "superior-cabin"
+  | "triple-traditional-cabin"
+  | "lakeside-cabin"
+  | "triple-electric-cabin"
+  | "signature-cabin"
+  | "quad-electric-cabin"
+  | "grand-peninsula-suite"
+  | "camping";
+
+const ROOM_GALLERIES: Record<RoomSlug, string[]> = {
+  "superior-cabin": [
+    "/images/rooms/superior-cabin/00.webp",
+    "/images/rooms/superior-cabin/01.webp",
+    "/images/rooms/superior-cabin/02.webp",
+    "/images/rooms/superior-cabin/03.webp",
+    "/images/rooms/superior-cabin/04.webp",
+  ],
+  "triple-traditional-cabin": [
+    "/images/rooms/triple-traditional-cabin/00.webp",
+    "/images/rooms/triple-traditional-cabin/01.webp",
+    "/images/rooms/triple-traditional-cabin/02.webp",
+    "/images/rooms/triple-traditional-cabin/03.webp",
+    "/images/rooms/triple-traditional-cabin/04.webp",
+  ],
+  "lakeside-cabin": [
+    "/images/rooms/lakeside-cabin/00.webp",
+    "/images/rooms/lakeside-cabin/01.webp",
+    "/images/rooms/lakeside-cabin/02.webp",
+    "/images/rooms/lakeside-cabin/03.webp",
+    "/images/rooms/lakeside-cabin/04.webp",
+  ],
+  "triple-electric-cabin": [
+    "/images/rooms/triple-electric-cabin/00.webp",
+    "/images/rooms/triple-electric-cabin/01.webp",
+    "/images/rooms/triple-electric-cabin/02.webp",
+    "/images/rooms/triple-electric-cabin/03.webp",
+    "/images/rooms/triple-electric-cabin/04.webp",
+  ],
+  "signature-cabin": [
+    "/images/rooms/signature-cabin/00.webp",
+    "/images/rooms/signature-cabin/01.webp",
+    "/images/rooms/signature-cabin/02.webp",
+    "/images/rooms/signature-cabin/03.webp",
+    "/images/rooms/signature-cabin/04.webp",
+  ],
+  "quad-electric-cabin": [
+    "/images/rooms/quad-electric-cabin/00.webp",
+    "/images/rooms/quad-electric-cabin/01.webp",
+    "/images/rooms/quad-electric-cabin/02.webp",
+    "/images/rooms/quad-electric-cabin/03.webp",
+    "/images/rooms/quad-electric-cabin/04.webp",
+  ],
+  "grand-peninsula-suite": [
+    "/images/rooms/grand-peninsula-suite/00.webp",
+    "/images/rooms/grand-peninsula-suite/01.webp",
+    "/images/rooms/grand-peninsula-suite/02.webp",
+    "/images/rooms/grand-peninsula-suite/03.webp",
+    "/images/rooms/grand-peninsula-suite/04.webp",
+  ],
+  camping: ["/images/rooms/camping.webp"],
+};
+
+// Update this map whenever Cloudbeds roomTypeID/accommodation codes change.
+// Supports both numeric IDs and provider abbreviations when those are returned.
+const ROOM_TYPE_ID_TO_SLUG: Record<string, RoomSlug> = {
+  EST: "triple-traditional-cabin",
+  LDG: "signature-cabin",
+  SCW: "lakeside-cabin",
+  ESH: "grand-peninsula-suite",
+  C: "camping",
+};
+
+const ROOM_NAME_ALIASES: Array<{ matches: string[]; slug: RoomSlug }> = [
+  { matches: ["superior", "их өргөө"], slug: "superior-cabin" },
+  { matches: ["их оргоо"], slug: "superior-cabin" },
+  { matches: ["triple", "traditional"], slug: "triple-traditional-cabin" },
+  { matches: ["тухтай", "галлагаатай"], slug: "triple-traditional-cabin" },
+  { matches: ["lakeside", "эрэг"], slug: "lakeside-cabin" },
+  { matches: ["эрэг", "хаус"], slug: "lakeside-cabin" },
+  { matches: ["triple", "electric"], slug: "triple-electric-cabin" },
+  { matches: ["тухтай", "цахилгаан", "халаалт"], slug: "triple-electric-cabin" },
+  { matches: ["signature"], slug: "signature-cabin" },
+  { matches: ["энгийн", "байр"], slug: "signature-cabin" },
+  { matches: ["quad", "electric"], slug: "quad-electric-cabin" },
+  { matches: ["гэр", "булийн", "цахилгаан", "халаалт"], slug: "quad-electric-cabin" },
+  { matches: ["grand", "peninsula"], slug: "grand-peninsula-suite" },
+  { matches: ["гэр", "булийн", "галлагаатай"], slug: "grand-peninsula-suite" },
+  { matches: ["camp"], slug: "camping" },
+  { matches: ["аялагчийн", "отог"], slug: "camping" },
+];
+
+function normalizeRoomName(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function resolveRoomSlug(roomTypeID: string, roomTypeName: string): RoomSlug | null {
+  const normalizedId = String(roomTypeID || "").trim();
+  const byId = ROOM_TYPE_ID_TO_SLUG[normalizedId] || ROOM_TYPE_ID_TO_SLUG[normalizedId.toUpperCase()];
+  if (byId) return byId;
+
+  const normalized = normalizeRoomName(roomTypeName || "");
+  for (const alias of ROOM_NAME_ALIASES) {
+    if (alias.matches.every((token) => normalized.includes(token))) return alias.slug;
+  }
+  return null;
+}
+
+function BookingCardSlideshow({ images, alt }: { images: string[]; alt: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [images]);
+
+  useEffect(() => {
+    if (images.length <= 1 || isPaused) return;
+    const id = window.setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3200);
+    return () => clearInterval(id);
+  }, [images, isPaused]);
+
+  const src = images[currentIndex] || images[0] || "";
+  const canSlide = images.length > 1;
+
+  const goPrev = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const goNext = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  return (
+    <div
+      className="relative w-full h-full"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.02]"
+      />
+      {canSlide && (
+        <>
+          <button
+            type="button"
+            onClick={goPrev}
+            aria-label="Previous slide"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-ink/55 hover:bg-ink/80 text-main transition-colors backdrop-blur-sm"
+          >
+            <ChevronLeft className="w-4 h-4" strokeWidth={1.4} />
+          </button>
+          <button
+            type="button"
+            onClick={goNext}
+            aria-label="Next slide"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-ink/55 hover:bg-ink/80 text-main transition-colors backdrop-blur-sm"
+          >
+            <ChevronRight className="w-4 h-4" strokeWidth={1.4} />
+          </button>
+        </>
+      )}
+    </div>
+  );
 }
 
 function stripHtml(html: string): string {
@@ -941,6 +1121,12 @@ function BookingContent() {
                 .filter(group => (group.maxGuests || 0) >= totalGuests)
                 .map((group, index) => {
                   const photos = group.photos || [];
+                  const primaryRoom = group.rates[0];
+                  const mappedSlug = resolveRoomSlug(primaryRoom?.roomTypeID || "", group.roomTypeName || "");
+                  const localGallery = mappedSlug ? ROOM_GALLERIES[mappedSlug] : [];
+                  const slideshowImages = localGallery.length > 0
+                    ? localGallery
+                    : (photos.length > 0 ? photos : [placeholderImages[index % placeholderImages.length]]);
                   const maxGuests = group.maxGuests || 2;
                   const isExpanded = expandedRooms.has(group.roomTypeName);
                   const hasCartItem = group.rates.some(r => cart.some(c => cartKey(c.roomTypeID, c.rateID) === cartKey(r.roomTypeID, r.rateID)));
@@ -966,11 +1152,7 @@ function BookingContent() {
                         href={getRoomDetailPath(group.roomTypeName)}
                         className="relative block aspect-[21/10] md:aspect-[21/9] bg-black/40 overflow-hidden group"
                       >
-                        <img
-                          src={photos[0] || placeholderImages[index % placeholderImages.length]}
-                          alt={group.roomTypeName || 'Room'}
-                          className="w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.02]"
-                        />
+                        <BookingCardSlideshow images={slideshowImages} alt={group.roomTypeName || "Room"} />
                         {group.roomsAvailable && group.roomsAvailable <= 3 && (
                           <div className="absolute top-4 right-4 bg-ink/80 text-main text-[10px] font-cta uppercase tracking-[0.22em] px-2.5 py-1 border border-main/20">
                             {t('onlyLeft', { count: group.roomsAvailable })}
