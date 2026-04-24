@@ -26,6 +26,7 @@ import {
   Wifi,
 } from "lucide-react";
 import { assetUrl } from "@/lib/assetUrl";
+import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
 
 const SHARED_SPA_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/spa-mirage-before.webp");
 const SHARED_WELLNESS_IMAGE_BEFORE = assetUrl(
@@ -54,10 +55,16 @@ type RoomConfig = {
   view: Bilingual;
 };
 
+function getRequiredCabinTitle(slug: string): Bilingual {
+  const entry = getCabinCatalogEntry(slug);
+  if (!entry) throw new Error(`Missing cabin catalog entry for slug: ${slug}`);
+  return entry.name;
+}
+
 const ROOM_CONFIGS: RoomConfig[] = [
   {
     slug: "superior-cabin",
-    title: { en: "Superior Cabin", mn: "Superior модон байшин" },
+    title: getRequiredCabinTitle("superior-cabin"),
     eyebrow: { en: "Designed for natural living", mn: "Байгальд ойр амьдралд зориулав" },
     area: { en: "30 m²", mn: "30 м²" },
     guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
@@ -72,7 +79,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
   {
     slug: "triple-traditional-cabin",
-    title: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
+    title: getRequiredCabinTitle("triple-traditional-cabin"),
     eyebrow: { en: "Traditional comfort, refined", mn: "Уламжлалт тав тух, шинэ өнгө аяс" },
     area: { en: "58 m²", mn: "58 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
@@ -87,7 +94,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
   {
     slug: "lakeside-cabin",
-    title: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
+    title: getRequiredCabinTitle("lakeside-cabin"),
     eyebrow: { en: "Closer to the waterline", mn: "Усны эрэгт илүү ойр" },
     area: { en: "55 m²", mn: "55 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
@@ -102,7 +109,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
   {
     slug: "triple-electric-cabin",
-    title: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
+    title: getRequiredCabinTitle("triple-electric-cabin"),
     eyebrow: { en: "Family-ready for longer stays", mn: "Урт амралтад зориулсан шийдэл" },
     area: { en: "60 m²", mn: "60 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
@@ -117,7 +124,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
   {
     slug: "signature-cabin",
-    title: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
+    title: getRequiredCabinTitle("signature-cabin"),
     eyebrow: { en: "Our most requested stay", mn: "Хамгийн эрэлттэй сонголт" },
     area: { en: "70 m²", mn: "70 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
@@ -132,7 +139,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
   {
     slug: "quad-electric-cabin",
-    title: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
+    title: getRequiredCabinTitle("quad-electric-cabin"),
     eyebrow: { en: "Flexible for group travel", mn: "Багаар аялахад тохиромжтой" },
     area: { en: "66 m²", mn: "66 м²" },
     guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
@@ -147,7 +154,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
   },
   {
     slug: "grand-peninsula-suite",
-    title: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
+    title: getRequiredCabinTitle("grand-peninsula-suite"),
     eyebrow: { en: "Our largest private stay", mn: "Хамгийн том хувийн байр" },
     area: { en: "120 m²", mn: "120 м²" },
     guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },

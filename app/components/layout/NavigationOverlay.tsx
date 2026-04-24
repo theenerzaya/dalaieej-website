@@ -2,12 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { Facebook, Instagram, Mail } from "lucide-react";
+import { Facebook, Images, Instagram, Mail } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import { Link as I18nLink } from "@/i18n/navigation";
 import { withLocalePath } from "@/lib/localePath";
+import { getLowestCabinPriceFrom } from "@/lib/cabinCatalog";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
 
@@ -52,7 +53,10 @@ const mainNavItems: MainNavItem[] = [
     href: "/cabins",
     image: "/images/nav-overlay/stay.jpg",
     label: { en: "Our Rooms", mn: "Өргөө" },
-    meta: { en: "Cabins & Suites · From $300/night", mn: "Модон өрөө · 1 шөнө $300-аас" },
+    meta: {
+      en: `Cabins & Suites · From $${getLowestCabinPriceFrom()}/night`,
+      mn: `Модон өрөө · 1 шөнө $${getLowestCabinPriceFrom()}-аас`,
+    },
     available: true,
   },
   {
@@ -385,9 +389,10 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         <Link
                           href={withLocalePath(locale, "/gallery")}
                           onClick={onClose}
-                          className="font-cta text-[11px] font-medium uppercase tracking-[0.22em] text-main/70 transition-colors hover:text-main"
+                          aria-label={isMn ? "Галерей" : "Gallery"}
+                          className="flex h-9 w-9 items-center justify-center rounded-full border border-main/25 text-main/70 transition-colors hover:border-main hover:text-main"
                         >
-                          {isMn ? "Галерей" : "Gallery"}
+                          <Images className="h-4 w-4" aria-hidden="true" />
                         </Link>
                       </li>
                     </ul>

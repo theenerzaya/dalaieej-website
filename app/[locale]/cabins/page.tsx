@@ -32,6 +32,7 @@ import {
   StaggerItem,
 } from "@/app/components/cabins/animations";
 import { assetUrl } from "@/lib/assetUrl";
+import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
 // stays clean and no WebGL code ships to other routes.
@@ -63,109 +64,115 @@ type Room = {
   image: string;
 };
 
+function getRequiredCabinCatalogEntry(slug: string) {
+  const entry = getCabinCatalogEntry(slug);
+  if (!entry) throw new Error(`Missing cabin catalog entry for slug: ${slug}`);
+  return entry;
+}
+
 const ROOMS: Room[] = [
   {
     slug: "superior-cabin",
     href: "/superior-cabin",
-    name: { en: "Superior Cabin", mn: "Их Өргөө" },
-    area: { en: "30 m²", mn: "30 м²" },
-    guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
-    quantity: { en: "6 cabins", mn: "6 байшин" },
+    name: getRequiredCabinCatalogEntry("superior-cabin").name,
+    area: { en: "50 m²", mn: "50 м²" },
+    guests: { en: "3 adults · 4 child", mn: "3 том хүн · 4 хүүхэд" },
+    quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
       en: "Wood-fired warmth, handwoven textiles and a private forest view — our entry-level cabin, sized for couples and small families.",
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
     },
-    priceFrom: 300,
+    priceFrom: getRequiredCabinCatalogEntry("superior-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-superior.webp"),
   },
   {
     slug: "triple-traditional-cabin",
     href: "/triple-traditional-cabin",
-    name: { en: "Triple Traditional Cabin", mn: "Тухтай Хаус (Галлагаатай)" },
-    area: { en: "58 m²", mn: "58 м²" },
-    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
+    name: getRequiredCabinCatalogEntry("triple-traditional-cabin").name,
+    area: { en: "30 m²", mn: "30 м²" },
+    guests: { en: "3 adults · 2 child", mn: "3 том хүн · 2 хүүхэд" },
+    quantity: { en: "5 cabins", mn: "5 байшин" },
     intro: {
       en: "A classic timber cabin layout with three full sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
       mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
     },
-    priceFrom: 470,
+    priceFrom: getRequiredCabinCatalogEntry("triple-traditional-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-triple-traditional.webp"),
   },
   {
     slug: "lakeside-cabin",
     href: "/lakeside-cabin",
-    name: { en: "Lakeside Cabin", mn: " Эрэг дээрх Хаус" },
-    area: { en: "55 m²", mn: "55 м²" },
-    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
-    quantity: { en: "4 cabins", mn: "4 байшин" },
+    name: getRequiredCabinCatalogEntry("lakeside-cabin").name,
+    area: { en: "40 m²", mn: "40 м²" },
+    guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
+    quantity: { en: "2 cabins", mn: "2 байшин" },
     intro: {
       en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khuvsgul.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
-    priceFrom: 420,
+    priceFrom: getRequiredCabinCatalogEntry("lakeside-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-lakeside.webp"),
   },
   {
     slug: "triple-electric-cabin",
     href: "/triple-electric-cabin",
-    name: { en: "Triple Electric Cabin", mn: "Тухтай Хаус (Цахилгаан халаалт)" },
-    area: { en: "60 m²", mn: "60 м²" },
+    name: getRequiredCabinCatalogEntry("triple-electric-cabin").name,
+    area: { en: "30 m²", mn: "30 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
+    quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
       en: "Designed for longer family stays, with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
     },
-    priceFrom: 510,
+    priceFrom: getRequiredCabinCatalogEntry("triple-electric-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-triple-electric.webp"),
   },
   {
     slug: "signature-cabin",
     href: "/signature-cabin",
-    name: { en: "Signature Cabin", mn: "Энгийн Байр" },
-    area: { en: "70 m²", mn: "70 м²" },
-    guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    quantity: { en: "3 cabins", mn: "3 байшин" },
+    name: getRequiredCabinCatalogEntry("signature-cabin").name,
+    area: { en: "30 m²", mn: "30 м²" },
+    guests: { en: " 2 adults", mn: "2 том хүн" },
+    quantity: { en: "5 cabin", mn: "5 байшин" },
     intro: {
       en: "Our most requested room — a separate living area, deep-soak tub, and a private terrace that opens onto the larch line.",
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
     },
-    priceFrom: 560,
+    priceFrom: getRequiredCabinCatalogEntry("signature-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-signature.webp"),
   },
   {
     slug: "quad-electric-cabin",
     href: "/quad-electric-cabin",
-    name: { en: "Quad Electric Cabin", mn: "Гэр Бүлийн Хаус (Цахилгаан халаалт)" },
-    area: { en: "66 m²", mn: "66 м²" },
-    guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
+    name: getRequiredCabinCatalogEntry("quad-electric-cabin").name,
+    area: { en: "25 m²", mn: "25 м²" },
+    guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
+    quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
       en: "Our flexible mid-tier option for groups — four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
       mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
     },
-    priceFrom: 540,
+    priceFrom: getRequiredCabinCatalogEntry("quad-electric-cabin").priceFrom,
     image: assetUrl("/images/cabins/room-quad-electric.webp"),
   },
   {
     slug: "grand-peninsula-suite",
     href: "/grand-peninsula-suite",
-    name: { en: "Grand Peninsula Suite", mn: "Гэр Бүлийн Хаус (Галлагаатай)" },
-    area: { en: "120 m²", mn: "120 м²" },
-    guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },
+    name: getRequiredCabinCatalogEntry("grand-peninsula-suite").name,
+    area: { en: "35 m²", mn: "35 м²" },
+    guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
     quantity: { en: "1 suite", mn: "1 тусгай хаус" },
     intro: {
       en: "A standalone suite on its own peninsula — two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
       mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
     },
-    priceFrom: 1200,
+    priceFrom: getRequiredCabinCatalogEntry("grand-peninsula-suite").priceFrom,
     image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
   },
   {
     slug: "camping",
     href: "/booking",
-    name: { en: "Camping", mn: "Аялагчийн Отог" },
+    name: getRequiredCabinCatalogEntry("camping").name,
     area: { en: "Outdoor setup", mn: "Гадаа байрлал" },
     guests: { en: "2 adults · 2 children", mn: "2 том хүн · 2 хүүхэд" },
     quantity: { en: "Limited spots", mn: "Хязгаартай талбай" },
@@ -173,7 +180,7 @@ const ROOMS: Room[] = [
       en: "A nature-first stay under the open sky with essential camp comforts and direct access to the lakeside grounds.",
       mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
     },
-    priceFrom: 180,
+    priceFrom: getRequiredCabinCatalogEntry("camping").priceFrom,
     image: assetUrl("/images/rooms/camping.webp"),
   },
 ];
