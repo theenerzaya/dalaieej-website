@@ -31,6 +31,7 @@ import {
   StaggerGroup,
   StaggerItem,
 } from "@/app/components/cabins/animations";
+import { assetUrl } from "@/lib/assetUrl";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
 // stays clean and no WebGL code ships to other routes.
@@ -66,7 +67,7 @@ const ROOMS: Room[] = [
   {
     slug: "superior-cabin",
     href: "/superior-cabin",
-    name: { en: "Superior Cabin", mn: "Superior модон байшин" },
+    name: { en: "Superior Cabin", mn: "Их Өргөө" },
     area: { en: "30 m²", mn: "30 м²" },
     guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
     quantity: { en: "6 cabins", mn: "6 байшин" },
@@ -75,12 +76,12 @@ const ROOMS: Room[] = [
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
     },
     priceFrom: 300,
-    image: "/images/cabins/room-superior.webp",
+    image: assetUrl("/images/cabins/room-superior.webp"),
   },
   {
     slug: "triple-traditional-cabin",
     href: "/triple-traditional-cabin",
-    name: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
+    name: { en: "Triple Traditional Cabin", mn: "Тухтай Хаус (Галлагаатай)" },
     area: { en: "58 m²", mn: "58 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
@@ -89,12 +90,12 @@ const ROOMS: Room[] = [
       mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
     },
     priceFrom: 470,
-    image: "/images/cabins/room-triple-traditional.webp",
+    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
   },
   {
     slug: "lakeside-cabin",
     href: "/lakeside-cabin",
-    name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
+    name: { en: "Lakeside Cabin", mn: " Эрэг дээрх Хаус" },
     area: { en: "55 m²", mn: "55 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
     quantity: { en: "4 cabins", mn: "4 байшин" },
@@ -103,12 +104,12 @@ const ROOMS: Room[] = [
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
     priceFrom: 420,
-    image: "/images/cabins/room-lakeside.webp",
+    image: assetUrl("/images/cabins/room-lakeside.webp"),
   },
   {
     slug: "triple-electric-cabin",
     href: "/triple-electric-cabin",
-    name: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
+    name: { en: "Triple Electric Cabin", mn: "Тухтай Хаус (Цахилгаан халаалт)" },
     area: { en: "60 m²", mn: "60 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
@@ -117,12 +118,12 @@ const ROOMS: Room[] = [
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
     },
     priceFrom: 510,
-    image: "/images/cabins/room-triple-electric.webp",
+    image: assetUrl("/images/cabins/room-triple-electric.webp"),
   },
   {
     slug: "signature-cabin",
     href: "/signature-cabin",
-    name: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
+    name: { en: "Signature Cabin", mn: "Энгийн Байр" },
     area: { en: "70 m²", mn: "70 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "3 cabins", mn: "3 байшин" },
@@ -131,12 +132,12 @@ const ROOMS: Room[] = [
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
     },
     priceFrom: 560,
-    image: "/images/cabins/room-signature.webp",
+    image: assetUrl("/images/cabins/room-signature.webp"),
   },
   {
     slug: "quad-electric-cabin",
     href: "/quad-electric-cabin",
-    name: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
+    name: { en: "Quad Electric Cabin", mn: "Гэр Бүлийн Хаус (Цахилгаан халаалт)" },
     area: { en: "66 m²", mn: "66 м²" },
     guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
@@ -145,12 +146,12 @@ const ROOMS: Room[] = [
       mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
     },
     priceFrom: 540,
-    image: "/images/cabins/room-quad-electric.webp",
+    image: assetUrl("/images/cabins/room-quad-electric.webp"),
   },
   {
     slug: "grand-peninsula-suite",
     href: "/grand-peninsula-suite",
-    name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
+    name: { en: "Grand Peninsula Suite", mn: "Гэр Бүлийн Хаус (Галлагаатай)" },
     area: { en: "120 m²", mn: "120 м²" },
     guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },
     quantity: { en: "1 suite", mn: "1 тусгай хаус" },
@@ -159,12 +160,12 @@ const ROOMS: Room[] = [
       mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
     },
     priceFrom: 1200,
-    image: "/images/cabins/room-grand-peninsula.webp",
+    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
   },
   {
     slug: "camping",
     href: "/booking",
-    name: { en: "Camping", mn: "Кемпинг" },
+    name: { en: "Camping", mn: "Аялагчийн Отог" },
     area: { en: "Outdoor setup", mn: "Гадаа байрлал" },
     guests: { en: "2 adults · 2 children", mn: "2 том хүн · 2 хүүхэд" },
     quantity: { en: "Limited spots", mn: "Хязгаартай талбай" },
@@ -173,21 +174,21 @@ const ROOMS: Room[] = [
       mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
     },
     priceFrom: 180,
-    image: "/images/rooms/camping.webp",
+    image: assetUrl("/images/rooms/camping.webp"),
   },
 ];
 
-const HERO_IMAGE = "/images/cabins/hero-our-rooms.webp";
+const HERO_IMAGE = assetUrl("/images/cabins/hero-our-rooms.webp");
 
 // Paired images for the Hoteller-style "mirage" crossfade.
 // `before` is the resting state; `after` is revealed with a WebGL liquid
 // distortion on hover. Each pair is two visually related but distinct shots
 // so the morph reads as a mood shift rather than a flicker.
-const SPA_IMAGE_BEFORE = "/images/cabins/spa-mirage-before.webp";
-const SPA_IMAGE_AFTER = "/images/cabins/spa-mirage-after.webp";
-const WELLNESS_IMAGE_BEFORE = "/images/cabins/wellness-mirage-before.webp";
-const WELLNESS_IMAGE_AFTER = "/images/cabins/wellness-mirage-after.webp";
-const TAGLINE_BG_MAIN = "/images/cabins/room-grand-peninsula.webp";
+const SPA_IMAGE_BEFORE = assetUrl("/images/cabins/spa-mirage-before.webp");
+const SPA_IMAGE_AFTER = assetUrl("/images/cabins/spa-mirage-after.webp");
+const WELLNESS_IMAGE_BEFORE = assetUrl("/images/cabins/wellness-mirage-before.webp");
+const WELLNESS_IMAGE_AFTER = assetUrl("/images/cabins/wellness-mirage-after.webp");
+const TAGLINE_BG_MAIN = assetUrl("/images/cabins/room-grand-peninsula.webp");
 
 type CopyKey =
   | "eyebrow"
@@ -299,7 +300,7 @@ export default function CabinsPage() {
   const isMn = locale === "mn";
   const t = COPY[isMn ? "mn" : "en"];
   const reduce = useReducedMotion();
-  const localePrefix = isMn ? "/mn" : "";
+  const localePrefix = isMn ? "/mn" : "/en";
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
   const heroEyebrow = isMn ? t.eyebrow.toUpperCase() : "STAY WITH US FEEL LIKE HOME";
 
@@ -757,26 +758,26 @@ function RoomRow({
         />
 
         <StaggerGroup
-          as="ul"
+          as="div"
           className="flex flex-wrap gap-x-6 gap-y-3 mb-6 text-main/70"
           stagger={0.06}
           offsetY={14}
         >
-          <StaggerItem as="li">
+          <StaggerItem as="div">
             <Fact
               icon={<Ruler className="w-4 h-4 text-bark" strokeWidth={1.4} />}
               label={t.areaLabel}
               value={room.area[lang]}
             />
           </StaggerItem>
-          <StaggerItem as="li">
+          <StaggerItem as="div">
             <Fact
               icon={<Users className="w-4 h-4 text-bark" strokeWidth={1.4} />}
               label={t.guestsLabel}
               value={room.guests[lang]}
             />
           </StaggerItem>
-          <StaggerItem as="li">
+          <StaggerItem as="div">
             <Fact
               icon={<BedDouble className="w-4 h-4 text-bark" strokeWidth={1.4} />}
               label={t.quantityLabel}
@@ -853,7 +854,7 @@ function Fact({
   value: string;
 }) {
   return (
-    <li className="flex items-start gap-2.5">
+    <div className="flex items-start gap-2.5">
       <span className="mt-0.5">{icon}</span>
       <span className="flex flex-col leading-tight">
         <span className="font-cta uppercase tracking-[0.22em] text-[9px] text-main/45">
@@ -861,7 +862,7 @@ function Fact({
         </span>
         <span className="font-body text-sm text-main/85">{value}</span>
       </span>
-    </li>
+    </div>
   );
 }
 
