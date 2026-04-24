@@ -21,21 +21,21 @@ const silos = [
   },
   {
     id: "dining",
-    href: /*"/dining",*/ "#",
+    href: "/restaurant",
     en: "Restaurant",
     mn: "Ресторан",
     image: "/images/silogrid/hearth.webp"
   },
   {
     id: "wellness",
-    href: /*"/wellness",*/ "#",
+    href: "/cabins",
     en: "Wellness",
     mn: "Амралт",
     image: "/images/silogrid/wellness.webp"
   },
   {
     id: "adventure",
-    href: /*"/experiences",*/ "#",
+    href: "/restaurant",
     en: "Experiences",
     mn: "Аялал",
     image: "/images/silogrid/wilderness.webp"

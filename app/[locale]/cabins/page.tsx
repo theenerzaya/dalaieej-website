@@ -31,7 +31,10 @@ import {
   StaggerGroup,
   StaggerItem,
 } from "@/app/components/cabins/animations";
-import { assetUrl } from "@/lib/assetUrl";
+
+function assetUrl(path: string): string {
+  return path;
+}
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
 // stays clean and no WebGL code ships to other routes.

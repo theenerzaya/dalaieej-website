@@ -51,15 +51,15 @@ const mainNavItems: MainNavItem[] = [
     image: "/images/nav-overlay/stay.jpg",
     label: { en: "Our Rooms", mn: "Өргөө" },
     meta: { en: "Cabins & Suites · From $300/night", mn: "Модон өрөө · 1 шөнө $300-аас" },
-    available: false,
+    available: true,
   },
   {
     id: "dining",
-    href: "/dining",
+    href: "/restaurant",
     image: "/images/nav-overlay/dining.jpg",
     label: { en: "Dining", mn: "Зоог" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дээрх гал тогоо" },
-    available: false,
+    available: true,
   },
   {
     id: "wellness",
