@@ -42,8 +42,8 @@ type MainNavItem = {
   available: boolean;
 };
 
-// NOTE: only `about` is live today; the rest show a "Coming Soon" tag and
-// render as non-interactive links (to preserve the overlay's visual rhythm).
+// NOTE: only selected sections are live; unavailable sections render a
+// "Coming Soon" tag to preserve the overlay's visual rhythm.
 const mainNavItems: MainNavItem[] = [
   {
     id: "stay",
@@ -51,15 +51,15 @@ const mainNavItems: MainNavItem[] = [
     image: "/images/nav-overlay/stay.jpg",
     label: { en: "Our Rooms", mn: "Өргөө" },
     meta: { en: "Cabins & Suites · From $300/night", mn: "Модон өрөө · 1 шөнө $300-аас" },
-    available: false,
+    available: true,
   },
   {
     id: "dining",
-    href: "/dining",
+    href: "/restaurant",
     image: "/images/nav-overlay/dining.jpg",
-    label: { en: "Dining", mn: "Зоог" },
+    label: { en: "Restaurant", mn: "Ресторан" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дээрх гал тогоо" },
-    available: false,
+    available: true,
   },
   {
     id: "wellness",

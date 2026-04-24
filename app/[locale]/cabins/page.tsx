@@ -300,7 +300,7 @@ export default function CabinsPage() {
   const isMn = locale === "mn";
   const t = COPY[isMn ? "mn" : "en"];
   const reduce = useReducedMotion();
-  const localePrefix = isMn ? "/mn" : "";
+  const localePrefix = isMn ? "/mn" : "/en";
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
   const heroEyebrow = isMn ? t.eyebrow.toUpperCase() : "STAY WITH US FEEL LIKE HOME";
 
@@ -758,26 +758,26 @@ function RoomRow({
         />
 
         <StaggerGroup
-          as="ul"
+          as="div"
           className="flex flex-wrap gap-x-6 gap-y-3 mb-6 text-main/70"
           stagger={0.06}
           offsetY={14}
         >
-          <StaggerItem as="li">
+          <StaggerItem as="div">
             <Fact
               icon={<Ruler className="w-4 h-4 text-bark" strokeWidth={1.4} />}
               label={t.areaLabel}
               value={room.area[lang]}
             />
           </StaggerItem>
-          <StaggerItem as="li">
+          <StaggerItem as="div">
             <Fact
               icon={<Users className="w-4 h-4 text-bark" strokeWidth={1.4} />}
               label={t.guestsLabel}
               value={room.guests[lang]}
             />
           </StaggerItem>
-          <StaggerItem as="li">
+          <StaggerItem as="div">
             <Fact
               icon={<BedDouble className="w-4 h-4 text-bark" strokeWidth={1.4} />}
               label={t.quantityLabel}
@@ -854,7 +854,7 @@ function Fact({
   value: string;
 }) {
   return (
-    <li className="flex items-start gap-2.5">
+    <div className="flex items-start gap-2.5">
       <span className="mt-0.5">{icon}</span>
       <span className="flex flex-col leading-tight">
         <span className="font-cta uppercase tracking-[0.22em] text-[9px] text-main/45">
@@ -862,7 +862,7 @@ function Fact({
         </span>
         <span className="font-body text-sm text-main/85">{value}</span>
       </span>
-    </li>
+    </div>
   );
 }
 

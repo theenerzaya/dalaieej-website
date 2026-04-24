@@ -36,7 +36,9 @@ import {
   Fragment,
   type ElementType,
   type ReactNode,
+  useEffect,
   useRef,
+  useState,
 } from "react";
 
 /* -------------------------------------------------------------------------- */
@@ -44,6 +46,20 @@ import {
 /* -------------------------------------------------------------------------- */
 
 export const EASE_OUT_EXPO = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * `useReducedMotion()` can be unknown on the server and resolve differently on
+ * the client, which would swap `<div>` vs `motion.*` and change `AnimatedText`
+ * structure — classic hydration failure. We keep SSR + the first client paint
+ * on the static branch, then enable motion after mount.
+ */
+function useClientReady() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+  return ready;
+}
 
 const DEFAULT_VIEW_OPTS: UseInViewOptions = { once: true, amount: 0.35 };
 
@@ -90,13 +106,14 @@ export function AnimatedText({
     ...(amount !== undefined ? { amount } : {}),
   });
   const reduce = useReducedMotion();
+  const clientReady = useClientReady();
 
   const units =
     mode === "line"
       ? text.split(/\n/).filter((s) => s.length > 0)
       : text.split(" ");
 
-  if (reduce) {
+  if (!clientReady || reduce) {
     return (
       <Tag className={className} ref={ref}>
         {text}
@@ -321,6 +338,7 @@ export function ScrollParallax({
 }: ScrollParallaxProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const reduce = useReducedMotion();
+  const clientReady = useClientReady();
 
   // `offset` is lightly typed in framer-motion; cast is local and safe.
   const { scrollYProgress } = useScroll({
@@ -330,7 +348,7 @@ export function ScrollParallax({
 
   const travel = useTransform(scrollYProgress, [0, 1], [-y / 2, y / 2]);
 
-  if (reduce) {
+  if (!clientReady || reduce) {
     return (
       <div ref={ref} className={className}>
         {children}
@@ -363,6 +381,7 @@ export function HeroFadeOut({
 }: HeroFadeOutProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const reduce = useReducedMotion();
+  const clientReady = useClientReady();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -372,7 +391,7 @@ export function HeroFadeOut({
   const y = useTransform(scrollYProgress, [0, 1], [0, -rise]);
   const opacity = useTransform(scrollYProgress, [0, 0.6, 1], [1, 0.9, 0]);
 
-  if (reduce) {
+  if (!clientReady || reduce) {
     return (
       <div ref={ref} className={className}>
         {children}
@@ -428,8 +447,9 @@ export function ImageReveal({
     ...(amount !== undefined ? { amount } : {}),
   });
   const reduce = useReducedMotion();
+  const clientReady = useClientReady();
 
-  if (reduce) {
+  if (!clientReady || reduce) {
     return (
       <div ref={ref} className={className}>
         {children}

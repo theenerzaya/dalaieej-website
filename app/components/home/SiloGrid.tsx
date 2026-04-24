@@ -185,7 +185,7 @@ function MobileSilo({
 
 export default function SiloGrid() {
   const locale = useLocale();
-  const localePrefix = locale === 'mn' ? '/mn' : '';
+  const localePrefix = locale === "mn" ? "/mn" : "/en";
   const isMongolian = locale === 'mn';
   const reduceMotion = useReducedMotion();
 

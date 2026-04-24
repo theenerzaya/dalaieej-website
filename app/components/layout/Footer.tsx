@@ -11,7 +11,7 @@ import { assetUrl } from "@/lib/assetUrl";
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
-  const localePrefix = locale === 'mn' ? '/mn' : '';
+  const localePrefix = locale === "mn" ? "/mn" : "/en";
   const pathname = usePathname();
   const isAboutUs = pathname?.includes("/about-us");
 
@@ -76,9 +76,9 @@ export default function Footer() {
 
           {/* Column 2: Experience */}
           <div className="min-w-0">
-            <h4 className="mb-3 md:mb-6">
+            <div className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("experience")}</Eyebrow>
-            </h4>
+            </div>
             <ul className="space-y-2 md:space-y-3">
               {experienceLinks.map((item) => (
                 <li key={item.key}>
@@ -95,9 +95,9 @@ export default function Footer() {
 
           {/* Column 3: Resort */}
           <div className="min-w-0">
-            <h4 className="mb-3 md:mb-6">
+            <div className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("resort")}</Eyebrow>
-            </h4>
+            </div>
             <ul className="space-y-2 md:space-y-3">
               {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
                 <li key={item.key}>
@@ -125,9 +125,9 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div className="col-span-2 lg:col-span-1">
-            <h4 className="mb-3 md:mb-6">
+            <div className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("contact")}</Eyebrow>
-            </h4>
+            </div>
             <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-main/50 mt-0.5 flex-shrink-0" />
