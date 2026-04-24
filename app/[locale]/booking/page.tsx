@@ -888,7 +888,9 @@ function BookingContent() {
       <div className="max-w-7xl mx-auto px-6 pt-10 md:pt-14 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-10 lg:gap-12">
         {/* Sidebar — first in DOM so it appears on top on mobile */}
         <aside className="min-w-0 lg:order-2">
-          <div className="lg:sticky lg:top-24 space-y-6">
+          {/* Bounded height + internal scroll: avoids tall sticky aside coupling page scroll
+              to the bottom of this column (felt like "jumping" to the page end). */}
+          <div className="space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:overscroll-contain">
             {/* Book Your Stay form */}
             <section className="bg-white/[0.04] border border-main/10 p-6">
               <h2 className="font-editorial-en italic text-2xl text-main mb-2">
@@ -1137,9 +1139,10 @@ function BookingContent() {
                 )}
 
                 <button
+                  type="button"
                   onClick={proceedToCheckout}
                   disabled={cartCapacity < totalGuests}
-                  className={`w-full mt-5 py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
+                  className={`hidden lg:block w-full mt-5 py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
                     cartCapacity >= totalGuests
                       ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                       : 'bg-main/10 text-main/40 cursor-not-allowed'
@@ -1384,6 +1387,7 @@ function BookingContent() {
                 <span className="font-editorial-en italic text-lg">{cartTotal.toLocaleString()} MNT</span>
               </div>
               <button
+                type="button"
                 onClick={proceedToCheckout}
                 disabled={cartCapacity < totalGuests}
                 className={`px-6 py-3 font-cta uppercase tracking-[0.28em] text-[11px] transition-colors whitespace-nowrap ${
@@ -1392,7 +1396,7 @@ function BookingContent() {
                     : 'bg-main/10 text-main/40 cursor-not-allowed'
                 }`}
               >
-                {currentLocale === 'mn' ? 'Захиалах' : 'Book Now'}
+                {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
               </button>
             </div>
           </div>

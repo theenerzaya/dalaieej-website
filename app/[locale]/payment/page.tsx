@@ -264,6 +264,10 @@ function PaymentContent() {
         body: JSON.stringify({
           amount: numAmount,
           description: `Dalai Eej Resort - Booking ${bid}`,
+          siteOrigin:
+            typeof window !== "undefined"
+              ? window.location.origin
+              : undefined,
         }),
       });
 
@@ -308,6 +312,10 @@ function PaymentContent() {
         body: JSON.stringify({
           amount: numAmount,
           description: `Dalai Eej Resort - Booking ${bookingId}`,
+          siteOrigin:
+            typeof window !== "undefined"
+              ? window.location.origin
+              : undefined,
         }),
       });
 
