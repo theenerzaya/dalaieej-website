@@ -406,7 +406,12 @@
     "promoCode": "Promo Code",
     "enterPromo": "Enter code",
     "apply": "Apply",
-    "promoApplied": "Promo code applied!"
+    "promoApplied": "Promo code applied!",
+    "restrictionsNotice": "Some prices may be greyed out for your dates. That usually means this rate has a minimum or maximum length of stay, or check-in / check-out is not allowed on the days you picked. Try changing your dates or select another rate.",
+    "restrictionClosedToArrival": "Check-in is not allowed on {date} for this rate.",
+    "restrictionClosedToDeparture": "Check-out is not allowed on {date} for this rate.",
+    "restrictionMinLos": "{nights, plural, one {At least # night is required for this rate.} other {At least # nights are required for this rate.}}",
+    "restrictionMaxLos": "{nights, plural, one {This rate allows at most # night for these dates.} other {This rate allows at most # nights for these dates.}}"
   },
   "rooms": {
     "title": "Our Heritage Stays",

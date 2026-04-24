@@ -37,7 +37,16 @@ export async function cloudbedsGet<T>(endpoint: string, params?: Record<string, 
       const message = error.response?.data?.message || error.message;
       
       if (status === 401) {
-        throw new Error("Cloudbeds API key is invalid. Please check CLOUDBEDS_API_KEY.");
+        const data = error.response?.data as { message?: unknown; error?: unknown } | undefined;
+        const detail = [data?.message, data?.error]
+          .map((x) => (x != null ? String(x).trim() : ""))
+          .filter(Boolean)
+          .join(" ");
+        throw new Error(
+          detail
+            ? `Cloudbeds API rejected the request (401): ${detail}`
+            : "Cloudbeds API key is invalid. Please check CLOUDBEDS_API_KEY."
+        );
       }
       throw new Error(`Cloudbeds API error (${status}): ${message}`);
     }

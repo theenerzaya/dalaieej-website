@@ -13,6 +13,13 @@ interface RateRestriction {
   maxLos: number;
 }
 
+/** Normalize Cloudbeds roomRateDetailed `date` (or YYYY-MM-DD) for comparison. */
+function normDetailDate(value: unknown): string {
+  if (value == null) return "";
+  const s = String(value);
+  return s.length >= 10 ? s.slice(0, 10) : s;
+}
+
 /** Cloudbeds returns adultsExtraCharge / childrenExtraCharge as an array of single-key objects. */
 function flattenExtraChargeMap(extra: unknown): Record<string, number> {
   const out: Record<string, number> = {};
@@ -114,16 +121,27 @@ export async function GET(request: NextRequest) {
     const baseCancellationByRoomType = new Map<string, RateCancellation>();
 
     if (ratePlansData?.data) {
+      const checkinKey = normDetailDate(checkin);
+      const checkoutKey = normDetailDate(checkout);
+
       for (const rate of ratePlansData.data) {
         const detailed: any[] = rate.roomRateDetailed || [];
         if (detailed.length === 0) continue;
 
-        const checkinDay = detailed[0];
-        const lastDay = detailed[detailed.length - 1];
+        // Per-day flags apply to that row's `date`. Using only the last row tied CTD on the
+        // last *priced night* to the guest's checkout day and caused false "checkout blocked" banners.
+        const byDate = new Map<string, (typeof detailed)[0]>();
+        for (const row of detailed) {
+          const k = normDetailDate(row?.date);
+          if (k) byDate.set(k, row);
+        }
+
+        const checkinDay = byDate.get(checkinKey) ?? detailed[0];
+        const checkoutDay = byDate.get(checkoutKey) ?? undefined;
 
         const restriction: RateRestriction = {
           closedToArrival: !!checkinDay?.closedToArrival,
-          closedToDeparture: !!lastDay?.closedToDeparture,
+          closedToDeparture: !!checkoutDay?.closedToDeparture,
           minLos: checkinDay?.minLos || 0,
           maxLos: checkinDay?.maxLos || 0,
         };

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronDown, ChevronUp, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck } from "lucide-react";
+import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 
@@ -253,16 +253,17 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function formatDate(dateStr: string): string {
-  if (!dateStr) return '';
-  const date = new Date(dateStr + 'T00:00:00');
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+function formatDate(dateStr: string, locale: "en" | "mn" = "en"): string {
+  if (!dateStr) return "";
+  const date = new Date(dateStr + "T00:00:00");
+  const tag = locale === "mn" ? "mn-MN" : "en-US";
+  return date.toLocaleDateString(tag, { month: "short", day: "numeric", year: "numeric" });
 }
 
 function calculateNights(checkinDate: string, checkoutDate: string): number {
   if (!checkinDate || !checkoutDate) return 1;
-  const start = new Date(checkinDate);
-  const end = new Date(checkoutDate);
+  const start = new Date(checkinDate + "T00:00:00");
+  const end = new Date(checkoutDate + "T00:00:00");
   const diffTime = end.getTime() - start.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays > 0 ? diffDays : 1;
@@ -293,6 +294,67 @@ function translateRateName(name: string, locale: string): string {
   };
   const lowerName = name.toLowerCase().trim();
   return map[lowerName] || name;
+}
+
+function restrictionFingerprint(restrictions: RoomRestrictions | null | undefined): string {
+  if (!restrictions) return "";
+  return `${restrictions.closedToArrival}|${restrictions.closedToDeparture}|${restrictions.minLos}|${restrictions.maxLos}`;
+}
+
+/** Same visible offer (Cloudbeds sometimes returns duplicate rows with different rateIDs). */
+function rateDisplayFingerprint(room: Room, locale: string): string {
+  const label = translateRateName(room.rateName, locale).toLowerCase().trim();
+  const nrf = isNonRefundableRate(room.rateName) ? "1" : "0";
+  const res = restrictionFingerprint(room.restrictions);
+  const c = room.cancellation;
+  const cPart = c
+    ? `${c.daysBeforeArrival ?? ""}:${(c.policyText || "").replace(/\s+/g, " ").trim().slice(0, 160)}`
+    : "";
+  return `${nrf}|${label}|${room.totalRate}|${room.originalRate ?? ""}|${res}|${cPart}`;
+}
+
+/**
+ * Cloudbeds getAvailableRoomTypes may repeat the same sellable offer (same terms/price)
+ * under multiple rateIDs. Merge by rateID first, then collapse identical fingerprints.
+ */
+function dedupeRoomRates(rates: Room[], locale: string): Room[] {
+  const byId = new Map<string, Room>();
+  for (const r of rates) {
+    const id = String(r.rateID);
+    const prev = byId.get(id);
+    if (!prev) byId.set(id, r);
+    else
+      byId.set(id, {
+        ...prev,
+        roomsAvailable: Math.max(prev.roomsAvailable, r.roomsAvailable),
+      });
+  }
+  const mergedById = Array.from(byId.values());
+  const byFp = new Map<string, Room>();
+  for (const r of mergedById) {
+    const fp = rateDisplayFingerprint(r, locale);
+    const prev = byFp.get(fp);
+    if (!prev) byFp.set(fp, r);
+    else
+      byFp.set(fp, {
+        ...prev,
+        roomsAvailable: Math.max(prev.roomsAvailable, r.roomsAvailable),
+      });
+  }
+  return Array.from(byFp.values());
+}
+
+/** Refundable (flexible) rates first, then non-refundable; cheapest within each group. */
+function sortRatesRefundableFirst(rates: Room[]): Room[] {
+  const byPrice = (a: Room, b: Room) => {
+    const ar = a.totalRate > 0 ? a.totalRate : Number.POSITIVE_INFINITY;
+    const br = b.totalRate > 0 ? b.totalRate : Number.POSITIVE_INFINITY;
+    if (ar !== br) return ar - br;
+    return String(a.rateID).localeCompare(String(b.rateID));
+  };
+  const refundable = rates.filter((r) => !isNonRefundableRate(r.rateName)).sort(byPrice);
+  const nonRefundable = rates.filter((r) => isNonRefundableRate(r.rateName)).sort(byPrice);
+  return [...refundable, ...nonRefundable];
 }
 
 function BookingContent() {
@@ -328,7 +390,6 @@ function BookingContent() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
-  const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
   const lastFetchedGuestsRef = useRef<{ a: number; c: number } | null>(null);
 
@@ -390,15 +451,6 @@ function BookingContent() {
 
   const cartKey = (roomTypeID: string, rateID: string) => `${roomTypeID}__${rateID}`;
 
-  const toggleExpand = (roomTypeName: string) => {
-    setExpandedRooms(prev => {
-      const next = new Set(prev);
-      if (next.has(roomTypeName)) next.delete(roomTypeName);
-      else next.add(roomTypeName);
-      return next;
-    });
-  };
-
   const groupedRooms = useMemo<RoomTypeGroup[]>(() => {
     const groups = new Map<string, RoomTypeGroup>();
     for (const room of rooms) {
@@ -417,8 +469,12 @@ function BookingContent() {
       }
       groups.get(key)!.rates.push(room);
     }
+    for (const g of groups.values()) {
+      g.rates = dedupeRoomRates(g.rates, currentLocale);
+      g.rates = sortRatesRefundableFirst(g.rates);
+    }
     return Array.from(groups.values());
-  }, [rooms]);
+  }, [rooms, currentLocale]);
 
   useEffect(() => {
     if (cart.length > 0 && cartCapacity < totalGuests) {
@@ -634,25 +690,18 @@ function BookingContent() {
   const getRestrictionMessages = (restrictions: RoomRestrictions | null | undefined): string[] => {
     if (!restrictions) return [];
     const msgs: string[] = [];
+    const loc = currentLocale === "mn" ? "mn" : "en";
     if (restrictions.closedToArrival) {
-      msgs.push(currentLocale === 'mn'
-        ? `${formatDate(checkin)} өдөр бүртгүүлэх боломжгүй`
-        : `Check-in not available on ${formatDate(checkin)}`);
+      msgs.push(t("restrictionClosedToArrival", { date: formatDate(checkin, loc) }));
     }
     if (restrictions.closedToDeparture) {
-      msgs.push(currentLocale === 'mn'
-        ? `${formatDate(checkout)} өдөр гарах боломжгүй`
-        : `Check-out not available on ${formatDate(checkout)}`);
+      msgs.push(t("restrictionClosedToDeparture", { date: formatDate(checkout, loc) }));
     }
     if (restrictions.minLos > 0 && restrictions.minLos > numberOfNights) {
-      msgs.push(currentLocale === 'mn'
-        ? `Хамгийн багадаа ${restrictions.minLos} шөнө байх шаардлагатай`
-        : `Minimum ${restrictions.minLos}-night stay required`);
+      msgs.push(t("restrictionMinLos", { nights: restrictions.minLos }));
     }
     if (restrictions.maxLos > 0 && restrictions.maxLos < numberOfNights) {
-      msgs.push(currentLocale === 'mn'
-        ? `Хамгийн ихдээ ${restrictions.maxLos} шөнө байх боломжтой`
-        : `Maximum ${restrictions.maxLos}-night stay`);
+      msgs.push(t("restrictionMaxLos", { nights: restrictions.maxLos }));
     }
     return msgs;
   };
@@ -686,6 +735,26 @@ function BookingContent() {
           <p className="font-body text-main text-sm">
             {translateRateName(rate.rateName, currentLocale)}
           </p>
+          {isNonRefundableRate(rate.rateName) ? (
+            <p className="mt-1.5 text-xs font-body text-orange-200/85">
+              {currentLocale === "mn" ? "Буцаан олгогдохгүй үнэ." : "Non-refundable rate."}
+            </p>
+          ) : (
+            <p className="mt-1.5 flex items-start gap-1.5 text-xs font-body text-emerald-200/85">
+              <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-emerald-300/80" aria-hidden />
+              <span>
+                {rate.cancellation?.daysBeforeArrival != null && rate.cancellation.daysBeforeArrival > 0
+                  ? currentLocale === "mn"
+                    ? `Ирэхээс ${rate.cancellation.daysBeforeArrival} хоногийн өмнө үнэгүй цуцлах боломжтой.`
+                    : `Free cancellation up to ${rate.cancellation.daysBeforeArrival} days before arrival.`
+                  : rate.cancellation?.policyText?.trim()
+                    ? stripHtml(rate.cancellation.policyText.trim())
+                    : currentLocale === "mn"
+                      ? "Уян хатан — буцаан олгодог үнэ."
+                      : "Refundable / flexible rate."}
+              </span>
+            </p>
+          )}
           {otherRateInCart && !blocked && (
             <p className="text-red-300 text-xs font-body mt-1">
               {currentLocale === 'mn' ? 'Сагсанд байгаа өрөөтэй хамт захиалах боломжгүй' : 'Not available with items in your cart'}
@@ -769,6 +838,18 @@ function BookingContent() {
 
   const resultsCount = groupedRooms.filter(g => (g.maxGuests || 0) >= totalGuests).length;
 
+  const hasBlockedRatesInResults = useMemo(() => {
+    return rooms.some((r) => {
+      const x = r.restrictions;
+      if (!x) return false;
+      if (x.closedToArrival) return true;
+      if (x.closedToDeparture) return true;
+      if (x.minLos > 0 && x.minLos > numberOfNights) return true;
+      if (x.maxLos > 0 && x.maxLos < numberOfNights) return true;
+      return false;
+    });
+  }, [rooms, numberOfNights]);
+
   return (
     <main id="main-content" className="min-h-screen bg-ink pt-24 md:pt-20 pb-32 lg:pb-20 text-main">
       {/* Results header band */}
@@ -780,8 +861,8 @@ function BookingContent() {
           {!loading && searched && resultsCount > 0 && checkin && checkout && (
             <p className="font-body text-main/60 text-sm md:text-base">
               {currentLocale === 'mn'
-                ? `${resultsCount} өрөө олдлоо · ${formatDate(checkin)} – ${formatDate(checkout)}`
-                : `${resultsCount} accommodation${resultsCount === 1 ? '' : 's'} found from ${formatDate(checkin)} – till ${formatDate(checkout)}`}
+                ? `${resultsCount} өрөө олдлоо · ${formatDate(checkin, "mn")} – ${formatDate(checkout, "mn")}`
+                : `${resultsCount} accommodation${resultsCount === 1 ? "" : "s"} found from ${formatDate(checkin, "en")} – till ${formatDate(checkout, "en")}`}
             </p>
           )}
           {!searched && !loading && (
@@ -792,6 +873,15 @@ function BookingContent() {
             </p>
           )}
           {error && <div className="mt-3 text-red-300 text-sm font-body">{error}</div>}
+          {!loading && searched && rooms.length > 0 && hasBlockedRatesInResults && (
+            <div
+              className="mt-4 flex gap-3 rounded border border-main/15 bg-white/[0.03] px-4 py-3 max-w-3xl"
+              role="note"
+            >
+              <Info className="w-5 h-5 shrink-0 text-main/45 mt-0.5" aria-hidden />
+              <p className="text-sm font-body text-main/75 leading-relaxed">{t("restrictionsNotice")}</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -937,9 +1027,9 @@ function BookingContent() {
                 </h2>
 
                 <div className="flex items-center justify-between text-sm font-body text-main mb-1">
-                  <span>{formatDate(checkin)}</span>
+                  <span>{formatDate(checkin, currentLocale === "mn" ? "mn" : "en")}</span>
                   <ArrowRight className="w-4 h-4 text-main/40" />
-                  <span>{formatDate(checkout)}</span>
+                  <span>{formatDate(checkout, currentLocale === "mn" ? "mn" : "en")}</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-main/60 font-body mb-5">
                   <Moon className="w-3.5 h-3.5" />
@@ -1076,10 +1166,20 @@ function BookingContent() {
             </div>
           )}
 
-          {!loading && searched && rooms.length === 0 && (
+          {!loading && searched && rooms.length === 0 && !error && (
             <div className="text-center py-16">
               <p className="text-main/80 text-lg font-body">{t('noRooms')}</p>
               <p className="text-main/50 mt-2 font-body">{t('tryDifferent')}</p>
+            </div>
+          )}
+
+          {!loading && searched && rooms.length === 0 && error && (
+            <div className="text-center py-16">
+              <p className="text-main/60 text-lg font-body">
+                {currentLocale === "mn"
+                  ? "Өрөөний мэдээлэл ачааллаж чадсангүй. Дээрх алдааг шалгаад дахин оролдоно уу."
+                  : "We could not load availability. See the message above and try again."}
+              </p>
             </div>
           )}
 
@@ -1128,15 +1228,16 @@ function BookingContent() {
                     ? localGallery
                     : (photos.length > 0 ? photos : [placeholderImages[index % placeholderImages.length]]);
                   const maxGuests = group.maxGuests || 2;
-                  const isExpanded = expandedRooms.has(group.roomTypeName);
                   const hasCartItem = group.rates.some(r => cart.some(c => cartKey(c.roomTypeID, c.rateID) === cartKey(r.roomTypeID, r.rateID)));
 
-                  const defaultRate = group.rates.reduce(
-                    (min, r) => ((r.totalRate > 0 && r.totalRate < min.totalRate) || min.totalRate === 0 ? r : min),
-                    group.rates[0]
-                  );
-                  const otherRates = group.rates.filter(r => r.rateID !== defaultRate.rateID);
-                  const perNightFrom = numberOfNights > 0 ? defaultRate.totalRate / numberOfNights : defaultRate.totalRate;
+                  const perNightValues = group.rates
+                    .filter((r) => r.totalRate > 0)
+                    .map((r) => (numberOfNights > 0 ? r.totalRate / numberOfNights : r.totalRate));
+                  const perNightFrom = perNightValues.length > 0 ? Math.min(...perNightValues) : 0;
+                  const priceCurrency = group.rates[0]?.currency || group.currency || "MNT";
+                  const hasBothRefundKinds =
+                    group.rates.some((r) => !isNonRefundableRate(r.rateName)) &&
+                    group.rates.some((r) => isNonRefundableRate(r.rateName));
 
                   const descriptionPlain = stripHtml(group.description || '');
                   const firstSentence = descriptionPlain.split(/(?<=\.)\s/)[0] || '';
@@ -1213,17 +1314,26 @@ function BookingContent() {
                         </ul>
 
                         {perNightFrom > 0 && (
-                          <p className="font-body text-main">
-                            <span className="text-main/60">
-                              {currentLocale === 'mn' ? 'Үнэ эхлэх:' : 'Prices start at:'}
-                            </span>
-                            <span className="font-editorial-en italic text-xl text-main ml-2">
-                              {perNightFrom.toLocaleString()} {defaultRate.currency || 'MNT'}
-                            </span>
-                            <span className="text-main/60 text-sm ml-1">
-                              {currentLocale === 'mn' ? '/ шөнө' : 'per night'}
-                            </span>
-                          </p>
+                          <div className="space-y-1.5">
+                            <p className="font-body text-main">
+                              <span className="text-main/60">
+                                {currentLocale === "mn" ? "Үнэ эхлэх:" : "Prices start at:"}
+                              </span>
+                              <span className="font-editorial-en italic text-xl text-main ml-2">
+                                {perNightFrom.toLocaleString()} {priceCurrency}
+                              </span>
+                              <span className="text-main/60 text-sm ml-1">
+                                {currentLocale === "mn" ? "/ шөнө" : "per night"}
+                              </span>
+                            </p>
+                            {hasBothRefundKinds && (
+                              <p className="text-main/50 text-xs font-body leading-relaxed">
+                                {currentLocale === "mn"
+                                  ? "Буцаан олгодог үнэ эхэнд жагсаагдсан; доор буцаан олгогдохгүй хямд сонголт байж болно."
+                                  : "Refundable options are listed first; lower non-refundable rates may appear below."}
+                              </p>
+                            )}
+                          </div>
                         )}
 
                         <Link
@@ -1235,26 +1345,9 @@ function BookingContent() {
                         </Link>
 
                         <div className="border-t border-main/10 mt-6 divide-y divide-main/10">
-                          {renderRateRow(defaultRate)}
-
-                          {otherRates.length > 0 && (
-                            <>
-                              {isExpanded && otherRates.map((rate) => (
-                                <div key={rate.rateID}>{renderRateRow(rate)}</div>
-                              ))}
-                              <button
-                                onClick={() => toggleExpand(group.roomTypeName)}
-                                className="w-full py-3 flex items-center justify-center gap-2 font-cta uppercase text-[10px] tracking-[0.28em] text-main/60 hover:text-main transition-colors"
-                              >
-                                {isExpanded
-                                  ? (currentLocale === 'mn' ? 'Хаах' : 'Hide offers')
-                                  : (currentLocale === 'mn'
-                                      ? `Өөр ${otherRates.length} үнэ харах`
-                                      : `View ${otherRates.length} more offer${otherRates.length > 1 ? 's' : ''}`)}
-                                {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                              </button>
-                            </>
-                          )}
+                          {group.rates.map((rate) => (
+                            <div key={rate.rateID}>{renderRateRow(rate)}</div>
+                          ))}
                         </div>
                       </div>
                     </article>
