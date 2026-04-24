@@ -33,6 +33,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import SiteImage from "@/app/components/SiteImage";
 
 type Slide = {
   src: string;
@@ -181,11 +182,12 @@ export default function RestaurantCarousel({
               }
             >
               <div className="relative h-full w-full overflow-hidden bg-white/5">
-                <img
+                <SiteImage
                   src={s.src}
                   alt={s.alt}
-                  className="h-full w-full object-cover select-none"
-                  draggable={false}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 55vw"
+                  className="object-cover select-none"
                 />
               </div>
             </motion.div>

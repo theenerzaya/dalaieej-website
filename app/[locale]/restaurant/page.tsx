@@ -41,6 +41,7 @@ import {
   StaggerGroup,
   StaggerItem,
 } from "@/app/components/cabins/animations";
+import SiteImage from "@/app/components/SiteImage";
 import RestaurantCarousel from "@/app/components/restaurant/Carousel";
 import { assetUrl } from "@/lib/assetUrl";
 
@@ -192,10 +193,13 @@ export default function RestaurantPage() {
           duration={1.6}
           from={1.12}
         >
-          <img
+          <SiteImage
             src={HERO_IMAGE}
             alt={t.title}
-            className="h-full w-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
         </ImageReveal>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/10 to-ink/55" />
@@ -235,11 +239,13 @@ export default function RestaurantPage() {
                 from={1.08}
                 direction="left"
               >
-                <img
+                <SiteImage
                   src={COLLAGE_TOP_LEFT}
                   alt=""
                   aria-hidden="true"
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 58vw, 24vw"
+                  className="object-cover"
                 />
               </ImageReveal>
             </ScrollParallax>
@@ -269,11 +275,13 @@ export default function RestaurantPage() {
                 from={1.08}
                 direction="right"
               >
-                <img
+                <SiteImage
                   src={COLLAGE_RIGHT}
                   alt=""
                   aria-hidden="true"
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 24vw"
+                  className="object-cover"
                 />
               </ImageReveal>
             </ScrollParallax>
@@ -289,11 +297,13 @@ export default function RestaurantPage() {
                 from={1.08}
                 direction="left"
               >
-                <img
+                <SiteImage
                   src={COLLAGE_BOTTOM_LEFT}
                   alt=""
                   aria-hidden="true"
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 58vw, 24vw"
+                  className="object-cover"
                 />
               </ImageReveal>
             </ScrollParallax>

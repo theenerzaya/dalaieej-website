@@ -31,6 +31,7 @@ import {
   StaggerGroup,
   StaggerItem,
 } from "@/app/components/cabins/animations";
+import SiteImage from "@/app/components/SiteImage";
 import { assetUrl } from "@/lib/assetUrl";
 import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
 
@@ -327,14 +328,21 @@ export default function CabinsPage() {
           className="absolute inset-0 h-full w-full"
           style={reduce ? undefined : { y: heroImageY }}
         >
-          <motion.img
-            src={HERO_IMAGE}
-            alt={t.title}
-            className="h-full w-full object-cover will-change-transform"
+          <motion.div
+            className="relative h-full w-full"
             initial={reduce ? { scale: 1 } : { scale: 1.14 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.9, ease: [0.22, 1, 0.36, 1] }}
-          />
+          >
+            <SiteImage
+              src={HERO_IMAGE}
+              alt={t.title}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover will-change-transform"
+            />
+          </motion.div>
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/75" />
 
@@ -468,10 +476,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="left"
           >
-            <img
+            <SiteImage
               src={TAGLINE_BG_MAIN}
               alt=""
-              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+              fill
+              sizes="(max-width: 768px) 100vw, 30vw"
+              className="object-cover mix-blend-luminosity opacity-90"
             />
             <div className="absolute inset-0 bg-ink/25" />
           </ImageReveal>
@@ -483,10 +493,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="right"
           >
-            <img
+            <SiteImage
               src={WELLNESS_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+              fill
+              sizes="(max-width: 768px) 100vw, 22vw"
+              className="object-cover mix-blend-luminosity opacity-90"
             />
             <div className="absolute inset-0 bg-ink/25" />
           </ImageReveal>
@@ -497,10 +509,12 @@ export default function CabinsPage() {
             duration={1.3}
             from={1.1}
           >
-            <img
+            <SiteImage
               src={SPA_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+              fill
+              sizes="(max-width: 768px) 100vw, 14vw"
+              className="object-cover mix-blend-luminosity opacity-90"
             />
             <div className="absolute inset-0 bg-ink/25" />
           </ImageReveal>
@@ -546,7 +560,6 @@ export default function CabinsPage() {
               isMn={isMn}
               reverse={idx % 2 === 1}
               localePrefix={localePrefix}
-              bookingHref={bookingHref}
               headlineFont={headlineFont}
               t={t}
             />
@@ -570,10 +583,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="left"
           >
-            <img
+            <SiteImage
               src={WELLNESS_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="22vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
           <ImageReveal
@@ -581,10 +596,12 @@ export default function CabinsPage() {
             duration={1.3}
             from={1.1}
           >
-            <img
+            <SiteImage
               src={SPA_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="16vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
           <ImageReveal
@@ -593,10 +610,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="right"
           >
-            <img
+            <SiteImage
               src={TAGLINE_BG_MAIN}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="24vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
           <ImageReveal
@@ -604,18 +623,22 @@ export default function CabinsPage() {
             duration={1.3}
             from={1.1}
           >
-            <img
+            <SiteImage
               src={WELLNESS_IMAGE_AFTER}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="18vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
 
           {/* Mobile-only soft backdrop so text stays legible without frames. */}
-          <img
+          <SiteImage
             src={TAGLINE_BG_MAIN}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-20 md:hidden"
+            fill
+            sizes="100vw"
+            className="object-cover opacity-20 md:hidden"
           />
         </div>
 
@@ -700,7 +723,6 @@ function RoomRow({
   isMn,
   reverse,
   localePrefix,
-  bookingHref,
   headlineFont,
   t,
 }: {
@@ -708,12 +730,11 @@ function RoomRow({
   isMn: boolean;
   reverse: boolean;
   localePrefix: string;
-  bookingHref: string;
   headlineFont: string;
   t: Record<CopyKey, string>;
 }) {
   const lang = isMn ? "mn" : "en";
-  const detailHref = `${localePrefix}${room.href}`;
+  const detailHref = `${localePrefix}/bookings`;
 
   return (
     <article
@@ -729,12 +750,14 @@ function RoomRow({
       >
         <Link
           href={detailHref}
-          className="block h-full w-full group"
+          className="relative block h-full w-full group"
         >
-          <img
+          <SiteImage
             src={room.image}
             alt={room.name[lang]}
-            className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.04]"
+            fill
+            sizes="(max-width: 768px) 100vw, 58vw"
+            className="object-cover transition-transform duration-[900ms] group-hover:scale-[1.04]"
           />
         </Link>
       </ImageReveal>
@@ -790,15 +813,6 @@ function RoomRow({
           stagger={0.08}
           offsetY={18}
         >
-          <StaggerItem>
-            <Link
-              href={bookingHref}
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-main text-ink font-cta uppercase tracking-[0.28em] text-[11px] hover:bg-main/90 transition-colors"
-            >
-              {t.bookCta}
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </StaggerItem>
           <StaggerItem>
             <Link
               href={detailHref}
