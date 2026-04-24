@@ -110,7 +110,6 @@ export async function GET(request: NextRequest) {
     console.log("Cloudbeds ratePlans response:", JSON.stringify(ratePlansData, null, 2));
 
     const restrictionByRateID = new Map<string, RateRestriction>();
-    const baseRestrictionByRoomType = new Map<string, RateRestriction>();
     const cancellationByRateID = new Map<string, RateCancellation>();
     const baseCancellationByRoomType = new Map<string, RateCancellation>();
 
@@ -131,10 +130,6 @@ export async function GET(request: NextRequest) {
 
         restrictionByRateID.set(String(rate.rateID), restriction);
 
-        if (!rate.isDerived && rate.roomTypeID) {
-          baseRestrictionByRoomType.set(String(rate.roomTypeID), restriction);
-        }
-
         const cancellation = extractRateCancellationFromPlan(rate as Record<string, unknown>);
         if (cancellation) {
           cancellationByRateID.set(String(rate.rateID), cancellation);
@@ -143,22 +138,6 @@ export async function GET(request: NextRequest) {
           }
         }
       }
-    }
-
-    function mergeRestrictions(rateID: string, roomTypeID: string): RateRestriction | null {
-      const derived = restrictionByRateID.get(rateID);
-      const base = baseRestrictionByRoomType.get(roomTypeID);
-      if (!derived && !base) return null;
-      if (!base) return derived!;
-      if (!derived) return base;
-      return {
-        closedToArrival: derived.closedToArrival || base.closedToArrival,
-        closedToDeparture: derived.closedToDeparture || base.closedToDeparture,
-        minLos: Math.max(derived.minLos, base.minLos),
-        maxLos: derived.maxLos > 0 && base.maxLos > 0
-          ? Math.min(derived.maxLos, base.maxLos)
-          : derived.maxLos || base.maxLos,
-      };
     }
 
     function mergeCancellationForRoom(rateID: string, roomTypeID: string): RateCancellation | null {
@@ -215,7 +194,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const mergedRestriction = mergeRestrictions(String(room.roomRateID), String(room.roomTypeID));
+      const restrictionsForRate = restrictionByRateID.get(String(room.roomRateID)) ?? null;
       const mergedCancellation = mergeCancellationForRoom(String(room.roomRateID), String(room.roomTypeID));
 
       return {
@@ -231,7 +210,7 @@ export async function GET(request: NextRequest) {
         maxGuests: parseInt(room.maxGuests) || 2,
         photos: photos,
         features: room.roomTypeFeatures || [],
-        restrictions: mergedRestriction,
+        restrictions: restrictionsForRate,
         cancellation: mergedCancellation,
       };
     });

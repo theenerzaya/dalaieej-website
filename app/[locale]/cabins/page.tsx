@@ -704,7 +704,6 @@ function RoomRow({
 }) {
   const lang = isMn ? "mn" : "en";
   const detailHref = `${localePrefix}${room.href}`;
-  const infoHref = `${localePrefix}/bookings`;
 
   return (
     <article
@@ -783,7 +782,7 @@ function RoomRow({
         >
           <StaggerItem>
             <Link
-              href={infoHref}
+              href={detailHref}
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-main/30 text-main font-cta uppercase tracking-[0.28em] text-[11px] hover:border-main hover:bg-main/5 transition-colors"
             >
               {t.moreInfo}
