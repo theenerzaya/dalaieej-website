@@ -1,25 +1,25 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Eyebrow } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
+import { withLocalePath } from "@/lib/localePath";
 
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
-  const localePrefix = locale === "mn" ? "/mn" : "/en";
   const pathname = usePathname();
   const isAboutUs = pathname?.includes("/about-us");
 
-  const experienceLinks = [
-    { key: "stay", href: "/cabins" },
-    { key: "dining", href: "/restaurant" },
-    { key: "wellness", href: "#" },
-    { key: "adventures", href: "#" },
+  const experienceLinks: Array<{ key: string; href: string; active: boolean }> = [
+    { key: "stay", href: "/cabins", active: true },
+    { key: "dining", href: "/restaurant", active: true },
+    { key: "wellness", href: "/wellness", active: false },
+    { key: "adventures", href: "/experiences", active: false },
   ];
 
   const resortLinks: { key: string; href: string; external?: boolean; enOnly?: boolean }[] = [
@@ -31,7 +31,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="sticky bottom-0 z-0 bg-ink text-main font-body">
+    <footer className="sticky bottom-0 z-20 bg-ink text-main font-body">
       <div className="max-w-7xl mx-auto px-6 pt-8 md:pt-20 pb-10 md:pb-28 lg:pb-36">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6 md:gap-x-8 md:gap-y-10 lg:gap-8">
 
@@ -42,7 +42,7 @@ export default function Footer() {
             }`}
           >
             <Link
-              href={localePrefix || "/"}
+              href={withLocalePath(locale, "/")}
               className="relative inline-grid place-items-center hover:opacity-90 transition-opacity"
               aria-label="Dalai Eej Resort"
             >
@@ -82,12 +82,18 @@ export default function Footer() {
             <ul className="space-y-2 md:space-y-3">
               {experienceLinks.map((item) => (
                 <li key={item.key}>
-                  <Link
-                    href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
-                    className="text-sm text-main/80 hover:text-white transition-colors"
-                  >
-                    {t(item.key)}
-                  </Link>
+                  {item.active ? (
+                    <Link
+                      href={withLocalePath(locale, item.href)}
+                      className="text-sm text-main/80 hover:text-white transition-colors"
+                    >
+                      {t(item.key)}
+                    </Link>
+                  ) : (
+                    <a href="#" aria-disabled="true" className="text-sm text-main/80 hover:text-white transition-colors">
+                      {t(item.key)}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -111,12 +117,18 @@ export default function Footer() {
                       {t(item.key)}
                     </a>
                   ) : (
-                    <Link
-                      href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
-                      className="text-sm text-main/80 hover:text-white transition-colors"
-                    >
-                      {t(item.key)}
-                    </Link>
+                    item.href === "#" ? (
+                      <a href="#" className="text-sm text-main/80 hover:text-white transition-colors">
+                        {t(item.key)}
+                      </a>
+                    ) : (
+                      <Link
+                        href={withLocalePath(locale, item.href)}
+                        className="text-sm text-main/80 hover:text-white transition-colors"
+                      >
+                        {t(item.key)}
+                      </Link>
+                    )
                   )}
                 </li>
               ))}

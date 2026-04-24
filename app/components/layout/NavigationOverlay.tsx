@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { Facebook, Instagram, Mail } from "lucide-react";
-import NextLink from "next/link";
 import SiteImage from "@/app/components/SiteImage";
 import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import { Link as I18nLink } from "@/i18n/navigation";
+import { withLocalePath } from "@/lib/localePath";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
 
@@ -57,7 +59,7 @@ const mainNavItems: MainNavItem[] = [
     id: "dining",
     href: "/restaurant",
     image: "/images/nav-overlay/dining.jpg",
-    label: { en: "Restaurant", mn: "Ресторан" },
+    label: { en: "Dining", mn: "Ресторан" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дээрх гал тогоо" },
     available: true,
   },
@@ -125,14 +127,9 @@ function getPathWithoutLocale(pathname: string): string {
 }
 
 export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
+  const locale = useLocale();
   const pathname = usePathname();
-  const locale = pathname.startsWith("/mn")
-    ? "mn"
-    : pathname.startsWith("/en")
-      ? "en"
-      : "mn";
   const isMn = locale === "mn";
-  const localePrefix = isMn ? "/mn" : "/en";
   const pathWithoutLocale = getPathWithoutLocale(pathname);
   const reduceMotion = useReducedMotion();
 
@@ -247,8 +244,8 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 </button>
 
                 {/* Centered wordmark — matches Navbar positioning exactly */}
-                <NextLink
-                  href={localePrefix || "/"}
+                <Link
+                  href={withLocalePath(locale, "/")}
                   onClick={onClose}
                   className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
@@ -260,7 +257,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
                     priority
                   />
-                </NextLink>
+                </Link>
 
                 <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12">
                   {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
@@ -270,7 +267,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
 
                   <div className="ml-auto flex shrink-0 items-center">
                     <CTAButton
-                      href={`${localePrefix}/booking`}
+                      href={withLocalePath(locale, "/booking")}
                       variant="secondary"
                       size="sm"
                       onClick={onClose}
@@ -323,13 +320,13 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           onFocus={() => scrollCardIntoView(item.id)}
                         >
                           {item.available ? (
-                            <NextLink
-                              href={`${localePrefix}${item.href}`}
+                            <Link
+                              href={withLocalePath(locale, item.href)}
                               onClick={onClose}
                               className={linkClass}
                             >
                               <span>{label}</span>
-                            </NextLink>
+                            </Link>
                           ) : (
                             <span role="link" aria-disabled="true" className={linkClass}>
                               <span>{label}</span>
@@ -384,6 +381,15 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           </a>
                         </li>
                       ))}
+                      <li>
+                        <Link
+                          href={withLocalePath(locale, "/gallery")}
+                          onClick={onClose}
+                          className="font-cta text-[11px] font-medium uppercase tracking-[0.22em] text-main/70 transition-colors hover:text-main"
+                        >
+                          {isMn ? "Галерей" : "Gallery"}
+                        </Link>
+                      </li>
                     </ul>
                   </motion.div>
                 </div>
@@ -451,14 +457,14 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       }
 
                       return (
-                        <NextLink
+                        <Link
                           key={item.id}
-                          href={`${localePrefix}${item.href}`}
+                          href={withLocalePath(locale, item.href)}
                           onClick={onClose}
                           className="shrink-0"
                         >
                           {card}
-                        </NextLink>
+                        </Link>
                       );
                     })}
 

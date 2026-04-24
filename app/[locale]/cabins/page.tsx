@@ -67,7 +67,7 @@ const ROOMS: Room[] = [
   {
     slug: "superior-cabin",
     href: "/superior-cabin",
-    name: { en: "Superior Cabin", mn: "Superior модон байшин" },
+    name: { en: "Superior Cabin", mn: "Их Өргөө" },
     area: { en: "30 m²", mn: "30 м²" },
     guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
     quantity: { en: "6 cabins", mn: "6 байшин" },
@@ -81,7 +81,7 @@ const ROOMS: Room[] = [
   {
     slug: "triple-traditional-cabin",
     href: "/triple-traditional-cabin",
-    name: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
+    name: { en: "Triple Traditional Cabin", mn: "Тухтай Хаус (Галлагаатай)" },
     area: { en: "58 m²", mn: "58 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
@@ -95,7 +95,7 @@ const ROOMS: Room[] = [
   {
     slug: "lakeside-cabin",
     href: "/lakeside-cabin",
-    name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
+    name: { en: "Lakeside Cabin", mn: " Эрэг дээрх Хаус" },
     area: { en: "55 m²", mn: "55 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
     quantity: { en: "4 cabins", mn: "4 байшин" },
@@ -109,7 +109,7 @@ const ROOMS: Room[] = [
   {
     slug: "triple-electric-cabin",
     href: "/triple-electric-cabin",
-    name: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
+    name: { en: "Triple Electric Cabin", mn: "Тухтай Хаус (Цахилгаан халаалт)" },
     area: { en: "60 m²", mn: "60 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
@@ -123,7 +123,7 @@ const ROOMS: Room[] = [
   {
     slug: "signature-cabin",
     href: "/signature-cabin",
-    name: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
+    name: { en: "Signature Cabin", mn: "Энгийн Байр" },
     area: { en: "70 m²", mn: "70 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "3 cabins", mn: "3 байшин" },
@@ -137,7 +137,7 @@ const ROOMS: Room[] = [
   {
     slug: "quad-electric-cabin",
     href: "/quad-electric-cabin",
-    name: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
+    name: { en: "Quad Electric Cabin", mn: "Гэр Бүлийн Хаус (Цахилгаан халаалт)" },
     area: { en: "66 m²", mn: "66 м²" },
     guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
@@ -151,7 +151,7 @@ const ROOMS: Room[] = [
   {
     slug: "grand-peninsula-suite",
     href: "/grand-peninsula-suite",
-    name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
+    name: { en: "Grand Peninsula Suite", mn: "Гэр Бүлийн Хаус (Галлагаатай)" },
     area: { en: "120 m²", mn: "120 м²" },
     guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },
     quantity: { en: "1 suite", mn: "1 тусгай хаус" },
@@ -165,7 +165,7 @@ const ROOMS: Room[] = [
   {
     slug: "camping",
     href: "/booking",
-    name: { en: "Camping", mn: "Кемпинг" },
+    name: { en: "Camping", mn: "Аялагчийн Отог" },
     area: { en: "Outdoor setup", mn: "Гадаа байрлал" },
     guests: { en: "2 adults · 2 children", mn: "2 том хүн · 2 хүүхэд" },
     quantity: { en: "Limited spots", mn: "Хязгаартай талбай" },
