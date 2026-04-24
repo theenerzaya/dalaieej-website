@@ -39,6 +39,8 @@ const nextConfig: NextConfig = {
       { source: '/services', destination: '/', permanent: true },
       { source: '/rooms-and-facilities', destination: '/', permanent: true },
       { source: '/gallery', destination: '/', permanent: true },
+      { source: '/en/gallery', destination: '/', permanent: true },
+      { source: '/mn/gallery', destination: '/', permanent: true },
       { source: '/faqs', destination: '/', permanent: true },
       { source: '/getting-here-mn', destination: '/', permanent: true },
       { source: '/home-kr', destination: '/', permanent: true },

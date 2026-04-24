@@ -4,7 +4,6 @@ import { SITE_URL_EN, SITE_URL_MN, hreflangLanguages } from '@/lib/site-urls';
 const routes = [
   '',
   '/booking',
-  '/gallery',
   '/about-us',
   '/amenities',
   '/cabins',
