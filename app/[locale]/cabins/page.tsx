@@ -62,7 +62,6 @@ type Room = {
   guests: Bilingual;
   quantity: Bilingual;
   intro: Bilingual;
-  priceFrom: number;
   image: string;
 };
 
@@ -78,7 +77,6 @@ const ROOMS: Room[] = [
       en: "Wood-fired warmth, handwoven textiles and a private forest view — our entry-level cabin, sized for couples and small families.",
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
     },
-    priceFrom: 300,
     image: assetUrl("/images/cabins/room-superior.webp"),
   },
   {
@@ -92,7 +90,6 @@ const ROOMS: Room[] = [
       en: "A classic timber cabin layout with three full sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
       mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
     },
-    priceFrom: 470,
     image: assetUrl("/images/cabins/room-triple-traditional.webp"),
   },
   {
@@ -106,7 +103,6 @@ const ROOMS: Room[] = [
       en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khuvsgul.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
-    priceFrom: 420,
     image: assetUrl("/images/cabins/room-lakeside.webp"),
   },
   {
@@ -120,7 +116,6 @@ const ROOMS: Room[] = [
       en: "Designed for longer family stays, with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
     },
-    priceFrom: 510,
     image: assetUrl("/images/cabins/room-triple-electric.webp"),
   },
   {
@@ -134,7 +129,6 @@ const ROOMS: Room[] = [
       en: "Our most requested room — a separate living area, deep-soak tub, and a private terrace that opens onto the larch line.",
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
     },
-    priceFrom: 560,
     image: assetUrl("/images/cabins/room-signature.webp"),
   },
   {
@@ -148,7 +142,6 @@ const ROOMS: Room[] = [
       en: "Our flexible mid-tier option for groups — four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
       mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
     },
-    priceFrom: 540,
     image: assetUrl("/images/cabins/room-quad-electric.webp"),
   },
   {
@@ -162,7 +155,6 @@ const ROOMS: Room[] = [
       en: "A standalone suite on its own peninsula — two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
       mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
     },
-    priceFrom: 1200,
     image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
   },
   {
@@ -176,7 +168,6 @@ const ROOMS: Room[] = [
       en: "A nature-first stay under the open sky with essential camp comforts and direct access to the lakeside grounds.",
       mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
     },
-    priceFrom: 180,
     image: assetUrl("/images/rooms/camping.webp"),
   },
 ];
@@ -210,10 +201,7 @@ type CopyKey =
   | "quantityLabel"
   | "guestsLabel"
   | "areaLabel"
-  | "fromLabel"
-  | "perNight"
   | "moreInfo"
-  | "bookCta"
   | "tagline1"
   | "tagline2"
   | "aboutCta"
@@ -244,10 +232,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     quantityLabel: "Quantity",
     guestsLabel: "Guests",
     areaLabel: "Average area",
-    fromLabel: "From",
-    perNight: "per night",
     moreInfo: "Get More Information",
-    bookCta: "Book Your Stay",
     tagline1: "The best people to take care of",
     tagline2: "our most valuable asset: you.",
     aboutCta: "More About Us",
@@ -279,10 +264,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     quantityLabel: "Тоо ширхэг",
     guestsLabel: "Зочид",
     areaLabel: "Дундаж талбай",
-    fromLabel: "Үнэ",
-    perNight: "1 шөнө",
     moreInfo: "Дэлгэрэнгүй",
-    bookCta: "Захиалах",
     tagline1: "Таны хамгийн үнэт зүйлд —",
     tagline2: "өөрт тань, бид анхаарна.",
     aboutCta: "Бидний тухай",
@@ -557,7 +539,6 @@ export default function CabinsPage() {
               isMn={isMn}
               reverse={idx % 2 === 1}
               localePrefix={localePrefix}
-              bookingHref={bookingHref}
               headlineFont={headlineFont}
               t={t}
             />
@@ -711,7 +692,6 @@ function RoomRow({
   isMn,
   reverse,
   localePrefix,
-  bookingHref,
   headlineFont,
   t,
 }: {
@@ -719,13 +699,12 @@ function RoomRow({
   isMn: boolean;
   reverse: boolean;
   localePrefix: string;
-  bookingHref: string;
   headlineFont: string;
   t: Record<CopyKey, string>;
 }) {
   const lang = isMn ? "mn" : "en";
   const detailHref = `${localePrefix}${room.href}`;
-  const formattedPrice = `$${room.priceFrom.toLocaleString()}`;
+  const infoHref = `${localePrefix}/bookings`;
 
   return (
     <article
@@ -797,40 +776,14 @@ function RoomRow({
           {room.intro[lang]}
         </Reveal>
 
-        <Reveal
-          className="flex flex-wrap items-baseline gap-x-3 mb-8 border-t border-main/10 pt-6"
-          delay={0.25}
-        >
-          <span className="font-cta uppercase tracking-[0.28em] text-[10px] text-main/50">
-            {t.fromLabel}
-          </span>
-          <span
-            className={`${headlineFont} italic text-3xl md:text-4xl text-main`}
-          >
-            {formattedPrice}
-          </span>
-          <span className="font-body text-main/60 text-sm">
-            / {t.perNight}
-          </span>
-        </Reveal>
-
         <StaggerGroup
-          className="flex flex-col sm:flex-row gap-4"
+          className="flex gap-4 border-t border-main/10 pt-6"
           stagger={0.08}
           offsetY={18}
         >
           <StaggerItem>
             <Link
-              href={bookingHref}
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-main text-ink font-cta uppercase tracking-[0.28em] text-[11px] hover:bg-main/90 transition-colors"
-            >
-              {t.bookCta}
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </StaggerItem>
-          <StaggerItem>
-            <Link
-              href={detailHref}
+              href={infoHref}
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-main/30 text-main font-cta uppercase tracking-[0.28em] text-[11px] hover:border-main hover:bg-main/5 transition-colors"
             >
               {t.moreInfo}
