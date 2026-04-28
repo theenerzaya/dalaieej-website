@@ -427,6 +427,13 @@ function TimelineCard({
 function FounderAudio({ label, src }: { label: string; src: string }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const allowPlayRef = useRef(false);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    // Guard against browsers restoring media playback on mount/navigation.
+    audioRef.current.pause();
+  }, []);
 
   const toggle = () => {
     if (!audioRef.current) return;
@@ -437,6 +444,7 @@ function FounderAudio({ label, src }: { label: string; src: string }) {
       if (audioRef.current.currentTime < 0.1) {
         audioRef.current.currentTime = 20;
       }
+      allowPlayRef.current = true;
       audioRef.current.play();
     }
     setPlaying(!playing);
@@ -455,6 +463,16 @@ function FounderAudio({ label, src }: { label: string; src: string }) {
         ref={audioRef}
         src={src}
         preload="metadata"
+        onPlay={() => {
+          if (allowPlayRef.current) {
+            allowPlayRef.current = false;
+            setPlaying(true);
+            return;
+          }
+          audioRef.current?.pause();
+          setPlaying(false);
+        }}
+        onPause={() => setPlaying(false)}
         onEnded={() => setPlaying(false)}
         className="hidden"
       />
@@ -1043,18 +1061,36 @@ export default function AboutUsPage() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img
-            src={
-              isMn
-                ? "/images/about-us/images/founders-note-mn.svg"
-                : "/images/about-us/images/founders-note.svg"
-            }
-            alt={t.founderSectionLabel}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-auto select-none"
-            draggable={false}
-          />
+          <div className="relative mx-auto w-full max-w-[44rem] aspect-[1440/1640] overflow-hidden shadow-[0_24px_54px_rgba(26,17,6,0.2)]">
+            <img
+              src="/images/about-us/letter/background.jpg"
+              alt={t.founderSectionLabel}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover select-none"
+              draggable={false}
+            />
+            <motion.img
+              src={
+                isMn
+                  ? "/images/about-us/letter/letter-1.png"
+                  : "/images/about-us/letter/letter-2.png"
+              }
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.75,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="absolute inset-0 z-10 h-full w-full translate-y-[15%] object-cover select-none"
+              draggable={false}
+            />
+          </div>
           <FounderAudio label={t.founderListenLabel} src="/audio/gun-tsenherhen.mp3" />
         </motion.div>
       </section>
