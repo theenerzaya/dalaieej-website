@@ -1067,7 +1067,9 @@ export default function AboutUsPage() {
               alt={t.founderSectionLabel}
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 h-full w-full object-cover select-none"
+              className={`absolute inset-0 h-full w-full object-cover select-none ${
+                isMn ? "object-center" : "object-[center_60%]"
+              }`}
               draggable={false}
             />
             <motion.img
@@ -1087,7 +1089,11 @@ export default function AboutUsPage() {
                 duration: reduceMotion ? 0 : 0.75,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="absolute inset-0 z-10 h-full w-full translate-y-[15%] object-cover select-none"
+              className={`absolute left-1/2 z-10 w-auto -translate-x-1/2 object-contain select-none ${
+                isMn
+                  ? "top-[14%] h-[116%] max-w-none"
+                  : "top-[28%] h-[110%] max-w-none"
+              }`}
               draggable={false}
             />
           </div>
