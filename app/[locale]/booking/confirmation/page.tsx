@@ -64,11 +64,10 @@ function ConfirmationContent() {
     if (!dateStr) return "";
     try {
       const date = new Date(dateStr);
-      return date.toLocaleDateString(currentLocale === "mn" ? "mn-MN" : "en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     } catch {
       return dateStr;
     }

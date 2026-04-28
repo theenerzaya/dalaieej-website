@@ -267,11 +267,13 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function formatDate(dateStr: string, locale: "en" | "mn" = "en"): string {
+function formatDate(dateStr: string, _locale: "en" | "mn" = "en"): string {
   if (!dateStr) return "";
   const date = new Date(dateStr + "T00:00:00");
-  const tag = locale === "mn" ? "mn-MN" : "en-US";
-  return date.toLocaleDateString(tag, { month: "short", day: "numeric", year: "numeric" });
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 function calculateNights(checkinDate: string, checkoutDate: string): number {
@@ -295,16 +297,19 @@ function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
 function translateRateName(name: string, locale: string): string {
   if (locale !== 'mn') return name;
   const map: Record<string, string> = {
-    'non-refundable': 'Буцаан олгогдохгүй',
+    'non-refundable': 'Буцаан олголтгүй үнэ',
+    'non-refundable rate': 'Буцаан олголтгүй үнэ',
     'dalai eej base': 'Үндсэн үнэ',
     'standard rate': 'Үндсэн үнэ',
     'base rate': 'Үндсэн үнэ',
     'default': 'Үндсэн үнэ',
-    'early bird / shoulder': 'Завсарын улирлын үнэ',
-    'early bird/shoulder': 'Завсарын улирлын үнэ',
-    'early bird': 'Завсарын улирлын үнэ',
-    'shoulder': 'Завсарын улирлын үнэ',
-    'shoulder season': 'Завсарын улирлын үнэ',
+    'early bird / shoulder': 'Засврын улирлын үнэ',
+    'early bird / shoulder rate': 'Засврын улирлын үнэ',
+    'early bird/shoulder': 'Засврын улирлын үнэ',
+    'early bird/shoulder rate': 'Засврын улирлын үнэ',
+    'early bird': 'Засврын улирлын үнэ',
+    'shoulder': 'Засврын улирлын үнэ',
+    'shoulder season': 'Засврын улирлын үнэ',
   };
   const lowerName = name.toLowerCase().trim();
   return map[lowerName] || name;
