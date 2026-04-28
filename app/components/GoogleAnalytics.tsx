@@ -18,16 +18,40 @@ export default function GoogleAnalytics() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!measurementId || typeof window.gtag !== "function") {
+    if (!measurementId) {
       return;
     }
 
     const query = searchParams?.toString();
     const pagePath = query ? `${pathname}?${query}` : pathname;
+    let attempts = 0;
+    const maxAttempts = 50;
 
-    window.gtag("config", measurementId, {
-      page_path: pagePath,
-    });
+    const sendPageView = () => {
+      if (typeof window.gtag !== "function") {
+        return false;
+      }
+
+      window.gtag("config", measurementId, {
+        page_path: pagePath,
+      });
+      return true;
+    };
+
+    if (sendPageView()) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      attempts += 1;
+      if (sendPageView() || attempts >= maxAttempts) {
+        window.clearInterval(intervalId);
+      }
+    }, 100);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
   }, [pathname, searchParams]);
 
   if (!measurementId) {

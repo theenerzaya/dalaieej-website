@@ -6,6 +6,7 @@
     "dev": "NODE_OPTIONS='--max-old-space-size=2048' next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
     "lint": "eslint",
     "optimize-images": "node scripts/optimize-images.mjs",
     "optimize-images:run": "node scripts/optimize-images.mjs --run",
@@ -44,6 +45,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.5"
   }
 }
