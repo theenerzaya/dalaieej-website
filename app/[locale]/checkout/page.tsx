@@ -274,8 +274,8 @@ function CheckoutContent() {
                         <div className="min-w-0">
                           <h3 className={`${editorialFont} italic font-normal text-main`}>{room.roomTypeName}</h3>
                           <p className="text-sm text-main/60 font-body mt-1">
-                            {room.adults} {currentLocale === 'mn' ? 'насанд хүрэгч' : 'adult'}{room.adults > 1 ? 's' : ''}
-                            {room.children > 0 && `, ${room.children} ${currentLocale === 'mn' ? 'хүүхэд' : 'child'}${room.children > 1 ? 'ren' : ''}`}
+                            {room.adults} {currentLocale === 'mn' ? 'насанд хүрэгч' : (room.adults > 1 ? 'adults' : 'adult')}
+                            {room.children > 0 && `, ${room.children} ${currentLocale === 'mn' ? 'хүүхэд' : (room.children > 1 ? 'children' : 'child')}`}
                           </p>
                         </div>
                         <div className="text-right shrink-0">
@@ -283,7 +283,7 @@ function CheckoutContent() {
                             {(room.pricePerNight * room.quantity * nights).toLocaleString()} {room.currency}
                           </p>
                           <p className="text-xs text-main/50 font-body mt-0.5">
-                            {room.pricePerNight.toLocaleString()} × {nights} {currentLocale === 'mn' ? 'шөнө' : 'nights'}
+                            {room.pricePerNight.toLocaleString()} × {nights} {currentLocale === 'mn' ? 'шөнө' : (nights === 1 ? 'night' : 'nights')}
                           </p>
                         </div>
                       </div>
@@ -548,14 +548,14 @@ function CheckoutContent() {
                 <div className="border-t border-main/15 pt-3 space-y-2">
                   <div className="flex justify-between text-sm font-body text-main">
                     <span className="text-main/70">
-                      {currentLocale === "mn" ? "Урьдчилгаа (одоо төлнө)" : "Deposit (pay now)"}
+                      {currentLocale === "mn" ? "Урьдчилгаа (одоо төлөх)" : "Deposit (pay now)"}
                     </span>
                     <span>{depositDueNow.toLocaleString()} {currency}</span>
                   </div>
                   {balanceOnArrival > 0 && (
                     <div className="flex justify-between text-sm font-body text-main">
                       <span className="text-main/70">
-                        {currentLocale === "mn" ? "Ирэхэд төлөх" : "Due on arrival"}
+                        {currentLocale === "mn" ? "Ирэхэд төлөх үлдэгдэл" : "Due on arrival"}
                       </span>
                       <span>{balanceOnArrival.toLocaleString()} {currency}</span>
                     </div>

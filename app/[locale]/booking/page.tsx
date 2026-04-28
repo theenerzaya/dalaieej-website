@@ -447,7 +447,7 @@ function BookingContent() {
           label,
           text:
             currentLocale === "mn"
-              ? "Энэ үнэ буцаан олгогдохгүй."
+              ? "Энэ үнэ буцаан олголтгүй."
               : "This rate is non-refundable.",
         });
         continue;
@@ -501,7 +501,7 @@ function BookingContent() {
       const remaining = totalGuests - cartCapacity;
       setCapacityError(
         currentLocale === 'mn' 
-          ? `Таны сонголтод ${cartCapacity} зочин багтах боломжтой. ${remaining} зочинд нэмэлт өрөө сонгоно уу.`
+          ? `Сонгосон өрөөнд ${cartCapacity} зочин багтана. Үлдсэн ${remaining} зочинд зориулж нэмэлт өрөө сонгоно уу.`
           : `Your selection fits ${cartCapacity} guests. Please select rooms for ${remaining} more guest${remaining > 1 ? 's' : ''}.`
       );
     } else {
@@ -757,7 +757,7 @@ function BookingContent() {
           </p>
           {isNonRefundableRate(rate.rateName) ? (
             <p className="mt-1.5 text-xs font-body text-orange-200/85">
-              {currentLocale === "mn" ? "Буцаан олгогдохгүй үнэ." : "Non-refundable rate."}
+              {currentLocale === "mn" ? "Буцаан олголтгүй үнэ." : "Non-refundable rate."}
             </p>
           ) : (
             <p className="mt-1.5 flex items-start gap-1.5 text-xs font-body text-emerald-200/85">
@@ -770,14 +770,14 @@ function BookingContent() {
                   : rate.cancellation?.policyText?.trim()
                     ? stripHtml(rate.cancellation.policyText.trim())
                     : currentLocale === "mn"
-                      ? "Уян хатан — буцаан олгодог үнэ."
+                      ? "Уян хатан, буцаан олголттой үнэ."
                       : "Refundable / flexible rate."}
               </span>
             </p>
           )}
           {otherRateInCart && !blocked && (
             <p className="text-red-300 text-xs font-body mt-1">
-              {currentLocale === 'mn' ? 'Сагсанд байгаа өрөөтэй хамт захиалах боломжгүй' : 'Not available with items in your cart'}
+              {currentLocale === 'mn' ? 'Сагсан дахь өрөөтэй хамт захиалах боломжгүй' : 'Not available with items in your cart'}
             </p>
           )}
           {restrictionMsgs.length > 0 && (
@@ -804,7 +804,7 @@ function BookingContent() {
                 {perNight.toLocaleString()}
               </p>
               <p className="font-cta uppercase text-[9px] tracking-[0.26em] text-main/40">
-                {currentLocale === 'mn' ? 'шөнө' : 'per night'}
+                {currentLocale === 'mn' ? '/ шөнө' : 'per night'}
               </p>
             </div>
           )}
@@ -888,7 +888,7 @@ function BookingContent() {
           {!searched && !loading && (
             <p className="font-body text-main/60 text-sm md:text-base">
               {currentLocale === 'mn'
-                ? 'Баруун талын маягтаас огноогоо сонгон хайлт хийнэ үү.'
+                ? 'Баруун талын маягтад огноогоо оруулан сул байраа шалгаарай.'
                 : 'Use the form to select your dates and check availability.'}
             </p>
           )}
@@ -918,7 +918,7 @@ function BookingContent() {
               </h2>
               <p className="font-body text-main/50 text-xs mb-5">
                 {currentLocale === 'mn'
-                  ? 'Заавал бөглөх талбарыг * тэмдгээр илэрхийлсэн'
+                  ? 'Заавал бөглөх талбарыг * тэмдгээр тэмдэглэв'
                   : 'Required fields are followed by *'}
               </p>
 
@@ -954,7 +954,7 @@ function BookingContent() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <span id="adults-label" className="block font-body text-main text-sm mb-1">
-                      {currentLocale === 'mn' ? 'Том хүн' : 'Adults'}:
+                      {currentLocale === 'mn' ? 'Насанд хүрэгч' : 'Adults'}:
                     </span>
                     <div className="flex items-center justify-between border border-main/20 px-1.5 py-1" role="group" aria-labelledby="adults-label">
                       <button
@@ -1089,7 +1089,7 @@ function BookingContent() {
 
                 <div className="border-t border-main/15 pt-4 space-y-2 text-sm font-body">
                   <div className="flex justify-between">
-                    <span className="text-main/70">{currentLocale === 'mn' ? 'Нийлбэр' : 'Subtotal'}</span>
+                    <span className="text-main/70">{currentLocale === 'mn' ? 'Дэд дүн' : 'Subtotal'}</span>
                     <span className="text-main">{cartTotal.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
@@ -1098,7 +1098,7 @@ function BookingContent() {
                   </div>
                   <div className="flex justify-between pt-2 border-t border-main/15">
                     <span className={`${editorialFont} italic text-base text-main`}>
-                      {currentLocale === 'mn' ? 'Нийт' : 'Total'}
+                      {currentLocale === 'mn' ? 'Нийт дүн' : 'Total'}
                     </span>
                     <span className={`${editorialFont} italic text-base text-main`}>
                       MNT {cartTotal.toLocaleString()}
@@ -1111,12 +1111,12 @@ function BookingContent() {
                     {currentLocale === 'mn' ? 'Төлбөрийн хуваарь' : 'Payment Schedule'}
                   </p>
                   <div className="flex justify-between text-sm font-body">
-                    <span className="text-main/70">{currentLocale === 'mn' ? 'Урьдчилгаа төлбөр' : 'Deposit (pay now)'}</span>
+                    <span className="text-main/70">{currentLocale === 'mn' ? 'Урьдчилгаа (одоо төлөх)' : 'Deposit (pay now)'}</span>
                     <span className="text-main">{depositDueNow.toLocaleString()}</span>
                   </div>
                   {balanceOnArrival > 0 && (
                     <div className="flex justify-between text-sm font-body mt-1.5">
-                      <span className="text-main/70">{currentLocale === 'mn' ? 'Үлдэгдэл төлбөр' : 'Due on arrival'}</span>
+                      <span className="text-main/70">{currentLocale === 'mn' ? 'Ирэхэд төлөх үлдэгдэл' : 'Due on arrival'}</span>
                       <span className="text-main">{balanceOnArrival.toLocaleString()}</span>
                     </div>
                   )}
@@ -1144,7 +1144,7 @@ function BookingContent() {
                   return (
                     <p className="mt-3 text-xs text-main/50 font-body leading-relaxed">
                       <span className="text-main/70">
-                        {currentLocale === 'mn' ? 'Байршлын нөхцөл: ' : 'Property terms: '}
+                        {currentLocale === 'mn' ? 'Газрын нөхцөл: ' : 'Property terms: '}
                       </span>
                       {short}
                     </p>
@@ -1200,7 +1200,7 @@ function BookingContent() {
             <div className="text-center py-16">
               <p className="text-main/60 text-lg font-body">
                 {currentLocale === "mn"
-                  ? "Өрөөний мэдээлэл ачааллаж чадсангүй. Дээрх алдааг шалгаад дахин оролдоно уу."
+                  ? "Сул байрны мэдээлэл ачаалж чадсангүй. Дээрх алдааг шалгаад дахин оролдоно уу."
                   : "We could not load availability. See the message above and try again."}
               </p>
             </div>
@@ -1227,7 +1227,7 @@ function BookingContent() {
                       <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="font-body text-orange-200 text-sm mb-1">
-                          {currentLocale === 'mn' ? 'Сонгосон огнооны хязгаарлалтууд' : 'Restrictions for selected dates'}
+                          {currentLocale === 'mn' ? 'Сонгосон огноонд үйлчилж буй хязгаарлалт' : 'Restrictions for selected dates'}
                         </p>
                         <ul className="space-y-0.5">
                           {uniqueRestrictions.map((msg, i) => (
@@ -1307,9 +1307,9 @@ function BookingContent() {
                             <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
                             <span>
                               <span className="text-main/50">
-                                {currentLocale === 'mn' ? 'Зочид:' : 'Guests:'}
+                                {currentLocale === 'mn' ? 'Багтаамж:' : 'Guests:'}
                               </span>{' '}
-                              {currentLocale === 'mn' ? `${maxGuests} хүртэл` : `Up to ${maxGuests}`}
+                              {currentLocale === 'mn' ? `${maxGuests} хүн хүртэл` : `Up to ${maxGuests}`}
                             </span>
                           </li>
                           {group.features && group.features.length > 0 && (
@@ -1327,7 +1327,7 @@ function BookingContent() {
                             <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
                             <span>
                               <span className="text-main/50">
-                                {currentLocale === 'mn' ? 'Боломж:' : 'Availability:'}
+                                {currentLocale === 'mn' ? 'Сул:' : 'Availability:'}
                               </span>{' '}
                               {currentLocale === 'mn'
                                 ? `${group.roomsAvailable} өрөө үлдсэн`
@@ -1340,7 +1340,7 @@ function BookingContent() {
                           <div className="space-y-1.5">
                             <p className="font-body text-main">
                               <span className="text-main/60">
-                                {currentLocale === "mn" ? "Үнэ эхлэх:" : "Prices start at:"}
+                                {currentLocale === "mn" ? "Эхлэх үнэ:" : "Prices start at:"}
                               </span>
                               <span className={`${editorialFont} italic text-xl text-main ml-2`}>
                                 {perNightFrom.toLocaleString()} {priceCurrency}
@@ -1352,7 +1352,7 @@ function BookingContent() {
                             {hasBothRefundKinds && (
                               <p className="text-main/50 text-xs font-body leading-relaxed">
                                 {currentLocale === "mn"
-                                  ? "Буцаан олгодог үнэ эхэнд жагсаагдсан; доор буцаан олгогдохгүй хямд сонголт байж болно."
+                                  ? "Эхэнд буцаан олголттой үнэ, доор нь буцаан олголтгүй хямд үнэ жагсаагдана."
                                   : "Refundable options are listed first; lower non-refundable rates may appear below."}
                               </p>
                             )}
@@ -1363,7 +1363,7 @@ function BookingContent() {
                           href={getRoomDetailPath(group.roomTypeName)}
                           className="inline-flex items-center gap-1.5 mt-3 font-cta uppercase text-[10px] tracking-[0.28em] text-bark hover:text-main transition-colors"
                         >
-                          {currentLocale === 'mn' ? 'Дэлгэрэнгүй' : 'View Details'}
+                          {currentLocale === 'mn' ? 'Дэлгэрэнгүй харах' : 'View Details'}
                           <ArrowRight className="w-3 h-3" />
                         </Link>
 
@@ -1402,7 +1402,7 @@ function BookingContent() {
             )}
             <div className="flex items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-2 text-sm text-main font-body">
-                <span>{totalRooms} {currentLocale === 'mn' ? 'өрөө' : 'Room(s)'}</span>
+                <span>{totalRooms} {currentLocale === 'mn' ? 'өрөө' : (totalRooms === 1 ? 'Room' : 'Rooms')}</span>
                 <span className="text-main/30">•</span>
                 <span className={`${editorialFont} italic text-lg text-main`}>{cartTotal.toLocaleString()} MNT</span>
               </div>
