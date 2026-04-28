@@ -19,15 +19,15 @@ export default function Preloader() {
       window.setTimeout(() => setVisible(false), wait);
     };
 
-    if (document.readyState === "complete") {
+    if (document.readyState !== "loading") {
       hide();
       return;
     }
 
-    window.addEventListener("load", hide, { once: true });
-    const safety = window.setTimeout(hide, 3500);
+    document.addEventListener("DOMContentLoaded", hide, { once: true });
+    const safety = window.setTimeout(hide, 1200);
     return () => {
-      window.removeEventListener("load", hide);
+      document.removeEventListener("DOMContentLoaded", hide);
       window.clearTimeout(safety);
     };
   }, []);
@@ -38,16 +38,6 @@ export default function Preloader() {
       return () => window.clearTimeout(t);
     }
   }, [visible]);
-
-  useEffect(() => {
-    if (mounted) {
-      const previousOverflow = document.documentElement.style.overflow;
-      document.documentElement.style.overflow = "hidden";
-      return () => {
-        document.documentElement.style.overflow = previousOverflow;
-      };
-    }
-  }, [mounted]);
 
   if (!mounted) return null;
 

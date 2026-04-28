@@ -135,12 +135,6 @@ export default function InteractiveMap() {
 
   return (
     <section className="bg-surface pt-24 md:pt-32 pb-[3.45rem] md:pb-[4.6rem] mb-[3.45rem] md:mb-[4.6rem] px-6">
-      <div className="hidden" aria-hidden="true">
-        {locations.map((loc) => (
-           loc.image && <Image key={loc.id} src={loc.image} alt="" width={10} height={10} priority />
-        ))}
-      </div>
-
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-8 flex flex-col items-center gap-6"
@@ -174,7 +168,6 @@ export default function InteractiveMap() {
             src="/images/map/resort-map.jpg"
             alt="Dalai Eej Resort Map"
             fill
-            priority
             draggable={false}
             className="object-cover object-center rounded-lg shadow-2xl touch-manipulation select-none [-webkit-touch-callout:none]"
             sizes="(max-width: 1200px) 100vw, 1200px"

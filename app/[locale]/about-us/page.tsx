@@ -1050,6 +1050,8 @@ export default function AboutUsPage() {
                 : "/images/about-us/images/founders-note.svg"
             }
             alt={t.founderSectionLabel}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto select-none"
             draggable={false}
           />

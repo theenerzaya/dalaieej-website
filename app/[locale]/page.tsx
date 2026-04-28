@@ -1,13 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import VideoHero from "../components/home/VideoHero";
 import EditorialIntro from "../components/home/EditorialIntro";
 import SiloGrid from "../components/home/SiloGrid";
 // import OffersCarousel from "../components/home/OffersCarousel";
-import PersonaSlider from "../components/home/PersonaSlider";
-import InteractiveMap from "../components/InteractiveMap";
-import AddressSection from "../components/home/AddressSection";
-import AvailabilityBar from "../components/AvailabilityBar";
+const PersonaSlider = dynamic(() => import("../components/home/PersonaSlider"));
+const InteractiveMap = dynamic(() => import("../components/InteractiveMap"));
+const AddressSection = dynamic(() => import("../components/home/AddressSection"));
+const AvailabilityBar = dynamic(() => import("../components/AvailabilityBar"));
 
 export default function Home() {
   return (
