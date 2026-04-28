@@ -2,6 +2,14 @@ import axios from "axios";
 
 const CLOUDBEDS_API_BASE = "https://hotels.cloudbeds.com/api/v1.2";
 
+/**
+ * Cloudbeds may return room identifiers with suffixes like `-0`, `-1`
+ * for per-room instances. Most API endpoints expect the stable room type ID.
+ */
+export function normalizeCloudbedsRoomTypeID(value: string): string {
+  return String(value || "").trim().replace(/-\d+$/, "");
+}
+
 export async function cloudbedsGet<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
   const apiKey = process.env.CLOUDBEDS_API_KEY;
   const propertyId = process.env.CLOUDBEDS_PROPERTY_ID;

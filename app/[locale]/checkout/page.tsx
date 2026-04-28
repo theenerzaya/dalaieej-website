@@ -7,6 +7,7 @@ import { User, Mail, Phone, Globe, MessageSquare, Plus, Minus, Loader2, AlertCir
 import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
 import { sumDepositDueForRoomLines, depositPortionForAddonTotal } from "@/lib/deposit-policy";
+import { normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 
 interface CartRoom {
   roomTypeID: string;
@@ -92,7 +93,7 @@ function CheckoutContent() {
         setCartRooms(parsedCart);
 
         if (urlCheckin && urlCheckout && parsedCart.length > 0) {
-          fetchAddons(urlCheckin, urlCheckout, parsedCart[0].roomTypeID);
+          fetchAddons(urlCheckin, urlCheckout, normalizeCloudbedsRoomTypeID(parsedCart[0].roomTypeID));
         }
       } catch (e) {
         console.error("Failed to parse cart:", e);

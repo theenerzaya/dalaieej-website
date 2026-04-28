@@ -140,6 +140,14 @@ const ROOM_TYPE_ID_TO_SLUG: Record<string, RoomSlug> = {
   SCW: "lakeside-cabin",
   ESH: "grand-peninsula-suite",
   C: "camping",
+  "196467430240449": "triple-traditional-cabin",
+  "197943412437120": "signature-cabin",
+  "198020352975040": "lakeside-cabin",
+  "198036698427584": "triple-electric-cabin",
+  "198038298677377": "grand-peninsula-suite",
+  "198039847624896": "superior-cabin",
+  "198042256253056": "camping",
+  "198046100787328": "quad-electric-cabin",
 };
 
 const ROOM_NAME_ALIASES: Array<{ matches: string[]; slug: RoomSlug }> = [
@@ -171,8 +179,14 @@ function normalizeRoomName(value: string): string {
     .trim();
 }
 
+function normalizeRoomTypeId(value: string): string {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  return raw.replace(/-\d+$/, "");
+}
+
 function resolveRoomSlug(roomTypeID: string, roomTypeName: string): RoomSlug | null {
-  const normalizedId = String(roomTypeID || "").trim();
+  const normalizedId = normalizeRoomTypeId(roomTypeID);
   const byId = ROOM_TYPE_ID_TO_SLUG[normalizedId] || ROOM_TYPE_ID_TO_SLUG[normalizedId.toUpperCase()];
   if (byId) return byId;
 

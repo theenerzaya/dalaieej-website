@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cloudbedsGet } from "@/lib/cloudbeds";
+import { cloudbedsGet, normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const params: Record<string, string> = {};
     if (checkin) params.startDate = checkin;
     if (checkout) params.endDate = checkout;
-    if (roomTypeId) params.roomTypeID = roomTypeId;
+    if (roomTypeId) params.roomTypeID = normalizeCloudbedsRoomTypeID(roomTypeId);
 
     const itemsData = await cloudbedsGet<any>("/getItems", params);
 

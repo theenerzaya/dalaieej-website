@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import qs from "qs";
+import { normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 
 const CLOUDBEDS_API_BASE = "https://hotels.cloudbeds.com/api/v1.2";
 
@@ -50,7 +51,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const roomList = rooms as RoomBooking[];
+    const roomList = (rooms as RoomBooking[]).map((room) => ({
+      ...room,
+      roomTypeID: normalizeCloudbedsRoomTypeID(room.roomTypeID),
+    }));
 
     const payloadObj: Record<string, unknown> = {
       propertyID: propertyId,
