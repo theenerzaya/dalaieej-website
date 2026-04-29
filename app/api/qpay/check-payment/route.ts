@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     let isPaid = !!paidRow;
 
     if (isPaid && expectedAmount && paidRow) {
-      const paidAmt = parseFloat(paidRow.payment_amount);
+      const paidAmt = Number(paidRow.payment_amount ?? 0);
       if (paidAmt < expectedAmount) {
         isPaid = false;
       }

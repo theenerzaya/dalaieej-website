@@ -88,7 +88,7 @@ export default function VideoHero() {
               const d = data as { fatal?: boolean };
               if (d.fatal) {
                 setVideoFailed(true);
-                hls.destroy();
+                hls?.destroy();
               }
             });
             hls.loadSource(hlsUrl);

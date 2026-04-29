@@ -279,6 +279,11 @@ export async function GET(request: NextRequest) {
       const restrictionsForRate = restrictionByRateID.get(String(room.roomRateID)) ?? null;
       const mergedCancellation = mergeCancellationForRoom(String(room.roomRateID), String(room.roomTypeID));
 
+      const maxGuestsValue =
+        typeof room.maxGuests === "number"
+          ? room.maxGuests
+          : parseInt(room.maxGuests ?? "", 10);
+
       return {
         roomTypeID: room.roomTypeID,
         roomTypeName: room.roomTypeName,
@@ -289,7 +294,7 @@ export async function GET(request: NextRequest) {
         originalRate,
         currency: currency,
         description: room.roomTypeDescription || "",
-        maxGuests: parseInt(room.maxGuests) || 2,
+        maxGuests: Number.isFinite(maxGuestsValue) && maxGuestsValue > 0 ? maxGuestsValue : 2,
         photos: photos,
         features: room.roomTypeFeatures || [],
         restrictions: restrictionsForRate,
