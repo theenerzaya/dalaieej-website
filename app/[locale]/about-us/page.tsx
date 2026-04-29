@@ -1049,13 +1049,13 @@ export default function AboutUsPage() {
 
       <section className="relative py-20 md:py-32">
         <motion.div
-          className="max-w-6xl mx-auto px-6"
+          className="w-full max-w-none px-0"
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="relative mx-auto w-full max-w-[44rem] aspect-[1440/1640] overflow-hidden shadow-[0_24px_54px_rgba(26,17,6,0.2)]">
+          <div className="relative mx-auto w-[90vw] max-w-none aspect-[1440/1640] overflow-hidden shadow-[0_24px_54px_rgba(26,17,6,0.2)]">
             <h3 className="absolute top-5 left-5 z-[60] font-editorial-mn text-xl md:text-2xl text-white/95 drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] tracking-wide">
               {t.founderSectionLabel}
             </h3>

@@ -234,7 +234,9 @@
     "directionsLabel": "Get directions:",
     "directionsFromCity": "Khatgal",
     "directionsFromAirport": "Murun Airport",
-    "bookCta": "Book your stay"
+    "bookCta": "Book your stay",
+    "imageFullBleedLabel": "View address image full screen",
+    "fullBleedCloseLabel": "Close full screen"
   },
   "map": {
     "eyebrow": "The grounds",
@@ -293,7 +295,9 @@
     "parking": {
       "title": "To Guest Parking",
       "desc": "Secure parking area."
-    }
+    },
+    "mapFullBleedLabel": "View map full screen",
+    "mapFullBleedCloseLabel": "Close full screen"
   },
   "discover": {
     "rooms": "The Stays",

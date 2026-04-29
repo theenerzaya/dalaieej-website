@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
+import { createPortal } from "react-dom";
 import { X, ArrowUpRight, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -88,10 +89,37 @@ const textItemVariants: Variants = {
   },
 };
 
+const MAP_FULLBLEED_SRC = "/images/map/resort-map.jpg";
+
 export default function InteractiveMap() {
   const t = useTranslations();
   const reduceMotion = useReducedMotion();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
+  const [portalMounted, setPortalMounted] = useState(false);
+  const [fullscreenMapImage, setFullscreenMapImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
+  useEffect(() => {
+    setPortalMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!fullscreenMapImage) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFullscreenMapImage(null);
+    };
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [fullscreenMapImage]);
 
   const isArrowMarker = (id: string) => id === 'overland' || id === 'parking';
 
@@ -124,8 +152,9 @@ export default function InteractiveMap() {
     setActiveHotspot(activeHotspot === id ? null : id);
   };
 
-  const handleBackgroundClick = () => {
+  const openMapFullBleed = () => {
     setActiveHotspot(null);
+    setFullscreenMapImage({ src: MAP_FULLBLEED_SRC, alt: "Dalai Eej Resort Map" });
   };
 
   const activeLocation =
@@ -154,7 +183,15 @@ export default function InteractiveMap() {
         <motion.div
           className="relative w-full overflow-visible z-10 cursor-pointer touch-manipulation select-none [-webkit-touch-callout:none]"
           style={{ aspectRatio: "6876 / 3000" }}
-          onClick={handleBackgroundClick}
+          role="button"
+          tabIndex={0}
+          aria-label={t("map.mapFullBleedLabel")}
+          onClick={openMapFullBleed}
+          onKeyDown={(e) => {
+            if (e.key !== "Enter" && e.key !== " ") return;
+            e.preventDefault();
+            openMapFullBleed();
+          }}
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
@@ -165,7 +202,7 @@ export default function InteractiveMap() {
           }}
         >
           <Image
-            src="/images/map/resort-map.jpg"
+            src={MAP_FULLBLEED_SRC}
             alt="Dalai Eej Resort Map"
             fill
             draggable={false}
@@ -367,6 +404,40 @@ export default function InteractiveMap() {
           </motion.div>
         )}
       </AnimatePresence>
+    {portalMounted && fullscreenMapImage
+      ? createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={fullscreenMapImage.alt}
+            className="fixed inset-0 z-[200]"
+          >
+            <button
+              type="button"
+              className="absolute inset-0 cursor-default bg-black/90"
+              aria-label={t("map.mapFullBleedCloseLabel")}
+              onClick={() => setFullscreenMapImage(null)}
+            />
+            <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center p-4 pt-16 md:p-8">
+              <img
+                src={fullscreenMapImage.src}
+                alt={fullscreenMapImage.alt}
+                onClick={() => setFullscreenMapImage(null)}
+                className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl cursor-zoom-in"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => setFullscreenMapImage(null)}
+              className="absolute top-4 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
+              aria-label={t("map.mapFullBleedCloseLabel")}
+            >
+              <X className="h-5 w-5" strokeWidth={2} />
+            </button>
+          </div>,
+          document.body
+        )
+      : null}
     </section>
   );
 }

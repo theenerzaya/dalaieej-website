@@ -379,7 +379,9 @@
     "directionsLabel": "Зам заагч:",
     "directionsFromCity": "Хатгал",
     "directionsFromAirport": "Мөрөнгийн нисэх буудал",
-    "bookCta": "Захиалга өгөх"
+    "bookCta": "Захиалга өгөх",
+    "imageFullBleedLabel": "Хаягийн зургийг бүтэн дэлгэцээр харах",
+    "fullBleedCloseLabel": "Бүтэн дэлгэцийг хаах"
   },
   "common": {
     "loading": "Ачаалж байна..."
@@ -496,7 +498,9 @@
     "parking": {
       "title": "Авто зогсоол руу",
       "desc": "Зочдын хамгаалалттай авто зогсоол."
-    }
+    },
+    "mapFullBleedLabel": "Газрын зургийг бүтэн дэлгэцээр харах",
+    "mapFullBleedCloseLabel": "Бүтэн дэлгэцийг хаах"
   },
   "discover": {
     "rooms": "Гэрүүд",
