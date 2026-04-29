@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { motion } from "framer-motion";
@@ -143,7 +144,7 @@ export default function TheHistory({ locale = 'en' }: TheHistoryProps) {
           className="text-center mt-12"
         >
           <p className="font-serif text-2xl md:text-3xl text-ink/80 italic">
-            "{isMn ? "Аз жаргалтай сүнснүүд" : "Happy Ghosts"}"
+            &quot;{isMn ? "Аз жаргалтай сүнснүүд" : "Happy Ghosts"}&quot;
           </p>
           <p className="font-body text-ink/50 text-sm mt-3">
             {isMn ? "Өнгөрсөн үеийн хүүхдүүдийн инээд энд хэвээр байна" : "The laughter of generations past still echoes here"}

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -7,8 +8,6 @@ import {
   motion,
   useInView,
   useReducedMotion,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
@@ -322,37 +321,6 @@ const historyVisuals: Array<{
   },
 ];
 
-function CampfireMark({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.1"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      {/* sparks */}
-      <path d="M32 6v3" />
-      <path d="M26 8l1.5 2.5" />
-      <path d="M38 8l-1.5 2.5" />
-      <path d="M22 12l2 1.5" />
-      <path d="M42 12l-2 1.5" />
-      {/* flame */}
-      <path d="M32 14c3.5 4.5 6 7.8 6 12a6 6 0 0 1-12 0c0-2.3 1-4.1 2.4-5.3-.3 1.3-.1 2.6.6 3.6.6-3.4 1.6-6.7 3-10.3z" />
-      {/* inner flame */}
-      <path d="M32 22c1.8 2.4 3 4 3 6a3 3 0 0 1-6 0c0-1.3.6-2.3 1.4-2.9 0 .8.2 1.4.6 1.9.3-1.8.6-3.3 1-5z" />
-      {/* logs */}
-      <path d="M18 44l28 8" />
-      <path d="M18 52l28-8" />
-      <path d="M22 42l4 12" />
-      <path d="M42 42l-4 12" />
-    </svg>
-  );
-}
-
 function SectionAccent({
   className = "py-1 md:py-2",
   width = "w-20 md:w-24",
@@ -484,87 +452,15 @@ export default function AboutUsPage() {
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const isMn = locale === "mn";
-  const parallaxSectionEnabled = false;
   const t = isMn ? content.mn : content.en;
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
   const historyHeadingRef = useRef<HTMLHeadingElement | null>(null);
-  const founderParallaxRef = useRef<HTMLElement | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<{
     src: string;
     alt: string;
   } | null>(null);
-  const [portalMounted, setPortalMounted] = useState(false);
-  const founderParallaxScrollTarget = parallaxSectionEnabled
-    ? founderParallaxRef
-    : undefined;
-  const { scrollYProgress: founderParallaxProgress } = useScroll({
-    target: founderParallaxScrollTarget,
-    offset: ["start end", "end start"],
-  });
-  const founderParallaxY = useTransform(
-    founderParallaxProgress,
-    [0, 1],
-    reduceMotion ? [0, 0] : [-18, 18]
-  );
-  const founderParallaxWidth = useTransform(
-    founderParallaxProgress,
-    [0, 0.42],
-    reduceMotion ? ["100vw", "100vw"] : ["50vw", "100vw"]
-  );
-  const founderParallaxHeight = useTransform(
-    founderParallaxProgress,
-    [0, 0.42],
-    reduceMotion ? ["100vh", "100vh"] : ["50vh", "100vh"]
-  );
-  const founderParallaxRadius = useTransform(
-    founderParallaxProgress,
-    [0, 0.42],
-    reduceMotion ? [0, 0] : [28, 0]
-  );
-  const founderTextOpacity = useTransform(
-    founderParallaxProgress,
-    [0.42, 0.55],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine1Y = useTransform(
-    founderParallaxProgress,
-    [0.46, 0.58],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-  const founderLine2Opacity = useTransform(
-    founderParallaxProgress,
-    [0.54, 0.66],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine2Y = useTransform(
-    founderParallaxProgress,
-    [0.54, 0.66],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-  const founderLine3Opacity = useTransform(
-    founderParallaxProgress,
-    [0.62, 0.74],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine3Y = useTransform(
-    founderParallaxProgress,
-    [0.62, 0.74],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-  const founderLine4Opacity = useTransform(
-    founderParallaxProgress,
-    [0.7, 0.82],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine4Y = useTransform(
-    founderParallaxProgress,
-    [0.7, 0.82],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-
-  useEffect(() => {
-    setPortalMounted(true);
-  }, []);
+  // Avoid rendering the portal during SSR.
+  const [portalMounted] = useState(() => typeof window !== "undefined");
 
   useEffect(() => {
     if (!fullscreenImage) return;

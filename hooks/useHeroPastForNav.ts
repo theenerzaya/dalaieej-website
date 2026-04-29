@@ -14,12 +14,7 @@ export function useHeroPastForNav(enabled: boolean): boolean {
   const [past, setPast] = useState(() => !enabled);
 
   useEffect(() => {
-    if (!enabled) {
-      setPast(true);
-      return;
-    }
-
-    setPast(false);
+    if (!enabled) return;
 
     const el =
       document.getElementById("hero-nav-sentinel") ??

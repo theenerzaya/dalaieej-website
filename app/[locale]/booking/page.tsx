@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
@@ -202,10 +203,6 @@ function BookingCardSlideshow({ images, alt }: { images: string[]; alt: string }
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    setCurrentIndex(0);
-  }, [images]);
-
-  useEffect(() => {
     if (images.length <= 1 || isPaused) return;
     const id = window.setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -267,7 +264,7 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function formatDate(dateStr: string, _locale: "en" | "mn" = "en"): string {
+function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const date = new Date(dateStr + "T00:00:00");
   const day = String(date.getDate()).padStart(2, "0");
@@ -509,6 +506,7 @@ function BookingContent() {
     }
   }, [cart, totalGuests, cartCapacity, currentLocale]);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const urlCheckin = searchParams.get("checkin");
     const urlCheckout = searchParams.get("checkout");
@@ -536,6 +534,7 @@ function BookingContent() {
     setNumberOfNights(calculateNights(effectiveCheckin, effectiveCheckout));
     fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "", parsedAdults, parsedChildren);
   }, [searchParams]);
+  /* eslint-enable react-hooks/exhaustive-deps */
   
   const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "", adults: number = totalAdults, children: number = totalChildren) => {
     setLoading(true);
@@ -554,7 +553,12 @@ function BookingContent() {
       const data: AvailabilityData = await response.json();
 
       if (!response.ok) {
-        throw new Error((data as any).error || "Failed to fetch availability");
+        const maybeError = (data as unknown as { error?: unknown }).error;
+        throw new Error(
+          typeof maybeError === "string" && maybeError.length > 0
+            ? maybeError
+            : "Failed to fetch availability"
+        );
       }
 
       const list = data.rooms || [];
@@ -579,6 +583,7 @@ function BookingContent() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (!searched || !checkin || !checkout) return;
     const last = lastFetchedGuestsRef.current;
@@ -588,6 +593,7 @@ function BookingContent() {
     }, 450);
     return () => clearTimeout(id);
   }, [totalAdults, totalChildren, searched, checkin, checkout]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const handleSearch = () => {
     if (!checkin || !checkout) {
@@ -710,12 +716,11 @@ function BookingContent() {
   const getRestrictionMessages = (restrictions: RoomRestrictions | null | undefined): string[] => {
     if (!restrictions) return [];
     const msgs: string[] = [];
-    const loc = currentLocale === "mn" ? "mn" : "en";
     if (restrictions.closedToArrival) {
-      msgs.push(t("restrictionClosedToArrival", { date: formatDate(checkin, loc) }));
+      msgs.push(t("restrictionClosedToArrival", { date: formatDate(checkin) }));
     }
     if (restrictions.closedToDeparture) {
-      msgs.push(t("restrictionClosedToDeparture", { date: formatDate(checkout, loc) }));
+      msgs.push(t("restrictionClosedToDeparture", { date: formatDate(checkout) }));
     }
     if (restrictions.minLos > 0 && restrictions.minLos > numberOfNights) {
       msgs.push(t("restrictionMinLos", { nights: restrictions.minLos }));
@@ -881,8 +886,8 @@ function BookingContent() {
           {!loading && searched && resultsCount > 0 && checkin && checkout && (
             <p className="font-body text-main/60 text-sm md:text-base">
               {currentLocale === 'mn'
-                ? `${resultsCount} өрөө олдлоо · ${formatDate(checkin, "mn")} – ${formatDate(checkout, "mn")}`
-                : `${resultsCount} accommodation${resultsCount === 1 ? "" : "s"} found from ${formatDate(checkin, "en")} – till ${formatDate(checkout, "en")}`}
+                ? `${resultsCount} өрөө олдлоо · ${formatDate(checkin)} – ${formatDate(checkout)}`
+                : `${resultsCount} accommodation${resultsCount === 1 ? "" : "s"} found from ${formatDate(checkin)} – till ${formatDate(checkout)}`}
             </p>
           )}
           {!searched && !loading && (
@@ -1049,9 +1054,9 @@ function BookingContent() {
                 </h2>
 
                 <div className="flex items-center justify-between text-sm font-body text-main mb-1">
-                  <span>{formatDate(checkin, currentLocale === "mn" ? "mn" : "en")}</span>
+                  <span>{formatDate(checkin)}</span>
                   <ArrowRight className="w-4 h-4 text-main/40" />
-                  <span>{formatDate(checkout, currentLocale === "mn" ? "mn" : "en")}</span>
+                  <span>{formatDate(checkout)}</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-main/60 font-body mb-5">
                   <Moon className="w-3.5 h-3.5" />
@@ -1276,7 +1281,11 @@ function BookingContent() {
                         href={getRoomDetailPath(group.roomTypeName)}
                         className="relative block aspect-[21/10] md:aspect-[21/9] bg-black/40 overflow-hidden group"
                       >
-                        <BookingCardSlideshow images={slideshowImages} alt={group.roomTypeName || "Room"} />
+                        <BookingCardSlideshow
+                          key={slideshowImages.join("|")}
+                          images={slideshowImages}
+                          alt={group.roomTypeName || "Room"}
+                        />
                         {group.roomsAvailable && group.roomsAvailable <= 3 && (
                           <div className="absolute top-4 right-4 bg-ink/80 text-main text-[10px] font-cta uppercase tracking-[0.22em] px-2.5 py-1 border border-main/20">
                             {t('onlyLeft', { count: group.roomsAvailable })}

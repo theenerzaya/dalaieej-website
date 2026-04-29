@@ -13,6 +13,67 @@ interface RateRestriction {
   maxLos: number;
 }
 
+type CloudbedsRateDetailedRow = {
+  date?: string;
+  closedToArrival?: unknown;
+  closedToDeparture?: unknown;
+  minLos?: number;
+  maxLos?: number;
+} & Record<string, unknown>;
+
+type CloudbedsRatePlan = {
+  rateID?: string | number;
+  roomTypeID?: string;
+  isDerived?: boolean;
+  roomRateDetailed?: CloudbedsRateDetailedRow[];
+} & Record<string, unknown>;
+
+type CloudbedsRatePlansResponse = {
+  success?: boolean;
+  data?: CloudbedsRatePlan[];
+};
+
+type CloudbedsAvailabilityPropertyCurrency = {
+  currencyCode?: string;
+};
+
+type CloudbedsPropertyPhoto = {
+  image?: string | null;
+  thumb?: string | null;
+};
+
+type CloudbedsPropertyRoom = {
+  roomTypeID: string;
+  roomTypeName?: string;
+  roomsAvailable?: number;
+  roomRateID: string | number;
+  ratePlanNamePublic?: string;
+  derivedType?: string;
+  derivedValue?: string;
+  roomTypePhotos?: Array<string | CloudbedsPropertyPhoto>;
+  roomTypeDescription?: string;
+  maxGuests?: number | string;
+  roomTypeFeatures?: string[];
+} & Record<string, unknown>;
+
+type CloudbedsAvailabilityResponse = {
+  success?: boolean;
+  data?: Array<{
+    propertyCurrency?: CloudbedsAvailabilityPropertyCurrency;
+    propertyRooms?: CloudbedsPropertyRoom[];
+    propertyID?: string;
+  }>;
+};
+
+type CloudbedsHotelDetailsResponse = {
+  success?: boolean;
+  data?: {
+    propertyPolicy?: {
+      propertyTermsAndConditions?: string;
+    };
+  };
+};
+
 /** Normalize Cloudbeds roomRateDetailed `date` (or YYYY-MM-DD) for comparison. */
 function normDetailDate(value: unknown): string {
   if (value == null) return "";
@@ -102,12 +163,12 @@ export async function GET(request: NextRequest) {
     }
 
     const [availabilityData, ratePlansData, hotelDetailsData] = await Promise.all([
-      cloudbedsGet<any>("/getAvailableRoomTypes", params),
-      cloudbedsGet<any>("/getRatePlans", { ...params, detailedRates: "true" }).catch((err) => {
+      cloudbedsGet<CloudbedsAvailabilityResponse>("/getAvailableRoomTypes", params),
+      cloudbedsGet<CloudbedsRatePlansResponse>("/getRatePlans", { ...params, detailedRates: "true" }).catch((err) => {
         console.error("Failed to fetch rate plan restrictions:", err);
         return null;
       }),
-      cloudbedsGet<any>("/getHotelDetails", {}).catch((err) => {
+      cloudbedsGet<CloudbedsHotelDetailsResponse>("/getHotelDetails", {}).catch((err) => {
         console.error("Failed to fetch hotel details:", err);
         return null;
       }),
@@ -125,7 +186,7 @@ export async function GET(request: NextRequest) {
       const checkoutKey = normDetailDate(checkout);
 
       for (const rate of ratePlansData.data) {
-        const detailed: any[] = rate.roomRateDetailed || [];
+        const detailed = rate.roomRateDetailed ?? [];
         if (detailed.length === 0) continue;
 
         // Per-day flags apply to that row's `date`. Using only the last row tied CTD on the
@@ -192,10 +253,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const enrichedRooms = propertyRooms.map((room: any) => {
-      const photos = (room.roomTypePhotos || []).map((p: any) => 
-        typeof p === 'string' ? p : p.image || p.thumb || ''
-      ).filter(Boolean);
+    const enrichedRooms = propertyRooms.map((room) => {
+      const photos = (room.roomTypePhotos ?? [])
+        .map((p) => {
+          if (typeof p === "string") return p;
+          return p?.image ?? p?.thumb ?? "";
+        })
+        .filter(Boolean);
 
       const fullStayTotal = stayTotalForRoom(room, adultsNum, childrenNum);
       

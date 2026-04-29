@@ -40,21 +40,19 @@ export default function AvailabilityBar() {
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
   const localePrefix = currentLocale === 'mn' ? '/mn' : '';
   
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [minDate, setMinDate] = useState("");
-
-  useEffect(() => {
-    const now = new Date();
-    const defaultCheckIn = new Date(now);
-    defaultCheckIn.setDate(defaultCheckIn.getDate() + 1);
-    const defaultCheckout = new Date(defaultCheckIn);
-    defaultCheckout.setDate(defaultCheckout.getDate() + 3);
-
-    setMinDate(getDateString(now));
-    setCheckIn(getDateString(defaultCheckIn));
-    setCheckOut(getDateString(defaultCheckout));
-  }, []);
+  // Initialize booking dates without setting state in `useEffect` (ESLint rule).
+  // Note: values are derived from the client/server's current time.
+  const [checkIn, setCheckIn] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return getDateString(d);
+  });
+  const [checkOut, setCheckOut] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 4); // defaultCheckout is defaultCheckIn + 3 days
+    return getDateString(d);
+  });
+  const [minDate] = useState(() => getDateString(new Date()));
 
   if (navOpen) return null;
 

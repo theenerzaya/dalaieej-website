@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet, normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 
+type CloudbedsAddonItem = {
+  itemID?: string;
+  id?: string;
+  itemName?: string;
+  name?: string;
+  itemDescription?: string;
+  description?: string;
+  itemPrice?: number | string;
+  price?: number | string;
+  currency?: string;
+  priceType?: string;
+  itemCategory?: string;
+  category?: string;
+  itemImage?: string | null;
+  image?: string | null;
+  maxQuantity?: number | string;
+};
+
+type CloudbedsItemsResponse = {
+  success?: boolean;
+  data?: unknown;
+};
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -13,7 +36,7 @@ export async function GET(request: NextRequest) {
     if (checkout) params.endDate = checkout;
     if (roomTypeId) params.roomTypeID = normalizeCloudbedsRoomTypeID(roomTypeId);
 
-    const itemsData = await cloudbedsGet<any>("/getItems", params);
+    const itemsData = await cloudbedsGet<CloudbedsItemsResponse>("/getItems", params);
 
     console.log("Cloudbeds items response:", JSON.stringify(itemsData, null, 2));
 
@@ -24,19 +47,21 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const items = Array.isArray(itemsData.data) ? itemsData.data : [];
+    const items = Array.isArray(itemsData.data)
+      ? (itemsData.data as CloudbedsAddonItem[])
+      : [];
     
     const addons = items
-      .map((item: any) => ({
+      .map((item) => ({
         id: item.itemID || item.id,
         name: item.itemName || item.name,
         description: item.itemDescription || item.description || "",
-        price: parseFloat(item.itemPrice || item.price || 0),
+        price: parseFloat(String(item.itemPrice ?? item.price ?? 0)),
         currency: item.currency || "MNT",
         priceType: item.priceType || "per_stay",
         category: item.itemCategory || item.category || "other",
-        image: item.itemImage || item.image || null,
-        maxQuantity: parseInt(item.maxQuantity || 10),
+        image: item.itemImage ?? item.image ?? null,
+        maxQuantity: parseInt(String(item.maxQuantity ?? 10), 10),
       }));
 
     return NextResponse.json({

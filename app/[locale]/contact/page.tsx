@@ -1,11 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import { Plane, Car, MapPin, Phone, Mail, Clock, Play } from "lucide-react";
 
 export default function LocationPage() {
-  const t = useTranslations();
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
 

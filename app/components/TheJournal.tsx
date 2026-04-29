@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { motion } from "framer-motion";
@@ -87,7 +88,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
                   {profile.title}
                 </h3>
                 <p className="font-body text-ink/60 italic leading-relaxed">
-                  "{profile.quote}"
+                  &quot;{profile.quote}&quot;
                 </p>
               </div>
             </motion.article>

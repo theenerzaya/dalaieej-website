@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -53,8 +54,6 @@ function CheckoutContent() {
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [nights, setNights] = useState(1);
-  const [totalAdults, setTotalAdults] = useState(1);
-  const [totalChildren, setTotalChildren] = useState(0);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -77,14 +76,10 @@ function CheckoutContent() {
     const urlCheckout = searchParams.get("checkout");
     const urlNights = searchParams.get("nights");
     const urlCart = searchParams.get("cart");
-    const urlTotalAdults = searchParams.get("totalAdults");
-    const urlTotalChildren = searchParams.get("totalChildren");
 
     if (urlCheckin) setCheckin(urlCheckin);
     if (urlCheckout) setCheckout(urlCheckout);
     if (urlNights) setNights(parseInt(urlNights));
-    if (urlTotalAdults) setTotalAdults(parseInt(urlTotalAdults));
-    if (urlTotalChildren) setTotalChildren(parseInt(urlTotalChildren));
 
     if (urlCart) {
       try {

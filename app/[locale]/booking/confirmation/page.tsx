@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { CheckCircle, MapPin, Calendar, Moon, Users, Mail } from "lucide-react";
@@ -26,28 +26,19 @@ function ConfirmationContent() {
   const source = searchParams.get("source") || "";
 
   const hasConfirmed = useRef(false);
-  const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     if (hasConfirmed.current) return;
-    if (!bookingId || bookingId.startsWith("booking-")) {
-      setConfirmed(true);
-      return;
-    }
+    if (!bookingId || bookingId.startsWith("booking-")) return;
+    if (source !== "stripe") return;
 
-    if (source === "stripe") {
-      hasConfirmed.current = true;
-      fetch("/api/cloudbeds/confirm-reservation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reservationId: bookingId }),
-      })
-        .then(() => setConfirmed(true))
-        .catch(() => setConfirmed(true));
-      return;
-    }
-
-    setConfirmed(true);
+    hasConfirmed.current = true;
+    fetch("/api/cloudbeds/confirm-reservation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservationId: bookingId }),
+    })
+      .catch(() => {});
   }, [bookingId, source]);
 
   const paidNum = amount ? parseInt(amount, 10) : 0;

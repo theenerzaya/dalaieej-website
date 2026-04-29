@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -34,15 +35,12 @@ export default function AddressSection() {
   const editorialFont =
     locale === "mn" ? "font-editorial-mn" : "font-editorial-en";
 
-  const [portalMounted, setPortalMounted] = useState(false);
+  // Avoid rendering the portal during SSR.
+  const [portalMounted] = useState(() => typeof window !== "undefined");
   const [fullscreenImage, setFullscreenImage] = useState<{
     src: string;
     alt: string;
   } | null>(null);
-
-  useEffect(() => {
-    setPortalMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!fullscreenImage) return;

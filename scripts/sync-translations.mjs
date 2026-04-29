@@ -37,16 +37,6 @@ function flattenKeys(obj, prefix = "") {
   return result;
 }
 
-function extractByDotKeys(obj, dotKey) {
-  const parts = dotKey.split(".");
-  let current = obj;
-  for (const part of parts) {
-    if (current === undefined || current === null) return undefined;
-    current = current[part];
-  }
-  return current;
-}
-
 function setByDotKey(obj, dotKey, value) {
   const parts = dotKey.split(".");
   let current = obj;
@@ -125,7 +115,7 @@ ${JSON.stringify(missingObj, null, 2)}`;
 
   try {
     return JSON.parse(jsonMatch);
-  } catch (e) {
+  } catch {
     console.error("\n  Failed to parse Gemini response as JSON.");
     console.error("  Raw response:\n", text.slice(0, 500));
     process.exit(1);

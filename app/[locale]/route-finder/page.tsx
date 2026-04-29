@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState } from 'react';
@@ -12,8 +13,8 @@ export default function RouteFinderPage() {
       content: (
         <div className="space-y-4">
           <p><strong>The Strategy:</strong> Maximum serenity. Zero road fatigue. The most direct path to the Blue Pearl.</p>
-          <p><strong>For the traveler who values depth over breadth.</strong> Most tourists lose 40% of their vacation staring at the back of a driver's seat. This route skips the long road entirely. You fly direct to Murun (MXV), giving you more days to explore the Taiga forest, visit the Reindeer tribes, and relax by the lake.</p>
-          <p><strong>The "Insider" Bonus: The UB Culture Extension</strong> Because you fly, you "buy back" 4 days of travel time. We recommend using those saved days for a "Civilized Stopover" in Ulaanbaatar:</p>
+          <p><strong>For the traveler who values depth over breadth.</strong> Most tourists lose 40% of their vacation staring at the back of a driver&apos;s seat. This route skips the long road entirely. You fly direct to Murun (MXV), giving you more days to explore the Taiga forest, visit the Reindeer tribes, and relax by the lake.</p>
+          <p><strong>The &quot;Insider&quot; Bonus: The UB Culture Extension</strong> Because you fly, you &quot;buy back&quot; 4 days of travel time. We recommend using those saved days for a &quot;Civilized Stopover&quot; in Ulaanbaatar:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>History:</strong> Visit the Chinggis Khaan Museum or the massive Genghis Khan Equestrian Statue (paved road).</li>
             <li><strong>Dining:</strong> Eat at The Bull (Hot Pot), Zalaat Garden (KBBQ), or Veranda (Italian with a view).</li>
@@ -29,7 +30,7 @@ export default function RouteFinderPage() {
         <div className="space-y-4">
           <p><strong>The Strategy:</strong> The Essential Expedition. The only route that shows you the true scale of the country.</p>
           <p><strong>The Route:</strong> UB → Elsen Tasarkhai (Mini Gobi) → Kharkhorin (Ancient Capital) → Khorgo Volcano → Dalai Eej Resort (3 Nights) → Fly back.</p>
-          <p><strong>Why we love it:</strong> This route solves the dilemma of "seeing it all" and ticks off the entire "Classic Mongolia" checklist. Instead of driving days to the deep Gobi, you stop at Elsen Tasarkhai to see sand dunes, ride camels, and gallop on the green steppe right on your path. You stand on the ground of Genghis Khan's ancient capital at Kharkhorin, exploring the massive monastery built from its rubble, before finishing your journey at the ecological crown of the country: Dalai Eej Resort.</p>
+          <p><strong>Why we love it:</strong> This route solves the dilemma of &quot;seeing it all&quot; and ticks off the entire &quot;Classic Mongolia&quot; checklist. Instead of driving days to the deep Gobi, you stop at Elsen Tasarkhai to see sand dunes, ride camels, and gallop on the green steppe right on your path. You stand on the ground of Genghis Khan&apos;s ancient capital at Kharkhorin, exploring the massive monastery built from its rubble, before finishing your journey at the ecological crown of the country: Dalai Eej Resort.</p>
           <p className="italic pt-2">Take the quiz above to see if you have enough days for this loop.</p>
         </div>
       )
@@ -40,7 +41,7 @@ export default function RouteFinderPage() {
         <div className="space-y-4">
           <p><strong>The Strategy:</strong> The Ultimate Contrast. From the dinosaur lands of the south to the deep blue north.</p>
           <p><strong>The Route:</strong> Gobi Desert (3 days) → Fly UB → Fly Murun → Dalai Eej Resort (4 Nights).</p>
-          <p><strong>The Reality:</strong> We call this "Hard Mode." This route combines the singing sands of the south with the cooling waters of the north. It requires more time, stamina, and budget (more flights), but for the right person, it is the ultimate experience of Mongolia's extremes.</p>
+          <p><strong>The Reality:</strong> We call this &quot;Hard Mode.&quot; This route combines the singing sands of the south with the cooling waters of the north. It requires more time, stamina, and budget (more flights), but for the right person, it is the ultimate experience of Mongolia&apos;s extremes.</p>
         </div>
       )
     }
@@ -84,8 +85,8 @@ export default function RouteFinderPage() {
         <h2 className="text-2xl font-serif font-medium mb-8">Don&apos;t plan your trip until you check your logic.</h2>
         <p>As locals, we see the same calculation error happen every summer. Travelers arrive with a checklist—ride a camel, see a monastery, gallop on the steppe—only to realize too late that they have left the story unfinished.</p>
         <p>They spend 14 days bouncing in a van through the arid south, missing the ecological crown of the country: The North.</p>
-        <p>Full Disclosure: We have one bias. We believe a Mongolian expedition is incomplete without the Taiga. Whether you want a rugged road trip or a luxury flight, all paths generated by this tool ultimately lead North to the "Blue Pearl."</p>
-        <p className="italic font-medium pt-4">Which path is right for you? In 60 seconds, this tool analyzes your travel dates and style to match you with the perfect logistical plan—whether you want the "Greatest Hits" road trip or a direct luxury flight.</p>
+        <p>Full Disclosure: We have one bias. We believe a Mongolian expedition is incomplete without the Taiga. Whether you want a rugged road trip or a luxury flight, all paths generated by this tool ultimately lead North to the &quot;Blue Pearl&quot;.</p>
+        <p className="italic font-medium pt-4">Which path is right for you? In 60 seconds, this tool analyzes your travel dates and style to match you with the perfect logistical plan—whether you want the &quot;Greatest Hits&quot; road trip or a direct luxury flight.</p>
       </section>
 
       {/* 3. TALLY QUIZ EMBED */}
@@ -102,7 +103,7 @@ export default function RouteFinderPage() {
         <script dangerouslySetInnerHTML={{ __html: `
           var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
         `}} />
-        <p className="text-center italic text-stone-500 mt-8">Don't want to take the quiz? Scroll down to browse our 3 recommended routes.</p>
+        <p className="text-center italic text-stone-500 mt-8">Don&apos;t want to take the quiz? Scroll down to browse our 3 recommended routes.</p>
       </section>
 
       {/* 4. ROUTES ACCORDION */}

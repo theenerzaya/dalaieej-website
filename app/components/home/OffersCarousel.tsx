@@ -99,7 +99,7 @@ export default function OffersCarousel() {
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % offers.length);
     }, 7000);
-  }, [offers.length]);
+  }, []);
 
   const stopAutoPlay = useCallback(() => {
     if (intervalRef.current) {

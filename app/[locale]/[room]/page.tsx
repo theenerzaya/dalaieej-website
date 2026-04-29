@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -228,26 +229,31 @@ export default function RoomDetailPage() {
   const reduce = useReducedMotion();
 
   const room = ROOM_CONFIGS.find((r) => r.slug === params.room);
-  if (!room) return null;
+  const roomSlug = room?.slug ?? "";
+  const roomImage = room?.image ?? ROOM_IMAGE_POOL[0];
+  const roomIndex = ROOM_CONFIGS.findIndex((r) => r.slug === roomSlug);
+  const safeRoomIndex = Math.max(roomIndex, 0);
 
-  const roomImageBasePath = `/images/rooms/${room.slug}`;
-  const heroImage = `${roomImageBasePath}/00.webp`;
-  const roomIndex = ROOM_CONFIGS.findIndex((r) => r.slug === room.slug);
-  const galleryFallbackImages = useMemo(() => {
-    const alternates = ROOM_IMAGE_POOL.filter((image) => image !== room.image);
-    if (alternates.length === 0) return [room.image, room.image, room.image, room.image];
-    const rotation = roomIndex % alternates.length;
+  // Keep hooks unconditional: avoid returning early before hook calls.
+  // Render null later if the room isn't found.
+  const roomImageBasePath = roomSlug ? `/images/rooms/${roomSlug}` : "";
+  const heroImage = roomImageBasePath ? `${roomImageBasePath}/00.webp` : "";
+
+  const galleryFallbackImages = (() => {
+    const alternates = ROOM_IMAGE_POOL.filter((image) => image !== roomImage);
+    if (alternates.length === 0) return [roomImage, roomImage, roomImage, roomImage];
+    const rotation = safeRoomIndex % alternates.length;
     const rotatedAlternates = [...alternates.slice(rotation), ...alternates.slice(0, rotation)];
-    return [room.image, rotatedAlternates[0], rotatedAlternates[1], rotatedAlternates[2]].map(
-      (image) => image ?? room.image,
+    return [roomImage, rotatedAlternates[0], rotatedAlternates[1], rotatedAlternates[2]].map(
+      (image) => image ?? roomImage,
     );
-  }, [room.image, roomIndex]);
+  })();
   const localGalleryImages = useMemo(
     () => ["01", "02", "03", "04"].map((index) => `${roomImageBasePath}/${index}.webp`),
     [roomImageBasePath],
   );
 
-  const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== room.slug);
+  const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== roomSlug);
   const otherRoomsTrack = useMemo(
     () => [...otherRooms, ...otherRooms, ...otherRooms],
     [otherRooms],
@@ -273,14 +279,16 @@ export default function RoomDetailPage() {
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
-  const facts = [
-    { icon: Ruler, label: room.size[lang] },
-    { icon: BedDouble, label: room.bed[lang] },
-    { icon: Mountain, label: room.view[lang] },
-    { icon: ShowerHead, label: t.shower },
-    { icon: Tv, label: t.tv },
-    { icon: Wifi, label: t.wifi },
-  ];
+  const facts = room
+    ? [
+        { icon: Ruler, label: room.size[lang] },
+        { icon: BedDouble, label: room.bed[lang] },
+        { icon: Mountain, label: room.view[lang] },
+        { icon: ShowerHead, label: t.shower },
+        { icon: Tv, label: t.tv },
+        { icon: Wifi, label: t.wifi },
+      ]
+    : [];
 
   useEffect(() => {
     const el = otherRoomsCarouselRef.current;
@@ -289,7 +297,7 @@ export default function RoomDetailPage() {
     // Keep the user in the middle copy to allow seamless looping both ways.
     const loopWidth = el.scrollWidth / 3;
     el.scrollLeft = loopWidth;
-  }, [room.slug]);
+  }, [roomSlug]);
 
   const normalizeOtherRoomsScroll = () => {
     const el = otherRoomsCarouselRef.current;
@@ -313,6 +321,8 @@ export default function RoomDetailPage() {
     const delta = Math.round(cardWidth + gap) * (direction === "next" ? 1 : -1);
     el.scrollBy({ left: delta, behavior: "smooth" });
   };
+
+  if (!room) return null;
 
   return (
     <main id="main-content" className="min-h-screen bg-ink text-main overflow-hidden">

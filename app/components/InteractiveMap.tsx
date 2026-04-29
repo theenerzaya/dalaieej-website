@@ -28,7 +28,7 @@ const locations: Location[] = [
   { id: 'reception', left: 66.27, top: 66.20, category: 'amenities',     image: '/images/map/reception.jpg' },
   { id: 'bathhouse', left: 69.01, top: 71.30, category: 'amenities',     image: '/images/map/bathhouse.jpg' },
   { id: 'sauna',     left: 95.43, top: 75.53, category: 'amenities',     image: '/images/map/sauna.webp' },
-  { id: 'pier',      left: 93.37, top: 66.03, category: 'amenities',     image: '/images/map/pier.jpg' },
+  { id: 'pier',      left: 93.37, top: 66.03, category: 'amenities',     image: '/images/map/pier.webp' },
   { id: 'courts',    left: 74.38, top: 63.20, category: 'amenities',     image: '/images/map/courts.jpg' },
 
   { id: 'entrance',  left: 34.10, top: 51.30, category: 'gettingAround', noImage: true },
@@ -95,15 +95,12 @@ export default function InteractiveMap() {
   const t = useTranslations();
   const reduceMotion = useReducedMotion();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
-  const [portalMounted, setPortalMounted] = useState(false);
+  // Avoid rendering the portal during SSR to prevent `document` usage errors.
+  const [portalMounted] = useState(() => typeof window !== "undefined");
   const [fullscreenMapImage, setFullscreenMapImage] = useState<{
     src: string;
     alt: string;
   } | null>(null);
-
-  useEffect(() => {
-    setPortalMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!fullscreenMapImage) return;
@@ -419,12 +416,19 @@ export default function InteractiveMap() {
               onClick={() => setFullscreenMapImage(null)}
             />
             <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center p-4 pt-16 md:p-8">
-              <img
-                src={fullscreenMapImage.src}
-                alt={fullscreenMapImage.alt}
+              <div
+                className="pointer-events-auto relative w-full h-full flex items-center justify-center"
                 onClick={() => setFullscreenMapImage(null)}
-                className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl cursor-zoom-in"
-              />
+              >
+                <Image
+                  src={fullscreenMapImage.src}
+                  alt={fullscreenMapImage.alt}
+                  fill
+                  draggable={false}
+                  sizes="100vw"
+                  className="object-contain shadow-2xl cursor-zoom-in select-none [-webkit-touch-callout:none]"
+                />
+              </div>
             </div>
             <button
               type="button"

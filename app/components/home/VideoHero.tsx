@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -60,7 +61,14 @@ export default function VideoHero() {
     const video = videoRef.current;
     if (!video) return;
 
-    let hls: any = null;
+    type HlsInstance = {
+      destroy: () => void;
+      loadSource: (src: string) => void;
+      attachMedia: (media: HTMLVideoElement) => void;
+      on: (event: unknown, handler: (...args: unknown[]) => void) => void;
+    };
+
+    let hls: HlsInstance | null = null;
 
     const tryPlayNative = () => {
       video.src = hlsUrl;
@@ -75,9 +83,10 @@ export default function VideoHero() {
         .then((mod) => {
           const Hls = mod.default;
           if (Hls.isSupported()) {
-            hls = new Hls({ enableWorker: false });
-            hls.on(Hls.Events.ERROR, (_: any, data: any) => {
-              if (data.fatal) {
+            hls = new Hls({ enableWorker: false }) as unknown as HlsInstance;
+            hls.on(Hls.Events.ERROR, (_: unknown, data: unknown) => {
+              const d = data as { fatal?: boolean };
+              if (d.fatal) {
                 setVideoFailed(true);
                 hls.destroy();
               }

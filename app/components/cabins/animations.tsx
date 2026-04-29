@@ -36,6 +36,8 @@ import {
   Fragment,
   type ElementType,
   type ReactNode,
+  createContext,
+  useContext,
   useRef,
 } from "react";
 
@@ -204,15 +206,15 @@ type StaggerGroupProps = {
   amount?: number;
 };
 
-const STAGGER_CTX: {
-  duration: number;
+type StaggerContextValue = {
   offsetY: number;
   transition: Transition;
-} = {
-  duration: 1.0,
+};
+
+const StaggerContext = createContext<StaggerContextValue>({
   offsetY: 24,
   transition: { duration: 1.0, ease: EASE_OUT_EXPO },
-};
+});
 
 export function StaggerGroup({
   children,
@@ -230,10 +232,10 @@ export function StaggerGroup({
     ...(amount !== undefined ? { amount } : {}),
   });
   const reduce = useReducedMotion();
-
-  STAGGER_CTX.duration = duration;
-  STAGGER_CTX.offsetY = offsetY;
-  STAGGER_CTX.transition = { duration, ease: EASE_OUT_EXPO };
+  const ctxValue: StaggerContextValue = {
+    offsetY,
+    transition: { duration, ease: EASE_OUT_EXPO },
+  };
 
   const parent = {
     hidden: {},
@@ -250,15 +252,17 @@ export function StaggerGroup({
   >;
 
   return (
-    <MotionTag
-      ref={ref}
-      className={className}
-      variants={parent}
-      initial="hidden"
-      animate={inView || reduce ? "show" : "hidden"}
-    >
-      {children}
-    </MotionTag>
+    <StaggerContext.Provider value={ctxValue}>
+      <MotionTag
+        ref={ref}
+        className={className}
+        variants={parent}
+        initial="hidden"
+        animate={inView || reduce ? "show" : "hidden"}
+      >
+        {children}
+      </MotionTag>
+    </StaggerContext.Provider>
   );
 }
 
@@ -277,13 +281,14 @@ export function StaggerItem({
   offsetY,
 }: StaggerItemProps) {
   const reduce = useReducedMotion();
-  const y = offsetY ?? STAGGER_CTX.offsetY;
+  const { offsetY: ctxOffsetY, transition } = useContext(StaggerContext);
+  const y = offsetY ?? ctxOffsetY;
 
   const child = reduce
     ? { hidden: { opacity: 1, y: 0 }, show: { opacity: 1, y: 0 } }
     : {
         hidden: { opacity: 0, y },
-        show: { opacity: 1, y: 0, transition: STAGGER_CTX.transition },
+        show: { opacity: 1, y: 0, transition },
       };
 
   const MotionTag = motion.create(Tag as ElementType) as React.ComponentType<
