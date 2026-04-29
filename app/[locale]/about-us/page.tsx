@@ -80,7 +80,7 @@ const content = {
         body: "We are a gathering place where global explorers and locals share stories under the starlight.",
       },
     ],
-    founderSectionLabel: "Founder's Note",
+    founderSectionLabel: "Founder's Letter",
     founderHeadline: "A Note from the Family",
     founderListenLabel: "Listen",
     founderBody: [
@@ -1005,7 +1005,6 @@ export default function AboutUsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-5">
             {t.pillars.map((pillar, i) => {
-              const isLast = i === t.pillars.length - 1;
               const isHospitalityPillar = i === 2;
               return (
                 <motion.div
@@ -1028,11 +1027,6 @@ export default function AboutUsPage() {
                         className="w-16 h-16 md:w-20 md:h-20 object-contain select-none pointer-events-none brightness-0 invert"
                         draggable={false}
                       />
-                    </div>
-                  ) : null}
-                  {isLast ? (
-                    <div className="flex justify-center mb-5 pt-1">
-                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-white/80" />
                     </div>
                   ) : null}
                   <span className="block font-editorial-mn not-italic text-lg md:text-xl text-white/70 mb-2 tracking-wide">
@@ -1062,6 +1056,9 @@ export default function AboutUsPage() {
           transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="relative mx-auto w-full max-w-[44rem] aspect-[1440/1640] overflow-hidden shadow-[0_24px_54px_rgba(26,17,6,0.2)]">
+            <h3 className="absolute top-5 left-5 z-[60] font-editorial-mn text-xl md:text-2xl text-white/95 drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] tracking-wide">
+              {t.founderSectionLabel}
+            </h3>
             <img
               src="/images/about-us/letter/background.jpg"
               alt={t.founderSectionLabel}
