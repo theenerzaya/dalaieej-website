@@ -150,9 +150,11 @@ export default function VideoHero() {
           <Headline
             as="h1"
             size="hero"
-            variant="signature"
+            variant="editorial"
             tone="dark"
-            className="text-white text-hero-glow"
+            className={`text-white text-hero-glow ${
+              locale === "mn" ? "" : "font-editorial-mn"
+            }`}
           >
             {locale === "mn" ? "Далай ээж" : "Dalai Eej"}
           </Headline>

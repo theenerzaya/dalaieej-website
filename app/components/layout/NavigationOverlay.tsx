@@ -5,9 +5,9 @@ import { Facebook, Instagram, Mail } from "lucide-react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Link as I18nLink } from "@/i18n/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
+import { absoluteSiteUrl } from "@/lib/site-urls";
 
 /**
  * NavigationOverlay — Hoteller-styled fullscreen menu.
@@ -158,12 +158,20 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
     });
   };
 
+  const goToLocaleHost = (targetLocale: "en" | "mn") => {
+    const targetHref = absoluteSiteUrl(targetLocale, pathWithoutLocale);
+    onClose();
+    window.location.assign(targetHref);
+  };
+
   const languageToggle = (
     <div className="font-cta text-sm md:text-[15px] font-semibold uppercase tracking-[0.28em] leading-none text-left">
-      <I18nLink
-        href={pathWithoutLocale}
-        locale="en"
-        onClick={onClose}
+      <a
+        href={absoluteSiteUrl("en", pathWithoutLocale)}
+        onClick={(event) => {
+          event.preventDefault();
+          goToLocaleHost("en");
+        }}
         aria-label="Switch to English"
         className={[
           "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50",
@@ -171,14 +179,16 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
         ].join(" ")}
       >
         EN
-      </I18nLink>
+      </a>
       <span className="mx-2 text-main/30" aria-hidden="true">
         /
       </span>
-      <I18nLink
-        href={pathWithoutLocale}
-        locale="mn"
-        onClick={onClose}
+      <a
+        href={absoluteSiteUrl("mn", pathWithoutLocale)}
+        onClick={(event) => {
+          event.preventDefault();
+          goToLocaleHost("mn");
+        }}
         aria-label="Switch to Mongolian"
         className={[
           "transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50",
@@ -186,7 +196,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
         ].join(" ")}
       >
         MN
-      </I18nLink>
+      </a>
     </div>
   );
 
@@ -276,7 +286,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       onClick={onClose}
                       className="!px-3.5 sm:!px-6 !py-2.5 sm:!py-[calc(0.75rem*1.6)] !text-[10px] sm:!text-xs !tracking-[0.16em] sm:!tracking-[0.18em]"
                     >
-                      {isMn ? "Захиалах" : "Book your stay"}
+                      {isMn ? "Захиалах" : "Book"}
                     </CTAButton>
                   </div>
                 </div>

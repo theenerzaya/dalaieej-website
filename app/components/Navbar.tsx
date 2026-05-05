@@ -12,7 +12,13 @@ import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
 import { siteOriginForLocale } from "@/lib/site-urls";
 
 function isHomePathname(pathname: string) {
-  return pathname === "/" || pathname === "/mn" || pathname === "/mn/";
+  return (
+    pathname === "/" ||
+    pathname === "/en" ||
+    pathname === "/en/" ||
+    pathname === "/mn" ||
+    pathname === "/mn/"
+  );
 }
 
 function isAboutUsPathname(pathname: string) {
