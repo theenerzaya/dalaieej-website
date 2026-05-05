@@ -332,8 +332,11 @@ export default function CabinsPage() {
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/75" />
 
-        <HeroFadeOut className="relative z-10 flex h-full items-center justify-center" rise={160}>
-          <div className="mx-auto w-full max-w-6xl px-6 text-center -mt-24 md:-mt-32">
+        <HeroFadeOut
+          className="relative z-10 flex h-full items-start justify-center pt-24 pb-[20rem] md:items-center md:pt-0 md:pb-0"
+          rise={160}
+        >
+          <div className="mx-auto w-full max-w-6xl px-6 text-center md:-mt-32">
             {/* First-load entrance: subtle slide-up from below.
                 The drop-down-from-above on scroll-return-to-top is produced
                 by HeroFadeOut's scroll-linked transform reversing. */}
@@ -897,7 +900,7 @@ function ExperienceCard({
           navigate();
         }
       }}
-      className="group relative h-[78vh] min-h-[520px] w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40"
+      className="group relative aspect-[3/4] h-auto min-h-0 w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40 md:aspect-auto md:h-[78vh] md:min-h-[520px]"
     >
       <ImageReveal
         className="absolute inset-0 h-full w-full z-0"
