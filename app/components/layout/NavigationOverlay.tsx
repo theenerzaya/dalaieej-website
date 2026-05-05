@@ -50,7 +50,7 @@ const mainNavItems: MainNavItem[] = [
     href: "/cabins",
     image: "/images/nav-overlay/stay.jpg",
     label: { en: "Our Rooms", mn: "Өргөө" },
-    meta: { en: "Cabins & Suites · From $300/night", mn: "Модон өрөө · 1 шөнө $300-аас" },
+    meta: { en: "Cabins & Suites · From $100/night", mn: "Модон өрөө · 1 шөнө $100-аас" },
     available: true,
   },
   {
