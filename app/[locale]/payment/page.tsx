@@ -474,10 +474,10 @@ function PaymentContent() {
 
   if (autoGenerating || (currentLocale === 'mn' && fromCheckout && loading && !qrCode)) {
     return (
-      <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
+      <main className="min-h-screen bg-ink pt-28 md:pt-32 pb-8 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
+            <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-[1.35] text-main mb-3 pb-1`}>
               {t('title')}
             </h1>
           </div>
@@ -499,10 +499,10 @@ function PaymentContent() {
   if (currentLocale === 'en' && fromCheckout) {
     if (stripeLoading) {
       return (
-        <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
+        <main className="min-h-screen bg-ink pt-28 md:pt-32 pb-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
+              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-[1.35] text-main mb-3 pb-1`}>
                 Secure Payment
               </h1>
             </div>
@@ -523,10 +523,10 @@ function PaymentContent() {
 
     if (error && !clientSecret) {
       return (
-        <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
+        <main className="min-h-screen bg-ink pt-28 md:pt-32 pb-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
+              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-[1.35] text-main mb-3 pb-1`}>
                 Secure Payment
               </h1>
             </div>
@@ -550,10 +550,10 @@ function PaymentContent() {
 
     if (clientSecret) {
       return (
-        <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
+        <main className="min-h-screen bg-ink pt-28 md:pt-32 pb-8 px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
+              <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-[1.35] text-main mb-3 pb-1`}>
                 Secure Payment
               </h1>
               <p className="font-body text-main/70 text-sm">
@@ -604,10 +604,10 @@ function PaymentContent() {
   }
 
   return (
-    <main className="min-h-screen bg-ink pt-24 md:pt-16 py-8 px-4">
+    <main className="min-h-screen bg-ink pt-28 md:pt-32 pb-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-3`}>
+          <h1 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-[1.35] text-main mb-3 pb-1`}>
             {t('title')}
           </h1>
           <p className="font-body text-main/70 text-sm">
