@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet, normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
+import { parseCloudbedsMoney } from "@/lib/cloudbeds-money";
 
 type CloudbedsAddonItem = {
   itemID?: string;
@@ -56,7 +57,7 @@ export async function GET(request: NextRequest) {
         id: item.itemID || item.id,
         name: item.itemName || item.name,
         description: item.itemDescription || item.description || "",
-        price: parseFloat(String(item.itemPrice ?? item.price ?? 0)),
+        price: parseCloudbedsMoney(item.itemPrice ?? item.price),
         currency: item.currency || "MNT",
         priceType: item.priceType || "per_stay",
         category: item.itemCategory || item.category || "other",

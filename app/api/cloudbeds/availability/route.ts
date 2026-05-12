@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet } from "@/lib/cloudbeds";
+import { parseCloudbedsMoney } from "@/lib/cloudbeds-money";
 import {
   extractRateCancellationFromPlan,
   mergeCancellation,
@@ -89,7 +90,7 @@ function flattenExtraChargeMap(extra: unknown): Record<string, number> {
   for (const row of rows) {
     if (row && typeof row === "object" && !Array.isArray(row)) {
       for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
-        const n = typeof v === "number" ? v : parseFloat(String(v));
+        const n = parseCloudbedsMoney(v);
         if (!Number.isNaN(n)) out[k] = n;
       }
     }
@@ -114,7 +115,7 @@ function extraChargeForGuestCount(map: Record<string, number>, count: number): n
 
 /** Full stay total: base roomRate plus occupancy-based extras (per-person / extra guest). */
 function stayTotalForRoom(room: Record<string, unknown>, adults: number, children: number): number {
-  const base = typeof room.roomRate === "number" ? room.roomRate : parseFloat(String(room.roomRate || 0)) || 0;
+  const base = parseCloudbedsMoney(room.roomRate);
   const adultExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.adultsExtraCharge), adults);
   const childExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.childrenExtraCharge), children);
   return base + adultExtra + childExtra;
