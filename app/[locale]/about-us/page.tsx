@@ -16,7 +16,7 @@ const content = {
   en: {
     heroTitle: "Our Story",
     heroCaption:
-      "The legend of the source—and a family sanctuary in the Khuvsgul taiga.",
+      "A quiet refuge on Lake Khövsgöl's eastern shore.",
     historySectionLabel: "A History Carved in Timber",
     historyScrollHint: "Scroll the years",
     history: [
@@ -101,7 +101,7 @@ const content = {
   mn: {
     heroTitle: "Бидний тухай",
     heroCaption:
-      "Рашааны домгоос эхтэй, Хөвсгөлийн тайгад ургасан гэр бүлийн голомт.",
+      "Хөвсгөл нуурын зүүн эрэг дээрх чимээгүй амарлал.",
     historySectionLabel: "Модоор бичигдсэн бидний түүх",
     historyScrollHint: "Он цагийг гүйлгэж үзэх",
     history: [

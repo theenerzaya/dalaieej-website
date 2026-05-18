@@ -44,8 +44,8 @@ export default function LocationPage() {
             className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
-              ? "Хөвсгөл нуурын зүүн эргийн Далай ээж ресортод тавтай морил"
-              : "Your journey to Lake Khuvsgul begins here"}
+              ? "Таны аялал эндээс эхэлнэ — Хөвсгөлийн зүүн эрэг рүү"
+              : "Your journey to Lake Khövsgöl begins here"}
           </motion.p>
         </div>
       </section>

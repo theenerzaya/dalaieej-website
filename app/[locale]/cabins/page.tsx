@@ -227,9 +227,9 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookingCta: "Check Availability",
     required: "*",
     sectionEyebrow: "Accommodations",
-    sectionHeading: "The luxury of being yourself.",
+    sectionHeading: "Slow days. Deep waters.",
     sectionIntro:
-      "Four rooms drawn from the shoreline — every cabin hand-built by Khuvsgul craftsmen, every interior assembled with local wood, wool and stone.",
+      "Traditional wooden cabins on Lake Khövsgöl's eastern shore.",
     quantityLabel: "Quantity",
     guestsLabel: "Guests",
     areaLabel: "Average area",
@@ -259,9 +259,9 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookingCta: "Боломжит өрөө шалгах",
     required: "*",
     sectionEyebrow: "Байрлах сонголтууд",
-    sectionHeading: "Өөрөө байх тансаглал.",
+    sectionHeading: "Удаан өдрүүд. Гүн ус.",
     sectionIntro:
-      "Нуурын эргээс сэдэвлэсэн дөрвөн өрөө — байшин бүрийг Хөвсгөлийн урчууд гараар бүтээж, дотоод засалд нь нутгийн мод, ноос, чулууг шингээжээ.",
+      "Хөвсгөл нуурын зүүн эрэг дээрх уламжлалт модон байшин.",
     quantityLabel: "Тоо ширхэг",
     guestsLabel: "Зочид",
     areaLabel: "Дундаж талбай",

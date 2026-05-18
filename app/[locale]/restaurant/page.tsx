@@ -117,7 +117,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     editorialEm2: "Mongolian craftspeople",
     editorialAfter: " with the utmost respect for its unique landscape.",
     editorialCaption:
-      "Lake Khuvsgul and the eastern ridge — on the present site of the lodge, feet at the water.",
+      "A tonic of wilderness on Lake Khövsgöl's eastern shore.",
 
     visitBody:
       "Open to passing travellers as well as house guests. Walk in for lunch on the deck, or reserve ahead for the lake-facing dinner.",
@@ -146,7 +146,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     editorialEm2: "Монгол гар урчууд",
     editorialAfter: " өөрийн өвөрмөц байгалийг хүндэтгэн алхам алхмаар бүтээсэн.",
     editorialCaption:
-      "Хөвсгөл нуур ба зүүн нурууны энгэр — бууцны энэ газар, хөл нь усанд.",
+      "Хөвсгөл нуурын зүүн эрэг дээрх онгон байгалийн амт.",
 
     visitBody:
       "Зочдоос гадна замын зорчигчдод нээлттэй. Үдийн зоог модон тавцан дээр, эсвэл нуур харсан оройн зоогийг урьдчилан захиалаарай.",

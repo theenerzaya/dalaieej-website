@@ -179,7 +179,7 @@ export default function VideoHero() {
           <Eyebrow tone="dark" className="text-white text-overlay-glow">
             {locale === "mn"
               ? "Хөвсгөл далайн хөвөөнд"
-              : "On the shores of Lake Khuvsgul"}
+              : "On Lake Khövsgöl's wild eastern shore"}
           </Eyebrow>
         </motion.div>
       </div>
