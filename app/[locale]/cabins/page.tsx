@@ -75,10 +75,10 @@ const ROOMS: Room[] = [
   {
     slug: "superior-cabin",
     href: "/superior-cabin",
-    name: { en: "Superior Cabin", mn: "Их Өргөө" },
-    area: { en: "30 m²", mn: "30 м²" },
-    guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
-    quantity: { en: "6 cabins", mn: "6 байшин" },
+    name: getRequiredCabinCatalogEntry("superior-cabin").name,
+    area: { en: "50 m²", mn: "50 m²" },
+    guests: { en: "3 adults · 4 child", mn: "3 том хүн · 4 хүүхэд" },
+    quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
       en: "Wood-fired warmth, handwoven textiles and a private forest view — our entry-level cabin, sized for couples and small families.",
       mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
@@ -88,10 +88,10 @@ const ROOMS: Room[] = [
   {
     slug: "triple-traditional-cabin",
     href: "/triple-traditional-cabin",
-    name: { en: "Triple Traditional Cabin", mn: "Тухтай Хаус (Галлагаатай)" },
-    area: { en: "58 m²", mn: "58 м²" },
-    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
+    name: getRequiredCabinCatalogEntry("triple-traditional-cabin").name,
+    area: { en: "30 m²", mn: "30 m²" },
+    guests: { en: "3 adults · 2 child", mn: "3 том хүн · 2 хүүхэд" },
+    quantity: { en: "5 cabins", mn: "5 байшин" },
     intro: {
       en: "A classic timber cabin layout with three full sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
       mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
@@ -101,10 +101,10 @@ const ROOMS: Room[] = [
   {
     slug: "lakeside-cabin",
     href: "/lakeside-cabin",
-    name: { en: "Lakeside Cabin", mn: " Эрэг дээрх Хаус" },
-    area: { en: "55 m²", mn: "55 м²" },
-    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
-    quantity: { en: "4 cabins", mn: "4 байшин" },
+    name: getRequiredCabinCatalogEntry("lakeside-cabin").name,
+    area: { en: "40 m²", mn: "40 m²" },
+    guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
+    quantity: { en: "2 cabins", mn: "2 байшин" },
     intro: {
       en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khuvsgul.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
@@ -114,8 +114,8 @@ const ROOMS: Room[] = [
   {
     slug: "triple-electric-cabin",
     href: "/triple-electric-cabin",
-    name: { en: "Triple Electric Cabin", mn: "Тухтай Хаус (Цахилгаан халаалт)" },
-    area: { en: "60 m²", mn: "60 м²" },
+    name: getRequiredCabinCatalogEntry("triple-electric-cabin").name,
+    area: { en: "30 m²", mn: "30 m²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
@@ -127,10 +127,10 @@ const ROOMS: Room[] = [
   {
     slug: "signature-cabin",
     href: "/signature-cabin",
-    name: { en: "Signature Cabin", mn: "Энгийн Байр" },
-    area: { en: "70 m²", mn: "70 м²" },
-    guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    quantity: { en: "3 cabins", mn: "3 байшин" },
+    name: getRequiredCabinCatalogEntry("signature-cabin").name,
+    area: { en: "30 m²", mn: "30 m²" },
+    guests: { en: "2 adults", mn: "2 том хүн" },
+    quantity: { en: "5 cabins", mn: "5 байшин" },
     intro: {
       en: "Our most requested room — a separate living area, deep-soak tub, and a private terrace that opens onto the larch line.",
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
@@ -140,10 +140,10 @@ const ROOMS: Room[] = [
   {
     slug: "quad-electric-cabin",
     href: "/quad-electric-cabin",
-    name: { en: "Quad Electric Cabin", mn: "Гэр Бүлийн Хаус (Цахилгаан халаалт)" },
-    area: { en: "66 m²", mn: "66 м²" },
-    guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
+    name: getRequiredCabinCatalogEntry("quad-electric-cabin").name,
+    area: { en: "25 m²", mn: "25 m²" },
+    guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
+    quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
       en: "Our flexible mid-tier option for groups — four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
       mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
@@ -153,9 +153,9 @@ const ROOMS: Room[] = [
   {
     slug: "grand-peninsula-suite",
     href: "/grand-peninsula-suite",
-    name: { en: "Grand Peninsula Suite", mn: "Гэр Бүлийн Хаус (Галлагаатай)" },
-    area: { en: "120 m²", mn: "120 м²" },
-    guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },
+    name: getRequiredCabinCatalogEntry("grand-peninsula-suite").name,
+    area: { en: "35 m²", mn: "35 m²" },
+    guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
     quantity: { en: "1 suite", mn: "1 тусгай хаус" },
     intro: {
       en: "A standalone suite on its own peninsula — two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
@@ -166,7 +166,7 @@ const ROOMS: Room[] = [
   {
     slug: "camping",
     href: "/booking",
-    name: { en: "Camping", mn: "Аялагчийн Отог" },
+    name: getRequiredCabinCatalogEntry("camping").name,
     area: { en: "Outdoor setup", mn: "Гадаа байрлал" },
     guests: { en: "2 adults · 2 children", mn: "2 том хүн · 2 хүүхэд" },
     quantity: { en: "Limited spots", mn: "Хязгаартай талбай" },
