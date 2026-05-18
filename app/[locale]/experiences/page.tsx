@@ -14,37 +14,37 @@ export default function ExperiencesPage() {
       icon: Fish, 
       title: locale === 'mn' ? "Загас барих" : "Fishing Expeditions",
       desc: locale === 'mn' ? "Хөвсгөл нуурын цэвэр усанд загас барих" : "Fly fishing in the pristine waters of Lake Khuvsgul",
-      image: "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=600&auto=format&fit=crop&q=80"
+      image: "/images/gallery/adventures/DBR_3442.webp"
     },
     { 
       icon: Mountain, 
       title: locale === 'mn' ? "Уулын аялал" : "Mountain Treks",
       desc: locale === 'mn' ? "Хөтөчтэй уулын аялал" : "Guided hikes through ancient forests and alpine meadows",
-      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&auto=format&fit=crop&q=80"
+      image: "/images/gallery/adventures/DBR_3494.webp"
     },
     { 
       icon: Tent, 
       title: locale === 'mn' ? "Нүүдлийн амьдрал" : "Nomadic Life",
       desc: locale === 'mn' ? "Нүүдэлчдийн гэрт айлчлах" : "Visit authentic nomadic families and their herds",
-      image: "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=600&auto=format&fit=crop&q=80"
+      image: "/images/gallery/adventures/DBR_3892.webp"
     },
     { 
       icon: Compass, 
       title: locale === 'mn' ? "Морин аялал" : "Horseback Riding",
       desc: locale === 'mn' ? "Монгол морьтой аялах" : "Explore the steppe on Mongolian horses",
-      image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&auto=format&fit=crop&q=80"
+      image: "/images/gallery/adventures/DBR_4306.webp"
     },
     { 
       icon: Camera, 
       title: locale === 'mn' ? "Гэрэл зургийн аялал" : "Photography Tours",
       desc: locale === 'mn' ? "Үзэсгэлэнт газруудаар аялах" : "Capture stunning landscapes with expert guides",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80"
+      image: "/images/gallery/adventures/DBR_4316.webp"
     },
     { 
       icon: Users, 
       title: locale === 'mn' ? "Соёлын аялал" : "Cultural Tours",
       desc: locale === 'mn' ? "Орон нутгийн соёлтой танилцах" : "Discover local traditions, crafts, and ceremonies",
-      image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=600&auto=format&fit=crop&q=80"
+      image: "/images/gallery/adventures/DBR_4329.webp"
     },
   ];
 
@@ -53,7 +53,7 @@ export default function ExperiencesPage() {
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1920&auto=format&fit=crop&q=80"
+            src="/images/gallery/adventures/DBR_4391.webp"
             alt="Experiences"
             className="w-full h-full object-cover"
           />

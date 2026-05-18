@@ -23,7 +23,7 @@ export default function WellnessPage() {
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1920&auto=format&fit=crop&q=80"
+            src="/images/cabins/wellness-mirage-before.webp"
             alt="Wellness Spa"
             className="w-full h-full object-cover"
           />
@@ -92,7 +92,7 @@ export default function WellnessPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <img
-              src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80"
+              src="/images/gallery/wellness/DBR_3111.webp"
               alt="Spa treatment"
               className="w-full h-96 object-cover rounded-lg"
             />

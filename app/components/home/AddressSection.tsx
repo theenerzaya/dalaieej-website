@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
 import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
@@ -121,7 +121,7 @@ export default function AddressSection() {
               aria-label={t("imageFullBleedLabel")}
               className="relative mt-8 w-full aspect-[4/3] overflow-hidden p-0 border-0 bg-transparent cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/50"
             >
-              <Image
+              <SiteImage
                 src={ADDRESS_IMAGE_SRC}
                 alt={t("visitCta")}
                 fill

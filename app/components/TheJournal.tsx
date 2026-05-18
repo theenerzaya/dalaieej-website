@@ -13,7 +13,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
 
   const profiles = [
     {
-      image: "https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?w=600&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_1902.webp",
       title: isMn ? "Ээж" : "The Matriarch",
       quote: isMn 
         ? "Би яагаад кампын сүнсийг амьд байлгасан." 
@@ -21,7 +21,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
       alt: "The Matriarch looking at the lake"
     },
     {
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_1914.webp",
       title: isMn ? "Нийгмийн менежер" : "The Social Director",
       quote: isMn 
         ? "Далай ээж дэх төгс зуны өдөр." 
@@ -29,7 +29,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
       alt: "The Social Director smiling"
     },
     {
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_4760.webp",
       title: isMn ? "Завны ахмад" : "The Captain",
       quote: isMn 
         ? "Хөх сувдын нууцууд." 

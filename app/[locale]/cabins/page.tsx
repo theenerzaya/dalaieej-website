@@ -32,10 +32,9 @@ import {
   StaggerGroup,
   StaggerItem,
 } from "@/app/components/cabins/animations";
-
-function assetUrl(path: string): string {
-  return path;
-}
+import SiteImage from "@/app/components/SiteImage";
+import { assetUrl } from "@/lib/assetUrl";
+import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
 // stays clean and no WebGL code ships to other routes.
@@ -65,6 +64,12 @@ type Room = {
   intro: Bilingual;
   image: string;
 };
+
+function getRequiredCabinCatalogEntry(slug: string) {
+  const entry = getCabinCatalogEntry(slug);
+  if (!entry) throw new Error(`Missing cabin catalog entry for slug: ${slug}`);
+  return entry;
+}
 
 const ROOMS: Room[] = [
   {
@@ -112,7 +117,7 @@ const ROOMS: Room[] = [
     name: { en: "Triple Electric Cabin", mn: "Тухтай Хаус (Цахилгаан халаалт)" },
     area: { en: "60 m²", mn: "60 м²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
+    quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
       en: "Designed for longer family stays, with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
       mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
@@ -321,14 +326,21 @@ export default function CabinsPage() {
           className="absolute inset-0 h-full w-full"
           style={reduce ? undefined : { y: heroImageY }}
         >
-          <motion.img
-            src={HERO_IMAGE}
-            alt={t.title}
-            className="h-full w-full object-cover will-change-transform"
+          <motion.div
+            className="relative h-full w-full"
             initial={reduce ? { scale: 1 } : { scale: 1.14 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.9, ease: [0.22, 1, 0.36, 1] }}
-          />
+          >
+            <SiteImage
+              src={HERO_IMAGE}
+              alt={t.title}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover will-change-transform"
+            />
+          </motion.div>
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/75" />
 
@@ -465,10 +477,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="left"
           >
-            <img
+            <SiteImage
               src={TAGLINE_BG_MAIN}
               alt=""
-              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+              fill
+              sizes="(max-width: 768px) 100vw, 30vw"
+              className="object-cover mix-blend-luminosity opacity-90"
             />
             <div className="absolute inset-0 bg-ink/25" />
           </ImageReveal>
@@ -480,10 +494,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="right"
           >
-            <img
+            <SiteImage
               src={WELLNESS_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+              fill
+              sizes="(max-width: 768px) 100vw, 22vw"
+              className="object-cover mix-blend-luminosity opacity-90"
             />
             <div className="absolute inset-0 bg-ink/25" />
           </ImageReveal>
@@ -494,10 +510,12 @@ export default function CabinsPage() {
             duration={1.3}
             from={1.1}
           >
-            <img
+            <SiteImage
               src={SPA_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover mix-blend-luminosity opacity-90"
+              fill
+              sizes="(max-width: 768px) 100vw, 14vw"
+              className="object-cover mix-blend-luminosity opacity-90"
             />
             <div className="absolute inset-0 bg-ink/25" />
           </ImageReveal>
@@ -566,10 +584,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="left"
           >
-            <img
+            <SiteImage
               src={WELLNESS_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="22vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
           <ImageReveal
@@ -577,10 +597,12 @@ export default function CabinsPage() {
             duration={1.3}
             from={1.1}
           >
-            <img
+            <SiteImage
               src={SPA_IMAGE_BEFORE}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="16vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
           <ImageReveal
@@ -589,10 +611,12 @@ export default function CabinsPage() {
             from={1.08}
             direction="right"
           >
-            <img
+            <SiteImage
               src={TAGLINE_BG_MAIN}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="24vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
           <ImageReveal
@@ -600,18 +624,22 @@ export default function CabinsPage() {
             duration={1.3}
             from={1.1}
           >
-            <img
+            <SiteImage
               src={WELLNESS_IMAGE_AFTER}
               alt=""
-              className="h-full w-full object-cover opacity-55 saturate-[0.65]"
+              fill
+              sizes="18vw"
+              className="object-cover opacity-55 saturate-[0.65]"
             />
           </ImageReveal>
 
           {/* Mobile-only soft backdrop so text stays legible without frames. */}
-          <img
+          <SiteImage
             src={TAGLINE_BG_MAIN}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-20 md:hidden"
+            fill
+            sizes="100vw"
+            className="object-cover opacity-20 md:hidden"
           />
         </div>
 
@@ -707,7 +735,7 @@ function RoomRow({
   t: Record<CopyKey, string>;
 }) {
   const lang = isMn ? "mn" : "en";
-  const detailHref = `${localePrefix}${room.href}`;
+  const detailHref = `${localePrefix}/bookings`;
 
   return (
     <article
@@ -723,12 +751,14 @@ function RoomRow({
       >
         <Link
           href={detailHref}
-          className="block h-full w-full group"
+          className="relative block h-full w-full group"
         >
-          <img
+          <SiteImage
             src={room.image}
             alt={room.name[lang]}
-            className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.04]"
+            fill
+            sizes="(max-width: 768px) 100vw, 58vw"
+            className="object-cover transition-transform duration-[900ms] group-hover:scale-[1.04]"
           />
         </Link>
       </ImageReveal>

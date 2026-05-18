@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
+import { openGraphAssetUrl } from '@/lib/assetUrl';
 import "../globals.css";
 import { araboto, cormorantGaramondItalic, montserrat, playfairDisplayItalic } from "../fonts";
 import NavbarWrapper from "../components/NavbarWrapper";
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       type: 'website',
       images: [
         {
-          url: 'https://dalaieej.com/images/og-heritage.jpg', 
+          url: openGraphAssetUrl('/images/og-heritage.jpg', locale),
           width: 1200,
           height: 630,
           alt: 'Dalai Eej Heritage Resort at Lake Khuvsgul',
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       card: 'summary_large_image',
       title: t('title'),
       description: t('description'),
-      images: ['https://dalaieej.com/images/og-heritage.jpg'],
+      images: [openGraphAssetUrl('/images/og-heritage.jpg', locale)],
     },
 
     other: {

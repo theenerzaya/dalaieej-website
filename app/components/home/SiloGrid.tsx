@@ -2,8 +2,9 @@
 "use client";
 
 import { useRef } from "react";
-import { useLocale } from "next-intl";
 import Link from "next/link";
+import { useLocale } from "next-intl";
+import { withLocalePath } from "@/lib/localePath";
 import {
   motion,
   useReducedMotion,
@@ -11,6 +12,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Headline } from "../ui/Typography";
+import { assetUrl } from "@/lib/assetUrl";
 
 const silos = [
   {
@@ -102,17 +104,16 @@ function SiloOverlay({
 
 interface MobileSiloProps {
   silo: SiloEntry;
-  localePrefix: string;
   isMongolian: boolean;
   index: number;
 }
 
 function MobileSilo({
   silo,
-  localePrefix,
   isMongolian,
   index,
 }: MobileSiloProps) {
+  const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
@@ -150,42 +151,70 @@ function MobileSilo({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-      <Link
-        href={`${localePrefix}${silo.href}`}
-        className="group relative block w-full h-full"
-      >
-        <div className="absolute inset-0 z-0">
-          <img
-            src={silo.image}
-            alt={isMongolian ? silo.mn : silo.en}
-            className={
-              silo.id === "stories"
-                ? "w-full h-full object-cover object-center"
-                : "w-full h-full object-cover"
-            }
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
+      {silo.href === "#" ? (
+        <a href="#" className="group relative block w-full h-full">
+          <div className="absolute inset-0 z-0">
+            <img
+              src={assetUrl(silo.image)}
+              alt={isMongolian ? silo.mn : silo.en}
+              className={
+                silo.id === "stories"
+                  ? "w-full h-full object-cover object-center"
+                  : "w-full h-full object-cover"
+              }
+            />
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
 
-        <motion.div
-          style={{ y, willChange: "transform" }}
-          className="absolute inset-0 pointer-events-none"
+          <motion.div
+            style={{ y, willChange: "transform" }}
+            className="absolute inset-0 pointer-events-none"
+          >
+            <SiloOverlay
+              silo={silo}
+              isMongolian={isMongolian}
+              size="section"
+              positionClassName="top-1/2 -translate-y-1/2"
+            />
+          </motion.div>
+        </a>
+      ) : (
+        <Link
+          href={withLocalePath(locale, silo.href)}
+          className="group relative block w-full h-full"
         >
-          <SiloOverlay
-            silo={silo}
-            isMongolian={isMongolian}
-            size="section"
-            positionClassName="top-1/2 -translate-y-1/2"
-          />
-        </motion.div>
-      </Link>
+          <div className="absolute inset-0 z-0">
+            <img
+              src={assetUrl(silo.image)}
+              alt={isMongolian ? silo.mn : silo.en}
+              className={
+                silo.id === "stories"
+                  ? "w-full h-full object-cover object-center"
+                  : "w-full h-full object-cover"
+              }
+            />
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
+
+          <motion.div
+            style={{ y, willChange: "transform" }}
+            className="absolute inset-0 pointer-events-none"
+          >
+            <SiloOverlay
+              silo={silo}
+              isMongolian={isMongolian}
+              size="section"
+              positionClassName="top-1/2 -translate-y-1/2"
+            />
+          </motion.div>
+        </Link>
+      )}
     </motion.div>
   );
 }
 
 export default function SiloGrid() {
   const locale = useLocale();
-  const localePrefix = locale === 'mn' ? '/mn' : '';
   const isMongolian = locale === 'mn';
   const reduceMotion = useReducedMotion();
 
@@ -197,7 +226,6 @@ export default function SiloGrid() {
           <MobileSilo
             key={silo.id}
             silo={silo}
-            localePrefix={localePrefix}
             isMongolian={isMongolian}
             index={i}
           />
@@ -205,7 +233,6 @@ export default function SiloGrid() {
         <MobileSilo
           key={storiesSilo.id}
           silo={storiesSilo}
-          localePrefix={localePrefix}
           isMongolian={isMongolian}
           index={silos.length}
         />
@@ -233,18 +260,30 @@ export default function SiloGrid() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <Link
-              href={`${localePrefix}${silo.href}`}
-              className="relative block w-full h-full"
-            >
-              <img
-                src={silo.image}
-                alt={isMongolian ? silo.mn : silo.en}
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-              <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
-            </Link>
+            {silo.href === "#" ? (
+              <a href="#" className="relative block w-full h-full">
+                <img
+                  src={assetUrl(silo.image)}
+                  alt={isMongolian ? silo.mn : silo.en}
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
+                <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
+              </a>
+            ) : (
+              <Link
+                href={withLocalePath(locale, silo.href)}
+                className="relative block w-full h-full"
+              >
+                <img
+                  src={assetUrl(silo.image)}
+                  alt={isMongolian ? silo.mn : silo.en}
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
+                <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
+              </Link>
+            )}
           </motion.div>
         ))}
 
@@ -264,18 +303,15 @@ export default function SiloGrid() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          <Link
-            href={`${localePrefix}${storiesSilo.href}`}
-            className="relative block w-full h-full"
-          >
+          <a href="#" className="relative block w-full h-full">
             <img
-              src={storiesSilo.image}
+              src={assetUrl(storiesSilo.image)}
               alt={isMongolian ? storiesSilo.mn : storiesSilo.en}
               className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
             <SiloOverlay silo={storiesSilo} isMongolian={isMongolian} size="hero" />
-          </Link>
+          </a>
         </motion.div>
       </div>
     </section>

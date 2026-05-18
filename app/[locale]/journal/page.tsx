@@ -13,42 +13,42 @@ export default function StoriesPage() {
       title: locale === 'mn' ? "Өвлийн шидэт Хөвсгөл" : "Winter Magic at Lake Khuvsgul",
       excerpt: locale === 'mn' ? "Хөвсгөл нуурын өвлийн гоо үзэсгэлэн, мөсөн дээрх адал явдал" : "Discover the enchanting beauty of frozen Lake Khuvsgul and winter adventures that await.",
       date: "January 15, 2026",
-      image: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_9425.webp",
       category: locale === 'mn' ? "Улирал" : "Seasons"
     },
     {
       title: locale === 'mn' ? "Нүүдэлчдийн соёл" : "The Nomadic Way of Life",
       excerpt: locale === 'mn' ? "Хөвсгөл нуурын эргийн нүүдэлчин малчдын өвөрмөц соёл" : "An intimate look at the reindeer herders who call these mountains home.",
       date: "December 28, 2025",
-      image: "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/adventures/DBR_5227.webp",
       category: locale === 'mn' ? "Соёл" : "Culture"
     },
     {
       title: locale === 'mn' ? "Орон нутгийн хоол" : "Farm to Table: Local Flavors",
       excerpt: locale === 'mn' ? "Манай тогооч орон нутгийн бүтээгдэхүүнээр хоол хийх тухай" : "How our chef transforms local ingredients into culinary masterpieces.",
       date: "December 10, 2025",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/restaurant/DBR_4944.webp",
       category: locale === 'mn' ? "Хоол" : "Cuisine"
     },
     {
       title: locale === 'mn' ? "Зуны баяр" : "Summer Celebrations",
       excerpt: locale === 'mn' ? "Наадам баярын үеийн онцгой арга хэмжээнүүд" : "Celebrating Naadam Festival traditions at Dalai Eej Resort.",
       date: "November 25, 2025",
-      image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/restaurant/DBR_6908.webp",
       category: locale === 'mn' ? "Арга хэмжээ" : "Events"
     },
     {
       title: locale === 'mn' ? "Шувуу ажиглах" : "Birdwatching Paradise",
       excerpt: locale === 'mn' ? "Хөвсгөлийн ховор шувууд" : "Rare and beautiful birds that make Lake Khuvsgul their home.",
       date: "November 10, 2025",
-      image: "https://images.unsplash.com/photo-1452570053594-1b985d6ea890?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_9430.webp",
       category: locale === 'mn' ? "Байгаль" : "Nature"
     },
     {
       title: locale === 'mn' ? "Одны тэнгэр" : "Stargazing Nights",
       excerpt: locale === 'mn' ? "Хөвсгөлийн цэлмэг тэнгэр дэх одод" : "Experience some of the darkest skies in the world at Dalai Eej.",
       date: "October 28, 2025",
-      image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&auto=format&fit=crop&q=80",
+      image: "/images/gallery/the-resort/DBR_9069.webp",
       category: locale === 'mn' ? "Туршлага" : "Experience"
     },
   ];

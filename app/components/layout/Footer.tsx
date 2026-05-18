@@ -2,30 +2,31 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Eyebrow } from "../ui/Typography";
+import { assetUrl } from "@/lib/assetUrl";
+import { withLocalePath } from "@/lib/localePath";
 
 export default function Footer() {
   const locale = useLocale();
   const t = useTranslations("footer");
-  const localePrefix = locale === 'mn' ? '/mn' : '';
   const pathname = usePathname();
   const isAboutUs = pathname?.includes("/about-us");
 
-  const experienceLinks = [
-    { key: "stay", href: "/cabins" },
-    { key: "dining", href: "/restaurant" },
-    { key: "wellness", href: "/cabins" },
-    { key: "adventures", href: "/restaurant" },
+  const experienceLinks: Array<{ key: string; href: string; active: boolean }> = [
+    { key: "stay", href: "/cabins", active: true },
+    { key: "dining", href: "/restaurant", active: true },
+    { key: "wellness", href: "/wellness", active: false },
+    { key: "adventures", href: "/experiences", active: false },
   ];
 
   const resortLinks: { key: string; href: string; external?: boolean; enOnly?: boolean }[] = [
     { key: "about", href: "/about-us" },
     { key: "catalogue", href: "https://online.fliphtml5.com/scxec/iewd/", external: true },
-    { key: "gallery", href: "#" },
+    { key: "gallery", href: "/gallery" },
     { key: "faq", href: "#" },
     { key: "route-finder", href: "#", enOnly: true }
   ];
@@ -42,13 +43,13 @@ export default function Footer() {
             }`}
           >
             <Link
-              href={localePrefix || "/"}
+              href={withLocalePath(locale, "/")}
               className="relative inline-grid place-items-center hover:opacity-90 transition-opacity"
               aria-label="Dalai Eej Resort"
             >
               {isAboutUs ? (
                 <img
-                  src="/images/about-us/decorations/accent-5.png"
+                  src={assetUrl("/images/about-us/decorations/accent-5.png")}
                   alt=""
                   aria-hidden
                   draggable={false}
@@ -56,7 +57,7 @@ export default function Footer() {
                 />
               ) : null}
               <img
-                src={isAboutUs ? "/branding/logos/logo-white-text.png" : "/branding/logos/logo-white.png"}
+                src={isAboutUs ? assetUrl("/branding/logos/logo-white-text.png") : assetUrl("/branding/logos/logo-white.png")}
                 alt="Dalai Eej Resort"
                 className={
                   isAboutUs
@@ -76,18 +77,24 @@ export default function Footer() {
 
           {/* Column 2: Experience */}
           <div className="min-w-0">
-            <h4 className="mb-3 md:mb-6">
+            <div className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("experience")}</Eyebrow>
-            </h4>
+            </div>
             <ul className="space-y-2 md:space-y-3">
               {experienceLinks.map((item) => (
                 <li key={item.key}>
-                  <Link
-                    href={`${localePrefix}${item.href}`}
-                    className="text-sm text-main/80 hover:text-white transition-colors"
-                  >
-                    {t(item.key)}
-                  </Link>
+                  {item.active ? (
+                    <Link
+                      href={withLocalePath(locale, item.href)}
+                      className="text-sm text-main/80 hover:text-white transition-colors"
+                    >
+                      {t(item.key)}
+                    </Link>
+                  ) : (
+                    <a href="#" aria-disabled="true" className="text-sm text-main/80 hover:text-white transition-colors">
+                      {t(item.key)}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -95,9 +102,9 @@ export default function Footer() {
 
           {/* Column 3: Resort */}
           <div className="min-w-0">
-            <h4 className="mb-3 md:mb-6">
+            <div className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("resort")}</Eyebrow>
-            </h4>
+            </div>
             <ul className="space-y-2 md:space-y-3">
               {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
                 <li key={item.key}>
@@ -111,12 +118,18 @@ export default function Footer() {
                       {t(item.key)}
                     </a>
                   ) : (
-                    <Link
-                      href={item.href === "#" ? "#" : `${localePrefix}${item.href}`}
-                      className="text-sm text-main/80 hover:text-white transition-colors"
-                    >
-                      {t(item.key)}
-                    </Link>
+                    item.href === "#" ? (
+                      <a href="#" className="text-sm text-main/80 hover:text-white transition-colors">
+                        {t(item.key)}
+                      </a>
+                    ) : (
+                      <Link
+                        href={withLocalePath(locale, item.href)}
+                        className="text-sm text-main/80 hover:text-white transition-colors"
+                      >
+                        {t(item.key)}
+                      </Link>
+                    )
                   )}
                 </li>
               ))}
@@ -125,9 +138,9 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <div className="col-span-2 lg:col-span-1">
-            <h4 className="mb-3 md:mb-6">
+            <div className="mb-3 md:mb-6">
               <Eyebrow tone="dark" className="!text-main/50">{t("contact")}</Eyebrow>
-            </h4>
+            </div>
             <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-main/50 mt-0.5 flex-shrink-0" />

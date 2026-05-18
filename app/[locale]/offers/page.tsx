@@ -7,7 +7,7 @@ import { ArrowLeft } from 'lucide-react';
 const offers = [
   {
     id: "couples",
-    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop&q=80",
+    image: "/images/specialoffers/family-getaway.jpg",
     titleKey: "offers.couples.title",
     descKey: "offers.couples.desc",
     offerKey: "offers.couples.offer",
@@ -15,7 +15,7 @@ const offers = [
   },
   {
     id: "erdenet",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80",
+    image: "/images/specialoffers/erdenet-jubilee.jpg",
     titleKey: "offers.erdenet.title",
     descKey: "offers.erdenet.desc",
     offerKey: "offers.erdenet.offer",
@@ -23,7 +23,7 @@ const offers = [
   },
   {
     id: "pioneer",
-    image: "https://images.unsplash.com/photo-1504851149312-7a075b496cc7?w=800&auto=format&fit=crop&q=80",
+    image: "/images/gallery/adventures/DBR_1996.webp",
     titleKey: "offers.pioneer.title",
     descKey: "offers.pioneer.desc",
     offerKey: "offers.pioneer.offer",
@@ -31,7 +31,7 @@ const offers = [
   },
   {
     id: "early",
-    image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80",
+    image: "/images/specialoffers/early-bird.jpg",
     titleKey: "offers.early.title",
     descKey: "offers.early.desc",
     offerKey: "offers.early.offer",
@@ -39,7 +39,7 @@ const offers = [
   },
   {
     id: "longstay",
-    image: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800&auto=format&fit=crop&q=80",
+    image: "/images/specialoffers/shoulder-season.jpg",
     titleKey: "offers.longstay.title",
     descKey: "offers.longstay.desc",
     offerKey: "offers.longstay.offer",
@@ -47,7 +47,7 @@ const offers = [
   },
   {
     id: "family",
-    image: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&auto=format&fit=crop&q=80",
+    image: "/images/gallery/the-resort/DBR_7676.webp",
     titleKey: "offers.family.title",
     descKey: "offers.family.desc",
     offerKey: "offers.family.offer",

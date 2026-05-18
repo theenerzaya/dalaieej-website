@@ -23,7 +23,7 @@ export default function RestaurantPage() {
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&auto=format&fit=crop&q=80"
+            src="/images/restaurant/hero-food-beverage.webp"
             alt="Restaurant"
             className="w-full h-full object-cover"
           />
@@ -110,7 +110,7 @@ export default function RestaurantPage() {
               </p>
             </div>
             <img
-              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=80"
+              src="/images/gallery/restaurant/DBR_4914.webp"
               alt="Cuisine"
               className="w-full h-96 object-cover rounded-lg"
             />

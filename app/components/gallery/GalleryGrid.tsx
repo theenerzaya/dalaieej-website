@@ -15,17 +15,16 @@
  *   3. LIGHTBOX — full-bleed overlay with prev/next/close, keyboard-navigable
  *      (ArrowLeft / ArrowRight / Escape).
  *
- * Gallery tiles reference existing photography already in /public/images
- * (restaurant, resort map, silogrid, lake, etc.). Paths under
- * /images/cabins and /images/rooms are intentionally omitted so this page
- * does not repeat cabin-detail galleries.
+ * Image list: all .webp under /public/images (except /about-us), plus .jpg/.jpeg
+ * under 900 KiB — see app/data/galleryImages.ts. Regenerate: npm run sync-gallery-images
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
+import SiteImage from "@/app/components/SiteImage";
+import { GALLERY_IMAGES } from "@/app/data/galleryImages";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -49,45 +48,10 @@ type GalleryImage = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Curated images — wired to existing /public assets (no /cabins or /rooms)  */
+/*  Image manifest — app/data/galleryImages.ts                                */
 /* -------------------------------------------------------------------------- */
 
-const IMAGES: GalleryImage[] = [
-  // Row 1
-  { src: "/images/gallery/the-resort/lodge-first-light-shore.jpg", category: "resort", alt: "Lodge at first light, seen from the shore", ratio: "landscape" },
-  { src: "/images/restaurant/hero-food-beverage.webp", category: "dining", alt: "Food and beverage — hero scene from the restaurant", ratio: "landscape" },
-  { src: "/images/gallery/the-lake/eastern-ridge-sunset.jpg", category: "lake", alt: "Eastern ridge at sunset over Lake Khuvsgul", ratio: "landscape" },
-
-  // Row 2
-  { src: "/images/map/annex.jpg", category: "rooms", alt: "Annex cabin on the resort map", ratio: "portrait" },
-  { src: "/images/restaurant/collage-tl.webp", category: "dining", alt: "Restaurant collage — detail", ratio: "portrait" },
-  { src: "/images/gallery/spa-and-wellness/birch-steam-sauna-afternoon.jpg", category: "wellness", alt: "Birch-steam sauna, afternoon session", ratio: "portrait" },
-
-  // Row 3
-  { src: "/images/silogrid/hearth.webp", category: "rooms", alt: "Hearth and gathering space", ratio: "landscape" },
-  { src: "/images/gallery/the-resort/main-lodge-low-cloud.jpg", category: "resort", alt: "Main lodge exterior under low cloud", ratio: "portrait" },
-  { src: "/images/restaurant/collage-bl.webp", category: "dining", alt: "Restaurant collage — lower scene", ratio: "landscape" },
-
-  // Row 4
-  { src: "/images/gallery/spa-and-wellness/warm-stone-massage-candlelight.jpg", category: "wellness", alt: "Warm-stone massage room, candlelight", ratio: "square" },
-  { src: "/images/gallery/adventures/horseback-haichin-valley.png", category: "adventures", alt: "Horseback ride along the Haichin valley", ratio: "portrait" },
-  { src: "/images/map/grand.jpg", category: "rooms", alt: "Grand Peninsula suite — map view", ratio: "landscape" },
-
-  // Row 5
-  { src: "/images/restaurant/carousel/02.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "landscape" },
-  { src: "/images/restaurant/carousel/04.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "portrait" },
-  { src: "/images/map/heritage.jpg", category: "rooms", alt: "Heritage cabin on the resort map", ratio: "landscape" },
-
-  // Row 6
-  { src: "/images/map/ensuite.jpg", category: "rooms", alt: "Ensuite cabin on the resort map", ratio: "portrait" },
-  { src: "/images/map/reception.jpg", category: "resort", alt: "Reception and arrival", ratio: "landscape" },
-  { src: "/images/restaurant/carousel/06.webp", category: "dining", alt: "Restaurant — carousel moment", ratio: "landscape" },
-
-  // Row 7
-  { src: "/images/gallery/the-lake/shoreline-mergens-ridge.jpg", category: "lake", alt: "Shoreline at the foot of Mergen's Ridge", ratio: "landscape" },
-  { src: "/images/restaurant/collage-r.webp", category: "dining", alt: "Restaurant collage — lakeside panel", ratio: "portrait" },
-  { src: "/images/silogrid/sanctuary.webp", category: "rooms", alt: "Sanctuary — quiet stay", ratio: "landscape" },
-];
+const IMAGES: GalleryImage[] = GALLERY_IMAGES;
 
 const FILTERS_EN: Record<FilterId, string> = {
   all: "All",
@@ -200,7 +164,7 @@ export default function GalleryGrid() {
   return (
     <main
       id="main-content"
-      className="min-h-screen bg-surface-alt pt-24 md:pt-32 pb-24 md:pb-32"
+      className="min-h-screen bg-surface-alt text-water-deep pt-24 md:pt-32 pb-24 md:pb-32"
     >
       {/* =============================================================== HEAD */}
       <section className="px-6">
@@ -209,7 +173,7 @@ export default function GalleryGrid() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className={`${headlineFont} italic text-[#223127] text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.02] font-normal`}
+            className={`${headlineFont} italic text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.02] font-normal`}
           >
             {isMn ? "Галерей" : "Gallery"}
           </motion.h1>
@@ -218,7 +182,7 @@ export default function GalleryGrid() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 font-body text-[#223127]/60 max-w-xl mx-auto text-sm md:text-base leading-relaxed"
+            className="mt-6 font-body text-water-deep/60 max-w-xl mx-auto text-sm md:text-base leading-relaxed"
           >
             {isMn
               ? "Хөвсгөлийн хэмнэл — бууц, нуур, хоол, тайван агшнууд."
@@ -247,8 +211,8 @@ export default function GalleryGrid() {
                       aria-pressed={isActive}
                       className={`font-cta uppercase text-[11px] md:text-xs tracking-[0.22em] transition-colors duration-300 pb-1 border-b ${
                         isActive
-                          ? "text-[#223127] border-[#223127]"
-                          : "text-[#223127]/55 border-transparent hover:text-[#223127]"
+                          ? "text-water-deep border-water-deep"
+                          : "text-water-deep/55 border-transparent hover:text-water-deep"
                       }`}
                     >
                       {labels[id]}
@@ -297,7 +261,7 @@ export default function GalleryGrid() {
                     <div
                       className={`${RATIO_CLASS[image.ratio]} w-full overflow-hidden bg-[#e7dfce]`}
                     >
-                      <Image
+                      <SiteImage
                         src={image.src}
                         alt={image.alt}
                         width={dimensions.width}
@@ -316,7 +280,7 @@ export default function GalleryGrid() {
           </motion.div>
 
           {filteredImages.length === 0 && (
-            <p className="mt-20 text-center font-body text-[#223127]/60">
+            <p className="mt-20 text-center font-body text-water-deep/60">
               {isMn
                 ? "Энэ ангилалд одоогоор зураг байхгүй байна."
                 : "No images in this collection yet."}
@@ -384,7 +348,7 @@ export default function GalleryGrid() {
               className="relative flex max-h-full max-w-6xl flex-col items-center gap-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <SiteImage
                 src={activeImage.src}
                 alt={activeImage.alt}
                 width={1600}

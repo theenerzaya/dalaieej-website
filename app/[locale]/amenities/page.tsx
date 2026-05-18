@@ -11,9 +11,9 @@ const inclusionKeys = ['breakfast', 'firewood', 'parking', 'security', 'concierg
 const policyKeys = ['checkin', 'cancellation', 'quiet', 'pets'];
 
 const featureImages = {
-  dining: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&auto=format&fit=crop&q=80",
-  activities: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&auto=format&fit=crop&q=80",
-  relaxation: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&auto=format&fit=crop&q=80"
+  dining: "/images/gallery/restaurant/DBR_4975.webp",
+  activities: "/images/gallery/adventures/DBR_4303.webp",
+  relaxation: "/images/gallery/wellness/DBR_3098.webp"
 };
 
 export default function AmenitiesPage() {
@@ -31,7 +31,7 @@ export default function AmenitiesPage() {
       <section className="relative min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-sky-900 to-sky-700">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&auto=format&fit=crop&q=80"
+            src="/images/cabins/hero-our-rooms.webp"
             alt="Lake Khuvsgul"
             className="w-full h-full object-cover opacity-40"
           />
@@ -75,7 +75,7 @@ export default function AmenitiesPage() {
             </div>
             <div className="relative h-[400px] rounded-xl overflow-hidden shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1000&auto=format&fit=crop&q=80"
+                src="/images/gallery/accommodations/DBR_4885.webp"
                 alt="Resort amenities"
                 className="w-full h-full object-cover"
               />

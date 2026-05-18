@@ -23,7 +23,7 @@ export default function LodgePage() {
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&auto=format&fit=crop&q=80"
+            src="/images/gallery/the-resort/DBR_7025.webp"
             alt="Main Lodge"
             className="w-full h-full object-cover"
           />
@@ -92,22 +92,22 @@ export default function LodgePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <img
-              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=80"
+              src="/images/gallery/accommodations/DBR_4872.webp"
               alt="Lodge living room"
               className="w-full h-64 object-cover rounded-lg md:col-span-2"
             />
             <img
-              src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&auto=format&fit=crop&q=80"
+              src="/images/rooms/superior-cabin/03.webp"
               alt="Lodge bedroom"
               className="w-full h-64 object-cover rounded-lg"
             />
             <img
-              src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&auto=format&fit=crop&q=80"
+              src="/images/gallery/restaurant/DBR_4946.webp"
               alt="Lodge dining"
               className="w-full h-64 object-cover rounded-lg"
             />
             <img
-              src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&auto=format&fit=crop&q=80"
+              src="/images/gallery/the-resort/DBR_7684.webp"
               alt="Lodge view"
               className="w-full h-64 object-cover rounded-lg md:col-span-2"
             />

@@ -69,7 +69,7 @@ export default function RouteFinderPage() {
       <section className="relative h-[50vh] flex items-center justify-center mb-16">
         <div className="absolute inset-0">
           <img 
-            src="https://images.squarespace-cdn.com/content/v1/64643a1d0c5968146b6cbd44/2269e1ae-5ec8-4118-87e2-d7803a67eda8/khuvsgul-lake-boat-tour-summer.jpg" 
+            src="/images/gallery/the-resort/DBR_7361.webp" 
             alt="Khuvsgul Lake"
             className="w-full h-full object-cover"
           />
@@ -134,10 +134,10 @@ export default function RouteFinderPage() {
       {/* 5. GALLERY GRID */}
       <section className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <img src="https://images.squarespace-cdn.com/content/v1/64643a1d0c5968146b6cbd44/d51a5a9a-64ab-469f-915d-24da7f7d2d1b/central-mongolia-road-trip-itinerary-mini-gobi-sand-dunes-self-drive.jpg" alt="Mongolia Road Trip" className="w-full aspect-[4/3] object-cover" />
-          <img src="https://images.squarespace-cdn.com/content/v1/64643a1d0c5968146b6cbd44/9545271c-e91b-41b8-aec9-8c884a4d3b11/gobi-desert-to-khuvsgul-lake-overland-tour-route-mongolia.jpg" alt="Gobi Desert to Khuvsgul" className="w-full aspect-[4/3] object-cover" />
-          <img src="https://images.squarespace-cdn.com/content/v1/64643a1d0c5968146b6cbd44/7be81066-9eda-4a63-9aa5-dd865dd7ce1e/luxury-mongolia-honeymoon-lake-khuvsgul-picnic-fly-in-tour.jpg" alt="Luxury Picnic" className="w-full aspect-[4/3] object-cover" />
-          <img src="https://images.squarespace-cdn.com/content/v1/64643a1d0c5968146b6cbd44/3636e8f5-ddf6-46ab-ab37-2e25d8112150/ulaanbaatar-city-tour-soviet-mosaics-gandan-monastery-cultural-guide.jpg" alt="Ulaanbaatar City Tour" className="w-full aspect-[4/3] object-cover" />
+          <img src="/images/gallery/adventures/DBR_1996.webp" alt="Mongolia Road Trip" className="w-full aspect-[4/3] object-cover" />
+          <img src="/images/gallery/adventures/DBR_3442.webp" alt="Gobi Desert to Khuvsgul" className="w-full aspect-[4/3] object-cover" />
+          <img src="/images/gallery/adventures/DBR_5227.webp" alt="Luxury Picnic" className="w-full aspect-[4/3] object-cover" />
+          <img src="/images/gallery/the-resort/DBR_6649.webp" alt="Ulaanbaatar City Tour" className="w-full aspect-[4/3] object-cover" />
         </div>
       </section>
 

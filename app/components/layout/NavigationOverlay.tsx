@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Facebook, Instagram, Mail } from "lucide-react";
-import NextLink from "next/link";
-import Image from "next/image";
+import Link from "next/link";
+import { Facebook, Images, Instagram, Mail } from "lucide-react";
+import SiteImage from "@/app/components/SiteImage";
 import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
+import { Link as I18nLink } from "@/i18n/navigation";
+import { withLocalePath } from "@/lib/localePath";
+import { getLowestCabinPriceFrom } from "@/lib/cabinCatalog";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
 import { absoluteSiteUrl } from "@/lib/site-urls";
@@ -42,22 +46,25 @@ type MainNavItem = {
   available: boolean;
 };
 
-// NOTE: only `about` is live today; the rest show a "Coming Soon" tag and
-// render as non-interactive links (to preserve the overlay's visual rhythm).
+// NOTE: only selected sections are live; unavailable sections render a
+// "Coming Soon" tag to preserve the overlay's visual rhythm.
 const mainNavItems: MainNavItem[] = [
   {
     id: "stay",
     href: "/cabins",
     image: "/images/nav-overlay/stay.jpg",
     label: { en: "Our Rooms", mn: "Өргөө" },
-    meta: { en: "Cabins & Suites · From $100/night", mn: "Модон өрөө · 1 шөнө $100-аас" },
+    meta: {
+      en: `Cabins & Suites · From $${getLowestCabinPriceFrom()}/night`,
+      mn: `Модон өрөө · 1 шөнө $${getLowestCabinPriceFrom()}-аас`,
+    },
     available: true,
   },
   {
     id: "dining",
     href: "/restaurant",
     image: "/images/nav-overlay/dining.jpg",
-    label: { en: "Dining", mn: "Зоог" },
+    label: { en: "Dining", mn: "Ресторан" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дээрх гал тогоо" },
     available: true,
   },
@@ -125,14 +132,9 @@ function getPathWithoutLocale(pathname: string): string {
 }
 
 export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
+  const locale = useLocale();
   const pathname = usePathname();
-  const locale = pathname.startsWith("/mn")
-    ? "mn"
-    : pathname.startsWith("/en")
-      ? "en"
-      : "mn";
   const isMn = locale === "mn";
-  const localePrefix = isMn ? "/mn" : "/en";
   const pathWithoutLocale = getPathWithoutLocale(pathname);
   const reduceMotion = useReducedMotion();
 
@@ -205,7 +207,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
       {/* Preload nav-strip images so the overlay opens fully populated */}
       <div className="hidden" aria-hidden="true">
         {mainNavItems.map((item) => (
-          <Image
+          <SiteImage
             key={item.id}
             src={item.image}
             alt=""
@@ -257,12 +259,12 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 </button>
 
                 {/* Centered wordmark — matches Navbar positioning exactly */}
-                <NextLink
-                  href={localePrefix || "/"}
+                <Link
+                  href={withLocalePath(locale, "/")}
                   onClick={onClose}
                   className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
-                  <Image
+                  <SiteImage
                     src="/branding/logos/logo-white.png"
                     alt="Dalai Eej Resort"
                     width={180}
@@ -270,7 +272,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
                     priority
                   />
-                </NextLink>
+                </Link>
 
                 <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12">
                   {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
@@ -280,7 +282,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
 
                   <div className="ml-auto flex shrink-0 items-center">
                     <CTAButton
-                      href={`${localePrefix}/booking`}
+                      href={withLocalePath(locale, "/booking")}
                       variant="secondary"
                       size="sm"
                       onClick={onClose}
@@ -333,13 +335,13 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           onFocus={() => scrollCardIntoView(item.id)}
                         >
                           {item.available ? (
-                            <NextLink
-                              href={`${localePrefix}${item.href}`}
+                            <Link
+                              href={withLocalePath(locale, item.href)}
                               onClick={onClose}
                               className={linkClass}
                             >
                               <span>{label}</span>
-                            </NextLink>
+                            </Link>
                           ) : (
                             <span role="link" aria-disabled="true" className={linkClass}>
                               <span>{label}</span>
@@ -394,6 +396,16 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           </a>
                         </li>
                       ))}
+                      <li>
+                        <Link
+                          href={withLocalePath(locale, "/gallery")}
+                          onClick={onClose}
+                          aria-label={isMn ? "Галерей" : "Gallery"}
+                          className="flex h-9 w-9 items-center justify-center rounded-full border border-main/25 text-main/70 transition-colors hover:border-main hover:text-main"
+                        >
+                          <Images className="h-4 w-4" aria-hidden="true" />
+                        </Link>
+                      </li>
                     </ul>
                   </motion.div>
                 </div>
@@ -419,7 +431,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           className="group flex w-[62vw] shrink-0 flex-col sm:w-[40vw] md:w-[clamp(16rem,28vw,22rem)]"
                         >
                           <div className="relative aspect-[3/4] w-full overflow-hidden bg-main/5">
-                            <Image
+                            <SiteImage
                               src={item.image}
                               alt={label}
                               fill
@@ -461,14 +473,14 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       }
 
                       return (
-                        <NextLink
+                        <Link
                           key={item.id}
-                          href={`${localePrefix}${item.href}`}
+                          href={withLocalePath(locale, item.href)}
                           onClick={onClose}
                           className="shrink-0"
                         >
                           {card}
-                        </NextLink>
+                        </Link>
                       );
                     })}
 

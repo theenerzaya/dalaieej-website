@@ -708,9 +708,9 @@ function BookingContent() {
   }, []);
 
   const placeholderImages = [
-    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&auto=format&fit=crop&q=80",
+    "/images/cabins/room-superior.webp",
+    "/images/cabins/room-lakeside.webp",
+    "/images/cabins/room-signature.webp",
   ];
 
   const getRestrictionMessages = (restrictions: RoomRestrictions | null | undefined): string[] => {
