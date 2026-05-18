@@ -95,7 +95,7 @@ const mainNavItems: MainNavItem[] = [
   },
 ];
 
-const PHONE_DISPLAY = "+976 7780 9010";
+const PHONE_DISPLAY = "+976 77 809010";
 const PHONE_HREF = "tel:+97677809010";
 
 const socialLinks: Array<{

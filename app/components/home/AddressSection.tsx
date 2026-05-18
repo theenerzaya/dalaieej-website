@@ -20,8 +20,8 @@ const DIRECTIONS_AIRPORT_URL =
 const DIRECTIONS_CITY_URL =
   "https://www.google.com/maps/dir/Khatgal,+Khovsgol,+Mongolia/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт,+Mergen's+Ridge,+Khatgal,+Khovsgol+67143,+Mongolia/@50.449042,100.148914,13z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x5d0dba5f265ed071:0xbfeab22f3128d8b8!2m2!1d100.16109!2d50.4359649!1m5!1m1!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!2m2!1d100.1893209!2d50.4846951!3e0?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D";
 
-const PHONE = "+976 9500 5595";
-const PHONE_HREF = "tel:+97695005595";
+const PHONE = "+976 77 809010";
+const PHONE_HREF = "tel:+97677809010";
 const EMAIL = "hello@dalaieej.com";
 const EMAIL_HREF = "mailto: hello@dalaieej.com";
 
