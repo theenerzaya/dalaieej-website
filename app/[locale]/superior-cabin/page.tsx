@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 /**
@@ -31,10 +32,8 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import {
   motion,
-  useMotionValue,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
   type Variants,
 } from "framer-motion";
@@ -965,7 +964,7 @@ function ExperienceCard({
           navigate();
         }
       }}
-      className="group relative h-[78vh] min-h-[520px] w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40"
+      className="group relative aspect-[3/4] h-auto min-h-0 w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40 md:aspect-auto md:h-[78vh] md:min-h-[520px]"
     >
       <motion.div className="absolute inset-0 h-full w-full z-0">
         <MirageImage

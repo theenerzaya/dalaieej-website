@@ -1,8 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import SiteImage from "@/app/components/SiteImage";
+import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "framer-motion";
+import { X } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { BodyText, Headline } from "../ui/Typography";
 
@@ -16,10 +20,12 @@ const DIRECTIONS_AIRPORT_URL =
 const DIRECTIONS_CITY_URL =
   "https://www.google.com/maps/dir/Khatgal,+Khovsgol,+Mongolia/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт,+Mergen's+Ridge,+Khatgal,+Khovsgol+67143,+Mongolia/@50.449042,100.148914,13z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x5d0dba5f265ed071:0xbfeab22f3128d8b8!2m2!1d100.16109!2d50.4359649!1m5!1m1!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!2m2!1d100.1893209!2d50.4846951!3e0?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D";
 
-const PHONE = "+976 9500 5595";
-const PHONE_HREF = "tel:+97695005595";
+const PHONE = "+976 77 809010";
+const PHONE_HREF = "tel:+97677809010";
 const EMAIL = "hello@dalaieej.com";
 const EMAIL_HREF = "mailto: hello@dalaieej.com";
+
+const ADDRESS_IMAGE_SRC = "/images/address.webp";
 
 export default function AddressSection() {
   const t = useTranslations("address");
@@ -28,6 +34,33 @@ export default function AddressSection() {
   const localePrefix = locale === "mn" ? "/mn" : "";
   const editorialFont =
     locale === "mn" ? "font-editorial-mn" : "font-editorial-en";
+
+  // Avoid rendering the portal during SSR.
+  const [portalMounted] = useState(() => typeof window !== "undefined");
+  const [fullscreenImage, setFullscreenImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!fullscreenImage) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFullscreenImage(null);
+    };
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [fullscreenImage]);
+
+  const openAddressFullBleed = () => {
+    setFullscreenImage({ src: ADDRESS_IMAGE_SRC, alt: t("visitCta") });
+  };
 
   const cardBase =
     "relative flex flex-col justify-between bg-earth text-main p-8 md:p-12 min-h-[260px] md:min-h-[360px]";
@@ -43,7 +76,8 @@ export default function AddressSection() {
   };
 
   return (
-    <section className="bg-ink px-6 pt-16 md:pt-20 pb-20 md:pb-28">
+    <>
+      <section className="bg-ink px-6 pt-16 md:pt-20 pb-20 md:pb-28">
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="text-center mb-10 md:mb-16"
@@ -81,15 +115,20 @@ export default function AddressSection() {
               {t("visitCopy")}
             </BodyText>
 
-            <div className="relative mt-8 w-full aspect-[4/3] overflow-hidden">
+            <button
+              type="button"
+              onClick={openAddressFullBleed}
+              aria-label={t("imageFullBleedLabel")}
+              className="relative mt-8 w-full aspect-[4/3] overflow-hidden p-0 border-0 bg-transparent cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/50"
+            >
               <SiteImage
-                src="/images/address.webp"
+                src={ADDRESS_IMAGE_SRC}
                 alt={t("visitCta")}
                 fill
                 sizes="(min-width: 768px) 33vw, 100vw"
                 className="object-cover"
               />
-            </div>
+            </button>
 
             <Link
               href={`${localePrefix}/contact`}
@@ -179,6 +218,41 @@ export default function AddressSection() {
           </div>
         </motion.div>
       </div>
-    </section>
+      </section>
+      {portalMounted && fullscreenImage
+        ? createPortal(
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={fullscreenImage.alt}
+              className="fixed inset-0 z-[200]"
+            >
+              <button
+                type="button"
+                className="absolute inset-0 cursor-default bg-black/90"
+                aria-label={t("fullBleedCloseLabel")}
+                onClick={() => setFullscreenImage(null)}
+              />
+              <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center p-4 pt-16 md:p-8">
+                <img
+                  src={fullscreenImage.src}
+                  alt={fullscreenImage.alt}
+                  onClick={() => setFullscreenImage(null)}
+                  className="pointer-events-auto max-h-full max-w-full object-contain shadow-2xl cursor-zoom-in"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setFullscreenImage(null)}
+                className="absolute top-4 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
+                aria-label={t("fullBleedCloseLabel")}
+              >
+                <X className="h-5 w-5" strokeWidth={2} />
+              </button>
+            </div>,
+            document.body
+          )
+        : null}
+    </>
   );
 }

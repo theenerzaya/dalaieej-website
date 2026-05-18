@@ -7,6 +7,17 @@ const QPAY_CHECK_URL = "https://merchant.qpay.mn/v2/payment/check";
 let cachedToken: string | null = null;
 let tokenExpiry: number = 0;
 
+type QPayCheckRow = {
+  payment_status?: string;
+  payment_amount?: string | number;
+};
+
+type QPayCheckResponse = {
+  rows?: QPayCheckRow[];
+  paid_amount?: string | number;
+  count?: number;
+};
+
 async function getQPayToken(): Promise<string> {
   if (cachedToken && Date.now() < tokenExpiry) {
     return cachedToken;
@@ -70,12 +81,12 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    const data = response.data;
-    const paidRow = data.rows?.find((row: any) => row.payment_status === "PAID");
+    const data = response.data as QPayCheckResponse;
+    const paidRow = data.rows?.find((row) => row.payment_status === "PAID");
     let isPaid = !!paidRow;
 
     if (isPaid && expectedAmount && paidRow) {
-      const paidAmt = parseFloat(paidRow.payment_amount);
+      const paidAmt = Number(paidRow.payment_amount ?? 0);
       if (paidAmt < expectedAmount) {
         isPaid = false;
       }

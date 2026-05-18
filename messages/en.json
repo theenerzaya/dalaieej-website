@@ -2,11 +2,11 @@
   "metadata": {
     "index": {
       "title": "Dalai Eej | Heritage Site & Resort at Lake Khuvsgul, Mongolia",
-      "description": "A lakeside sanctuary dedicated to the heritage of the Blue Pearl. Experience authentic Mongolian hospitality in wood-fired cabins on the shores of Lake Khuvsgul."
+      "description": "Looking for places to stay in Khuvsgul Province? Discover our #1 best value lodge. Enjoy a scenic view sauna, complimentary breakfast, and Bradt Guide-featured hospitality."
     },
     "story": {
       "title": "Our Heritage & Story | Dalai Eej Resort",
-      "description": "From pioneer camp beginnings to a refined heritage refuge. Discover the history and mission behind Dalai Eej on the Khuvsgul shoreline."
+      "description": "Three generations of family stewardship at Dalai Eej — from pioneer camp to a lakeside refuge on Lake Khövsgöl."
     },
     "planner": {
       "title": "Mongolia Itinerary Planner | Gobi to Khuvsgul Heritage Trail",
@@ -14,7 +14,7 @@
     },
     "booking": {
       "title": "Book Your Stay | Dalai Eej Resort at Lake Khuvsgul",
-      "description": "Check availability and book your heritage cabin at Dalai Eej Resort. Wood-fired lakeside stays on the shores of Lake Khuvsgul, Mongolia."
+      "description": "Check availability and secure your stay at Dalai Eej Resort on Lake Khövsgöl."
     },
     "amenities": {
       "title": "Resort Amenities | Dalai Eej Heritage Site",
@@ -38,11 +38,11 @@
     },
     "cabins": {
       "title": "Our Rooms | Dalai Eej Resort",
-      "description": "Browse every cabin, suite, and lodge at Dalai Eej — handcrafted stays on the shores of Lake Khuvsgul."
+      "description": "Traditional wooden cabins on Lake Khövsgöl's eastern shore."
     },
     "restaurant": {
       "title": "Food & Beverage | Dalai Eej Resort",
-      "description": "Three dining rooms at Dalai Eej — the open-fire Hearth, the lake-facing Sunset Deck, and the fireside Library Bar. Mongolian heritage flavors on the shores of Lake Khuvsgul."
+      "description": "Lakeside dining at Dalai Eej — open-fire hearth, sunset deck, and Mongolian flavours on Lake Khövsgöl."
     },
     "catalogue": {
       "title": "Resort Journal | Dalai Eej 2026 Archive",
@@ -50,7 +50,7 @@
     },
     "contact": {
       "title": "Contact Us | Dalai Eej Resort",
-      "description": "Get in touch with Dalai Eej Resort. Mergen's Ridge, Haichin Am, on the eastern shore of Lake Khuvsgul (13 km from Khatgal), Khuvsgul Province, Mongolia."
+      "description": "Plan your journey to Dalai Eej — Mergen's Ridge, Haichin Am, eastern shore of Lake Khövsgöl, 13 km from Khatgal."
     },
     "fam": {
       "title": "FAM Tour Application | Dalai Eej Resort",
@@ -234,7 +234,9 @@
     "directionsLabel": "Get directions:",
     "directionsFromCity": "Khatgal",
     "directionsFromAirport": "Murun Airport",
-    "bookCta": "Book your stay"
+    "bookCta": "Book your stay",
+    "imageFullBleedLabel": "View address image full screen",
+    "fullBleedCloseLabel": "Close full screen"
   },
   "map": {
     "eyebrow": "The grounds",
@@ -293,7 +295,9 @@
     "parking": {
       "title": "To Guest Parking",
       "desc": "Secure parking area."
-    }
+    },
+    "mapFullBleedLabel": "View map full screen",
+    "mapFullBleedCloseLabel": "Close full screen"
   },
   "discover": {
     "rooms": "The Stays",
@@ -406,7 +410,12 @@
     "promoCode": "Promo Code",
     "enterPromo": "Enter code",
     "apply": "Apply",
-    "promoApplied": "Promo code applied!"
+    "promoApplied": "Promo code applied!",
+    "restrictionsNotice": "Some prices may be greyed out for your dates. That usually means this rate has a minimum or maximum length of stay, or check-in / check-out is not allowed on the days you picked. Try changing your dates or select another rate.",
+    "restrictionClosedToArrival": "Check-in is not allowed on {date} for this rate.",
+    "restrictionClosedToDeparture": "Check-out is not allowed on {date} for this rate.",
+    "restrictionMinLos": "{nights, plural, one {At least # night is required for this rate.} other {At least # nights are required for this rate.}}",
+    "restrictionMaxLos": "{nights, plural, one {This rate allows at most # night for these dates.} other {This rate allows at most # nights for these dates.}}"
   },
   "rooms": {
     "title": "Our Heritage Stays",

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -7,8 +8,6 @@ import {
   motion,
   useInView,
   useReducedMotion,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
@@ -18,7 +17,7 @@ const content = {
   en: {
     heroTitle: "Our Story",
     heroCaption:
-      "The legend of the source—and a family sanctuary in the Khuvsgul taiga.",
+      "A quiet refuge on Lake Khövsgöl's eastern shore.",
     historySectionLabel: "A History Carved in Timber",
     historyScrollHint: "Scroll the years",
     history: [
@@ -81,7 +80,7 @@ const content = {
         body: "We are a gathering place where global explorers and locals share stories under the starlight.",
       },
     ],
-    founderSectionLabel: "Founder's Note",
+    founderSectionLabel: "Founder's Letter",
     founderHeadline: "A Note from the Family",
     founderListenLabel: "Listen",
     founderBody: [
@@ -103,7 +102,7 @@ const content = {
   mn: {
     heroTitle: "Бидний тухай",
     heroCaption:
-      "Рашааны домгоос эхтэй, Хөвсгөлийн тайгад ургасан гэр бүлийн голомт.",
+      "Хөвсгөл нуурын зүүн эрэг дээрх чимээгүй амарлал.",
     historySectionLabel: "Модоор бичигдсэн бидний түүх",
     historyScrollHint: "Он цагийг гүйлгэж үзэх",
     history: [
@@ -323,37 +322,6 @@ const historyVisuals: Array<{
   },
 ];
 
-function CampfireMark({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.1"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      {/* sparks */}
-      <path d="M32 6v3" />
-      <path d="M26 8l1.5 2.5" />
-      <path d="M38 8l-1.5 2.5" />
-      <path d="M22 12l2 1.5" />
-      <path d="M42 12l-2 1.5" />
-      {/* flame */}
-      <path d="M32 14c3.5 4.5 6 7.8 6 12a6 6 0 0 1-12 0c0-2.3 1-4.1 2.4-5.3-.3 1.3-.1 2.6.6 3.6.6-3.4 1.6-6.7 3-10.3z" />
-      {/* inner flame */}
-      <path d="M32 22c1.8 2.4 3 4 3 6a3 3 0 0 1-6 0c0-1.3.6-2.3 1.4-2.9 0 .8.2 1.4.6 1.9.3-1.8.6-3.3 1-5z" />
-      {/* logs */}
-      <path d="M18 44l28 8" />
-      <path d="M18 52l28-8" />
-      <path d="M22 42l4 12" />
-      <path d="M42 42l-4 12" />
-    </svg>
-  );
-}
-
 function SectionAccent({
   className = "py-1 md:py-2",
   width = "w-20 md:w-24",
@@ -428,6 +396,13 @@ function TimelineCard({
 function FounderAudio({ label, src }: { label: string; src: string }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const allowPlayRef = useRef(false);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    // Guard against browsers restoring media playback on mount/navigation.
+    audioRef.current.pause();
+  }, []);
 
   const toggle = () => {
     if (!audioRef.current) return;
@@ -438,6 +413,7 @@ function FounderAudio({ label, src }: { label: string; src: string }) {
       if (audioRef.current.currentTime < 0.1) {
         audioRef.current.currentTime = 20;
       }
+      allowPlayRef.current = true;
       audioRef.current.play();
     }
     setPlaying(!playing);
@@ -456,6 +432,16 @@ function FounderAudio({ label, src }: { label: string; src: string }) {
         ref={audioRef}
         src={src}
         preload="metadata"
+        onPlay={() => {
+          if (allowPlayRef.current) {
+            allowPlayRef.current = false;
+            setPlaying(true);
+            return;
+          }
+          audioRef.current?.pause();
+          setPlaying(false);
+        }}
+        onPause={() => setPlaying(false)}
         onEnded={() => setPlaying(false)}
         className="hidden"
       />
@@ -467,87 +453,15 @@ export default function AboutUsPage() {
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const isMn = locale === "mn";
-  const parallaxSectionEnabled = false;
   const t = isMn ? content.mn : content.en;
   const historyScrollRef = useRef<HTMLDivElement | null>(null);
   const historyHeadingRef = useRef<HTMLHeadingElement | null>(null);
-  const founderParallaxRef = useRef<HTMLElement | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<{
     src: string;
     alt: string;
   } | null>(null);
-  const [portalMounted, setPortalMounted] = useState(false);
-  const founderParallaxScrollTarget = parallaxSectionEnabled
-    ? founderParallaxRef
-    : undefined;
-  const { scrollYProgress: founderParallaxProgress } = useScroll({
-    target: founderParallaxScrollTarget,
-    offset: ["start end", "end start"],
-  });
-  const founderParallaxY = useTransform(
-    founderParallaxProgress,
-    [0, 1],
-    reduceMotion ? [0, 0] : [-18, 18]
-  );
-  const founderParallaxWidth = useTransform(
-    founderParallaxProgress,
-    [0, 0.42],
-    reduceMotion ? ["100vw", "100vw"] : ["50vw", "100vw"]
-  );
-  const founderParallaxHeight = useTransform(
-    founderParallaxProgress,
-    [0, 0.42],
-    reduceMotion ? ["100vh", "100vh"] : ["50vh", "100vh"]
-  );
-  const founderParallaxRadius = useTransform(
-    founderParallaxProgress,
-    [0, 0.42],
-    reduceMotion ? [0, 0] : [28, 0]
-  );
-  const founderTextOpacity = useTransform(
-    founderParallaxProgress,
-    [0.42, 0.55],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine1Y = useTransform(
-    founderParallaxProgress,
-    [0.46, 0.58],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-  const founderLine2Opacity = useTransform(
-    founderParallaxProgress,
-    [0.54, 0.66],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine2Y = useTransform(
-    founderParallaxProgress,
-    [0.54, 0.66],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-  const founderLine3Opacity = useTransform(
-    founderParallaxProgress,
-    [0.62, 0.74],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine3Y = useTransform(
-    founderParallaxProgress,
-    [0.62, 0.74],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-  const founderLine4Opacity = useTransform(
-    founderParallaxProgress,
-    [0.7, 0.82],
-    reduceMotion ? [1, 1] : [0, 1]
-  );
-  const founderLine4Y = useTransform(
-    founderParallaxProgress,
-    [0.7, 0.82],
-    reduceMotion ? [0, 0] : [240, 0]
-  );
-
-  useEffect(() => {
-    setPortalMounted(true);
-  }, []);
+  // Avoid rendering the portal during SSR.
+  const [portalMounted] = useState(() => typeof window !== "undefined");
 
   useEffect(() => {
     if (!fullscreenImage) return;
@@ -988,7 +902,6 @@ export default function AboutUsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-5">
             {t.pillars.map((pillar, i) => {
-              const isLast = i === t.pillars.length - 1;
               const isHospitalityPillar = i === 2;
               return (
                 <motion.div
@@ -1013,11 +926,6 @@ export default function AboutUsPage() {
                       />
                     </div>
                   ) : null}
-                  {isLast ? (
-                    <div className="flex justify-center mb-5 pt-1">
-                      <CampfireMark className="w-16 h-16 md:w-20 md:h-20 text-white/80" />
-                    </div>
-                  ) : null}
                   <span className="block font-editorial-mn not-italic text-lg md:text-xl text-white/70 mb-2 tracking-wide">
                     {pillar.num}
                   </span>
@@ -1038,22 +946,51 @@ export default function AboutUsPage() {
 
       <section className="relative py-20 md:py-32">
         <motion.div
-          className="max-w-6xl mx-auto px-6"
+          className="w-full max-w-none px-0"
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img
-            src={
-              isMn
-                ? assetUrl("/images/about-us/images/founders-note-mn.svg")
-                : assetUrl("/images/about-us/images/founders-note.svg")
-            }
-            alt={t.founderSectionLabel}
-            className="w-full h-auto select-none"
-            draggable={false}
-          />
+          <div className="relative mx-auto w-[90vw] max-w-none aspect-[1440/1640] overflow-hidden shadow-[0_24px_54px_rgba(26,17,6,0.2)]">
+            <h3 className="absolute top-5 left-5 z-[60] font-editorial-mn text-xl md:text-2xl text-white/95 drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] tracking-wide">
+              {t.founderSectionLabel}
+            </h3>
+            <img
+              src="/images/about-us/letter/background.jpg"
+              alt={t.founderSectionLabel}
+              loading="lazy"
+              decoding="async"
+              className={`absolute inset-0 h-full w-full object-cover select-none ${
+                isMn ? "object-center" : "object-[center_60%]"
+              }`}
+              draggable={false}
+            />
+            <motion.img
+              src={
+                isMn
+                  ? "/images/about-us/letter/letter-1.png"
+                  : "/images/about-us/letter/letter-2.png"
+              }
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.75,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className={`absolute left-1/2 z-10 w-auto -translate-x-1/2 object-contain select-none ${
+                isMn
+                  ? "top-[14%] h-[116%] max-w-none"
+                  : "top-[28%] h-[110%] max-w-none"
+              }`}
+              draggable={false}
+            />
+          </div>
           <FounderAudio label={t.founderListenLabel} src="/audio/gun-tsenherhen.mp3" />
         </motion.div>
       </section>

@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
-import { Cloud } from "lucide-react";
 
 interface WeatherData {
   tempC: number;
@@ -10,7 +8,6 @@ interface WeatherData {
 }
 
 export default function WeatherWidget() {
-  const t = useTranslations("footer");
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 /**
@@ -75,7 +76,7 @@ const ROOMS: Room[] = [
     slug: "superior-cabin",
     href: "/superior-cabin",
     name: getRequiredCabinCatalogEntry("superior-cabin").name,
-    area: { en: "50 m²", mn: "50 м²" },
+    area: { en: "50 m²", mn: "50 m²" },
     guests: { en: "3 adults · 4 child", mn: "3 том хүн · 4 хүүхэд" },
     quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
@@ -88,7 +89,7 @@ const ROOMS: Room[] = [
     slug: "triple-traditional-cabin",
     href: "/triple-traditional-cabin",
     name: getRequiredCabinCatalogEntry("triple-traditional-cabin").name,
-    area: { en: "30 m²", mn: "30 м²" },
+    area: { en: "30 m²", mn: "30 m²" },
     guests: { en: "3 adults · 2 child", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "5 cabins", mn: "5 байшин" },
     intro: {
@@ -101,7 +102,7 @@ const ROOMS: Room[] = [
     slug: "lakeside-cabin",
     href: "/lakeside-cabin",
     name: getRequiredCabinCatalogEntry("lakeside-cabin").name,
-    area: { en: "40 m²", mn: "40 м²" },
+    area: { en: "40 m²", mn: "40 m²" },
     guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
     intro: {
@@ -114,7 +115,7 @@ const ROOMS: Room[] = [
     slug: "triple-electric-cabin",
     href: "/triple-electric-cabin",
     name: getRequiredCabinCatalogEntry("triple-electric-cabin").name,
-    area: { en: "30 m²", mn: "30 м²" },
+    area: { en: "30 m²", mn: "30 m²" },
     guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
     quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
@@ -127,9 +128,9 @@ const ROOMS: Room[] = [
     slug: "signature-cabin",
     href: "/signature-cabin",
     name: getRequiredCabinCatalogEntry("signature-cabin").name,
-    area: { en: "30 m²", mn: "30 м²" },
-    guests: { en: " 2 adults", mn: "2 том хүн" },
-    quantity: { en: "5 cabin", mn: "5 байшин" },
+    area: { en: "30 m²", mn: "30 m²" },
+    guests: { en: "2 adults", mn: "2 том хүн" },
+    quantity: { en: "5 cabins", mn: "5 байшин" },
     intro: {
       en: "Our most requested room — a separate living area, deep-soak tub, and a private terrace that opens onto the larch line.",
       mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
@@ -140,7 +141,7 @@ const ROOMS: Room[] = [
     slug: "quad-electric-cabin",
     href: "/quad-electric-cabin",
     name: getRequiredCabinCatalogEntry("quad-electric-cabin").name,
-    area: { en: "25 m²", mn: "25 м²" },
+    area: { en: "25 m²", mn: "25 m²" },
     guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
     quantity: { en: "1 cabin", mn: "1 байшин" },
     intro: {
@@ -153,7 +154,7 @@ const ROOMS: Room[] = [
     slug: "grand-peninsula-suite",
     href: "/grand-peninsula-suite",
     name: getRequiredCabinCatalogEntry("grand-peninsula-suite").name,
-    area: { en: "35 m²", mn: "35 м²" },
+    area: { en: "35 m²", mn: "35 m²" },
     guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
     quantity: { en: "1 suite", mn: "1 тусгай хаус" },
     intro: {
@@ -207,7 +208,6 @@ type CopyKey =
   | "guestsLabel"
   | "areaLabel"
   | "moreInfo"
-  | "bookCta"
   | "tagline1"
   | "tagline2"
   | "aboutCta"
@@ -232,14 +232,13 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookingCta: "Check Availability",
     required: "*",
     sectionEyebrow: "Accommodations",
-    sectionHeading: "The luxury of being yourself.",
+    sectionHeading: "Slow days. Deep waters.",
     sectionIntro:
-      "Four rooms drawn from the shoreline — every cabin hand-built by Khuvsgul craftsmen, every interior assembled with local wood, wool and stone.",
+      "Traditional wooden cabins on Lake Khövsgöl's eastern shore.",
     quantityLabel: "Quantity",
     guestsLabel: "Guests",
     areaLabel: "Average area",
     moreInfo: "Get More Information",
-    bookCta: "Book Your Stay",
     tagline1: "The best people to take care of",
     tagline2: "our most valuable asset: you.",
     aboutCta: "More About Us",
@@ -265,14 +264,13 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookingCta: "Боломжит өрөө шалгах",
     required: "*",
     sectionEyebrow: "Байрлах сонголтууд",
-    sectionHeading: "Өөрөө байх тансаглал.",
+    sectionHeading: "Удаан өдрүүд. Гүн ус.",
     sectionIntro:
-      "Нуурын эргээс сэдэвлэсэн дөрвөн өрөө — байшин бүрийг Хөвсгөлийн урчууд гараар бүтээж, дотоод засалд нь нутгийн мод, ноос, чулууг шингээжээ.",
+      "Хөвсгөл нуурын зүүн эрэг дээрх уламжлалт модон байшин.",
     quantityLabel: "Тоо ширхэг",
     guestsLabel: "Зочид",
     areaLabel: "Дундаж талбай",
     moreInfo: "Дэлгэрэнгүй",
-    bookCta: "Захиалах",
     tagline1: "Таны хамгийн үнэт зүйлд —",
     tagline2: "өөрт тань, бид анхаарна.",
     aboutCta: "Бидний тухай",
@@ -346,8 +344,11 @@ export default function CabinsPage() {
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/75" />
 
-        <HeroFadeOut className="relative z-10 flex h-full items-center justify-center" rise={160}>
-          <div className="mx-auto w-full max-w-6xl px-6 text-center -mt-24 md:-mt-32">
+        <HeroFadeOut
+          className="relative z-10 flex h-full items-start justify-center pt-24 pb-[20rem] md:items-center md:pt-0 md:pb-0"
+          rise={160}
+        >
+          <div className="mx-auto w-full max-w-6xl px-6 text-center md:-mt-32">
             {/* First-load entrance: subtle slide-up from below.
                 The drop-down-from-above on scroll-return-to-top is produced
                 by HeroFadeOut's scroll-linked transform reversing. */}
@@ -809,7 +810,7 @@ function RoomRow({
         </Reveal>
 
         <StaggerGroup
-          className="flex flex-col sm:flex-row gap-4"
+          className="flex gap-4 border-t border-main/10 pt-6"
           stagger={0.08}
           offsetY={18}
         >
@@ -929,7 +930,7 @@ function ExperienceCard({
           navigate();
         }
       }}
-      className="group relative h-[78vh] min-h-[520px] w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40"
+      className="group relative aspect-[3/4] h-auto min-h-0 w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40 md:aspect-auto md:h-[78vh] md:min-h-[520px]"
     >
       <ImageReveal
         className="absolute inset-0 h-full w-full z-0"

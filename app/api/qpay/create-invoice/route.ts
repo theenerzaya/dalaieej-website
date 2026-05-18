@@ -9,6 +9,144 @@ interface InvoiceRequest {
   amount: number;
   description?: string;
   callbackUrl?: string;
+  /** Browser `window.location.origin` — used when reverse proxies omit x-forwarded-proto. */
+  siteOrigin?: string;
+}
+
+function normalizeBaseUrl(base: string): string {
+  return base.replace(/\/+$/, "").trim();
+}
+
+/** Hosts that cannot be used as QPay callback bases (local / RFC1918). */
+function isNonPublicHostname(hostname: string): boolean {
+  const h = hostname.toLowerCase();
+  if (h === "localhost" || h.endsWith(".localhost")) return true;
+  if (h === "127.0.0.1" || h === "::1" || h === "0.0.0.0") return true;
+  if (/^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(h)) return true;
+  if (/^192\.168\.\d{1,3}\.\d{1,3}$/.test(h)) return true;
+  if (/^172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}$/.test(h)) return true;
+  return false;
+}
+
+/** Public origin for server-side callbacks (QPay webhook). */
+function getConfiguredPublicBaseUrl(): string {
+  const explicit = normalizeBaseUrl(process.env.NEXT_PUBLIC_BASE_URL || "");
+  if (explicit) return explicit;
+  const vercel = process.env.VERCEL_URL?.trim();
+  if (vercel) {
+    return normalizeBaseUrl(`https://${vercel.replace(/^https?:\/\//, "")}`);
+  }
+  return "";
+}
+
+/**
+ * HTTPS origin the client used to reach this app (tunnel, production, Vercel URL).
+ * For public hostnames, assumes https when TLS terminates at the edge and x-forwarded-proto
+ * is missing (common); still requires https for QPay.
+ */
+function getPublicOriginFromRequest(request: NextRequest): string | null {
+  const forwardedHost = request.headers
+    .get("x-forwarded-host")
+    ?.split(",")[0]
+    ?.trim();
+  const hostHeader = request.headers.get("host")?.split(",")[0]?.trim();
+  const host = forwardedHost || hostHeader;
+  if (!host) return null;
+
+  const hostname = host.split(":")[0]?.toLowerCase() ?? "";
+  if (isNonPublicHostname(hostname)) {
+    return null;
+  }
+
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim()
+    .toLowerCase();
+
+  let proto: string;
+  if (forwardedProto === "https" || forwardedProto === "http") {
+    proto = forwardedProto;
+  } else if (request.nextUrl.protocol === "https:") {
+    proto = "https";
+  } else {
+    proto = "https";
+  }
+
+  if (proto !== "https") {
+    return null;
+  }
+
+  return normalizeBaseUrl(`https://${host}`);
+}
+
+/**
+ * QPay requires a public HTTPS callback. Localhost and relative URLs are rejected by their API.
+ * Prefers the request's public origin so the webhook matches where the app is actually opened.
+ */
+function resolveQPayWebhookUrl(
+  explicitCallback: string | undefined,
+  request: NextRequest,
+  siteOrigin?: string | undefined
+): string {
+  const trimmed = explicitCallback?.trim();
+  if (trimmed) {
+    return trimmed;
+  }
+  /** Full webhook URL QPay must accept — use when the portal only allows an exact host (www vs apex). */
+  const envCallback = normalizeBaseUrl(process.env.QPAY_CALLBACK_URL || "").trim();
+  if (envCallback) {
+    return envCallback;
+  }
+  const fromRequest = getPublicOriginFromRequest(request);
+  if (fromRequest) {
+    return `${fromRequest}/api/qpay/webhook`;
+  }
+  const clientOrigin = normalizeBaseUrl(siteOrigin?.trim() || "");
+  if (clientOrigin) {
+    return `${clientOrigin}/api/qpay/webhook`;
+  }
+  const base = getConfiguredPublicBaseUrl();
+  return `${base}/api/qpay/webhook`;
+}
+
+function validateQPayCallbackUrl(callbackUrl: string):
+  | { ok: true; url: string }
+  | { ok: false; message: string } {
+  let parsed: URL;
+  try {
+    parsed = new URL(callbackUrl);
+  } catch {
+    return {
+      ok: false,
+      message:
+        "Invalid QPay callback_url: no public HTTPS origin was resolved (often http://localhost). Use an HTTPS tunnel or production URL in the browser, set NEXT_PUBLIC_BASE_URL to that https origin, or pass callbackUrl. On Vercel, VERCEL_URL applies when unset.",
+    };
+  }
+
+  if (parsed.protocol !== "https:") {
+    return {
+      ok: false,
+      message:
+        "Invalid QPay callback_url: QPay requires https://. Use a public HTTPS base URL (e.g. production domain or an HTTPS tunnel for local development).",
+    };
+  }
+
+  const host = parsed.hostname.toLowerCase();
+  if (
+    host === "localhost" ||
+    host.endsWith(".localhost") ||
+    host === "127.0.0.1" ||
+    host === "::1"
+  ) {
+    return {
+      ok: false,
+      message:
+        "Invalid QPay callback_url: localhost is not allowed. Use your public https URL in the browser (tunnel or production), or set NEXT_PUBLIC_BASE_URL to that origin.",
+    };
+  }
+
+  return { ok: true, url: parsed.toString() };
 }
 
 interface QPayTokenResponse {
@@ -109,7 +247,12 @@ async function createInvoice(
 export async function POST(request: NextRequest) {
   try {
     const body: InvoiceRequest = await request.json();
-    const { amount, description = "Dalai Eej Resort Payment", callbackUrl } = body;
+    const {
+      amount,
+      description = "Dalai Eej Resort Payment",
+      callbackUrl,
+      siteOrigin,
+    } = body;
 
     if (!amount || amount <= 0) {
       return NextResponse.json(
@@ -118,12 +261,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const webhookUrl =
-      callbackUrl ||
-      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/qpay/webhook`;
+    const webhookCandidate = resolveQPayWebhookUrl(
+      callbackUrl,
+      request,
+      siteOrigin
+    );
+    const validated = validateQPayCallbackUrl(webhookCandidate);
+    if (!validated.ok) {
+      return NextResponse.json({ error: validated.message }, { status: 400 });
+    }
 
     const token = await getQPayToken();
-    const invoice = await createInvoice(token, amount, description, webhookUrl);
+    const invoice = await createInvoice(
+      token,
+      amount,
+      description,
+      validated.url
+    );
 
     return NextResponse.json({
       success: true,
@@ -154,6 +308,13 @@ export async function POST(request: NextRequest) {
         userMessage = "QPay authentication failed - invalid credentials";
       } else if (statusCode === 400) {
         userMessage = `QPay rejected the request: ${errorDetail}`;
+        if (
+          /callback_url/i.test(errorDetail) &&
+          /invalid/i.test(errorDetail)
+        ) {
+          userMessage +=
+            " Register the exact callback URL in the QPay merchant settings (www vs non-www must match what you send). On the server, set QPAY_CALLBACK_URL to the full https URL QPay expects, e.g. https://www.dalaieej.mn/api/qpay/webhook";
+        }
       } else {
         userMessage = `QPay error (${statusCode}): ${errorDetail}`;
       }

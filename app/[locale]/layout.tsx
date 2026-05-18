@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
@@ -97,7 +96,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             '@type': 'Resort',
             name: 'Dalai Eej Heritage Site',
             image: `${resortImageBase}/images/og-heritage.jpg`,
-            telephone: '+976-9500-5595',
+            telephone: '+976-77-809010',
             email: 'hello@dalaieej.com',
             address: {
               '@type': 'PostalAddress',

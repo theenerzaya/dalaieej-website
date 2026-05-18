@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useRef } from "react";
@@ -30,14 +31,14 @@ const silos = [
   },
   {
     id: "wellness",
-    href: /*"/wellness",*/ "#",
+    href: "/cabins",
     en: "Wellness",
     mn: "Амралт",
     image: "/images/silogrid/wellness.webp"
   },
   {
     id: "adventure",
-    href: /*"/experiences",*/ "#",
+    href: "/restaurant",
     en: "Experiences",
     mn: "Аялал",
     image: "/images/silogrid/wilderness.webp"

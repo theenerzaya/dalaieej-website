@@ -1,11 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { motion } from "framer-motion";
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import { Compass, Fish, Mountain, Tent, Camera, Users } from "lucide-react";
 
 export default function ExperiencesPage() {
-  const t = useTranslations();
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
 

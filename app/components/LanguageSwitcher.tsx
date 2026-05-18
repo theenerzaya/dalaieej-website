@@ -2,7 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { Link } from '@/i18n/navigation';
+import type { MouseEvent } from 'react';
+import { absoluteSiteUrl } from '@/lib/site-urls';
 
 type Props = {
   /** Replaces default light-on-dark link colors (e.g. paper / light hero). */
@@ -28,11 +29,16 @@ export default function LanguageSwitcher({ className }: Props) {
   const label = currentLocale === 'en' ? 'MN' : 'EN';
   const ariaLabel =
     currentLocale === 'en' ? 'Switch to Mongolian (MN)' : 'Switch to English (EN)';
+  const href = absoluteSiteUrl(targetLocale, pathWithoutLocale);
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    window.location.assign(href);
+  };
 
   return (
-    <Link
-      href={pathWithoutLocale}
-      locale={targetLocale}
+    <a
+      href={href}
+      onClick={handleClick}
       className={
         className ??
         "font-cta text-xs font-medium uppercase tracking-[0.18em] px-2 py-1 rounded text-main/70 hover:text-main transition-colors"
@@ -40,6 +46,6 @@ export default function LanguageSwitcher({ className }: Props) {
       aria-label={ariaLabel}
     >
       {label}
-    </Link>
+    </a>
   );
 }

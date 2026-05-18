@@ -1,11 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import { Plane, Car, MapPin, Phone, Mail, Clock, Play } from "lucide-react";
 
 export default function LocationPage() {
-  const t = useTranslations();
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
 
@@ -45,8 +44,8 @@ export default function LocationPage() {
             className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
           >
             {locale === 'mn' 
-              ? "Хөвсгөл нуурын зүүн эргийн Далай ээж ресортод тавтай морил"
-              : "Your journey to Lake Khuvsgul begins here"}
+              ? "Таны аялал эндээс эхэлнэ — Хөвсгөлийн зүүн эрэг рүү"
+              : "Your journey to Lake Khövsgöl begins here"}
           </motion.p>
         </div>
       </section>
@@ -131,7 +130,7 @@ export default function LocationPage() {
               <h4 className="font-serif text-lg text-leaf mb-2">
                 {locale === 'mn' ? "Утас" : "Phone"}
               </h4>
-              <p className="font-body text-leaf/70">+976 7011 1234</p>
+              <p className="font-body text-leaf/70">+976 77 809010</p>
             </div>
             <div className="text-center">
               <Mail className="w-10 h-10 text-leaf mx-auto mb-4" />

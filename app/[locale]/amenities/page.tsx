@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -191,7 +192,7 @@ export default function AmenitiesPage() {
               <div key={review} className="bg-white rounded-xl p-8 shadow-lg relative">
                 <Quote className="w-10 h-10 text-sky-200 absolute top-6 right-6" />
                 <p className="font-body text-slate-600 italic mb-6 leading-relaxed">
-                  "{t(`amenities.testimonials.${review}.text`)}"
+                  &quot;{t(`amenities.testimonials.${review}.text`)}&quot;
                 </p>
                 <p className="font-body text-sky-900 font-semibold">
                   — {t(`amenities.testimonials.${review}.author`)}

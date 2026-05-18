@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet } from "@/lib/cloudbeds";
+import { parseCloudbedsMoney } from "@/lib/cloudbeds-money";
 import {
   extractRateCancellationFromPlan,
   mergeCancellation,
@@ -13,6 +14,74 @@ interface RateRestriction {
   maxLos: number;
 }
 
+type CloudbedsRateDetailedRow = {
+  date?: string;
+  closedToArrival?: unknown;
+  closedToDeparture?: unknown;
+  minLos?: number;
+  maxLos?: number;
+} & Record<string, unknown>;
+
+type CloudbedsRatePlan = {
+  rateID?: string | number;
+  roomTypeID?: string;
+  isDerived?: boolean;
+  roomRateDetailed?: CloudbedsRateDetailedRow[];
+} & Record<string, unknown>;
+
+type CloudbedsRatePlansResponse = {
+  success?: boolean;
+  data?: CloudbedsRatePlan[];
+};
+
+type CloudbedsAvailabilityPropertyCurrency = {
+  currencyCode?: string;
+};
+
+type CloudbedsPropertyPhoto = {
+  image?: string | null;
+  thumb?: string | null;
+};
+
+type CloudbedsPropertyRoom = {
+  roomTypeID: string;
+  roomTypeName?: string;
+  roomsAvailable?: number;
+  roomRateID: string | number;
+  ratePlanNamePublic?: string;
+  derivedType?: string;
+  derivedValue?: string;
+  roomTypePhotos?: Array<string | CloudbedsPropertyPhoto>;
+  roomTypeDescription?: string;
+  maxGuests?: number | string;
+  roomTypeFeatures?: string[];
+} & Record<string, unknown>;
+
+type CloudbedsAvailabilityResponse = {
+  success?: boolean;
+  data?: Array<{
+    propertyCurrency?: CloudbedsAvailabilityPropertyCurrency;
+    propertyRooms?: CloudbedsPropertyRoom[];
+    propertyID?: string;
+  }>;
+};
+
+type CloudbedsHotelDetailsResponse = {
+  success?: boolean;
+  data?: {
+    propertyPolicy?: {
+      propertyTermsAndConditions?: string;
+    };
+  };
+};
+
+/** Normalize Cloudbeds roomRateDetailed `date` (or YYYY-MM-DD) for comparison. */
+function normDetailDate(value: unknown): string {
+  if (value == null) return "";
+  const s = String(value);
+  return s.length >= 10 ? s.slice(0, 10) : s;
+}
+
 /** Cloudbeds returns adultsExtraCharge / childrenExtraCharge as an array of single-key objects. */
 function flattenExtraChargeMap(extra: unknown): Record<string, number> {
   const out: Record<string, number> = {};
@@ -21,7 +90,7 @@ function flattenExtraChargeMap(extra: unknown): Record<string, number> {
   for (const row of rows) {
     if (row && typeof row === "object" && !Array.isArray(row)) {
       for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
-        const n = typeof v === "number" ? v : parseFloat(String(v));
+        const n = parseCloudbedsMoney(v);
         if (!Number.isNaN(n)) out[k] = n;
       }
     }
@@ -46,7 +115,7 @@ function extraChargeForGuestCount(map: Record<string, number>, count: number): n
 
 /** Full stay total: base roomRate plus occupancy-based extras (per-person / extra guest). */
 function stayTotalForRoom(room: Record<string, unknown>, adults: number, children: number): number {
-  const base = typeof room.roomRate === "number" ? room.roomRate : parseFloat(String(room.roomRate || 0)) || 0;
+  const base = parseCloudbedsMoney(room.roomRate);
   const adultExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.adultsExtraCharge), adults);
   const childExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.childrenExtraCharge), children);
   return base + adultExtra + childExtra;
@@ -95,12 +164,12 @@ export async function GET(request: NextRequest) {
     }
 
     const [availabilityData, ratePlansData, hotelDetailsData] = await Promise.all([
-      cloudbedsGet<any>("/getAvailableRoomTypes", params),
-      cloudbedsGet<any>("/getRatePlans", { ...params, detailedRates: "true" }).catch((err) => {
+      cloudbedsGet<CloudbedsAvailabilityResponse>("/getAvailableRoomTypes", params),
+      cloudbedsGet<CloudbedsRatePlansResponse>("/getRatePlans", { ...params, detailedRates: "true" }).catch((err) => {
         console.error("Failed to fetch rate plan restrictions:", err);
         return null;
       }),
-      cloudbedsGet<any>("/getHotelDetails", {}).catch((err) => {
+      cloudbedsGet<CloudbedsHotelDetailsResponse>("/getHotelDetails", {}).catch((err) => {
         console.error("Failed to fetch hotel details:", err);
         return null;
       }),
@@ -110,30 +179,36 @@ export async function GET(request: NextRequest) {
     console.log("Cloudbeds ratePlans response:", JSON.stringify(ratePlansData, null, 2));
 
     const restrictionByRateID = new Map<string, RateRestriction>();
-    const baseRestrictionByRoomType = new Map<string, RateRestriction>();
     const cancellationByRateID = new Map<string, RateCancellation>();
     const baseCancellationByRoomType = new Map<string, RateCancellation>();
 
     if (ratePlansData?.data) {
+      const checkinKey = normDetailDate(checkin);
+      const checkoutKey = normDetailDate(checkout);
+
       for (const rate of ratePlansData.data) {
-        const detailed: any[] = rate.roomRateDetailed || [];
+        const detailed = rate.roomRateDetailed ?? [];
         if (detailed.length === 0) continue;
 
-        const checkinDay = detailed[0];
-        const lastDay = detailed[detailed.length - 1];
+        // Per-day flags apply to that row's `date`. Using only the last row tied CTD on the
+        // last *priced night* to the guest's checkout day and caused false "checkout blocked" banners.
+        const byDate = new Map<string, (typeof detailed)[0]>();
+        for (const row of detailed) {
+          const k = normDetailDate(row?.date);
+          if (k) byDate.set(k, row);
+        }
+
+        const checkinDay = byDate.get(checkinKey) ?? detailed[0];
+        const checkoutDay = byDate.get(checkoutKey) ?? undefined;
 
         const restriction: RateRestriction = {
           closedToArrival: !!checkinDay?.closedToArrival,
-          closedToDeparture: !!lastDay?.closedToDeparture,
+          closedToDeparture: !!checkoutDay?.closedToDeparture,
           minLos: checkinDay?.minLos || 0,
           maxLos: checkinDay?.maxLos || 0,
         };
 
         restrictionByRateID.set(String(rate.rateID), restriction);
-
-        if (!rate.isDerived && rate.roomTypeID) {
-          baseRestrictionByRoomType.set(String(rate.roomTypeID), restriction);
-        }
 
         const cancellation = extractRateCancellationFromPlan(rate as Record<string, unknown>);
         if (cancellation) {
@@ -143,22 +218,6 @@ export async function GET(request: NextRequest) {
           }
         }
       }
-    }
-
-    function mergeRestrictions(rateID: string, roomTypeID: string): RateRestriction | null {
-      const derived = restrictionByRateID.get(rateID);
-      const base = baseRestrictionByRoomType.get(roomTypeID);
-      if (!derived && !base) return null;
-      if (!base) return derived!;
-      if (!derived) return base;
-      return {
-        closedToArrival: derived.closedToArrival || base.closedToArrival,
-        closedToDeparture: derived.closedToDeparture || base.closedToDeparture,
-        minLos: Math.max(derived.minLos, base.minLos),
-        maxLos: derived.maxLos > 0 && base.maxLos > 0
-          ? Math.min(derived.maxLos, base.maxLos)
-          : derived.maxLos || base.maxLos,
-      };
     }
 
     function mergeCancellationForRoom(rateID: string, roomTypeID: string): RateCancellation | null {
@@ -195,10 +254,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const enrichedRooms = propertyRooms.map((room: any) => {
-      const photos = (room.roomTypePhotos || []).map((p: any) => 
-        typeof p === 'string' ? p : p.image || p.thumb || ''
-      ).filter(Boolean);
+    const enrichedRooms = propertyRooms.map((room) => {
+      const photos = (room.roomTypePhotos ?? [])
+        .map((p) => {
+          if (typeof p === "string") return p;
+          return p?.image ?? p?.thumb ?? "";
+        })
+        .filter(Boolean);
 
       const fullStayTotal = stayTotalForRoom(room, adultsNum, childrenNum);
       
@@ -215,8 +277,13 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const mergedRestriction = mergeRestrictions(String(room.roomRateID), String(room.roomTypeID));
+      const restrictionsForRate = restrictionByRateID.get(String(room.roomRateID)) ?? null;
       const mergedCancellation = mergeCancellationForRoom(String(room.roomRateID), String(room.roomTypeID));
+
+      const maxGuestsValue =
+        typeof room.maxGuests === "number"
+          ? room.maxGuests
+          : parseInt(room.maxGuests ?? "", 10);
 
       return {
         roomTypeID: room.roomTypeID,
@@ -228,10 +295,10 @@ export async function GET(request: NextRequest) {
         originalRate,
         currency: currency,
         description: room.roomTypeDescription || "",
-        maxGuests: parseInt(room.maxGuests) || 2,
+        maxGuests: Number.isFinite(maxGuestsValue) && maxGuestsValue > 0 ? maxGuestsValue : 2,
         photos: photos,
         features: room.roomTypeFeatures || [],
-        restrictions: mergedRestriction,
+        restrictions: restrictionsForRate,
         cancellation: mergedCancellation,
       };
     });

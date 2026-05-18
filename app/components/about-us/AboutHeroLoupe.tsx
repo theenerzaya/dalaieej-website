@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import {
@@ -74,17 +75,15 @@ export function AboutHeroLoupe({
   className = "",
 }: AboutHeroLoupeProps) {
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const [portalReady, setPortalReady] = useState(false);
-  const [reduced, setReduced] = useState(false);
+  const [portalReady] = useState(() => typeof window !== "undefined");
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
   const [loupe, setLoupe] = useState<LoupeState | null>(null);
 
   useEffect(() => {
-    setPortalReady(true);
-  }, []);
-
-  useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
     const onChange = () => setReduced(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);

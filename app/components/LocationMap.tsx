@@ -1,7 +1,6 @@
 "use client";
 
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { useState, useCallback } from "react";
 
 const mapContainerStyle = {
   width: "100%",
@@ -99,12 +98,7 @@ const customMapStyle = [
 ];
 
 export default function LocationMap() {
-  const [mapLoaded, setMapLoaded] = useState(false);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  const onLoad = useCallback(() => {
-    setMapLoaded(true);
-  }, []);
 
   if (!apiKey) {
     return (
@@ -130,7 +124,6 @@ export default function LocationMap() {
         mapContainerStyle={mapContainerStyle}
         center={center}
         zoom={12}
-        onLoad={onLoad}
         options={{
           styles: customMapStyle,
           disableDefaultUI: true,

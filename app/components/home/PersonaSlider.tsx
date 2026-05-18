@@ -32,14 +32,14 @@ const personas = [
       description:
         "Refined comfort in the wild. A peaceful escape from the capital, with zero compromises.",
       image: assetUrl("/images/personas/sanctuary-en.jpg"),
-      href: /*"/suites"*/ "/#",
+      href: "/cabins",
     },
     mn: {
       title: "ТАВ ТУХТАЙ АМРАЛТ",
       description:
         "Байгаль дунд тав тухтай амарч, хэрэгтэй бүхнээ нэг дороос авах тайван сонголт.",
       image: assetUrl("/images/personas/sanctuary-mn.jpg"),
-      href: /*"/suites"*/ "/#",
+      href: "/cabins",
     },
   },
   {
@@ -50,14 +50,14 @@ const personas = [
       description:
         "For those who have been everywhere. Experience the untamed Taiga and the raw beauty of the Blue Pearl.",
       image: assetUrl("/images/personas/frontier-en.jpg"),
-      href: /*"/experiences"*/ "/#",
+      href: "/restaurant",
     },
     mn: {
       title: "БАЙГАЛИЙН АДАЛ ЯВДАЛ",
       description:
         "Хөх сувдын эрэг, тайгын жимээр алхаж, морь унан, Хөвсгөлийн жинхэнэ өнгийг мэдрэх аялал.",
       image: assetUrl("/images/personas/frontier-mn.jpg"),
-      href: /*"/experiences"*/ "/#",
+      href: "/restaurant",
     },
   },
   {
@@ -68,14 +68,14 @@ const personas = [
       description:
         "Silence the noise. No Zoom calls, just crackling fires, lake sounds, and deep focus.",
       image: assetUrl("/images/personas/disconnect-en.jpg"),
-      href: /*"/retreats"*/ "/#",
+      href: "/cabins",
     },
     mn: {
       title: "АМЬСГАА АВАХ ЗАВСАР",
       description:
         "Хотын хэмнэлээс түр холдож, чимээгүй орчинд өөртөө эргэн төвлөрөх нам гүм хугацаа.",
       image: assetUrl("/images/personas/disconnect-mn.jpg"),
-      href: /*"/retreats"*/ "/#",
+      href: "/cabins",
     },
   },
   {
@@ -86,14 +86,14 @@ const personas = [
       description:
         "Intimate escapes designed for two. Private dining, sunset wine, and zero interruptions.",
       image: assetUrl("/images/personas/seclusion.jpg"),
-      href: /*"/offers"*/ "/#",
+      href: "/restaurant",
     },
     mn: {
       title: "ХОЁУЛАХНЫ АМРАЛТ",
       description:
         "Хувийн уур амьсгалтай орчинд жаргах нарыг хамт үзэж, дурсамж бүтээх дулаан аялал.",
       image: assetUrl("/images/personas/seclusion.jpg"),
-      href: /*"/offers"*/ "/#",
+      href: "/restaurant",
     },
   },
 ];

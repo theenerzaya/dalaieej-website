@@ -147,6 +147,7 @@ export const GALLERY_IMAGES: GalleryImageSource[] = [
   { src: "/images/map/grand.jpg", category: "rooms", alt: "map — grand", ratio: "square" },
   { src: "/images/map/heritage.jpg", category: "rooms", alt: "map — heritage", ratio: "square" },
   { src: "/images/map/overland.jpg", category: "adventures", alt: "map — overland", ratio: "landscape" },
+  { src: "/images/map/pier.webp", category: "lake", alt: "map — pier", ratio: "square" },
   { src: "/images/map/reception.jpg", category: "resort", alt: "map — reception", ratio: "square" },
   { src: "/images/map/resort-map.jpg", category: "resort", alt: "map — resort map", ratio: "portrait" },
   { src: "/images/map/sauna.webp", category: "wellness", alt: "map — sauna", ratio: "landscape" },

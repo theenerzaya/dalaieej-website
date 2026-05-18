@@ -2,6 +2,14 @@ import axios from "axios";
 
 const CLOUDBEDS_API_BASE = "https://hotels.cloudbeds.com/api/v1.2";
 
+/**
+ * Cloudbeds may return room identifiers with suffixes like `-0`, `-1`
+ * for per-room instances. Most API endpoints expect the stable room type ID.
+ */
+export function normalizeCloudbedsRoomTypeID(value: string): string {
+  return String(value || "").trim().replace(/-\d+$/, "");
+}
+
 export async function cloudbedsGet<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
   const apiKey = process.env.CLOUDBEDS_API_KEY;
   const propertyId = process.env.CLOUDBEDS_PROPERTY_ID;
@@ -37,7 +45,16 @@ export async function cloudbedsGet<T>(endpoint: string, params?: Record<string, 
       const message = error.response?.data?.message || error.message;
       
       if (status === 401) {
-        throw new Error("Cloudbeds API key is invalid. Please check CLOUDBEDS_API_KEY.");
+        const data = error.response?.data as { message?: unknown; error?: unknown } | undefined;
+        const detail = [data?.message, data?.error]
+          .map((x) => (x != null ? String(x).trim() : ""))
+          .filter(Boolean)
+          .join(" ");
+        throw new Error(
+          detail
+            ? `Cloudbeds API rejected the request (401): ${detail}`
+            : "Cloudbeds API key is invalid. Please check CLOUDBEDS_API_KEY."
+        );
       }
       throw new Error(`Cloudbeds API error (${status}): ${message}`);
     }
