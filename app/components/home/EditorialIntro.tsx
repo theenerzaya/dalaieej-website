@@ -43,13 +43,13 @@ export default function EditorialIntro() {
               <>
                 Анир нам, ариун дагшин
                 <br />
-                — ХӨВСГӨЛИЙН ЗҮРХЭН ЦЭГ.
+                ХӨВСГӨЛИЙН ЗҮРХЭН ЦЭГ.
               </>
             ) : (
               <>
                 SOLITARY, SACRED, SINGULAR
                 <br />
-                — THE HEART OF KHUVSGUL.
+                THE HEART OF KHUVSGUL.
               </>
             )}
           </Headline>
