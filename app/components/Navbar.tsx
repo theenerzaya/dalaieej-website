@@ -35,8 +35,6 @@ export default function Navbar() {
   const heroPast = useHeroPastForNav(isHome);
   const showFullChrome = isBookingPage || heroPast;
   const paperNav = isAboutUs && !isBookingPage;
-  const hideHomeNavUntilHero =
-    isHome && !isBookingPage && !heroPast && !menuOpen;
 
   useEffect(() => {
     if (menuOpen) {
@@ -55,12 +53,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        aria-hidden={hideHomeNavUntilHero}
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          hideHomeNavUntilHero
-            ? "pointer-events-none invisible opacity-0"
-            : "visible opacity-100"
-        } ${
           paperNav
             ? "bg-main text-ink"
             : isBookingPage || heroPast
