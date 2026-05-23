@@ -10,6 +10,7 @@ const routes = [
   '/lodge',
   '/catalogue',
   '/contact',
+  '/getting-here',
   '/dining',
   '/restaurant',
   '/experiences',

@@ -206,7 +206,7 @@ export function BodyText({
 }
 
 /* -------------------------------------------------------------------------- */
-/*  CTALink — Montserrat underlined text link with optional arrow.            */
+/*  CTALink — Montserrat underlined text link. Internal: → arrow; external: ↗.  */
 /*  Anything that has a link/action and reads as a CTA uses this or CTAButton. */
 /* -------------------------------------------------------------------------- */
 
@@ -240,7 +240,7 @@ export function CTALink({
       <span className={cx("border-b pb-0.5 transition-colors", toneToCtaBorder[tone])}>
         {children}
       </span>
-      {arrow && <ArrowGlyph />}
+      {arrow && (external ? <ExternalArrowGlyph /> : <ArrowGlyph />)}
     </>
   );
 
@@ -291,6 +291,17 @@ function ArrowGlyph() {
       <path d="M5 12h14" />
       <path d="M13 5l7 7-7 7" />
     </svg>
+  );
+}
+
+function ExternalArrowGlyph() {
+  return (
+    <span
+      className="text-[1em] leading-none transition-transform group-hover:-translate-y-px group-hover:translate-x-px"
+      aria-hidden="true"
+    >
+      ↗
+    </span>
   );
 }
 
