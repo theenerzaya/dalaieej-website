@@ -74,7 +74,7 @@ export default function AccessRoadMap({ className = "" }: Props) {
           to guest parking.
         </p>
         <CTALink href={accessRoadTrace.kmlPath} external>
-          Download route (KML)
+          Download GPS Route (KML)
         </CTALink>
       </div>
     );
@@ -131,7 +131,7 @@ export default function AccessRoadMap({ className = "" }: Props) {
       </div>
       <div className="mt-4">
         <CTALink href={accessRoadTrace.kmlPath} external>
-          Download route (KML)
+          Download GPS Route (KML)
         </CTALink>
       </div>
     </div>

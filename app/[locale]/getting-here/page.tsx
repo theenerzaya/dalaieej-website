@@ -150,8 +150,8 @@ export default function GettingHerePage() {
       id: "resort-transfer",
       icon: Ship,
       title: "Resort Transfer",
-      meta: "270,000 MNT · each way",
-      body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way. When your travel plans are set, share your itinerary so we can time your transfer and resort welcome.",
+      meta: "270,000 MNT (Each Way)",
+      body: "We offer a private transfer—a 100 km drive followed by a scenic speedboat arrival. Share your itinerary with us to time your welcome perfectly.",
       href: ITINERARY_MAILTO,
       linkLabel: "Share your itinerary",
     },
@@ -159,7 +159,7 @@ export default function GettingHerePage() {
       id: "ubcab",
       icon: Car,
       title: "UBCab",
-      meta: "App · Murun → Khatgal",
+      meta: "App Booking",
       body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
       href: "https://onelink.to/ubcab",
       linkLabel: "Get UBCab",
@@ -245,7 +245,7 @@ export default function GettingHerePage() {
                     starting from 300,000 MNT per person.
                   </Prose>
                   <Prose>
-                    Because July represents the peak of the Mongolian summer, domestic
+                    Because July represents the absolute peak of the Mongolian summer, domestic
                     flights sell out exceptionally quickly. We strongly advise
                     securing your air travel as early as possible directly with the
                     carriers:
@@ -255,8 +255,8 @@ export default function GettingHerePage() {
                   <div className="grid gap-4 md:grid-cols-1">
                     <CarrierCard
                       name="MIAT Mongolian Airlines"
-                      description="Check schedules and book directly on the MIAT website."
-                      linkLabel="miat.com"
+                      description="Check schedules and book directly on the"
+                      linkLabel="MIAT website"
                       href={
                         locale === "mn"
                           ? "https://miat.com/mn"
@@ -266,8 +266,8 @@ export default function GettingHerePage() {
                     />
                     <CarrierCard
                       name="Hunnu Air"
-                      description="View timetables and book directly on the Hunnu Air website."
-                      linkLabel="hunnuair.com"
+                      description="View timetables and book directly on the"
+                      linkLabel="Hunnu Air website"
                       href={
                         locale === "mn"
                           ? "https://www.hunnuair.com/mn/timetable"
@@ -314,15 +314,14 @@ export default function GettingHerePage() {
                   </Prose>
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
-                  <Subhead>The Erdenet Pitstop</Subhead>
+                  <Subhead>The Erdenet Pit Stop</Subhead>
                   <Prose>
-                    If you are driving, we highly recommend breaking up the trip
-                    with a stop in Erdenet for lunch and refueling. As one of
-                    Mongolia&apos;s wealthiest cities per capita, Erdenet offers a
-                    charming glimpse into Soviet-era urban planning. It is filled
-                    with character—you will find an eclectic mix of options to
-                    recharge, from cozy local &quot;tea houses&quot; to excellent
-                    standalone restaurants.
+                    We highly recommend breaking up the trip with a stop in Erdenet
+                    for lunch and refueling. As one of Mongolia&apos;s wealthiest
+                    cities per capita, Erdenet offers a charming glimpse into
+                    Soviet-era urban planning. Filled with character, you will find
+                    an eclectic mix of options to recharge, from cozy local
+                    &quot;tea houses&quot; to excellent standalone restaurants.
                   </Prose>
                   <Subhead>The Heart of Bulgan</Subhead>
                   <Prose>
@@ -389,7 +388,7 @@ export default function GettingHerePage() {
                       }
                       external
                     >
-                      Transdep E-Ticket
+                      Transdep E-Ticket Portal
                     </CTALink>
                   </div>
                 </FadeInBlock>
@@ -403,26 +402,27 @@ export default function GettingHerePage() {
                         Trans-Siberian Railway—the very same iconic railway famously
                         traveled by David Bowie. Taking the overnight sleeper train to
                         Erdenet is a deeply nostalgic, romantic way to travel. Once
-                        you arrive, independent drivers are waiting at the station
-                        ready to take you the rest of the way to Murun (please
-                        remember to negotiate your fare before departing).
+                        you arrive, independent drivers are waiting at the station ready to take you the rest of the way directly to Khatgal and the lake (please remember to negotiate your fare to your final destination before departing).
                       </Prose>
+                      <p className="font-body text-base md:text-lg text-ink/75 leading-relaxed">
+                        (Tickets available via the{" "}
+                        <CTALink
+                          href="https://eticket.ubtz.mn/search"
+                          external
+                          className="!inline !text-base md:!text-lg"
+                        >
+                          UBTZ E-Ticket Portal
+                        </CTALink>
+                        )
+                      </p>
                       <Prose>
                         <strong className="font-medium text-ink">
                           For Motorbike Expeditions:
                         </strong>{" "}
-                        You can transport your motorbike with you on the train to
+                        You can transport your motorbike on the train to
                         Erdenet, bypassing the heaviest city traffic and officially
                         beginning your ride from there.
                       </Prose>
-                      <div className="pt-2">
-                        <CTALink
-                          href="https://eticket.ubtz.mn/search"
-                          external
-                        >
-                          UBTZ E-Ticket
-                        </CTALink>
-                      </div>
                     </div>
                     <figure className="mx-auto w-[13rem] shrink-0 md:mx-0 md:w-[14rem] lg:w-[15rem]">
                       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
@@ -474,26 +474,26 @@ export default function GettingHerePage() {
                   <Prose>
                     The resort is located 13 km beyond the village of Khatgal, tucked
                     into the Khaich Valley on the eastern shore of the lake. If you are
-                    driving yourself for this final leg, please note that while our
+                    driving this final leg, please note that while our
                     Google Maps pin is highly accurate, the final approach to the resort
                     can be adventurous.
                   </Prose>
                   <Prose>
                     The first 8 km out of Khatgal is a graded gravel road, but the
                     final 5 km is an unpaved, natural dirt track. Because of this, we
-                    highly recommend traveling in a 4x4 vehicle or ensuring you are
-                    an experienced driver.
+                    require traveling in a 4x4 vehicle and highly recommend having
+                    an experienced driver at the wheel.
                   </Prose>
                   <BodyText
                     size="md"
                     className="!text-left max-w-none italic text-ink/55"
                   >
                     Once you pass the Khatgal village edge, you will need to navigate
-                    around the tree line…
+                    around the tree line.
                   </BodyText>
-                  <div className="pt-2">
+                  <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
                     <CTALink href={MAP_URL} external>
-                      Google Maps
+                      View on Google Maps
                     </CTALink>
                   </div>
                   <FadeInBlock delay={0.05} className="mt-6">
@@ -515,23 +515,22 @@ export default function GettingHerePage() {
       </section>
 
       <FrostedMapSection
-        aria-label="Continue planning"
+        aria-label="The destination"
         className="py-24 md:py-32"
         contentClassName="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center"
         fadeTop
         fadeBottom={false}
       >
         <FadeInBlock className="flex w-full flex-col items-center gap-8 text-center">
-          <Eyebrow className="!text-water-deep/70">Continue planning</Eyebrow>
+          <Eyebrow className="!text-water-deep/70">The destination</Eyebrow>
           <Headline as="h2" size="sub">
-            Ready to plan your time on the water?
+            The journey is just the prelude.
           </Headline>
           <BodyText size="md" className="max-w-xl">
-            Discover our wellness and heritage experiences on the shores of Lake
-            Khövsgöl.
+            Discover the accommodations and exclusive spaces waiting at Dalai Eej.
           </BodyText>
-          <CTALink href={`${localePrefix}/experiences`} arrow>
-            Discover Our Wellness & Heritage Experiences
+          <CTALink href={`${localePrefix}/accommodation`} arrow>
+            Explore accommodations
           </CTALink>
         </FadeInBlock>
       </FrostedMapSection>
