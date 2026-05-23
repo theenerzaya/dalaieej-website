@@ -173,6 +173,8 @@ export default function GettingHerePage() {
         aria-label="How We Get to Khövsgöl"
         className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
         imagePriority
+        frostOpacity={13.87}
+        frostBlurPx={6.2}
       >
         <motion.div
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -493,11 +495,8 @@ export default function GettingHerePage() {
                       Google Maps
                     </CTALink>
                   </div>
-                  <Prose>
-                    For those driving independently, the precise path to the resort.
-                  </Prose>
                   <FadeInBlock delay={0.05} className="mt-6">
-                    <AccessRoadMap />
+                    <AccessRoadMap className="mx-auto w-full md:w-1/2" />
                   </FadeInBlock>
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
