@@ -1,6 +1,6 @@
 /**
  * Raster images under public/images: every .webp; .jpg/.jpeg under 900 KiB (except
- * gallery/DBR_* — any size, jpg or webp). Excludes about-us/. Byte-identical files omitted.
+ * gallery/DBR_* — any size, jpg or webp). Excludes about-us/ and getting-here/. Byte-identical files omitted.
  * Regenerate: npm run sync-gallery-images
  */
 export type GalleryImageSource = {

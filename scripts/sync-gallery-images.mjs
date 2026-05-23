@@ -7,7 +7,7 @@
  *     public/images/gallery/DBR_* shots: any .jpg / .jpeg / .webp (no size cap)
  *   - For the same DBR stem (e.g. DBR_7366.jpg vs DBR_7366.webp), keeps .webp only
  *   - Byte-identical files are deduped (first path by sort order is kept)
- *   - Skips public/images/about-us (story page assets, not gallery)
+ *   - Skips public/images/about-us and getting-here (page assets, not gallery)
  *
  * Usage: node scripts/sync-gallery-images.mjs
  */
@@ -262,7 +262,7 @@ async function main() {
   const picked = [];
 
   for (const rel of allRels) {
-    if (rel.startsWith("about-us/")) continue;
+    if (rel.startsWith("about-us/") || rel.startsWith("getting-here/")) continue;
 
     const ext = path.extname(rel).toLowerCase();
     const full = path.join(IMAGES_ROOT, ...rel.split("/"));
@@ -294,7 +294,7 @@ async function main() {
 
   const header = `/**
  * Raster images under public/images: every .webp; .jpg/.jpeg under 900 KiB (except
- * gallery/DBR_* — any size, jpg or webp). Excludes about-us/. Byte-identical files omitted.
+ * gallery/DBR_* — any size, jpg or webp). Excludes about-us/ and getting-here/. Byte-identical files omitted.
  * Regenerate: npm run sync-gallery-images
  */
 export type GalleryImageSource = {
