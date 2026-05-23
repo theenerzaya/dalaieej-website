@@ -18,10 +18,11 @@ import TransferOptions, {
   type TransferOption,
 } from "@/app/components/getting-here/TransferOptions";
 import AccessRoadMap from "@/app/components/getting-here/AccessRoadMap";
+import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
 import SiteImage from "@/app/components/SiteImage";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { Car, Plane, Ship, type LucideIcon } from "lucide-react";
+import { Car, Ship } from "lucide-react";
 
 const MAP_URL =
   "https://www.google.com/maps/place/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт/@50.449042,100.148914,13z/data=!4m9!3m8!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!5m2!4m1!1i2!8m2!3d50.4846951!4d100.1893209!16s%2Fg%2F11stqvr5td?entry=ttu";
@@ -150,9 +151,9 @@ export default function GettingHerePage() {
       icon: Ship,
       title: "Resort Transfer",
       meta: "270,000 MNT · each way",
-      body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way.",
-      href: `${localePrefix}/contact`,
-      linkLabel: "Arrange transfer",
+      body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way. When your travel plans are set, share your itinerary so we can time your transfer and resort welcome.",
+      href: ITINERARY_MAILTO,
+      linkLabel: "Share your itinerary",
     },
     {
       id: "ubcab",
@@ -164,68 +165,41 @@ export default function GettingHerePage() {
       linkLabel: "Get UBCab",
       external: true,
     },
-    {
-      id: "coordinate",
-      icon: Plane,
-      title: "Coordinate with us",
-      meta: "Email · we align timing",
-      body: "Share your itinerary and we will align private transfers and your resort welcome.",
-      href: ITINERARY_MAILTO,
-      linkLabel: "Share itinerary",
-    },
   ];
 
   return (
     <PageShell>
-      <section
+      <FrostedMapSection
         aria-label="How We Get to Khövsgöl"
-        className="relative w-full overflow-hidden pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
+        className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
+        imagePriority
       >
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-0 scale-[1.35] md:scale-[1.25]">
-              <SiteImage
-                src="/map.jpg"
-                alt=""
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-            </div>
-          </div>
-          <div className="absolute inset-0 bg-main/[14.6] backdrop-blur-[6.5px] backdrop-saturate-90" />
-          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-surface md:h-36" />
-        </div>
-
-        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center">
-          <motion.div
-            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.7 }}
-          >
-            <Eyebrow className="!text-water-deep/70 mb-6">
-              The Journey
-            </Eyebrow>
-            <Headline as="h1" size="section">
-              How We Get to Khövsgöl
-            </Headline>
-          </motion.div>
-          <motion.div
-            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: reduceMotion ? 0 : 0.6,
-              delay: reduceMotion ? 0 : 0.15,
-            }}
-          >
-            <BodyText size="md" className="max-w-2xl">
-              A comprehensive guide to traveling from Ulaanbaatar to the Khaich
-              Valley.
-            </BodyText>
-          </motion.div>
-        </div>
-      </section>
+        <motion.div
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.7 }}
+        >
+          <Eyebrow className="!text-water-deep/70 mb-6">
+            The Journey
+          </Eyebrow>
+          <Headline as="h1" size="section">
+            How We Get to Khövsgöl
+          </Headline>
+        </motion.div>
+        <motion.div
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.6,
+            delay: reduceMotion ? 0 : 0.15,
+          }}
+        >
+          <BodyText size="md" className="max-w-2xl">
+            A comprehensive guide to traveling from Ulaanbaatar to the Khaich
+            Valley.
+          </BodyText>
+        </motion.div>
+      </FrostedMapSection>
 
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto max-w-6xl">
@@ -529,23 +503,10 @@ export default function GettingHerePage() {
                 <FadeInBlock delay={0.15}>
                   <Subhead>Taxis and Private Transfers</Subhead>
                   <Prose>
-                    If you did not drive your own vehicle to Murun, you have several
+                    If you did not drive your own vehicle to Murun, you have two
                     options for the final stretch:
                   </Prose>
                   <TransferOptions options={transferOptions} />
-                </FadeInBlock>
-                <FadeInBlock delay={0.2}>
-                  <Subhead>Coordinating Your Arrival</Subhead>
-                  <Prose>
-                    Once your flights or overland travel plans are secured, please share
-                    your itinerary with our team. We will ensure your private transfers
-                    and resort welcome are perfectly timed.
-                  </Prose>
-                  <div className="pt-4">
-                    <CTALink href={ITINERARY_MAILTO} arrow>
-                      Share your itinerary with us
-                    </CTALink>
-                  </div>
                 </FadeInBlock>
               </SectionBlock>
             </div>
@@ -553,8 +514,14 @@ export default function GettingHerePage() {
         </div>
       </section>
 
-      <ContentSection tone="leaf-tint" width="wide" align="center">
-        <FadeInBlock>
+      <FrostedMapSection
+        aria-label="Continue planning"
+        className="py-24 md:py-32"
+        contentClassName="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center"
+        fadeTop
+        fadeBottom={false}
+      >
+        <FadeInBlock className="flex w-full flex-col items-center gap-8 text-center">
           <Eyebrow className="!text-water-deep/70">Continue planning</Eyebrow>
           <Headline as="h2" size="sub">
             Ready to plan your time on the water?
@@ -567,7 +534,7 @@ export default function GettingHerePage() {
             Discover Our Wellness & Heritage Experiences
           </CTALink>
         </FadeInBlock>
-      </ContentSection>
+      </FrostedMapSection>
     </PageShell>
   );
 }

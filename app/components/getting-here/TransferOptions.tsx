@@ -13,6 +13,8 @@ export type TransferOption = {
   href: string;
   linkLabel: string;
   external?: boolean;
+  secondaryHref?: string;
+  secondaryLinkLabel?: string;
 };
 
 type Props = {
@@ -20,7 +22,17 @@ type Props = {
 };
 
 function TransferOptionCard({ option }: { option: TransferOption }) {
-  const { icon: Icon, title, meta, body, href, linkLabel, external } = option;
+  const {
+    icon: Icon,
+    title,
+    meta,
+    body,
+    href,
+    linkLabel,
+    external,
+    secondaryHref,
+    secondaryLinkLabel,
+  } = option;
 
   return (
     <article className="group flex h-full flex-col gap-3 bg-leaf/5 p-6 transition-colors duration-300 hover:bg-surface-alt/90">
@@ -40,10 +52,15 @@ function TransferOptionCard({ option }: { option: TransferOption }) {
       <p className="flex-1 font-body text-sm leading-relaxed text-ink/70">
         {body}
       </p>
-      <div className="pt-1">
+      <div className="flex flex-col items-start gap-3 pt-1">
         <CTALink href={href} external={external} arrow>
           {linkLabel}
         </CTALink>
+        {secondaryHref && secondaryLinkLabel ? (
+          <CTALink href={secondaryHref} arrow>
+            {secondaryLinkLabel}
+          </CTALink>
+        ) : null}
       </div>
     </article>
   );
@@ -51,7 +68,7 @@ function TransferOptionCard({ option }: { option: TransferOption }) {
 
 export default function TransferOptions({ options }: Props) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 sm:grid-cols-2">
       {options.map((option, index) => (
         <FadeInBlock
           key={option.id}
