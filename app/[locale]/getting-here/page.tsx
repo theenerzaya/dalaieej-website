@@ -499,8 +499,11 @@ export default function GettingHerePage() {
                       Google Maps
                     </CTALink>
                   </div>
-                  <FadeInBlock delay={0.05} className="mt-8">
-                    <MediaPlaceholder variant="map" label="Resort location map — placeholder" />
+                  <Prose>
+                    For those driving independently, the precise path to the resort.
+                  </Prose>
+                  <FadeInBlock delay={0.05} className="mt-6">
+                    <AccessRoadMap />
                   </FadeInBlock>
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
