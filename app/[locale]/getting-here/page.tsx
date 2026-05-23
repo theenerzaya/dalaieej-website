@@ -177,35 +177,55 @@ export default function GettingHerePage() {
 
   return (
     <PageShell>
-      <ContentSection
-        tone="surface"
-        width="default"
-        align="center"
-        className="!pt-[150px] pb-24 md:pb-32"
+      <section
+        aria-label="How We Get to Khövsgöl"
+        className="relative w-full overflow-hidden pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
       >
-        <motion.div
-          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.7 }}
-        >
-          <Eyebrow className="!text-water-deep/70 mb-6">
-            The Journey
-          </Eyebrow>
-          <Headline as="h1" size="section">
-            How We Get to Khövsgöl
-          </Headline>
-        </motion.div>
-        <motion.div
-          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.6, delay: reduceMotion ? 0 : 0.15 }}
-        >
-          <BodyText size="md" className="max-w-2xl">
-            A comprehensive guide to traveling from Ulaanbaatar to the Khaich
-            Valley.
-          </BodyText>
-        </motion.div>
-      </ContentSection>
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 scale-[1.35] md:scale-[1.25]">
+              <SiteImage
+                src="/map.jpg"
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+            </div>
+          </div>
+          <div className="absolute inset-0 bg-main/[14.6] backdrop-blur-[6.5px] backdrop-saturate-90" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-surface md:h-36" />
+        </div>
+
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center">
+          <motion.div
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.7 }}
+          >
+            <Eyebrow className="!text-water-deep/70 mb-6">
+              The Journey
+            </Eyebrow>
+            <Headline as="h1" size="section">
+              How We Get to Khövsgöl
+            </Headline>
+          </motion.div>
+          <motion.div
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.6,
+              delay: reduceMotion ? 0 : 0.15,
+            }}
+          >
+            <BodyText size="md" className="max-w-2xl">
+              A comprehensive guide to traveling from Ulaanbaatar to the Khaich
+              Valley.
+            </BodyText>
+          </motion.div>
+        </div>
+      </section>
 
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto max-w-6xl">

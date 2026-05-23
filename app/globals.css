@@ -39,6 +39,9 @@
 
   --gradient-fade-down: linear-gradient(180deg, #0D0F1C 0%, rgba(13, 15, 28, 0) 100%);
   --gradient-fade-up: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 50%);
+
+  /* Fixed navbar band — matches Navbar min-h (5rem × 1.05) */
+  --navbar-h: 5.25rem;
 }
 
 @theme inline {
