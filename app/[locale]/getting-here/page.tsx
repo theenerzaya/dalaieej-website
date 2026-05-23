@@ -175,6 +175,7 @@ export default function GettingHerePage() {
         imagePriority
         frostOpacity={13.87}
         frostBlurPx={6.2}
+        mapObjectPosition="50% 58%"
       >
         <motion.div
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}

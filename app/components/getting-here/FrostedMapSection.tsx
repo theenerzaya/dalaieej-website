@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import SiteImage from "@/app/components/SiteImage";
 
-const MAP_SRC = "/map.jpg";
+const MAP_SRC = "/images/getting-here/travel-route-map.jpg";
 
 type FrostedMapSectionProps = {
   children: ReactNode;
@@ -17,13 +17,15 @@ type FrostedMapSectionProps = {
   frostOpacity?: number;
   /** Backdrop blur in px. Default 6.5 */
   frostBlurPx?: number;
+  /** CSS object-position for the map crop (e.g. "50% 55%"). */
+  mapObjectPosition?: string;
 };
 
 const DEFAULT_FROST_OPACITY = 14.6;
 const DEFAULT_FROST_BLUR_PX = 6.5;
 
 /**
- * Full-width band with zoomed map.jpg and shared frost treatment (Getting Here).
+ * Full-width band with travel-route-map.jpg and shared frost treatment (Getting Here).
  */
 export default function FrostedMapSection({
   children,
@@ -35,6 +37,7 @@ export default function FrostedMapSection({
   fadeBottom = true,
   frostOpacity = DEFAULT_FROST_OPACITY,
   frostBlurPx = DEFAULT_FROST_BLUR_PX,
+  mapObjectPosition = "50% 50%",
 }: FrostedMapSectionProps) {
   return (
     <section
@@ -50,7 +53,8 @@ export default function FrostedMapSection({
               fill
               priority={imagePriority}
               sizes="100vw"
-              className="object-cover object-center"
+              className="object-cover"
+              style={{ objectPosition: mapObjectPosition }}
             />
           </div>
         </div>
