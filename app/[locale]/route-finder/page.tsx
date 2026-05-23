@@ -50,7 +50,7 @@ export default function RouteFinderPage() {
   const faqs = [
     {
       q: "Why do you recommend the North over the South?",
-      a: "The South (Gobi) is spectacular, but it is an arid, demanding desert. If you want the 'Classic Mongolia' image of green grasslands and galloping horses, you actually find that in the North and Center.\n\nKhuvsgul is a sanctuary—lush alpine forests, reindeer tribes, and massive freshwater reserves. We believe the perfect Mongolia expedition should always end in the North to 'wash off the dust' of the steppe before you fly home."
+      a: "The South (Gobi) is spectacular, but it is an arid, demanding desert. If you want the 'Classic Mongolia' image of green grasslands and galloping horses, you actually find that in the North and Center.\n\nKhövsgöl is a sanctuary—lush alpine forests, reindeer tribes, and massive freshwater reserves. We believe the perfect Mongolia expedition should always end in the North to 'wash off the dust' of the steppe before you fly home."
     },
     {
       q: "Do I need a tour guide?",
@@ -70,7 +70,7 @@ export default function RouteFinderPage() {
         <div className="absolute inset-0">
           <img 
             src="/images/gallery/the-resort/DBR_7361.webp" 
-            alt="Khuvsgul Lake"
+            alt="Lake Khövsgöl"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/20" /> {/* Subtle overlay for text readability */}
@@ -135,7 +135,7 @@ export default function RouteFinderPage() {
       <section className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <img src="/images/gallery/adventures/DBR_1996.webp" alt="Mongolia Road Trip" className="w-full aspect-[4/3] object-cover" />
-          <img src="/images/gallery/adventures/DBR_3442.webp" alt="Gobi Desert to Khuvsgul" className="w-full aspect-[4/3] object-cover" />
+          <img src="/images/gallery/adventures/DBR_3442.webp" alt="Gobi Desert to Khövsgöl" className="w-full aspect-[4/3] object-cover" />
           <img src="/images/gallery/adventures/DBR_5227.webp" alt="Luxury Picnic" className="w-full aspect-[4/3] object-cover" />
           <img src="/images/gallery/the-resort/DBR_6649.webp" alt="Ulaanbaatar City Tour" className="w-full aspect-[4/3] object-cover" />
         </div>
@@ -170,7 +170,7 @@ export default function RouteFinderPage() {
       <footer className="py-20 px-6 bg-main text-center">
         <div className="max-w-3xl mx-auto space-y-4 text-stone-800">
           <h2 className="text-3xl font-serif mb-8">Contact Us</h2>
-          <p><strong>Address:</strong> Mergen&apos;s Ridge, Haichin Am, eastern shore of Lake Khuvsgul (13 km from Khatgal), Khövsgöl Province, Mongolia</p>
+          <p><strong>Address:</strong> Mergen&apos;s Ridge, Haichin Am, eastern shore of Lake Khövsgöl (13 km from Khatgal), Khövsgöl Province, Mongolia</p>
           <p><strong>Location Notes:</strong> 50.4° N, 100.1° E</p>
           <p><strong>Email:</strong> <a href="mailto:hello@dalaieej.com" className="underline hover:text-stone-500">hello@dalaieej.com</a></p>
           <p className="pt-4 text-sm">For all inquiries: <a href="tel:+97677809010" className="underline hover:text-stone-500">+976 77 809010</a></p>

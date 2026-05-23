@@ -19,7 +19,7 @@ const silos = [
     id: "stay",
     href: "/cabins",
     en: "Cabins",
-    mn: "Өрөөнүүд",
+    mn: "Амрах байр",
     image: "/images/silogrid/sanctuary.webp"
   },
   {
@@ -33,7 +33,7 @@ const silos = [
     id: "wellness",
     href: "/cabins",
     en: "Wellness",
-    mn: "Амралт",
+    mn: "Алжаал тайлах",
     image: "/images/silogrid/wellness.webp"
   },
   {
@@ -49,7 +49,7 @@ const storiesSilo = {
   id: "stories",
   href: "#",
   en: "Stories",
-  mn: "Нийтлэл",
+    mn: "Тэмдэглэл",
   image: "/images/silogrid/stories-placeholder.webp"
 };
 

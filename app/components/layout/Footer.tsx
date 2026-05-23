@@ -28,12 +28,11 @@ export default function Footer() {
     href: string;
     external?: boolean;
     enOnly?: boolean;
-    breakBefore?: boolean;
   }[] = [
     { key: "about", href: "/about-us" },
     { key: "catalogue", href: "https://online.fliphtml5.com/scxec/iewd/", external: true },
     { key: "gallery", href: "/gallery" },
-    { key: "gettingHere", href: "/getting-here", breakBefore: true },
+    { key: "gettingHere", href: "/getting-here" },
     { key: "policies", href: "#" },
   ];
 
@@ -73,7 +72,7 @@ export default function Footer() {
               />
             </Link>
             <p
-              className={`mt-3 md:mt-4 text-sm text-main/70 leading-relaxed max-w-xs ${
+              className={`mt-3 md:mt-4 text-sm text-main/70 leading-relaxed max-w-xs whitespace-pre-line ${
                 isAboutUs ? "mx-auto md:mx-0" : ""
               }`}
             >
@@ -113,7 +112,7 @@ export default function Footer() {
             </div>
             <ul className="space-y-2 md:space-y-3">
               {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
-                <li key={item.key} className={item.breakBefore ? "pt-3 md:pt-4 mt-1 md:mt-2 border-t border-main/10" : undefined}>
+                <li key={item.key}>
                   {item.external ? (
                     <a
                       href={item.href}

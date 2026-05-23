@@ -16,7 +16,15 @@ import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import MediaPlaceholder from "@/app/components/getting-here/MediaPlaceholder";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { Bus, Car, Plane, Ship, Train } from "lucide-react";
+import { Bus, Car, Plane, Ship, Train, type LucideIcon } from "lucide-react";
+
+type TransferCard = {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+  href?: string;
+  linkLabel?: string;
+};
 
 const MAP_URL =
   "https://www.google.com/maps/place/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт/@50.449042,100.148914,13z/data=!4m9!3m8!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!5m2!4m1!1i2!8m2!3d50.4846951!4d100.1893209!16s%2Fg%2F11stqvr5td?entry=ttu";
@@ -73,9 +81,14 @@ function SectionBlock({
 
 function Subhead({ children }: { children: ReactNode }) {
   return (
-    <h3 className="font-editorial-en italic text-xl md:text-2xl text-ink/90 mt-10 mb-4">
+    <Headline
+      as="h3"
+      size="sub"
+      align="left"
+      className="!text-ink/90 mt-10 mb-4 text-xl md:!text-2xl"
+    >
       {children}
-    </h3>
+    </Headline>
   );
 }
 
@@ -91,7 +104,9 @@ function BulletList({ items }: { items: ReactNode[] }) {
   return (
     <ul className="list-disc space-y-2 pl-5 font-body text-base md:text-lg text-ink/75 leading-relaxed">
       {items.map((item, i) => (
-        <li key={i}>{item}</li>
+        <li key={i}>
+          <p>{item}</p>
+        </li>
       ))}
     </ul>
   );
@@ -166,7 +181,10 @@ export default function GettingHerePage() {
 
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto max-w-6xl">
-          <div className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20">
+          <article
+            aria-label="Arrival guide"
+            className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"
+          >
             <aside className="mb-12 lg:mb-0">
               <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-2">
                 <FadeInBlock>
@@ -258,7 +276,7 @@ export default function GettingHerePage() {
                   </Prose>
                   <Subhead>Pacing the Journey</Subhead>
                   <Prose>
-                    If you plan to complete the drive to Lake Khuvsgul in a single
+                    If you plan to complete the drive to Lake Khövsgöl in a single
                     day, an early departure is essential. We strongly advise setting
                     out from Ulaanbaatar no later than 9:00 AM sharp. To comfortably
                     complete the journey and arrive before nightfall, aim to safely
@@ -435,25 +453,27 @@ export default function GettingHerePage() {
                     options for the final stretch:
                   </Prose>
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {[
-                      {
-                        icon: Ship,
-                        title: "Resort Transfer",
-                        body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way.",
-                      },
-                      {
-                        icon: Car,
-                        title: "UBCab",
-                        body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
-                        href: "https://onelink.to/ubcab",
-                        linkLabel: "UBCab",
-                      },
-                      {
-                        icon: Plane,
-                        title: "Coordinate with us",
-                        body: "Share your itinerary and we will align private transfers and your resort welcome.",
-                      },
-                    ].map((card) => (
+                    {(
+                      [
+                        {
+                          icon: Ship,
+                          title: "Resort Transfer",
+                          body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way.",
+                        },
+                        {
+                          icon: Car,
+                          title: "UBCab",
+                          body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
+                          href: "https://onelink.to/ubcab",
+                          linkLabel: "UBCab",
+                        },
+                        {
+                          icon: Plane,
+                          title: "Coordinate with us",
+                          body: "Share your itinerary and we will align private transfers and your resort welcome.",
+                        },
+                      ] as TransferCard[]
+                    ).map((card) => (
                       <div
                         key={card.title}
                         className="flex flex-col gap-3 border border-ink/10 bg-leaf/5 p-6"
@@ -465,7 +485,7 @@ export default function GettingHerePage() {
                         <p className="font-body text-sm text-ink/70 leading-relaxed">
                           {card.body}
                         </p>
-                        {"href" in card && card.href ? (
+                        {card.href ? (
                           <CTALink href={card.href} external>
                             {card.linkLabel ?? card.title}
                           </CTALink>
@@ -489,7 +509,7 @@ export default function GettingHerePage() {
                 </FadeInBlock>
               </SectionBlock>
             </div>
-          </div>
+          </article>
         </div>
       </section>
 

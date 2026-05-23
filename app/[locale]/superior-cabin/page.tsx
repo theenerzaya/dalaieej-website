@@ -116,7 +116,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     guests: "Guests",
     guestsValue: "2 adults · 1 child",
     intro:
-      "Wood-fired warmth, handwoven textiles and a private view of the larch line — our Superior Cabin pairs the quiet materiality of the Khuvsgul forest with a restrained, crafted interior. Every detail is placeholder copy, ready to be replaced with the final room story.",
+      "Wood-fired warmth, handwoven textiles and a private view of the larch line — our Superior Cabin pairs the quiet materiality of the Khövsgöl forest with a restrained, crafted interior. Every detail is placeholder copy, ready to be replaced with the final room story.",
     detailsHeading: "At a glance",
     size: "30 m²",
     bed: "1 Queen Bed",

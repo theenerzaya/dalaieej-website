@@ -100,7 +100,7 @@ const ROOM_CONFIGS: RoomConfig[] = [
     area: { en: "55 m²", mn: "55 м²" },
     guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
     intro: {
-      en: "A wider shoreline footprint with two sleeping spaces, a reading nook, and a deck that steps directly toward Lake Khuvsgul.",
+      en: "A wider shoreline footprint with two sleeping spaces, a reading nook, and a deck that steps directly toward Lake Khövsgöl.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай, хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
     image: assetUrl("/images/cabins/room-lakeside.webp"),

@@ -26,7 +26,7 @@ export default function AccommodationPage() {
       subtitle: locale === 'mn' ? "Нуурын эрэг дээр" : "On the Lakeshore",
       description: locale === 'mn' 
         ? "Хөвсгөл нуурын эрэг дээрх түүхэн гол байшин. Нуурын харагдац бүхий өрөөнүүд."
-        : "Our historic main lodge overlooking the lake. Rooms with panoramic views of Lake Khuvsgul.",
+        : "Our historic main lodge overlooking the lake. Rooms with panoramic views of Lake Khövsgöl.",
       image: "/images/gallery/the-resort/DBR_8136.webp",
       capacity: locale === 'mn' ? "2-3 зочин" : "2-3 Guests"
     }
@@ -158,7 +158,7 @@ export default function AccommodationPage() {
           <p className="font-body text-main/70 mb-10">
             {locale === 'mn' 
               ? "Хөвсгөл нуурын эргэнд тантай уулзахыг хүлээж байна"
-              : "Experience the tranquility of Lake Khuvsgul"}
+              : "Experience the tranquility of Lake Khövsgöl"}
           </p>
           <a
             href={`${localePrefix}/booking`}

@@ -106,7 +106,7 @@ const ROOMS: Room[] = [
     guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
     quantity: { en: "2 cabins", mn: "2 байшин" },
     intro: {
-      en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khuvsgul.",
+      en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khövsgöl.",
       mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
     },
     image: assetUrl("/images/cabins/room-lakeside.webp"),

@@ -41,15 +41,15 @@ export default function EditorialIntro() {
           <Headline as="h2" size="section">
             {locale === 'mn' ? (
               <>
-                Анир нам, ариун дагшин
+                Анир нам, ариун дагшин.
                 <br />
                 ХӨВСГӨЛИЙН ЗҮРХЭН ЦЭГ.
               </>
             ) : (
               <>
-                SOLITARY, SACRED, SINGULAR
+                SOLITARY, SACRED, SINGULAR.
                 <br />
-                THE HEART OF KHUVSGUL.
+                THE HEART OF KHÖVSGÖL.
               </>
             )}
           </Headline>

@@ -32,7 +32,7 @@ export default function AmenitiesPage() {
         <div className="absolute inset-0">
           <img 
             src="/images/cabins/hero-our-rooms.webp"
-            alt="Lake Khuvsgul"
+            alt="Lake Khövsgöl"
             className="w-full h-full object-cover opacity-40"
           />
         </div>

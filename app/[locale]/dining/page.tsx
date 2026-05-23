@@ -65,7 +65,7 @@ export default function RestaurantPage() {
             <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Манай ресторан нь Хөвсгөлийн байгалийн бүтээгдэхүүнийг ашиглан дэлхийн түвшний хоол бэлтгэдэг."
-                : "Our restaurant celebrates the bounty of Lake Khuvsgul, crafting memorable dishes from the freshest local ingredients."}
+                : "Our restaurant celebrates the bounty of Lake Khövsgöl, crafting memorable dishes from the freshest local ingredients."}
             </p>
           </motion.div>
 

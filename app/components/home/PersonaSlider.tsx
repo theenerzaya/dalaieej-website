@@ -35,9 +35,9 @@ const personas = [
       href: "/cabins",
     },
     mn: {
-      title: "ТАВ ТУХТАЙ АМРАЛТ",
+      title: "ТӨГС АМРАЛТ",
       description:
-        "Байгаль дунд тав тухтай амарч, хэрэгтэй бүхнээ нэг дороос авах тайван сонголт.",
+        "Онгон байгаль дахь төгс тав тух. Хотын шуугианаас холдож, юугаар ч үл дутах амар амгаланг мэдрэхүй.",
       image: assetUrl("/images/personas/sanctuary-mn.jpg"),
       href: "/cabins",
     },
@@ -53,9 +53,9 @@ const personas = [
       href: "/restaurant",
     },
     mn: {
-      title: "БАЙГАЛИЙН АДАЛ ЯВДАЛ",
+      title: "ХЯЗГААР НУТАГ",
       description:
-        "Хөх сувдын эрэг, тайгын жимээр алхаж, морь унан, Хөвсгөлийн жинхэнэ өнгийг мэдрэх аялал.",
+        "Хаа сайгүй аялж үзсэн хүмүүст зориулав. Хөндөгдөөгүй онгон тайга болон Хөх сувдын байгалийн сайхныг нээх аялал.",
       image: assetUrl("/images/personas/frontier-mn.jpg"),
       href: "/restaurant",
     },
@@ -71,9 +71,9 @@ const personas = [
       href: "/cabins",
     },
     mn: {
-      title: "АМЬСГАА АВАХ ЗАВСАР",
+      title: "ӨӨРТӨӨ ТӨВЛӨРӨХҮЙ",
       description:
-        "Хотын хэмнэлээс түр холдож, чимээгүй орчинд өөртөө эргэн төвлөрөх нам гүм хугацаа.",
+        "Чимээ шуугианаас ангижрах орон зай. Цахим ертөнцөөс хөндийрч, галын чимээ, нуурын долгио чагнаж өөртөө төвлөрөх цаг.",
       image: assetUrl("/images/personas/disconnect-mn.jpg"),
       href: "/cabins",
     },
@@ -89,9 +89,9 @@ const personas = [
       href: "/restaurant",
     },
     mn: {
-      title: "ХОЁУЛАХНЫ АМРАЛТ",
+      title: "ХОЁУЛАХНАА",
       description:
-        "Хувийн уур амьсгалтай орчинд жаргах нарыг хамт үзэж, дурсамж бүтээх дулаан аялал.",
+        "Зөвхөн та хоёрт зориулсан онцгой орон зай. Үдшийн зоог, жаргах наран, хэний ч үл саад болох амар амгалан.",
       image: assetUrl("/images/personas/seclusion.jpg"),
       href: "/restaurant",
     },
@@ -229,7 +229,7 @@ export default function PersonaSlider() {
       <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col items-center gap-6 mb-10 md:mb-12">
         <FadeInWhenVisible y={14} duration={0.5}>
           <Eyebrow>
-            {locale === "mn" ? "Танд тохирох аяллаа сонгоорой" : "Find Your Journey"}
+            {locale === "mn" ? "Өөрийн аяллаа ол" : "Find Your Journey"}
           </Eyebrow>
         </FadeInWhenVisible>
         <motion.div
@@ -395,7 +395,7 @@ export default function PersonaSlider() {
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
                   <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
-                    {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
+                    {locale === "mn" ? "Сонирхох" : "Explore"}
                   </CTALink>
                 </div>
 
@@ -461,7 +461,7 @@ export default function PersonaSlider() {
               </div>
 
               <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
-                {locale === "mn" ? "Дэлгэрэнгүй" : "Explore"}
+                {locale === "mn" ? "Сонирхох" : "Explore"}
               </CTALink>
 
               <figure

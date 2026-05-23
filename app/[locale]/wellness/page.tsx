@@ -103,7 +103,7 @@ export default function WellnessPage() {
               <p className="font-body text-leaf/70 mb-6">
                 {locale === 'mn' 
                   ? "Хөвсгөл нуурын цэвэр агаар, тайван орчин нь таны эрүүл мэндэд эерэг нөлөө үзүүлнэ. Манай спа нь энэхүү байгалийн гоо сайханыг ашигладаг."
-                  : "The pristine air and serene environment of Lake Khuvsgul naturally promotes healing and renewal. Our spa harnesses this natural beauty to enhance every treatment."}
+                  : "The pristine air and serene environment of Lake Khövsgöl naturally promotes healing and renewal. Our spa harnesses this natural beauty to enhance every treatment."}
               </p>
               <p className="font-body text-leaf/70">
                 {locale === 'mn' 

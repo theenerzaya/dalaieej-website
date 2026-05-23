@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
           url: openGraphAssetUrl('/images/og-heritage.jpg', locale),
           width: 1200,
           height: 630,
-          alt: 'Dalai Eej Heritage Resort at Lake Khuvsgul',
+          alt: 'Dalai Eej Heritage Resort at Lake Khövsgöl',
           type: 'image/jpeg',
         },
       ],
@@ -94,15 +94,18 @@ export default async function LocaleLayout({ children, params }: Props) {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Resort',
-            name: 'Dalai Eej Heritage Site',
+            name: 'Dalai Eej Resort',
+            description:
+              "A quiet refuge on Lake Khövsgöl's eastern shore. Wooden cabins, deep waters, slow days. Northern Mongolia.",
             image: `${resortImageBase}/images/og-heritage.jpg`,
-            telephone: '+976-77-809010',
+            telephone: '+97677809010',
             email: 'hello@dalaieej.com',
             address: {
               '@type': 'PostalAddress',
-              streetAddress: "Mergen's Ridge, Haichin Am, eastern shore of Lake Khuvsgul",
+              streetAddress:
+                "Mergen's Ridge, Khaich Valley, eastern Lake Khövsgöl shore",
               addressLocality: 'Khatgal',
-              addressRegion: 'Khuvsgul',
+              addressRegion: 'Khövsgöl Province',
               postalCode: '67143',
               addressCountry: 'MN'
             },
@@ -112,6 +115,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               longitude: '100.198139'
             },
             url: resortCanonical,
+            hasMap: 'https://maps.app.goo.gl/iynJVGDxFPfYy3f1A',
             priceRange: '$$$'
           })
         }}

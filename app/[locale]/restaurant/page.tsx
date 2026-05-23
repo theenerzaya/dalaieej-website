@@ -128,7 +128,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     bookHeadingLine1: "Spend your",
     bookHeadingLine2: "evenings with us",
     bookAddress:
-      "Mergen's Ridge, Haichin Am — eastern shore of Lake Khuvsgul, 13 km from Khatgal.",
+      "Mergen's Ridge, Haichin Am — eastern shore of Lake Khövsgöl, 13 km from Khatgal.",
     bookCta: "Book your stay",
 
     spaTitle: "Relax Spa",

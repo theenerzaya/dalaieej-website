@@ -16,7 +16,7 @@ function galleryJsonLd(locale: string) {
     '@context': 'https://schema.org',
     '@type': 'ImageGallery',
     name: 'Dalai Eej Resort Photo Gallery',
-    description: 'A visual journey through Dalai Eej Resort on Lake Khuvsgul, Mongolia',
+    description: 'A visual journey through Dalai Eej Resort on Lake Khövsgöl, Mongolia',
     url: absoluteSiteUrl(locale, '/gallery'),
     inLanguage: locale,
     about: {

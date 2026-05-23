@@ -90,7 +90,7 @@ async function translateWithGemini(missingFlat, existingMnJson) {
     setByDotKey(missingObj, dotKey, value);
   }
 
-  const prompt = `You are a professional English-to-Mongolian translator for a luxury lakeside resort website (Dalai Eej Resort on Lake Khuvsgul, Mongolia).
+  const prompt = `You are a professional English-to-Mongolian translator for a luxury lakeside resort website (Dalai Eej Resort on Lake Khövsgöl, Mongolia).
 
 EXISTING MONGOLIAN TRANSLATIONS (for tone/style reference):
 ${JSON.stringify(existingMnJson, null, 2).slice(0, 4000)}

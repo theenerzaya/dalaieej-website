@@ -1,4 +1,5 @@
-import { generatePageMetadata } from '@/lib/metadata';
+import { getTranslations } from 'next-intl/server';
+import { absoluteSiteUrl, hreflangLanguages } from '@/lib/site-urls';
 
 type Props = {
   children: React.ReactNode;
@@ -7,11 +8,25 @@ type Props = {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return generatePageMetadata({
-    locale,
-    namespace: 'metadata.gettingHere',
-    path: '/getting-here',
-  });
+  const t = await getTranslations({ locale, namespace: 'metadata.gettingHere' });
+  const canonical = absoluteSiteUrl(locale, '/getting-here');
+
+  return {
+    title: t('title'),
+    description: t('description'),
+    alternates: {
+      canonical,
+      languages: hreflangLanguages('/getting-here'),
+    },
+    openGraph: {
+      title: t('openGraphTitle'),
+      description: t('openGraphDescription'),
+      url: canonical,
+      siteName: 'Dalai Eej Resort',
+      locale: locale === 'mn' ? 'mn_MN' : 'en_US',
+      type: 'website',
+    },
+  };
 }
 
 export default async function GettingHereLayout({ children }: Props) {

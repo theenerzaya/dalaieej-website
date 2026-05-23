@@ -24,7 +24,7 @@ const content = {
       {
         year: "The 1990s",
         title: "The Auction",
-        body: 'As Mongolia transitioned to capitalism, a local "Khatgal boy"—and future Member of Parliament—purchased a pioneer camp at auction. The price paid funded the province’s civil servants for a full year, cementing our investment in Khuvsgul\'s survival.',
+        body: 'As Mongolia transitioned to capitalism, a local "Khatgal boy"—and future Member of Parliament—purchased a pioneer camp at auction. The price paid funded the province’s civil servants for a full year, cementing our investment in Khövsgöl\'s survival.',
       },
       {
         year: "The 2000s",
@@ -72,7 +72,7 @@ const content = {
       {
         num: "05",
         title: "Protectors of the Blue Pearl",
-        body: "We answer to Khatgal. A hard 10% of our net profits goes directly into local hands, fiercely defending the history and future of Khuvsgul.",
+        body: "We answer to Khatgal. A hard 10% of our net profits goes directly into local hands, fiercely defending the history and future of Khövsgöl.",
       },
       {
         num: "06",
@@ -84,7 +84,7 @@ const content = {
     founderHeadline: "A Note from the Family",
     founderListenLabel: "Listen",
     founderBody: [
-      "Khuvsgul is the life force that raised us. Our founder wrote this song to honor the “Deep Blue Mother Ocean”—a pure spring that provides for the Mongolian North. Today, our family works side-by-side to share the taiga's profound silence and protective energy with you. Welcome to our home.",
+      "Khövsgöl is the life force that raised us. Our founder wrote this song to honor the “Deep Blue Mother Ocean”—a pure spring that provides for the Mongolian North. Today, our family works side-by-side to share the taiga's profound silence and protective energy with you. Welcome to our home.",
       "— The Family at Dalai Eej Resort",
     ],
     founderClosing:

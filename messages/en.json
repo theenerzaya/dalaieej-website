@@ -1,40 +1,40 @@
 {
   "metadata": {
     "index": {
-      "title": "Dalai Eej | Heritage Site & Resort at Lake Khuvsgul, Mongolia",
-      "description": "Looking for places to stay in Khuvsgul Province? Discover our #1 best value lodge. Enjoy a scenic view sauna, complimentary breakfast, and Bradt Guide-featured hospitality."
+      "title": "Dalai Eej | Heritage Site & Resort at Lake Khövsgöl, Mongolia",
+      "description": "Looking for places to stay in Khövsgöl Province? Discover our #1 best value lodge. Enjoy a scenic view sauna, complimentary breakfast, and Bradt Guide-featured hospitality."
     },
     "story": {
       "title": "Our Heritage & Story | Dalai Eej Resort",
       "description": "Three generations of family stewardship at Dalai Eej — from pioneer camp to a lakeside refuge on Lake Khövsgöl."
     },
     "planner": {
-      "title": "Mongolia Itinerary Planner | Gobi to Khuvsgul Heritage Trail",
+      "title": "Mongolia Itinerary Planner | Gobi to Khövsgöl Heritage Trail",
       "description": "Plan your journey across the Great Steppe. A curated guide for travelers seeking the intersection of Mongolian history and nature."
     },
     "booking": {
-      "title": "Book Your Stay | Dalai Eej Resort at Lake Khuvsgul",
+      "title": "Book Your Stay | Dalai Eej Resort at Lake Khövsgöl",
       "description": "Check availability and secure your stay at Dalai Eej Resort on Lake Khövsgöl."
     },
     "amenities": {
       "title": "Resort Amenities | Dalai Eej Heritage Site",
-      "description": "Explore our lakeside amenities: private shoreline, restaurant, traditional sauna, guided tours and horse trekking at Lake Khuvsgul."
+      "description": "Explore our lakeside amenities: private shoreline, restaurant, traditional sauna, guided tours and horse trekking at Lake Khövsgöl."
     },
     "gallery": {
       "title": "Visual Journey | Dalai Eej Resort Photo Gallery",
-      "description": "Explore the beauty of Khuvsgul Lake, our heritage cabins, and the wilderness. A visual guide to Dalai Eej Resort."
+      "description": "Explore the beauty of Lake Khövsgöl, our heritage cabins, and the wilderness. A visual guide to Dalai Eej Resort."
     },
     "offers": {
       "title": "Special Offers & Heritage Packages | Dalai Eej Resort",
-      "description": "Summer 2026 exclusive offers and heritage packages at Dalai Eej Resort. Romantic escapes, family stays, and early bird deals on Lake Khuvsgul."
+      "description": "Summer 2026 exclusive offers and heritage packages at Dalai Eej Resort. Romantic escapes, family stays, and early bird deals on Lake Khövsgöl."
     },
     "accommodation": {
       "title": "Heritage Stays & Cabins | Dalai Eej Resort",
-      "description": "Choose from wood-fired cabins, ensuite suites, and the Grand Peninsula Suite at Dalai Eej Resort on Lake Khuvsgul."
+      "description": "Choose from wood-fired cabins, ensuite suites, and the Grand Peninsula Suite at Dalai Eej Resort on Lake Khövsgöl."
     },
     "superiorCabin": {
       "title": "Superior Cabin | Dalai Eej Resort",
-      "description": "A wood-fired Superior Cabin on the shores of Lake Khuvsgul — designed for natural living."
+      "description": "A wood-fired Superior Cabin on the shores of Lake Khövsgöl — designed for natural living."
     },
     "cabins": {
       "title": "Our Rooms | Dalai Eej Resort",
@@ -46,15 +46,17 @@
     },
     "catalogue": {
       "title": "Resort Journal | Dalai Eej 2026 Archive",
-      "description": "An editorial exploration of the hearth, the sanctuary, and the spirit of Khuvsgul. Browse the 2026 resort journal."
+      "description": "An editorial exploration of the hearth, the sanctuary, and the spirit of Khövsgöl. Browse the 2026 resort journal."
     },
     "contact": {
       "title": "Contact Us | Dalai Eej Resort",
       "description": "Plan your journey to Dalai Eej — Mergen's Ridge, Haichin Am, eastern shore of Lake Khövsgöl, 13 km from Khatgal."
     },
     "gettingHere": {
-      "title": "How We Get to Khövsgöl | Dalai Eej Resort",
-      "description": "A comprehensive guide to traveling from Ulaanbaatar to the Khaich Valley — flights, overland routes, coaches, railway, and the final leg to Dalai Eej Resort."
+      "title": "How We Get to Lake Khövsgöl | Dalai Eej Resort",
+      "description": "A curated guide on traveling from Ulaanbaatar to Lake Khövsgöl. Discover domestic flight details, scenic overland routes, and private transfer information.",
+      "openGraphTitle": "The Journey to Lake Khövsgöl | Dalai Eej Resort",
+      "openGraphDescription": "Whether you prefer a quick domestic flight to Murun or a scenic drive across the Mongolian steppe, discover the best ways to reach our shores."
     },
     "fam": {
       "title": "FAM Tour Application | Dalai Eej Resort",
@@ -82,7 +84,7 @@
   "amenities": {
     "hero": {
       "title": "A Sanctuary on the Shoreline",
-      "subtitle": "Situated on the pristine shores of Lake Khuvsgul, Dalai Eej offers a refuge of comfort in the heart of the National Park."
+      "subtitle": "Situated on the pristine shores of Lake Khövsgöl, Dalai Eej offers a refuge of comfort in the heart of the National Park."
     },
     "keyAmenities": {
       "title": "Key Amenities",
@@ -198,7 +200,7 @@
     }
   },
   "footer": {
-    "bio": "A refuge at the edge of the world. On the shores of Lake Khuvsgul.",
+    "bio": "A quiet refuge on Lake Khövsgöl's eastern shore.\nWooden cabins, deep waters, slow days.\nNorthern Mongolia.",
     "weather": "Weather Conditions",
     "weatherAttribution": "Weather data provided by OpenWeatherMap.",
     "experience": "Experience",
@@ -212,7 +214,7 @@
     "gallery": "Gallery",
     "policies": "Policies",
     "contact": "Contact",
-    "address": "Mergen's Ridge, eastern Lake Khuvsgul shore, Khuvsgul Province, Mongolia",
+    "address": "Mergen's Ridge, eastern Lake Khövsgöl shore, Khövsgöl Province, Mongolia",
     "rights": "All rights reserved.",
     "digital": "Digital",
     "brand": "Brand",
@@ -226,7 +228,7 @@
   },
   "address": {
     "title": "Address",
-    "visitCopy": "Find us on the eastern shore of Lake Khuvsgul, where larch forests meet the Blue Pearl. The journey north is part of the heritage.",
+    "visitCopy": "Find us on the eastern shore of Lake Khövsgöl, where larch forests meet the Blue Pearl. The journey north is part of the heritage.",
     "visitCta": "Visit Us",
     "directReservations": "Direct Reservations",
     "directReservationsCopy": "For preferred rates and seasonal availability, we invite you to book directly with our team.",
@@ -311,7 +313,7 @@
   },
   "offers": {
     "title": "Heritage Packages",
-    "subtitle": "Summer 2026 exclusive experiences on the Khuvsgul shoreline",
+    "subtitle": "Summer 2026 exclusive experiences on the Khövsgöl shoreline",
     "viewOffer": "View Offer",
     "bookNow": "Book Now",
     "checkAvailability": "Check Availability",
@@ -328,7 +330,7 @@
     },
     "pioneer": {
       "title": "Nostalgia Returns",
-      "desc": "Did you spend your childhood summers at a Khuvsgul pioneer camp? Relive the memories at our heritage site.",
+      "desc": "Did you spend your childhood summers at a Khövsgöl pioneer camp? Relive the memories at our heritage site.",
       "offer": "Free 'Campfire' Dinner Package + Souvenir"
     },
     "early": {
@@ -338,7 +340,7 @@
     },
     "longstay": {
       "title": "The Long Weekend & Beyond",
-      "desc": "Khuvsgul is too big to see in a day. Take your time to explore the mountains and the water.",
+      "desc": "Khövsgöl is too big to see in a day. Take your time to explore the mountains and the water.",
       "offer": "Stay 4 Nights, Pay for 3"
     },
     "family": {
@@ -469,7 +471,7 @@
       "subtitle": "Our heritage experience",
       "capacity": "Max 2 Adults",
       "bedding": "2 Double Beds",
-      "description": "Ideally positioned in the heart of the resort, these authentic wood-fired cabins offer a classic Khuvsgul stay. Located on level ground just steps from the dining lodge.",
+      "description": "Ideally positioned in the heart of the resort, these authentic wood-fired cabins offer a classic Khövsgöl stay. Located on level ground just steps from the dining lodge.",
       "features": [
         "Authentic wood-burning stove (staff-tended)",
         "Central location near dining lodge",
@@ -602,7 +604,7 @@
   "catalogue": {
     "archiveLabel": "The 2026 Archive",
     "mainTitle": "Resort Journal",
-    "subtitle": "An editorial exploration of the hearth, the sanctuary, and the spirit of Khuvsgul.",
+    "subtitle": "An editorial exploration of the hearth, the sanctuary, and the spirit of Khövsgöl.",
     "downloadHeading": "Archival Print Edition",
     "downloadSubtext": "Download the full 2026 catalogue in high-resolution PDF format.",
     "downloadButton": "Request Digital Copy"
@@ -622,7 +624,7 @@
     "bookingTotal": "Booking total",
     "whatNext": "What to Expect",
     "emailNote": "A confirmation email with your reservation details will be sent to you shortly.",
-    "locationNote": "Dalai Eej Resort is on the eastern shore of Lake Khuvsgul. Detailed arrival instructions will be included in your confirmation email.",
+    "locationNote": "Dalai Eej Resort is on the eastern shore of Lake Khövsgöl. Detailed arrival instructions will be included in your confirmation email.",
     "arrivalTitle": "Planning Your Arrival",
     "arrivalBody": "Peak summer domestic flights to Murun sell out quickly. Read our complete guide on flights, overland routes, and coordinating your transfer.",
     "arrivalCta": "Read the Arrival Guide",

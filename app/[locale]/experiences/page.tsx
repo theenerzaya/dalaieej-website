@@ -13,7 +13,7 @@ export default function ExperiencesPage() {
     { 
       icon: Fish, 
       title: locale === 'mn' ? "Загас барих" : "Fishing Expeditions",
-      desc: locale === 'mn' ? "Хөвсгөл нуурын цэвэр усанд загас барих" : "Fly fishing in the pristine waters of Lake Khuvsgul",
+      desc: locale === 'mn' ? "Хөвсгөл нуурын цэвэр усанд загас барих" : "Fly fishing in the pristine waters of Lake Khövsgöl",
       image: "/images/gallery/adventures/DBR_3442.webp"
     },
     { 
@@ -76,7 +76,7 @@ export default function ExperiencesPage() {
           >
             {locale === 'mn' 
               ? "Хөвсгөлийн байгаль, соёлын онцгой туршлагууд"
-              : "Curated adventures that reveal the soul of Lake Khuvsgul and its timeless traditions"}
+              : "Curated adventures that reveal the soul of Lake Khövsgöl and its timeless traditions"}
           </motion.p>
         </div>
       </section>

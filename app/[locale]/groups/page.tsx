@@ -65,7 +65,7 @@ export default function CelebratePage() {
             <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Хөвсгөл нуурын эрэг дээр таны онцгой арга хэмжээг зохион байгуулна."
-                : "From intimate gatherings to grand celebrations, we create bespoke experiences on the shores of Lake Khuvsgul."}
+                : "From intimate gatherings to grand celebrations, we create bespoke experiences on the shores of Lake Khövsgöl."}
             </p>
           </motion.div>
 

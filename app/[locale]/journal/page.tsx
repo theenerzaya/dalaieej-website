@@ -10,8 +10,8 @@ export default function StoriesPage() {
 
   const stories = [
     {
-      title: locale === 'mn' ? "Өвлийн шидэт Хөвсгөл" : "Winter Magic at Lake Khuvsgul",
-      excerpt: locale === 'mn' ? "Хөвсгөл нуурын өвлийн гоо үзэсгэлэн, мөсөн дээрх адал явдал" : "Discover the enchanting beauty of frozen Lake Khuvsgul and winter adventures that await.",
+      title: locale === 'mn' ? "Өвлийн шидэт Хөвсгөл" : "Winter Magic at Lake Khövsgöl",
+      excerpt: locale === 'mn' ? "Хөвсгөл нуурын өвлийн гоо үзэсгэлэн, мөсөн дээрх адал явдал" : "Discover the enchanting beauty of frozen Lake Khövsgöl and winter adventures that await.",
       date: "January 15, 2026",
       image: "/images/gallery/the-resort/DBR_9425.webp",
       category: locale === 'mn' ? "Улирал" : "Seasons"
@@ -39,7 +39,7 @@ export default function StoriesPage() {
     },
     {
       title: locale === 'mn' ? "Шувуу ажиглах" : "Birdwatching Paradise",
-      excerpt: locale === 'mn' ? "Хөвсгөлийн ховор шувууд" : "Rare and beautiful birds that make Lake Khuvsgul their home.",
+      excerpt: locale === 'mn' ? "Хөвсгөлийн ховор шувууд" : "Rare and beautiful birds that make Lake Khövsgöl their home.",
       date: "November 10, 2025",
       image: "/images/gallery/the-resort/DBR_9430.webp",
       category: locale === 'mn' ? "Байгаль" : "Nature"
@@ -73,7 +73,7 @@ export default function StoriesPage() {
           >
             {locale === 'mn' 
               ? "Хөвсгөлийн түүх, соёл, байгалийн тухай өгүүлэл"
-              : "Tales from the shores of Lake Khuvsgul—nature, culture, and the art of living well"}
+              : "Tales from the shores of Lake Khövsgöl—nature, culture, and the art of living well"}
           </motion.p>
         </div>
       </section>

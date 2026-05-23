@@ -111,7 +111,7 @@ export default function LocationMap() {
             </svg>
           </div>
           <h3 className="font-serif text-2xl text-main mb-2">Dalai Eej Resort</h3>
-          <p className="font-body text-main/70 text-sm">Khuvsgul Lake, Mongolia</p>
+          <p className="font-body text-main/70 text-sm">Lake Khövsgöl, Mongolia</p>
           <p className="font-body text-main/50 text-xs mt-4">50.4431° N, 100.1667° E</p>
         </div>
       </div>
