@@ -210,13 +210,13 @@
     "about": "About",
     "catalogue": "Catalogue",
     "gallery": "Gallery",
-    "faq": "FAQ",
+    "policies": "Policies",
     "contact": "Contact",
     "address": "Mergen's Ridge, eastern Lake Khuvsgul shore, Khuvsgul Province, Mongolia",
     "rights": "All rights reserved.",
     "digital": "Digital",
     "brand": "Brand",
-    "route-finder": "Route Finder"
+    "gettingHere": "Getting Here"
   },
   "cta": {
     "title": "Ready to Experience the Blue Pearl?",
@@ -238,6 +238,7 @@
     "directionsLabel": "Get directions:",
     "directionsFromCity": "Khatgal",
     "directionsFromAirport": "Murun Airport",
+    "travelGuide": "View Full Travel Guide",
     "bookCta": "Book your stay",
     "imageFullBleedLabel": "View address image full screen",
     "fullBleedCloseLabel": "Close full screen"
@@ -589,7 +590,9 @@
     "errorLastName": "Please enter your last name",
     "errorEmail": "Please enter your email address",
     "errorEmailInvalid": "Please enter a valid email address",
-    "errorTerms": "Please accept the Terms & Conditions to continue"
+    "errorTerms": "Please accept the Terms & Conditions to continue",
+    "arrivalNoteBefore": "For domestic flight and airport transfer coordination, see our",
+    "arrivalNoteLink": "Arrival Guide"
   },
   "silo": {
     "sanctuary": "CABINS",
@@ -621,6 +624,9 @@
     "whatNext": "What to Expect",
     "emailNote": "A confirmation email with your reservation details will be sent to you shortly.",
     "locationNote": "Dalai Eej Resort is on the eastern shore of Lake Khuvsgul. Detailed arrival instructions will be included in your confirmation email.",
+    "arrivalTitle": "Planning Your Arrival",
+    "arrivalBody": "Peak summer domestic flights to Murun sell out quickly. Read our complete guide on flights, overland routes, and coordinating your transfer.",
+    "arrivalCta": "Read the Arrival Guide",
     "backToHome": "Back to Home"
   }
 }

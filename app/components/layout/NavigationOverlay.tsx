@@ -93,6 +93,17 @@ const mainNavItems: MainNavItem[] = [
     available: true,
   },
   {
+    id: "getting-here",
+    href: "/getting-here",
+    image: "/images/gallery/adventures/DBR_3442.webp",
+    label: { en: "Getting Here", mn: "Хэрхэн ирэх вэ" },
+    meta: {
+      en: "Flights, coaches & the final leg",
+      mn: "Нислэг, автобус, сүүлийн хэсэг",
+    },
+    available: true,
+  },
+  {
     id: "contact",
     href: "/contact",
     image: "/images/address.webp",

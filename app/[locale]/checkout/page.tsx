@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { User, Mail, Phone, Globe, MessageSquare, Plus, Minus, Loader2, AlertCircle, Check, ChevronDown, ChevronUp, Bed } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { sumDepositDueForRoomLines, depositPortionForAddonTotal } from "@/lib/deposit-policy";
 import { normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 
@@ -589,6 +590,17 @@ function CheckoutContent() {
                     </span>
                   </label>
                 </div>
+
+                <p className="mb-4 text-sm text-main/55 font-body leading-relaxed">
+                  {t('arrivalNoteBefore')}{' '}
+                  <Link
+                    href={`${localePrefix}/getting-here`}
+                    className="text-main/75 underline decoration-main/30 underline-offset-2 hover:text-main transition-colors"
+                  >
+                    {t('arrivalNoteLink')}
+                  </Link>
+                  .
+                </p>
 
                 <button
                   type="button"

@@ -167,6 +167,14 @@ export default function AddressSection() {
                 >
                   ({t("mapLabel")})
                 </a>
+                {" · "}
+                <Link
+                  href={`${localePrefix}/getting-here`}
+                  className={inlineLinkClass}
+                  style={inlineLinkStyle}
+                >
+                  {t("travelGuide")}
+                </Link>
               </p>
               <p>
                 <span className="text-main/85">{t("coordinatesLabel")}:</span>{" "}

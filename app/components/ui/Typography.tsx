@@ -254,6 +254,14 @@ export function CTALink({
     className
   );
 
+  if (href.startsWith("mailto:")) {
+    return (
+      <a href={href} className={baseClass} onClick={onClick} aria-label={ariaLabel}>
+        {content}
+      </a>
+    );
+  }
+
   if (external) {
     return (
       <a

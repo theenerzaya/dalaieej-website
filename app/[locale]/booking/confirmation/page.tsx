@@ -3,9 +3,10 @@
 import { useEffect, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { CheckCircle, MapPin, Calendar, Moon, Users, Mail } from "lucide-react";
+import { CheckCircle, MapPin, Calendar, Moon, Users, Mail, Plane } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 function ConfirmationContent() {
   const t = useTranslations("confirmation");
@@ -191,6 +192,36 @@ function ConfirmationContent() {
                 <p className="text-main/70 text-sm font-body">{t("locationNote")}</p>
               </li>
             </ul>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="mt-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-main/10 px-8 py-6"
+          >
+            <div className="flex items-start gap-3">
+              <Plane className="w-4 h-4 text-main/40 mt-1 flex-shrink-0" />
+              <div className="min-w-0">
+                <h3 className={`${editorialFont} italic text-lg text-main mb-2`}>
+                  {t("arrivalTitle")}
+                </h3>
+                <p className="text-main/70 text-sm font-body leading-relaxed mb-4">
+                  {t("arrivalBody")}
+                </p>
+                <Link
+                  href={`${localePrefix}/getting-here`}
+                  className="inline-flex items-center gap-2 font-cta uppercase tracking-[0.22em] text-[11px] text-main hover:text-white transition-colors group"
+                >
+                  <span className="border-b border-main/40 pb-0.5 group-hover:border-main">
+                    {t("arrivalCta")}
+                  </span>
+                  <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+                    →
+                  </span>
+                </Link>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div

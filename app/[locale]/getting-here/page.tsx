@@ -21,6 +21,22 @@ import { Bus, Car, Plane, Ship, Train } from "lucide-react";
 const MAP_URL =
   "https://www.google.com/maps/place/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт/@50.449042,100.148914,13z/data=!4m9!3m8!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!5m2!4m1!1i2!8m2!3d50.4846951!4d100.1893209!16s%2Fg%2F11stqvr5td?entry=ttu";
 
+const ITINERARY_EMAIL_SUBJECT = "Arrival itinerary - Dalai Eej Resort";
+const ITINERARY_EMAIL_BODY = [
+  "Dear Dalai Eej team,",
+  "",
+  "I would like to share my arrival itinerary:",
+  "",
+  "Name:",
+  "Booking reference (if applicable):",
+  "Arrival date:",
+  "Flight or transport details:",
+  "Estimated arrival time in Murun or Khatgal:",
+  "",
+  "Thank you,",
+].join("\n");
+const ITINERARY_MAILTO = `mailto:hello@dalaieej.com?subject=${encodeURIComponent(ITINERARY_EMAIL_SUBJECT)}&body=${encodeURIComponent(ITINERARY_EMAIL_BODY)}`;
+
 const TOC_ITEMS: GettingHereTocItem[] = [
   { id: "domestic-flights", label: "I. The Quickest Route: Domestic Flights" },
   { id: "overland-driving", label: "II. The Overland Expedition: Driving the Steppe" },
@@ -240,6 +256,14 @@ export default function GettingHerePage() {
                     landscape at their own pace, driving overland is a spectacular
                     option. The 1,000 km route from Ulaanbaatar is fully paved.
                   </Prose>
+                  <Subhead>Pacing the Journey</Subhead>
+                  <Prose>
+                    If you plan to complete the drive to Lake Khuvsgul in a single
+                    day, an early departure is essential. We strongly advise setting
+                    out from Ulaanbaatar no later than 9:00 AM sharp. To comfortably
+                    complete the journey and arrive before nightfall, aim to safely
+                    maintain a cruising speed of 100 km/h where the open road allows.
+                  </Prose>
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
                   <Subhead>The Erdenet Pitstop</Subhead>
@@ -251,6 +275,15 @@ export default function GettingHerePage() {
                     with character—you will find an eclectic mix of options to
                     recharge, from cozy local &quot;tea houses&quot; to excellent
                     standalone restaurants.
+                  </Prose>
+                  <Subhead>The Heart of Bulgan</Subhead>
+                  <Prose>
+                    As you leave Erdenet and continue northwest, the road opens up
+                    into Bulgan province. If you are familiar with airag—Mongolia&apos;s
+                    traditional fermented mare&apos;s milk—Bulgan is the undisputed
+                    heartland for it. As you drive through, the definitive place to
+                    stop and taste the best airag in the country is at the Tuluu Pass
+                    (Түлүүгийн даваа).
                   </Prose>
                 </FadeInBlock>
               </SectionBlock>
@@ -412,6 +445,8 @@ export default function GettingHerePage() {
                         icon: Car,
                         title: "UBCab",
                         body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
+                        href: "https://onelink.to/ubcab",
+                        linkLabel: "UBCab",
                       },
                       {
                         icon: Plane,
@@ -430,6 +465,11 @@ export default function GettingHerePage() {
                         <p className="font-body text-sm text-ink/70 leading-relaxed">
                           {card.body}
                         </p>
+                        {"href" in card && card.href ? (
+                          <CTALink href={card.href} external>
+                            {card.linkLabel ?? card.title}
+                          </CTALink>
+                        ) : null}
                       </div>
                     ))}
                   </div>
@@ -442,7 +482,7 @@ export default function GettingHerePage() {
                     and resort welcome are perfectly timed.
                   </Prose>
                   <div className="pt-4">
-                    <CTALink href={`${localePrefix}/contact`} arrow>
+                    <CTALink href={ITINERARY_MAILTO} arrow>
                       Share your itinerary with us
                     </CTALink>
                   </div>
