@@ -9,6 +9,8 @@ type Props = {
   label: string;
   imageSrc?: string;
   imageAlt?: string;
+  aspectClass?: string;
+  imageClassName?: string;
   icons?: LucideIcon[];
   className?: string;
 };
@@ -20,19 +22,21 @@ export default function MediaPlaceholder({
   label,
   imageSrc,
   imageAlt = "",
+  aspectClass = "aspect-[21/9]",
+  imageClassName = "object-cover",
   icons = defaultIcons,
   className = "",
 }: Props) {
   if (imageSrc) {
     return (
       <div
-        className={`relative aspect-[21/9] w-full overflow-hidden rounded-sm bg-leaf/10 ${className}`}
+        className={`relative ${aspectClass} w-full overflow-hidden rounded-sm bg-leaf/10 ${className}`}
       >
         <SiteImage
           src={imageSrc}
           alt={imageAlt || label}
           fill
-          className="object-cover"
+          className={imageClassName}
           sizes="(max-width: 1024px) 100vw, 720px"
         />
         <span className="sr-only">{label}</span>

@@ -13,7 +13,8 @@
     "sync-translations": "node scripts/sync-translations.mjs",
     "sync-translations:run": "node scripts/sync-translations.mjs --run",
     "sync-gallery-images": "node scripts/sync-gallery-images.mjs",
-    "check-gallery-images": "node scripts/sync-gallery-images.mjs && git diff --exit-code app/data/galleryImages.ts"
+    "check-gallery-images": "node scripts/sync-gallery-images.mjs && git diff --exit-code app/data/galleryImages.ts",
+    "parse-access-road-kml": "node scripts/parse-access-road-kml.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

@@ -48,7 +48,7 @@ export default function GettingHereToc({ items, title = "On this page" }: Props)
       <p className="font-cta text-[11px] sm:text-xs font-medium uppercase tracking-[0.3em] text-ink/45 mb-5">
         {title}
       </p>
-      <ol className="space-y-3 border-l border-ink/15 pl-4">
+      <ol className="space-y-3">
         {items.map((item) => {
           const isActive = activeId === item.id;
           return (

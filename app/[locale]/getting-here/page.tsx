@@ -14,17 +14,14 @@ import GettingHereToc, {
 } from "@/app/components/getting-here/GettingHereToc";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import MediaPlaceholder from "@/app/components/getting-here/MediaPlaceholder";
+import TransferOptions, {
+  type TransferOption,
+} from "@/app/components/getting-here/TransferOptions";
+import AccessRoadMap from "@/app/components/getting-here/AccessRoadMap";
+import SiteImage from "@/app/components/SiteImage";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
-import { Bus, Car, Plane, Ship, Train, type LucideIcon } from "lucide-react";
-
-type TransferCard = {
-  icon: LucideIcon;
-  title: string;
-  body: string;
-  href?: string;
-  linkLabel?: string;
-};
+import { Car, Plane, Ship, type LucideIcon } from "lucide-react";
 
 const MAP_URL =
   "https://www.google.com/maps/place/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт/@50.449042,100.148914,13z/data=!4m9!3m8!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!5m2!4m1!1i2!8m2!3d50.4846951!4d100.1893209!16s%2Fg%2F11stqvr5td?entry=ttu";
@@ -67,7 +64,7 @@ function SectionBlock({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 border-t border-ink/10 pt-16 first:border-t-0 first:pt-0">
+    <section id={id} className="scroll-mt-24 pt-16 first:pt-0">
       <FadeInBlock>
         <Eyebrow className="!text-water-deep/70 mb-4">{eyebrow}</Eyebrow>
         <Headline as="h2" size="sub" className="!text-left mb-8">
@@ -126,7 +123,7 @@ function CarrierCard({
   linkLabel?: string;
 }) {
   return (
-    <div className="border border-ink/10 bg-surface-alt/80 p-6 md:p-8">
+    <div className="bg-surface-alt/80 p-6 md:p-8">
       <p className="font-cta text-[11px] uppercase tracking-[0.25em] text-leaf mb-2">
         {name}
       </p>
@@ -146,6 +143,37 @@ export default function GettingHerePage() {
   const locale = useLocale();
   const localePrefix = locale === "mn" ? "/mn" : "";
   const reduceMotion = useReducedMotion();
+
+  const transferOptions: TransferOption[] = [
+    {
+      id: "resort-transfer",
+      icon: Ship,
+      title: "Resort Transfer",
+      meta: "270,000 MNT · each way",
+      body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way.",
+      href: `${localePrefix}/contact`,
+      linkLabel: "Arrange transfer",
+    },
+    {
+      id: "ubcab",
+      icon: Car,
+      title: "UBCab",
+      meta: "App · Murun → Khatgal",
+      body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
+      href: "https://onelink.to/ubcab",
+      linkLabel: "Get UBCab",
+      external: true,
+    },
+    {
+      id: "coordinate",
+      icon: Plane,
+      title: "Coordinate with us",
+      meta: "Email · we align timing",
+      body: "Share your itinerary and we will align private transfers and your resort welcome.",
+      href: ITINERARY_MAILTO,
+      linkLabel: "Share itinerary",
+    },
+  ];
 
   return (
     <PageShell>
@@ -202,9 +230,11 @@ export default function GettingHerePage() {
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
                     variant="photo"
-                    label="Domestic flight — placeholder"
-                    imageSrc="/images/gallery/adventures/DBR_3442.webp"
-                    imageAlt="Aerial view toward northern Mongolia"
+                    label="Murun Airport"
+                    imageSrc="/images/getting-here/murun-airport-exterior.jpg"
+                    imageAlt="Murun Airport terminal viewed from an aircraft on the tarmac, with the wing and steppe mountains beyond."
+                    aspectClass="aspect-[4/3] md:aspect-[21/9]"
+                    imageClassName="object-cover"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
@@ -264,8 +294,11 @@ export default function GettingHerePage() {
               >
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
-                    variant="map"
-                    label="Overland route map — placeholder"
+                    variant="photo"
+                    label="Overland route through Bulgan province"
+                    imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
+                    imageAlt="A vehicle stopped on a paved road across the open steppe in Bulgan province, Mongolia."
+                    aspectClass="aspect-[4/3]"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
@@ -313,9 +346,12 @@ export default function GettingHerePage() {
               >
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
-                    variant="icons"
-                    label="Coach and railway — placeholder"
-                    icons={[Bus, Train, Car]}
+                    variant="photo"
+                    label="Train travel in Mongolia"
+                    imageSrc="/images/getting-here/train.jpg"
+                    imageAlt="A passenger train on the railway in Mongolia."
+                    aspectClass="aspect-[8/5] md:aspect-[21/9]"
+                    imageClassName="object-cover"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
@@ -362,31 +398,51 @@ export default function GettingHerePage() {
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
                   <Subhead>The Trans-Siberian Railway</Subhead>
-                  <Prose>
-                    There is no direct train to Murun; the railway ends in Erdenet.
-                    However, the route is a spur of the legendary Trans-Siberian
-                    Railway—the very same iconic railway famously traveled by David
-                    Bowie. Taking the overnight sleeper train to Erdenet is a deeply
-                    nostalgic, romantic way to travel. Once you arrive, independent
-                    drivers are waiting at the station ready to take you the rest of
-                    the way to Murun (please remember to negotiate your fare before
-                    departing).
-                  </Prose>
-                  <Prose>
-                    <strong className="font-medium text-ink">
-                      For Motorbike Expeditions:
-                    </strong>{" "}
-                    You can transport your motorbike with you on the train to
-                    Erdenet, bypassing the heaviest city traffic and officially
-                    beginning your ride from there.
-                  </Prose>
-                  <div className="pt-2">
-                    <CTALink
-                      href="https://eticket.ubtz.mn/search"
-                      external
-                    >
-                      UBTZ E-Ticket
-                    </CTALink>
+                  <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
+                    <div className="min-w-0 flex-1 space-y-6">
+                      <Prose>
+                        There is no direct train to Murun; the railway ends in
+                        Erdenet. However, the route is a spur of the legendary
+                        Trans-Siberian Railway—the very same iconic railway famously
+                        traveled by David Bowie. Taking the overnight sleeper train to
+                        Erdenet is a deeply nostalgic, romantic way to travel. Once
+                        you arrive, independent drivers are waiting at the station
+                        ready to take you the rest of the way to Murun (please
+                        remember to negotiate your fare before departing).
+                      </Prose>
+                      <Prose>
+                        <strong className="font-medium text-ink">
+                          For Motorbike Expeditions:
+                        </strong>{" "}
+                        You can transport your motorbike with you on the train to
+                        Erdenet, bypassing the heaviest city traffic and officially
+                        beginning your ride from there.
+                      </Prose>
+                      <div className="pt-2">
+                        <CTALink
+                          href="https://eticket.ubtz.mn/search"
+                          external
+                        >
+                          UBTZ E-Ticket
+                        </CTALink>
+                      </div>
+                    </div>
+                    <figure className="mx-auto w-[13rem] shrink-0 md:mx-0 md:w-[14rem] lg:w-[15rem]">
+                      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
+                        <SiteImage
+                          src="/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
+                          alt="Black and white archival photograph of David Bowie traveling in a sleeper cabin on the Trans-Siberian Railway."
+                          title="David Bowie on the Trans-Siberian Railway"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 208px, 240px"
+                        />
+                      </div>
+                      <figcaption className="mt-3 font-body text-sm leading-snug text-ink/60">
+                        David Bowie on the Trans-Siberian Railway, 1973.
+                        Photograph by Geoff MacCormack.
+                      </figcaption>
+                    </figure>
                   </div>
                 </FadeInBlock>
               </SectionBlock>
@@ -399,9 +455,10 @@ export default function GettingHerePage() {
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
                     variant="photo"
-                    label="Final leg to the resort — placeholder"
-                    imageSrc="/images/gallery/the-resort/DBR_7361.webp"
-                    imageAlt="Lake Khövsgöl shoreline near the resort"
+                    label="Murun Airport terminal"
+                    imageSrc="/images/getting-here/murun-airport-terminal-interior.jpg"
+                    imageAlt="Travelers in the Murun Airport terminal with Dalai Eej Resort signage visible."
+                    aspectClass="aspect-[4/3] md:aspect-[21/9]"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
@@ -416,7 +473,7 @@ export default function GettingHerePage() {
                   </Prose>
                 </FadeInBlock>
                 <FadeInBlock delay={0.12}>
-                  <Subhead>Navigating the Final 13 Kilometers</Subhead>
+                  <Subhead>Navigating the Final Approach</Subhead>
                   <Prose>
                     The resort is located 13 km beyond the village of Khatgal, tucked
                     into the Khaich Valley on the eastern shore of the lake. If you are
@@ -452,47 +509,7 @@ export default function GettingHerePage() {
                     If you did not drive your own vehicle to Murun, you have several
                     options for the final stretch:
                   </Prose>
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {(
-                      [
-                        {
-                          icon: Ship,
-                          title: "Resort Transfer",
-                          body: "We offer a private transfer (100 km drive followed by a scenic speedboat arrival) for 270,000 MNT each way.",
-                        },
-                        {
-                          icon: Car,
-                          title: "UBCab",
-                          body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
-                          href: "https://onelink.to/ubcab",
-                          linkLabel: "UBCab",
-                        },
-                        {
-                          icon: Plane,
-                          title: "Coordinate with us",
-                          body: "Share your itinerary and we will align private transfers and your resort welcome.",
-                        },
-                      ] as TransferCard[]
-                    ).map((card) => (
-                      <div
-                        key={card.title}
-                        className="flex flex-col gap-3 border border-ink/10 bg-leaf/5 p-6"
-                      >
-                        <card.icon className="h-8 w-8 text-leaf/70" strokeWidth={1.25} />
-                        <p className="font-cta text-[11px] uppercase tracking-[0.2em] text-ink/80">
-                          {card.title}
-                        </p>
-                        <p className="font-body text-sm text-ink/70 leading-relaxed">
-                          {card.body}
-                        </p>
-                        {card.href ? (
-                          <CTALink href={card.href} external>
-                            {card.linkLabel ?? card.title}
-                          </CTALink>
-                        ) : null}
-                      </div>
-                    ))}
-                  </div>
+                  <TransferOptions options={transferOptions} />
                 </FadeInBlock>
                 <FadeInBlock delay={0.2}>
                   <Subhead>Coordinating Your Arrival</Subhead>
