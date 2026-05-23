@@ -19,13 +19,15 @@ const DIRECTIONS_AIRPORT_URL =
 /** Driving directions from Khatgal village */
 const DIRECTIONS_CITY_URL =
   "https://www.google.com/maps/dir/Khatgal,+Khovsgol,+Mongolia/Dalai+Eej+Resort+%7C+Далай+ээж+ресорт,+Mergen's+Ridge,+Khatgal,+Khovsgol+67143,+Mongolia/@50.449042,100.148914,13z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x5d0dba5f265ed071:0xbfeab22f3128d8b8!2m2!1d100.16109!2d50.4359649!1m5!1m1!1s0x5d0dbb730711f929:0xb57b13f8b35c0cf3!2m2!1d100.1893209!2d50.4846951!3e0?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D";
-
-const PHONE = "+976 77 809010";
-const PHONE_HREF = "tel:+97677809010";
-const EMAIL = "hello@dalaieej.com";
-const EMAIL_HREF = "mailto: hello@dalaieej.com";
-
 const ADDRESS_IMAGE_SRC = "/images/address.webp";
+
+function ExternalArrow() {
+  return (
+    <span className="inline-block ml-0.5" aria-hidden>
+      ↗
+    </span>
+  );
+}
 
 export default function AddressSection() {
   const t = useTranslations("address");
@@ -138,26 +140,34 @@ export default function AddressSection() {
             </Link>
           </div>
 
-          {/* Right card — Holidays / contact / directions */}
+          {/* Right card — direct reservations & location */}
           <div className={`${cardBase} md:col-span-2`}>
             <div className="flex flex-col gap-5">
               <h3
                 className={`${editorialFont} text-main text-3xl md:text-4xl lg:text-5xl leading-snug`}
               >
-                {t("stayHeadline")}
+                {t("directReservations")}
               </h3>
               <BodyText
                 align="left"
                 size="md"
                 className="!text-main/90 max-w-[60ch]"
               >
-                {t("bestPrice")}
+                {t("directReservationsCopy")}
               </BodyText>
             </div>
 
-            <div className="mt-8 flex flex-col gap-2 font-body text-sm md:text-base text-main/90 leading-relaxed">
+            <div className="mt-10 md:mt-12 flex flex-col gap-3 font-body text-sm md:text-base text-main/90 leading-relaxed">
+              <p
+                className={`${editorialFont} text-xl md:text-2xl text-main`}
+              >
+                {t("locationLabel")}
+              </p>
               <p>
-                {t("fullAddress")}{" "}
+                <span className="text-main/85">{t("coordinatesLabel")}:</span>{" "}
+                <span className="tabular-nums">{t("coordinatesValue")}</span>
+              </p>
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <a
                   href={MAP_URL}
                   target="_blank"
@@ -165,64 +175,48 @@ export default function AddressSection() {
                   className={inlineLinkClass}
                   style={inlineLinkStyle}
                 >
-                  ({t("mapLabel")})
+                  {t("openInMaps")}
+                  <ExternalArrow />
                 </a>
-                {" · "}
+                <span className="text-main/50" aria-hidden>
+                  |
+                </span>
                 <Link
                   href={`${localePrefix}/getting-here`}
                   className={inlineLinkClass}
                   style={inlineLinkStyle}
                 >
                   {t("travelGuide")}
+                  <ExternalArrow />
                 </Link>
               </p>
-              <p>
-                <span className="text-main/85">{t("coordinatesLabel")}:</span>{" "}
-                <span className="tabular-nums">{t("coordinatesValue")}</span>
-              </p>
-              <p>
-                <a href={PHONE_HREF} className={inlineLinkClass} style={inlineLinkStyle}>
-                  {PHONE}
-                </a>
-              </p>
-              <p>
-                <a href={EMAIL_HREF} className={inlineLinkClass} style={inlineLinkStyle}>
-                  {EMAIL}
-                </a>
-              </p>
-              <p>
-                <Link
-                  href={`${localePrefix}/booking`}
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-main/80">
+                <span className="text-main/85">{t("quickRoutesLabel")}</span>
+                <a
+                  href={DIRECTIONS_AIRPORT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={inlineLinkClass}
                   style={inlineLinkStyle}
                 >
-                  {t("manageReservation")}
-                </Link>
+                  {t("fromMurunAirport")}
+                  <ExternalArrow />
+                </a>
+                <span className="text-main/50" aria-hidden>
+                  •
+                </span>
+                <a
+                  href={DIRECTIONS_CITY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={inlineLinkClass}
+                  style={inlineLinkStyle}
+                >
+                  {t("fromKhatgal")}
+                  <ExternalArrow />
+                </a>
               </p>
             </div>
-
-            <p className="mt-6 font-body text-sm md:text-base text-main/80 leading-relaxed">
-              {t("directionsLabel")}{" "}
-              <a
-                href={DIRECTIONS_CITY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={inlineLinkClass}
-                style={inlineLinkStyle}
-              >
-                {t("directionsFromCity")}
-              </a>
-              {", "}
-              <a
-                href={DIRECTIONS_AIRPORT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={inlineLinkClass}
-                style={inlineLinkStyle}
-              >
-                {t("directionsFromAirport")}
-              </a>
-            </p>
           </div>
         </motion.div>
       </div>
