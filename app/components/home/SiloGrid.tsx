@@ -47,10 +47,10 @@ const silos = [
 
 const storiesSilo = {
   id: "stories",
-  href: "#",
+  href: "/catalogue",
   en: "Stories",
-    mn: "Тэмдэглэл",
-  image: "/images/silogrid/stories-placeholder.webp"
+  mn: "Тэмдэглэл",
+  image: "/images/silogrid/stories-placeholder.webp",
 };
 
 type SiloEntry = typeof silos[0];
@@ -303,7 +303,10 @@ export default function SiloGrid() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          <a href="#" className="relative block w-full h-full">
+          <Link
+            href={withLocalePath(locale, storiesSilo.href)}
+            className="relative block w-full h-full"
+          >
             <img
               src={assetUrl(storiesSilo.image)}
               alt={isMongolian ? storiesSilo.mn : storiesSilo.en}
@@ -311,7 +314,7 @@ export default function SiloGrid() {
             />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
             <SiloOverlay silo={storiesSilo} isMongolian={isMongolian} size="hero" />
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

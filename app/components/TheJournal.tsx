@@ -3,6 +3,8 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { withLocalePath } from "@/lib/localePath";
 
 interface TheJournalProps {
   locale?: string;
@@ -103,15 +105,15 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
           transition={{ delay: 0.6 }}
           className="text-center mt-16"
         >
-          <a
-            href={isMn ? "/mn/stories" : "/stories"}
+          <Link
+            href={withLocalePath(locale, "/catalogue")}
             className="inline-flex items-center gap-2 font-body text-leaf hover:text-water-deep transition-colors group"
           >
             <span className="border-b border-leaf/30 group-hover:border-ink pb-1">
               {isMn ? "Бүх түүхийг унших" : "Read All Stories"}
             </span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

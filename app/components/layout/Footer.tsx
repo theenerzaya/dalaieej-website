@@ -30,7 +30,7 @@ export default function Footer() {
     enOnly?: boolean;
   }[] = [
     { key: "about", href: "/about-us" },
-    { key: "catalogue", href: "https://online.fliphtml5.com/scxec/iewd/", external: true },
+    { key: "catalogue", href: "/catalogue" },
     { key: "gallery", href: "/gallery" },
     { key: "gettingHere", href: "/getting-here" },
     { key: "policies", href: "#" },

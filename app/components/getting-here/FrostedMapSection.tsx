@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
 import SiteImage from "@/app/components/SiteImage";
 
-const MAP_SRC = "/images/getting-here/travel-route-map.jpg";
+const DEFAULT_IMAGE_SRC = "/images/getting-here/travel-route-map.jpg";
 
 type FrostedMapSectionProps = {
   children: ReactNode;
   className?: string;
   contentClassName?: string;
   "aria-label"?: string;
+  /** Background image. Defaults to the Getting Here route map. */
+  imageSrc?: string;
   imagePriority?: boolean;
   /** Fade the top edge into the page background (surface). */
   fadeTop?: boolean;
@@ -25,13 +27,14 @@ const DEFAULT_FROST_OPACITY = 14.6;
 const DEFAULT_FROST_BLUR_PX = 6.5;
 
 /**
- * Full-width band with travel-route-map.jpg and shared frost treatment (Getting Here).
+ * Full-width band with a background image and shared frost treatment (Getting Here, Catalogue, etc.).
  */
 export default function FrostedMapSection({
   children,
   className = "",
   contentClassName = "mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center",
   "aria-label": ariaLabel,
+  imageSrc = DEFAULT_IMAGE_SRC,
   imagePriority = false,
   fadeTop = false,
   fadeBottom = true,
@@ -48,7 +51,7 @@ export default function FrostedMapSection({
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 scale-[1.35] md:scale-[1.25]">
             <SiteImage
-              src={MAP_SRC}
+              src={imageSrc}
               alt=""
               fill
               priority={imagePriority}

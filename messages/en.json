@@ -605,9 +605,9 @@
     "archiveLabel": "The 2026 Archive",
     "mainTitle": "Resort Journal",
     "subtitle": "An editorial exploration of the hearth, the sanctuary, and the spirit of Khövsgöl.",
-    "downloadHeading": "Archival Print Edition",
-    "downloadSubtext": "Download the full 2026 catalogue in high-resolution PDF format.",
-    "downloadButton": "Request Digital Copy"
+    "downloadSubtext": "Acquire the high-resolution edition to keep for your journey to Khövsgöl.",
+    "downloadButton": "Save Digital Edition",
+    "returnToMainSite": "Return to the Main Site"
   },
   "confirmation": {
     "title": "Your Stay is Confirmed",
