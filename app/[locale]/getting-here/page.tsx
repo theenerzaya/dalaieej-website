@@ -277,7 +277,7 @@ export default function GettingHerePage() {
                     />
                     <CarrierCard
                       name="Chinggis Airlines (Nomin Holdings)"
-                      description="For availability on this newer premium option, please contact their operator, Enkhjargal, directly via Viber at +976 8810 4149."
+                      description="For availability on this newer premium option, please contact their operator, Tumee, directly via Viber at +97699838351."
                       href="#"
                     />
                   </div>
