@@ -402,7 +402,7 @@ export default function GettingHerePage() {
                         Trans-Siberian Railway—the very same iconic railway famously
                         traveled by David Bowie. Taking the overnight sleeper train to
                         Erdenet is a deeply nostalgic, romantic way to travel. Once
-                        you arrive, independent drivers are waiting at the station ready to take you the rest of the way directly to Khatgal and the lake (please remember to negotiate your fare to your final destination before departing). Tickets available via the UBTZ E-Ticket Portal.
+                        you arrive, independent drivers are waiting at the station ready to take you the rest of the way directly to Khatgal and the lake (please remember to negotiate your fare to your final destination before departing). Tickets available via the
                       </Prose>
                       <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
                         <CTALink
