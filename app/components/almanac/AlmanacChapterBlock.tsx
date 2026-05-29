@@ -21,6 +21,7 @@ export interface AlmanacChapterBlockProps {
   imageSrc: string;
   imageAlt: string;
   imageFit?: "cover" | "contain";
+  imageScale?: number;
   imageCaption?: string;
   href?: string;
   ctaLabel?: string;
@@ -34,15 +35,26 @@ export default function AlmanacChapterBlock({
   imageSrc,
   imageAlt,
   imageFit = "cover",
+  imageScale = 1,
   imageCaption,
   href,
   ctaLabel,
 }: AlmanacChapterBlockProps) {
   const imageFirst = index % 2 === 0;
   const articleLabel = ctaLabel ?? `Read ${eyebrow}`;
+  const scaledImage = imageScale > 0 && imageScale < 1;
+  const figureClassName = [
+    scaledImage ? undefined : "w-full",
+    scaledImage && !imageFirst ? "md:ml-auto" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   const imageBlock = (
-    <figure>
+    <figure
+      className={figureClassName || undefined}
+      style={scaledImage ? { width: `${imageScale * 100}%` } : undefined}
+    >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-alt/30">
         <SiteImage
           src={imageSrc}

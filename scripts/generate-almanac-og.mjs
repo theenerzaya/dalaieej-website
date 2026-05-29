@@ -18,12 +18,12 @@ const OG_HEIGHT = 630;
 /** slug → source path under public/ (hero or brand image) */
 const SOURCES = [
   { slug: "hub", source: "/images/og-heritage.jpg" },
-  { slug: "murun", source: "/murun-accidentally-wes-anderson.webp" },
+  { slug: "murun", source: "/images/almanac/murun/hero-wes-anderson-terminal.webp" },
   {
     slug: "borders-and-industry",
-    source: "/images/about-us/images/timeline-1990s-primary.png",
+    source: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg",
   },
-  { slug: "forest-and-steppe", source: "/images/gallery/adventures/DBR_4167.webp" },
+  { slug: "forest-and-steppe", source: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg" },
   { slug: "khovsgol-and-baikal", source: "/images/gallery/the-resort/DBR_9425.webp" },
 ];
 

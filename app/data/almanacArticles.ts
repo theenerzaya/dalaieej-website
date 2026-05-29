@@ -63,7 +63,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       "Before the pavement ends and the wilderness of the Khaich Valley begins, there is Mörön. More than just a transit hub, the capital of Khövsgöl province is a town of unexpected charm, deep local heritage, and a slow, intentional pace of life.",
     ],
     heroImage: {
-      src: "/murun-accidentally-wes-anderson.webp",
+      src: "/images/almanac/murun/hero-wes-anderson-terminal.webp",
       alt: "Murun Airport terminal, noted for its mid-century aesthetic by Accidentally Wes Anderson.",
       objectPosition: "50% 45%",
     },
@@ -85,7 +85,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         tocLabel: "The Wes Anderson Airport",
         title: "The Wes Anderson Airport",
         image: {
-          src: "/murun-airport-exterior.jpg",
+          src: "/images/almanac/murun/airport-exterior.jpg",
           alt: "Murun Airport terminal viewed from the tarmac, with the wing and steppe mountains beyond.",
           label: "Mörön Airport",
         },
@@ -105,7 +105,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         tocLabel: "The First Aviator of the North",
         title: "The First Aviator of the North",
         image: {
-          src: "/statue.jpg",
+          src: "/images/almanac/murun/gelenkhuu-statue.jpg",
           alt: "Statue of Khainzangiin Gelenkhüü outside Mörön Airport.",
           label: "Monument to Gelenkhüü",
           size: "compact",
@@ -193,7 +193,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "image",
-            src: "/zasagt-khan.jpg",
+            src: "/images/almanac/borders-and-industry/zasagt-khan-aimags-map.jpg",
             alt: "Historical map of the four aimags of Outer Mongolia under Qing administration.",
             captionTitle: "THE FOUR AIMAGS (c. 18th – Early 20th Century)",
             caption:
@@ -233,7 +233,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "video",
-            src: "/factory.mp4",
+            src: "/images/almanac/borders-and-industry/khatgal-wool-factory.mp4",
             alt: "Archival footage of the Khatgal Wool Washing Factory.",
             caption:
               "Archival footage of the Khatgal Wool Washing Factory (c. 1980–1988), capturing an inspection by state leader Yumjaagiin Tsedenbal. The audio's explicit directives for the floor staff to \"work harder\" offer a raw glimpse into the intense demands of the Five-Year Plan.",
@@ -280,9 +280,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       "Lake Khövsgöl sits exactly on this ancient geographic fault line. As you travel north from Mörön toward Khatgal, you are physically crossing from the Central Asian steppe into the Siberian taiga. The landscape shifts abruptly from the rolling, arid grasslands that defined the Mongol Empire into dense, alpine forests of larch and pine.",
     ],
     heroImage: {
-      src: "/images/gallery/adventures/DBR_4167.webp",
-      alt: "Landscape at the edge of the steppe and Siberian taiga.",
-      objectPosition: "50% 40%",
+      src: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
+      alt: "The Uushigiin Övör Deer Stones at the ancient threshold of the steppe.",
+      objectPosition: "50% 45%",
     },
     metadata: {
       published: "2025-06-01T00:00:00.000Z",

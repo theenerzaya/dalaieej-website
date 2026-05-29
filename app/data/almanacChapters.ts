@@ -7,6 +7,8 @@ export type AlmanacChapter = {
   imageAlt: string;
   /** Defaults to cover. Use contain to avoid cropping wide images on the index. */
   imageFit?: "cover" | "contain";
+  /** Thumbnail width as a fraction of the column (e.g. 0.85 = 15% smaller). */
+  imageScale?: number;
   imageCaption?: string;
   href?: string;
   ctaLabel?: string;
@@ -35,7 +37,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     title: "The Northern Gateway: Mörön & Beyond",
     description:
       "Before the pavement ends, there is Mörön. Discover the mid-century, cinematic charm of the provincial capital, the legend of the north’s first aviator, and why the locals refer to the water solely as Dalai Eej (Mother Ocean).",
-    imageSrc: "/murun-accidentally-wes-anderson.webp",
+    imageSrc: "/images/almanac/murun/hero-wes-anderson-terminal.webp",
     imageAlt:
       "Murun Airport terminal, noted for its mid-century aesthetic by Accidentally Wes Anderson.",
     imageFit: "contain",
@@ -50,8 +52,9 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     title: "The Making of the North: Borders & Industry",
     description:
       "The administrative map of the north was not drawn by accident. Explore the geopolitical history of Khatgal—from its origins as a 1700s military border post to the site of Mongolia's first massive, Soviet-engineered wool factory.",
-    imageSrc: "/sukhbaatar.jpeg",
+    imageSrc: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg",
     imageAlt: "Historical photograph of the Sukhbaatar.",
+    imageScale: 0.85,
     imageCaption:
       "The Sukhbaatar. Sourced via the Bidnii Saikhan Khövgsöl digital archive.",
     href: "/almanac/borders-and-industry",
@@ -63,8 +66,11 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     title: "The Forest and the Steppe: An Ancient Divide",
     description:
       "Lake Khövsgöl sits exactly on one of Asia's most enduring ecological borders. Understand the historical tension between the nomadic pastoralists of the Buddhist steppe and the hunter-gatherers of the Shamanic taiga.",
-    imageSrc: "/images/gallery/adventures/DBR_4167.webp",
-    imageAlt: "Landscape at the edge of the steppe and Siberian taiga.",
+    imageSrc: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
+    imageAlt: "The Uushigiin Övör Deer Stones at the ancient threshold of the steppe.",
+    imageScale: 0.85,
+    imageCaption:
+      "The Uushigiin Övör Deer Stones, marking the ancient threshold of the steppe. Sourced via Tour Mongolia.",
     href: "/almanac/forest-and-steppe",
     ctaLabel: "Read Chapter IV",
   },
