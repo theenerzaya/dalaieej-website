@@ -206,6 +206,16 @@ export default function GettingHerePage() {
 
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto max-w-6xl">
+          <FadeInBlock className="mb-12 md:mb-16">
+            <CTALink
+              href={`${localePrefix}/almanac`}
+              arrow={false}
+              className="!text-ink/50 hover:!text-water-deep [&>span]:!border-ink/20 [&>span]:group-hover:!border-water-deep/40"
+            >
+              ← The Almanac
+            </CTALink>
+          </FadeInBlock>
+
           <article
             aria-label="Arrival guide"
             className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"

@@ -1,0 +1,426 @@
+export type AlmanacContentBlock =
+  | { type: "prose"; text: string }
+  | { type: "subhead"; text: string }
+  | {
+      type: "image";
+      src: string;
+      alt: string;
+      captionTitle: string;
+      caption: string;
+      aspectClass?: string;
+      fit?: "cover" | "contain";
+      size?: "default" | "compact" | "centered";
+    }
+  | {
+      type: "video";
+      src: string;
+      alt: string;
+      caption: string;
+      credit?: string;
+    };
+
+export type AlmanacArticleSection = {
+  id: string;
+  tocLabel: string;
+  title: string;
+  image?: {
+    src: string;
+    alt: string;
+    label: string;
+    caption?: string;
+    aspectClass?: string;
+    size?: "default" | "compact";
+  };
+  blocks: AlmanacContentBlock[];
+};
+
+export type AlmanacArticle = {
+  slug: string;
+  chapterEyebrow: string;
+  title: string;
+  lede: string[];
+  heroImage: {
+    src: string;
+    alt: string;
+    objectPosition?: string;
+  };
+  metadata: {
+    title: string;
+    description: string;
+  };
+  sections: AlmanacArticleSection[];
+  prev?: { href: string; label: string };
+  next?: { href: string; label: string };
+};
+
+export const ALMANAC_ARTICLES: AlmanacArticle[] = [
+  {
+    slug: "murun",
+    chapterEyebrow: "Chapter II",
+    title: "The Northern Gateway: Mörön & Beyond",
+    lede: [
+      "Before the pavement ends and the wilderness of the Khaich Valley begins, there is Mörön. More than just a transit hub, the capital of Khövsgöl province is a town of unexpected charm, deep local heritage, and a slow, intentional pace of life.",
+    ],
+    heroImage: {
+      src: "/murun-accidentally-wes-anderson.webp",
+      alt: "Murun Airport terminal, noted for its mid-century aesthetic by Accidentally Wes Anderson.",
+      objectPosition: "50% 45%",
+    },
+    metadata: {
+      title: "The Northern Gateway: Mörön & Beyond | The Almanac",
+      description:
+        "Discover Mörön—the mid-century charm of Khövsgöl's provincial capital, the legend of the north's first aviator, and why locals call the lake Dalai Eej.",
+    },
+    prev: {
+      href: "/getting-here",
+      label: "Chapter I — The Journey",
+    },
+    next: {
+      href: "/almanac/borders-and-industry",
+      label: "Chapter III — Borders & Industry",
+    },
+    sections: [
+      {
+        id: "wes-anderson-airport",
+        tocLabel: "The Wes Anderson Airport",
+        title: "The Wes Anderson Airport",
+        image: {
+          src: "/murun-airport-exterior.jpg",
+          alt: "Murun Airport terminal viewed from the tarmac, with the wing and steppe mountains beyond.",
+          label: "Mörön Airport",
+        },
+        blocks: [
+          {
+            type: "prose",
+            text: "For most of our guests, the journey north begins on the tarmac of Mörön Airport (MXV). Regarded as the finest of Mongolia's domestic airstrips, the terminal is a masterclass in mid-century provincial architecture.",
+          },
+          {
+            type: "prose",
+            text: "With its retro pastel facades and symmetrical, time-capsule interiors, the building was famously cataloged by Accidentally Wes Anderson for its cinematic aesthetic. It is a quiet, sunlit space that feels a world away from the frantic energy of modern international hubs. In fact, the airport is so woven into the daily fabric of the town that on quiet mornings, you will often see Mörön locals utilizing the perimeter of the runway track for their morning runs.",
+          },
+        ],
+      },
+      {
+        id: "first-aviator",
+        tocLabel: "The First Aviator of the North",
+        title: "The First Aviator of the North",
+        image: {
+          src: "/statue.jpg",
+          alt: "Statue of Khainzangiin Gelenkhüü outside Mörön Airport.",
+          label: "Monument to Gelenkhüü",
+          size: "compact",
+        },
+        blocks: [
+          {
+            type: "prose",
+            text: "Just outside the terminal doors stands a monument that frequently sparks conversation among travelers: a statue of Khainzangiin Gelenkhüü, affectionately known as Shükhert Gelenkhüü (Parachute Gelenkhüü).",
+          },
+          {
+            type: "prose",
+            text: "A local Khövsgöl legend from the 1930s, Gelenkhüü was a rebel monk who became so captivated after seeing his first airplane that he built himself a pair of wings using sheepskin and eagle feathers, and jumped from a 170-meter cliff. He survived the fall (brilliantly, by driving his flock of sheep to the bottom of the cliff beforehand to act as a cushion). Stepping out of the terminal and passing his statue serves as a quiet nod to the daring, pioneering spirit of the province.",
+          },
+        ],
+      },
+      {
+        id: "community-effort",
+        tocLabel: "A Community Effort",
+        title: "A Community Effort: The International Milestone",
+        blocks: [
+          {
+            type: "prose",
+            text: "Mörön is a place defined by its resourcefulness and community spirit. Recently, the airport celebrated a massive historic milestone: receiving its first-ever direct international flight from South Korea.",
+          },
+          {
+            type: "prose",
+            text: "Aviation regulations dictated that two fire engines had to be present on the tarmac to safely receive the international aircraft. The airport, equipped with only one, didn't view this as a setback. Instead, they simply borrowed the municipal fire engine from the town center for the afternoon. The flight landed seamlessly—a testament to the grounded, collaborative nature of the north.",
+          },
+        ],
+      },
+      {
+        id: "dalai-eej-namesake",
+        tocLabel: "Finding Dalai Eej",
+        title: "The Namesake: Finding 'Dalai Eej'",
+        blocks: [
+          {
+            type: "prose",
+            text: "As you drive through the streets of Mörön to provision for the lake, you may notice a recurring phrase on the town's signage. The largest, bustling central market in town is named Dalai Eej, and you will spot the same name painted across the facades of countless small, neighborhood kiosks (mukhlag).",
+          },
+          {
+            type: "prose",
+            text: "Translating to \"Mother Ocean,\" Dalai Eej is the reverent title locals have given to Lake Khövsgöl for centuries. Seeing the name scattered throughout the town is a reminder that the lake is not just a destination on a map; it is the spiritual and economic gravity of the entire province.",
+          },
+          {
+            type: "prose",
+            text: "It is this exact reverence that we carry with us as you leave the town behind, navigating the final roads toward the pristine eastern shores and our namesake resort.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "borders-and-industry",
+    chapterEyebrow: "Chapter III",
+    title: "The Making of the North: Borders & Industry",
+    lede: [
+      "To a modern traveler, the administrative map of Mongolia—divided into twenty-one aimags (provinces)—can seem somewhat arbitrary. In reality, the boundaries drawn across the northern steppe are a direct byproduct of centuries of geopolitical shifts, from the colonial administration of the Qing Dynasty to the heavy industry of Soviet socialism.",
+    ],
+    heroImage: {
+      src: "/images/about-us/images/timeline-1990s-primary.png",
+      alt: "Historical photograph from Khatgal and Khövsgöl region.",
+      objectPosition: "50% 35%",
+    },
+    metadata: {
+      title: "The Making of the North: Borders & Industry | The Almanac",
+      description:
+        "From the Zasagt Khan Aimag to Khatgal's Qing border post and Mongolia's first Soviet wool factory—the geopolitical history of Khövsgöl.",
+    },
+    prev: {
+      href: "/almanac/murun",
+      label: "Chapter II — Mörön & Beyond",
+    },
+    next: {
+      href: "/almanac/forest-and-steppe",
+      label: "Chapter IV — Forest & Steppe",
+    },
+    sections: [
+      {
+        id: "zasagt-khan",
+        tocLabel: "The Realm of the Zasagt Khan",
+        title: "The Realm of the Zasagt Khan",
+        blocks: [
+          {
+            type: "prose",
+            text: "Before the 1930s, the modern concept of Khövsgöl did not exist. Instead, the Mongolian steppe was divided into four massive, sweeping provinces. The territory that encompasses today's Khövsgöl belonged largely to the Zasagt Khan Aimag (The Province of the Ruling King). Governed by dynastic nobles, it was a vast, wild frontier region defined by nomadic movement rather than fixed borders.",
+          },
+          {
+            type: "image",
+            src: "/zasagt-khan.jpg",
+            alt: "Historical map of the four aimags of Outer Mongolia under Qing administration.",
+            captionTitle: "THE FOUR AIMAGS (c. 18th – Early 20th Century)",
+            caption:
+              "Before the modern reorganization into twenty-one provinces, Outer Mongolia was administered by the Qing Dynasty as four massive, sweeping aimags. From west to east, they were the realms of the Zasagt Khan, Sain Noyon Khan, Tüsheet Khan, and Setsen Khan. Flanked by special military frontiers (like Khovd in the far west), this four-province structure governed the nomadic movement of the steppe for nearly two hundred years, until the collapse of the Bogd Khanate and the rise of the Soviet-backed Mongolian People's Republic in the 1920s.",
+            fit: "contain",
+            size: "centered",
+          },
+        ],
+      },
+      {
+        id: "original-capital",
+        tocLabel: "The Original Capital",
+        title: "The Original Capital",
+        blocks: [
+          {
+            type: "prose",
+            text: "As the Qing Dynasty exerted its influence, fixed settlements became necessary to monitor trade and territorial lines. Khatgal was founded in 1727 as a Qing military border post. Because of its strategic proximity to the Russian frontier, it naturally developed into a bustling transit hub.",
+          },
+          {
+            type: "prose",
+            text: "When the modern Khövsgöl province was officially carved out and established in 1931, Khatgal was designated as its first administrative capital. However, logistical realities quickly set in, and just two years later in 1933, the provincial center was permanently relocated 100 km south to the more accessible town of Mörön.",
+          },
+        ],
+      },
+      {
+        id: "industrial-frontier",
+        tocLabel: "Mongolia's Industrial Frontier",
+        title: "Mongolia's Industrial Frontier",
+        blocks: [
+          {
+            type: "prose",
+            text: "Despite losing its capital status, Khatgal was not abandoned; it transformed into an industrial powerhouse. In 1933, the Khatgal Wool Washing Factory was established on the southern shore of the lake.",
+          },
+          {
+            type: "prose",
+            text: "Built with Soviet engineering and capital, it was a massive milestone for the country—one of the very first fully mechanized light-industry factories in Mongolia. The facility was considered a triumph of national engineering, and its round-the-clock operations were even immortalized in a state documentary capturing an inspection by Mongolian leader Yumjaagiin Tsedenbal. The surviving footage, highlighting the relentless hum of the machinery and the strict quotas of the command economy, perfectly captures the heavy, demanding momentum of the era.",
+          },
+          {
+            type: "video",
+            src: "/factory.mp4",
+            alt: "Archival footage of the Khatgal Wool Washing Factory.",
+            caption:
+              "Archival footage of the Khatgal Wool Washing Factory (c. 1980–1988), capturing an inspection by state leader Yumjaagiin Tsedenbal. The audio's explicit directives for the floor staff to \"work harder\" offer a raw glimpse into the intense demands of the Five-Year Plan.",
+            credit: "Sourced via the Ergen Dursakhad Saikhan digital archive.",
+          },
+          {
+            type: "subhead",
+            text: "The Hub of the North",
+          },
+          {
+            type: "prose",
+            text: "Khatgal became a bustling, cinematic center of commerce. Wool and goods were transported not just by modern trucks, but by steamboats across the summer waters, horse-drawn sledges fitted with iron horseshoes over the winter ice, and camel caravans arriving from as far away as the Gobi Desert.",
+          },
+          {
+            type: "subhead",
+            text: "The Power Grid",
+          },
+          {
+            type: "prose",
+            text: "The factory was remarkably advanced for its time. Its massive steam boilers generated enough surplus electricity to power Khatgal's schools, hospitals, and homes—making it the first rural town in Mongolia to have 24-hour electricity, decades before the national grid arrived.",
+          },
+          {
+            type: "subhead",
+            text: "The Ecological Pivot",
+          },
+          {
+            type: "prose",
+            text: "For over half a century, the factory operated around the clock, processing thousands of tons of wool bound for international markets. However, in 1988, a landmark government resolution was passed. To protect the pristine ecology and pure waters of Lake Khövsgöl, the heavy wool-washing operations were permanently ordered to cease.",
+          },
+          {
+            type: "prose",
+            text: "Today, the heavy industrial machinery and cargo barges are gone, and Khatgal has returned to a quieter existence. Yet, this era of sweeping geopolitical shifts and early industry remains woven into the architecture, the local infrastructure, and the families who built the modern north.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "forest-and-steppe",
+    chapterEyebrow: "Chapter IV",
+    title: "The Forest and the Steppe: An Ancient Divide",
+    lede: [
+      "Historian David Morgan notes in The Mongols that one of the deepest, most enduring divides in Central Asia was never just political—it was ecological. For centuries, a quiet tension existed between the nomadic pastoralists of the open steppe and the hunter-gatherer \"forest dwellers\" (hoi-yin irgen) of the northern taiga.",
+      "Lake Khövsgöl sits exactly on this ancient geographic fault line. As you travel north from Mörön toward Khatgal, you are physically crossing from the Central Asian steppe into the Siberian taiga. The landscape shifts abruptly from the rolling, arid grasslands that defined the Mongol Empire into dense, alpine forests of larch and pine.",
+    ],
+    heroImage: {
+      src: "/images/gallery/adventures/DBR_4167.webp",
+      alt: "Landscape at the edge of the steppe and Siberian taiga.",
+      objectPosition: "50% 40%",
+    },
+    metadata: {
+      title: "The Forest and the Steppe: An Ancient Divide | The Almanac",
+      description:
+        "Lake Khövsgöl sits on Asia's most enduring ecological border—the tension between the Buddhist steppe and the Shamanic taiga.",
+    },
+    prev: {
+      href: "/almanac/borders-and-industry",
+      label: "Chapter III — Borders & Industry",
+    },
+    next: {
+      href: "/almanac/khovsgol-and-baikal",
+      label: "Chapter V — Khövsgöl & Baikal",
+    },
+    sections: [
+      {
+        id: "two-ways-of-life",
+        tocLabel: "Two Ways of Life, Two Faiths",
+        title: "Two Ways of Life, Two Faiths",
+        image: {
+          src: "/images/personas/frontier-en.jpg",
+          alt: "The open steppe meeting the northern forest at Khövsgöl.",
+          label: "Steppe and taiga at the northern frontier",
+          aspectClass: "aspect-[4/3] md:aspect-[21/9]",
+        },
+        blocks: [
+          {
+            type: "prose",
+            text: "This dramatic geography created a hard border between two radically different ways of life—and ultimately, two different spiritual worlds.",
+          },
+          {
+            type: "subhead",
+            text: "The Steppe and the Sutras",
+          },
+          {
+            type: "prose",
+            text: "To the south, the pastoralists thrived on the open plains. As the centuries progressed, the steppe nomads underwent a massive cultural shift, adopting Tibetan Buddhism. High lamas became powerful political figures, vast monasteries were built across the plains, and the nomadic elite embraced the structured, institutionalized religion of the Yellow Hat sect.",
+          },
+          {
+            type: "subhead",
+            text: "The Forest and the Old Gods",
+          },
+          {
+            type: "prose",
+            text: "To the north, deep in the taiga and the neighboring Darkhad Valley, the forest peoples lived an entirely different existence. Relying on hunting, trapping, and reindeer herding, they completely rejected the encroaching Buddhism. The dense, impenetrable forests acted as a fortress, allowing the northern tribes to preserve the original animist faith of the Mongols: Shamanism.",
+          },
+          {
+            type: "prose",
+            text: "To this day, the Khövsgöl region remains the undisputed heartland of Mongolian shamanism—the original religion of Chinggis Khan. While his successors would later bastardize the old ways, adopting foreign faiths and elaborate rituals as they settled into sedentary empires, the Great Khan's own spirituality was notoriously austere. He famously performed no sacrifices, preferring to simply remove his hat and belt to speak directly to the Eternal Blue Sky. When you arrive in Khatgal and look out over the water, you are standing on the ultimate frontier: the exact point where the Buddhist steppe ends, and that ancient, unmediated connection to the taiga begins.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "khovsgol-and-baikal",
+    chapterEyebrow: "Chapter V",
+    title: "Two Lakes, One Empire: Khövsgöl and Baikal",
+    lede: [
+      "To understand Lake Khövsgöl, one must look 200 kilometers across the northern border to its geological older sister: Lake Baikal. Today, a hard international border separates the two, but for centuries, they were the dual anchors of the northern Mongolian frontier.",
+    ],
+    heroImage: {
+      src: "/images/gallery/the-resort/DBR_9425.webp",
+      alt: "Lake Khövsgöl and the northern shoreline at Dalai Eej.",
+      objectPosition: "50% 55%",
+    },
+    metadata: {
+      title: "Two Lakes, One Empire: Khövsgöl and Baikal | The Almanac",
+      description:
+        "How the Treaty of Kyakhta severed Khövsgöl from its geological sister Lake Baikal—and why their 20th-century destinies diverged so dramatically.",
+    },
+    prev: {
+      href: "/almanac/forest-and-steppe",
+      label: "Chapter IV — Forest & Steppe",
+    },
+    sections: [
+      {
+        id: "sister-lakes",
+        tocLabel: "The Sister Lakes",
+        title: "The Sister Lakes",
+        blocks: [
+          {
+            type: "prose",
+            text: "Khövsgöl and Baikal are intrinsically linked. They sit within the same massive tectonic rift valley, and the waters of Khövsgöl eventually flow all the way into Baikal via the Eg and Selenge rivers.",
+          },
+          {
+            type: "prose",
+            text: "More importantly, they were historically part of the same unified cultural expanse. The very name Baikal is a Russian adaptation of the Mongolian word Baigal (Байгаль), which simply translates to \"nature.\" To the Mongols who inhabited its shores, the lake was the ultimate natural phenomenon.",
+          },
+        ],
+      },
+      {
+        id: "severing-of-north",
+        tocLabel: "The Severing of the North",
+        title: "The Severing of the North",
+        image: {
+          src: "/images/gallery/the-resort/DBR_8599.webp",
+          alt: "The pristine waters of Lake Khövsgöl under northern light.",
+          label: "Lake Khövsgöl",
+          aspectClass: "aspect-[4/3]",
+        },
+        blocks: [
+          {
+            type: "prose",
+            text: "The separation of the two lakes was not a natural divide, but an imperial one. As the Russian Empire expanded eastward across Siberia, and the Qing Dynasty secured its grip on the Mongolian steppe, the two powers collided.",
+          },
+          {
+            type: "prose",
+            text: "Through a series of treaties—most notably the Treaty of Kyakhta in 1727—a hard geopolitical line was drawn directly through the northern territories. Lake Baikal was formally absorbed into the Russian Empire, while Lake Khövsgöl remained on the southern side of the border, left as the northernmost frontier of the Mongolian state.",
+          },
+        ],
+      },
+      {
+        id: "transformation-of-taiga",
+        tocLabel: "The Transformation of the Taiga",
+        title: "The Transformation of the Taiga",
+        blocks: [
+          {
+            type: "prose",
+            text: "This border would permanently alter the destiny of the two lakes. For millennia, the vast expanse of Siberia surrounding Baikal was the exclusive domain of Mongolic, Turkic, and Tungusic tribes—peoples intimately adapted to the harsh, sacred rhythms of the forest and steppe.",
+          },
+          {
+            type: "prose",
+            text: "However, as the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Millions of political prisoners and exiles from European Russia and the West were sent eastward into the Gulags. The forced insertion of European prisoners into the freezing, alien expanse of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
+          },
+          {
+            type: "prose",
+            text: "While Baikal saw its shores industrialized and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma, allowing it to remain the quiet, pristine sanctuary of the old north.",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const ALMANAC_ARTICLE_SLUGS = ALMANAC_ARTICLES.map((article) => article.slug);
+
+export function getAlmanacArticle(slug: string): AlmanacArticle | undefined {
+  return ALMANAC_ARTICLES.find((article) => article.slug === slug);
+}
