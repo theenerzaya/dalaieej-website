@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { openGraphAssetUrl } from "@/lib/assetUrl";
+import {
+  ALMANAC_HUB_OG_IMAGE,
+  ALMANAC_OG_HEIGHT,
+  ALMANAC_OG_WIDTH,
+} from "@/lib/almanac-seo";
 import { absoluteSiteUrl, hreflangLanguages } from "@/lib/site-urls";
 
 type Props = {
@@ -10,10 +17,11 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata.almanac" });
   const canonical = absoluteSiteUrl(locale, "/almanac");
+  const ogImageUrl = openGraphAssetUrl(ALMANAC_HUB_OG_IMAGE, locale);
 
   return {
     title: t("title"),
@@ -29,6 +37,21 @@ export async function generateMetadata({
       siteName: "Dalai Eej Resort",
       locale: locale === "mn" ? "mn_MN" : "en_US",
       type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: ALMANAC_OG_WIDTH,
+          height: ALMANAC_OG_HEIGHT,
+          alt: t("openGraphImageAlt"),
+          type: "image/jpeg",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("openGraphTitle"),
+      description: t("openGraphDescription"),
+      images: [ogImageUrl],
     },
   };
 }

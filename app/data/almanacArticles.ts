@@ -45,8 +45,9 @@ export type AlmanacArticle = {
     objectPosition?: string;
   };
   metadata: {
-    title: string;
-    description: string;
+    /** ISO 8601 — used for Open Graph and Article JSON-LD */
+    published: string;
+    modified: string;
   };
   sections: AlmanacArticleSection[];
   prev?: { href: string; label: string };
@@ -67,9 +68,8 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       objectPosition: "50% 45%",
     },
     metadata: {
-      title: "The Northern Gateway: Mörön & Beyond | The Almanac",
-      description:
-        "Discover Mörön—the mid-century charm of Khövsgöl's provincial capital, the legend of the north's first aviator, and why locals call the lake Dalai Eej.",
+      published: "2025-04-01T00:00:00.000Z",
+      modified: "2026-05-30T00:00:00.000Z",
     },
     prev: {
       href: "/getting-here",
@@ -170,9 +170,8 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       objectPosition: "50% 35%",
     },
     metadata: {
-      title: "The Making of the North: Borders & Industry | The Almanac",
-      description:
-        "From the Zasagt Khan Aimag to Khatgal's Qing border post and Mongolia's first Soviet wool factory—the geopolitical history of Khövsgöl.",
+      published: "2025-05-01T00:00:00.000Z",
+      modified: "2026-05-30T00:00:00.000Z",
     },
     prev: {
       href: "/almanac/murun",
@@ -286,9 +285,8 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       objectPosition: "50% 40%",
     },
     metadata: {
-      title: "The Forest and the Steppe: An Ancient Divide | The Almanac",
-      description:
-        "Lake Khövsgöl sits on Asia's most enduring ecological border—the tension between the Buddhist steppe and the Shamanic taiga.",
+      published: "2025-06-01T00:00:00.000Z",
+      modified: "2026-05-30T00:00:00.000Z",
     },
     prev: {
       href: "/almanac/borders-and-industry",
@@ -351,9 +349,8 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       objectPosition: "50% 55%",
     },
     metadata: {
-      title: "Two Lakes, One Empire: Khövsgöl and Baikal | The Almanac",
-      description:
-        "How the Treaty of Kyakhta severed Khövsgöl from its geological sister Lake Baikal—and why their 20th-century destinies diverged so dramatically.",
+      published: "2025-07-01T00:00:00.000Z",
+      modified: "2026-05-30T00:00:00.000Z",
     },
     prev: {
       href: "/almanac/forest-and-steppe",

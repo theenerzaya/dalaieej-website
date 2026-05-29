@@ -62,7 +62,30 @@
       "title": "The Almanac | A Guide to the Northern Frontier | Dalai Eej Resort",
       "description": "Field notes and historical archives on Lake Khövsgöl — from the steppe to the taiga, Mörön to Khatgal, and the ancient divide of the northern frontier.",
       "openGraphTitle": "The Almanac | Dalai Eej Resort",
-      "openGraphDescription": "A collection of field notes and historical archives designed to give you a true sense of place before you arrive on our shores."
+      "openGraphDescription": "A multi-chapter field guide to the northern frontier of Lake Khövsgöl — travel, history, and ecology before you reach our shores.",
+      "openGraphImageAlt": "Lake Khövsgöl and the northern frontier at Dalai Eej Resort"
+    },
+    "almanacArticles": {
+      "murun": {
+        "metaTitle": "The Northern Gateway: Mörön & Beyond",
+        "description": "Discover Mörön—the mid-century charm of Khövsgöl's provincial capital, the legend of the north's first aviator, and why locals call the lake Dalai Eej.",
+        "ogImageAlt": "Mörön Airport terminal, noted for its mid-century aesthetic"
+      },
+      "borders-and-industry": {
+        "metaTitle": "The Making of the North: Borders & Industry",
+        "description": "From the Zasagt Khan Aimag to Khatgal's Qing border post and Mongolia's first Soviet wool factory—the geopolitical history of Khövsgöl.",
+        "ogImageAlt": "Historical photograph from Khatgal and the Khövsgöl region"
+      },
+      "forest-and-steppe": {
+        "metaTitle": "The Forest and the Steppe: An Ancient Divide",
+        "description": "Lake Khövsgöl sits on Asia's most enduring ecological border—the tension between the Buddhist steppe and the Shamanic taiga.",
+        "ogImageAlt": "Landscape at the edge of the steppe and Siberian taiga"
+      },
+      "khovsgol-and-baikal": {
+        "metaTitle": "Two Lakes, One Empire: Khövsgöl and Baikal",
+        "description": "How the Treaty of Kyakhta severed Khövsgöl from its geological sister Lake Baikal—and why their 20th-century destinies diverged so dramatically.",
+        "ogImageAlt": "Lake Khövsgöl and the northern shoreline at Dalai Eej"
+      }
     },
     "fam": {
       "title": "FAM Tour Application | Dalai Eej Resort",
@@ -225,6 +248,14 @@
     "digital": "Digital",
     "brand": "Brand",
     "gettingHere": "Getting Here"
+  },
+  "almanacPage": {
+    "eyebrow": "The Almanac",
+    "title": "A Guide to the Northern Frontier",
+    "seriesLead": "A multi-chapter field guide—travel logistics, provincial history, and the ecology of the north—published in order before you reach our shores.",
+    "intro1": "Lake Khövsgöl is not merely a destination; it is a geographic and cultural fault line.",
+    "intro2": "To travel to the Khaich Valley is to step into a region where the open Central Asian steppe abruptly ends and the dense Siberian taiga begins. It is a landscape that has been shaped by the sweeping territories of the Zasagt Khan, the border administration of the Qing Dynasty, the heavy industry of Soviet socialism, and the ancient, unyielding traditions of the forest tribes.",
+    "intro3": "Read the chapters in sequence, or jump to the place or era that draws you in. Each installment is written to stand alone—and to deepen your sense of where you are going."
   },
   "cta": {
     "title": "Ready to Experience the Blue Pearl?",

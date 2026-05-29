@@ -54,9 +54,11 @@ function cx(...parts: Array<string | false | null | undefined>) {
 
 export interface EyebrowProps extends ComponentPropsWithoutRef<"p"> {
   tone?: Tone;
+  as?: "p" | "span";
 }
 
 export function Eyebrow({
+  as: Tag = "p",
   tone = "light",
   className,
   children,
@@ -65,7 +67,7 @@ export function Eyebrow({
   const locale = useLocale();
   const isMn = locale === "mn";
   return (
-    <p
+    <Tag
       {...rest}
       className={cx(
         "font-cta uppercase",
@@ -77,7 +79,7 @@ export function Eyebrow({
       )}
     >
       {children}
-    </p>
+    </Tag>
   );
 }
 

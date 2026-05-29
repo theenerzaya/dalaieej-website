@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
-import { absoluteSiteUrl, hreflangLanguages } from "@/lib/site-urls";
+import { getTranslations } from "next-intl/server";
+import AlmanacArticleStructuredData from "@/app/components/almanac/AlmanacArticleStructuredData";
 import { getAlmanacArticle } from "@/app/data/almanacArticles";
+import {
+  buildAlmanacArticleMetadata,
+  resolveAlmanacArticleSeoCopy,
+} from "@/lib/almanac-seo";
 
 type Props = {
   children: React.ReactNode;
@@ -15,37 +20,27 @@ export async function generateMetadata({ params }: Props) {
     return {};
   }
 
-  const path = `/almanac/${slug}`;
-  const canonical = absoluteSiteUrl(locale, path);
+  const t = await getTranslations({ locale, namespace: "metadata.almanacArticles" });
+  const seo = resolveAlmanacArticleSeoCopy(slug, t);
 
-  return {
-    title: `${article.title} | The Almanac | Dalai Eej Resort`,
-    description: article.metadata.description,
-    alternates: {
-      canonical,
-      languages: hreflangLanguages(path),
-    },
-    openGraph: {
-      title: `${article.title} | The Almanac`,
-      description: article.metadata.description,
-      url: canonical,
-      siteName: "Dalai Eej Resort",
-      locale: locale === "mn" ? "mn_MN" : "en_US",
-      type: "article",
-    },
-  };
+  return buildAlmanacArticleMetadata({ locale, slug, article, seo });
 }
 
 export default async function AlmanacArticleRouteLayout({
   children,
   params,
 }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const article = getAlmanacArticle(slug);
 
   if (!article) {
     notFound();
   }
 
-  return children;
+  return (
+    <>
+      <AlmanacArticleStructuredData locale={locale} slug={slug} />
+      {children}
+    </>
+  );
 }

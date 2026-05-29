@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import SiteImage from "@/app/components/SiteImage";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import {
@@ -8,6 +9,9 @@ import {
   Eyebrow,
   Headline,
 } from "@/app/components/ui/Typography";
+
+const chapterLinkFocus =
+  "rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-water-deep";
 
 export interface AlmanacChapterBlockProps {
   index: number;
@@ -35,6 +39,29 @@ export default function AlmanacChapterBlock({
   ctaLabel,
 }: AlmanacChapterBlockProps) {
   const imageFirst = index % 2 === 0;
+  const articleLabel = ctaLabel ?? `Read ${eyebrow}`;
+
+  const imageBlock = (
+    <figure>
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-alt/30">
+        <SiteImage
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          sizes="(max-width: 768px) 100vw, 42vw"
+          className={[
+            imageFit === "contain" ? "object-contain" : "object-cover",
+            href ? "transition-transform duration-500 group-hover:scale-[1.02]" : "",
+          ].join(" ")}
+        />
+      </div>
+      {imageCaption ? (
+        <figcaption className="mx-auto mt-3 max-w-sm text-center font-body text-sm leading-snug text-ink/60">
+          {imageCaption}
+        </figcaption>
+      ) : null}
+    </figure>
+  );
 
   return (
     <FadeInBlock>
@@ -44,22 +71,17 @@ export default function AlmanacChapterBlock({
             imageFirst ? "order-1 md:sticky md:top-28" : "order-1 md:order-2 md:sticky md:top-28"
           }
         >
-          <figure>
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-alt/30">
-              <SiteImage
-                src={imageSrc}
-                alt={imageAlt}
-                fill
-                sizes="(max-width: 768px) 100vw, 42vw"
-                className={imageFit === "contain" ? "object-contain" : "object-cover"}
-              />
-            </div>
-            {imageCaption ? (
-              <figcaption className="mx-auto mt-3 max-w-sm text-center font-body text-sm leading-snug text-ink/60">
-                {imageCaption}
-              </figcaption>
-            ) : null}
-          </figure>
+          {href ? (
+            <Link
+              href={href}
+              className={`group block ${chapterLinkFocus}`}
+              aria-label={articleLabel}
+            >
+              {imageBlock}
+            </Link>
+          ) : (
+            imageBlock
+          )}
         </div>
 
         <div
@@ -67,10 +89,42 @@ export default function AlmanacChapterBlock({
             imageFirst ? "order-2" : "order-2 md:order-1 md:ml-auto"
           }`}
         >
-          <Eyebrow className="!text-water-deep/70 mb-0">{eyebrow}</Eyebrow>
-          <Headline as="h2" size="sub" align="left" className="!text-left">
-            {title}
-          </Headline>
+          {href ? (
+            <Link
+              href={href}
+              className={`group block w-fit ${chapterLinkFocus}`}
+              aria-label={articleLabel}
+            >
+              <Eyebrow
+                as="span"
+                className="!text-water-deep/70 mb-0 transition-colors group-hover:!text-water-deep"
+              >
+                {eyebrow}
+              </Eyebrow>
+            </Link>
+          ) : (
+            <Eyebrow className="!text-water-deep/70 mb-0">{eyebrow}</Eyebrow>
+          )}
+          {href ? (
+            <Link
+              href={href}
+              className={`group block w-fit ${chapterLinkFocus}`}
+              aria-label={articleLabel}
+            >
+              <Headline
+                as="h2"
+                size="sub"
+                align="left"
+                className="!text-left transition-colors group-hover:!text-water-deep"
+              >
+                {title}
+              </Headline>
+            </Link>
+          ) : (
+            <Headline as="h2" size="sub" align="left" className="!text-left">
+              {title}
+            </Headline>
+          )}
           <BodyText size="md" className="!text-left text-ink/75">
             {description}
           </BodyText>
