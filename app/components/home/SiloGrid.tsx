@@ -47,7 +47,7 @@ const silos = [
 
 const storiesSilo = {
   id: "stories",
-  href: "/catalogue",
+  href: "/almanac",
   en: "Stories",
   mn: "Тэмдэглэл",
   image: "/images/silogrid/stories-placeholder.webp",

@@ -106,7 +106,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
           className="text-center mt-16"
         >
           <Link
-            href={withLocalePath(locale, "/catalogue")}
+            href={withLocalePath(locale, "/almanac")}
             className="inline-flex items-center gap-2 font-body text-leaf hover:text-water-deep transition-colors group"
           >
             <span className="border-b border-leaf/30 group-hover:border-ink pb-1">
