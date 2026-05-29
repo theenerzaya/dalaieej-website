@@ -18,7 +18,7 @@ export default function AlmanacPage() {
     href: chapter.href ? `${localePrefix}${chapter.href}` : undefined,
   }));
 
-  const introParagraphs = [t("intro1"), t("intro2"), t("intro3")];
+  const introParagraphs = [t("intro1"), t("intro2")];
 
   return (
     <PageShell>
@@ -28,27 +28,37 @@ export default function AlmanacPage() {
         align="left"
         className="!pb-12 !pt-28 md:!pb-16 md:!pt-36"
       >
-        <FadeInBlock className="flex flex-col gap-10 md:gap-12">
+        <FadeInBlock className="flex max-w-2xl flex-col gap-7">
           <div className="flex flex-col gap-5">
             <Eyebrow className="!text-water-deep/70">{t("eyebrow")}</Eyebrow>
             <Headline as="h1" size="section" align="left" className="!text-left">
               {t("title")}
             </Headline>
-            <BodyText size="md" className="!text-left text-ink/70 max-w-2xl">
-              {t("seriesLead")}
-            </BodyText>
-          </div>
-          <div className="flex max-w-2xl flex-col gap-7">
-            {introParagraphs.map((paragraph) => (
-              <BodyText
-                key={paragraph.slice(0, 32)}
-                size="md"
-                className="!text-left text-ink/75"
-              >
-                {paragraph}
+            <div className="flex flex-col">
+              <BodyText size="md" className="!text-left text-ink/70">
+                {t("seriesLead")}
               </BodyText>
-            ))}
+              <BodyText size="md" className="!text-left text-ink/75">
+                {introParagraphs[0]}
+              </BodyText>
+            </div>
           </div>
+          {introParagraphs.slice(1).map((paragraph) => (
+            <BodyText
+              key={paragraph.slice(0, 32)}
+              size="md"
+              className="!text-left text-ink/75"
+            >
+              {paragraph}
+            </BodyText>
+          ))}
+          <BodyText
+            size="md"
+            align="left"
+            className="!text-left italic text-ink/80"
+          >
+            {t("archiveNote")}
+          </BodyText>
         </FadeInBlock>
       </ContentSection>
 
