@@ -244,7 +244,7 @@ function PaymentContent() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to initialize payment");
+        throw new Error(data.error || "Failed to initialise payment");
       }
 
       setClientSecret(data.clientSecret);
@@ -510,7 +510,7 @@ function PaymentContent() {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12 border border-main/20 text-center">
               <Loader2 className="w-12 h-12 text-main animate-spin mx-auto mb-4" />
               <p className={`text-main ${editorialFont} italic text-xl mb-2`}>
-                Initializing Payment...
+                Initialising Payment...
               </p>
               <p className="text-main/60 text-sm font-body">
                 Please wait a moment

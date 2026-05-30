@@ -24,7 +24,7 @@ export default function StoriesPage() {
       category: locale === 'mn' ? "Соёл" : "Culture"
     },
     {
-      title: locale === 'mn' ? "Орон нутгийн хоол" : "Farm to Table: Local Flavors",
+      title: locale === 'mn' ? "Орон нутгийн хоол" : "Farm to Table: Local Flavours",
       excerpt: locale === 'mn' ? "Манай тогооч орон нутгийн бүтээгдэхүүнээр хоол хийх тухай" : "How our chef transforms local ingredients into culinary masterpieces.",
       date: "December 10, 2025",
       image: "/images/gallery/restaurant/DBR_4944.webp",

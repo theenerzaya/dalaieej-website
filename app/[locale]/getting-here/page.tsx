@@ -172,10 +172,11 @@ export default function GettingHerePage() {
       <FrostedMapSection
         aria-label="How We Get to Khövsgöl"
         className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
+        imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
         imagePriority
         frostOpacity={13.87}
         frostBlurPx={6.2}
-        mapObjectPosition="50% 58%"
+        mapObjectPosition="50% 45%"
       >
         <motion.div
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -198,7 +199,7 @@ export default function GettingHerePage() {
           }}
         >
           <BodyText size="md" className="max-w-2xl">
-            A comprehensive guide to traveling from Ulaanbaatar to the Khaich
+            A comprehensive guide to travelling from Ulaanbaatar to the Khaich
             Valley.
           </BodyText>
         </motion.div>
@@ -330,7 +331,7 @@ export default function GettingHerePage() {
                     for lunch and refueling. As one of Mongolia&apos;s wealthiest
                     cities per capita, Erdenet offers a charming glimpse into
                     Soviet-era urban planning. Filled with character, you will find
-                    an eclectic mix of options to recharge, from cozy local
+                    an eclectic mix of options to recharge, from cosy local
                     &quot;tea houses&quot; to excellent standalone restaurants.
                   </Prose>
                   <Subhead>The Heart of Bulgan</Subhead>
@@ -410,7 +411,7 @@ export default function GettingHerePage() {
                         There is no direct train to Murun; the railway ends in
                         Erdenet. However, the route is a spur of the legendary
                         Trans-Siberian Railway—the very same iconic railway famously
-                        traveled by David Bowie. Taking the overnight sleeper train to
+                        travelled by David Bowie. Taking the overnight sleeper train to
                         Erdenet is a deeply nostalgic, romantic way to travel. Once
                         you arrive, independent drivers are waiting at the station ready to take you the rest of the way directly to Khatgal and the lake (please remember to negotiate your fare to your final destination before departing). Tickets available via the
                       </Prose>
@@ -435,7 +436,7 @@ export default function GettingHerePage() {
                       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
                         <SiteImage
                           src="/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
-                          alt="Black and white archival photograph of David Bowie traveling in a sleeper cabin on the Trans-Siberian Railway."
+                          alt="Black and white archival photograph of David Bowie travelling in a sleeper cabin on the Trans-Siberian Railway."
                           title="David Bowie on the Trans-Siberian Railway"
                           fill
                           className="object-cover"
@@ -461,7 +462,7 @@ export default function GettingHerePage() {
                     variant="photo"
                     label="Murun Airport terminal"
                     imageSrc="/images/getting-here/murun-airport-terminal-interior.jpg"
-                    imageAlt="Travelers in the Murun Airport terminal with Dalai Eej Resort signage visible."
+                    imageAlt="Travellers in the Murun Airport terminal with Dalai Eej Resort signage visible."
                     aspectClass="aspect-[4/3] md:aspect-[21/9]"
                   />
                 </FadeInBlock>
@@ -488,7 +489,7 @@ export default function GettingHerePage() {
                   <Prose>
                     The first 8 km out of Khatgal is a graded gravel road, but the
                     final 5 km is an unpaved, natural dirt track. Because of this, we
-                    require traveling in a 4x4 vehicle and highly recommend having
+                    require travelling in a 4x4 vehicle and highly recommend having
                     an experienced driver at the wheel.
                   </Prose>
                   <BodyText

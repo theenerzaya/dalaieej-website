@@ -12,7 +12,9 @@ import {
   ArticleImage,
   ArticleSection,
   ArticleVideo,
+  EditorialPullQuote,
   EpilogueQuote,
+  isCompactFigureSize,
   Prose,
   Subhead,
 } from "@/app/components/almanac/AlmanacArticlePrimitives";
@@ -26,6 +28,98 @@ import { BodyText, CTALink, Eyebrow, Headline } from "@/app/components/ui/Typogr
 type Props = {
   article: AlmanacArticle;
 };
+
+type ImageBlock = Extract<AlmanacContentBlock, { type: "image" }>;
+
+function hasSplitAsidePlacements(blocks: AlmanacContentBlock[]) {
+  return blocks.some(
+    (block) => block.placement === "aside-left" || block.placement === "aside-right"
+  );
+}
+
+function partitionSplitAside(blocks: AlmanacContentBlock[], firstCompactIdx: number) {
+  const headBlocks = blocks.slice(0, firstCompactIdx);
+  const introBlocks = headBlocks.filter(
+    (block) => block.placement !== "aside-span" && block.placement !== "center"
+  );
+  const centerBlocks: AlmanacContentBlock[] = [];
+  const spanBlocks: AlmanacContentBlock[] = [];
+  const leftAside: AlmanacContentBlock[] = [];
+  const rightAside: AlmanacContentBlock[] = [];
+
+  for (const block of blocks.slice(firstCompactIdx)) {
+    if (block.placement === "center") {
+      centerBlocks.push(block);
+    } else if (block.placement === "aside-span") {
+      spanBlocks.push(block);
+    } else if (block.placement === "aside-right") {
+      rightAside.push(block);
+    } else if (block.placement === "aside-left") {
+      leftAside.push(block);
+    }
+  }
+
+  return { introBlocks, centerBlocks, spanBlocks, leftAside, rightAside };
+}
+
+function renderAsideBlock(sectionId: string, block: AlmanacContentBlock, key: string) {
+  if (block.type === "prose") {
+    return <Prose key={key}>{block.text}</Prose>;
+  }
+  if (block.type === "image") {
+    return (
+      <ArticleFigure
+        key={key}
+        src={block.src}
+        alt={block.alt}
+        captionTitle={block.captionTitle}
+        caption={block.caption}
+        fit={block.fit}
+        frameless={block.frameless}
+        size={block.size && isCompactFigureSize(block.size) ? block.size : "compact"}
+      />
+    );
+  }
+  return null;
+}
+
+function collectCompactAsideRun(blocks: AlmanacContentBlock[]) {
+  const firstIdx = blocks.findIndex(
+    (block) => block.type === "image" && isCompactFigureSize(block.size)
+  );
+  if (firstIdx < 0) return null;
+
+  let lastIdx = firstIdx;
+  while (
+    lastIdx + 1 < blocks.length &&
+    blocks[lastIdx + 1].type === "image" &&
+    isCompactFigureSize(blocks[lastIdx + 1].size) &&
+    blocks[lastIdx + 1].placement !== "aside-right" &&
+    blocks[lastIdx + 1].placement !== "center"
+  ) {
+    lastIdx += 1;
+  }
+
+  const blocksBefore = blocks.slice(0, firstIdx);
+  const compactImageBlocks = blocks.slice(firstIdx, lastIdx + 1) as ImageBlock[];
+
+  const asideProseBlocks: Extract<AlmanacContentBlock, { type: "prose" }>[] = [];
+  let tailIdx = lastIdx + 1;
+  while (tailIdx < blocks.length && blocks[tailIdx].type === "prose") {
+    asideProseBlocks.push(blocks[tailIdx] as Extract<AlmanacContentBlock, { type: "prose" }>);
+    tailIdx += 1;
+  }
+  const blocksAfter = blocks.slice(tailIdx);
+
+  if (
+    blocksBefore.length === 0 ||
+    !blocksBefore.every((block) => block.type === "prose")
+  ) {
+    return null;
+  }
+
+  return { blocksBefore, compactImageBlocks, asideProseBlocks, blocksAfter, firstIdx };
+}
 
 function renderBlock(sectionId: string, block: AlmanacContentBlock, index: number) {
   if (block.type === "prose") {
@@ -42,6 +136,7 @@ function renderBlock(sectionId: string, block: AlmanacContentBlock, index: numbe
         aspectClass={block.aspectClass}
         fit={block.fit}
         size={block.size}
+        frameless={block.frameless}
       />
     );
   }
@@ -60,46 +155,159 @@ function renderBlock(sectionId: string, block: AlmanacContentBlock, index: numbe
 }
 
 function SectionContent({ section }: { section: AlmanacArticleSection }) {
-  const compactAsideImage = section.image?.size === "compact" ? section.image : null;
+  const compactAsideImage =
+    section.image && isCompactFigureSize(section.image.size) ? section.image : null;
   const proseBlocks = section.blocks.filter((block) => block.type === "prose");
 
-  const compactImageBlockIndex = section.blocks.findIndex(
-    (block) => block.type === "image" && block.size === "compact"
+  const firstCompactIdx = section.blocks.findIndex(
+    (block) => block.type === "image" && isCompactFigureSize(block.size)
   );
-  const compactImageBlock =
-    compactImageBlockIndex >= 0 ? section.blocks[compactImageBlockIndex] : null;
-  const blocksBeforeCompactImage =
-    compactImageBlockIndex >= 0 ? section.blocks.slice(0, compactImageBlockIndex) : [];
-  const blocksAfterCompactImage =
-    compactImageBlockIndex >= 0 ? section.blocks.slice(compactImageBlockIndex + 1) : [];
 
   if (
-    compactImageBlock?.type === "image" &&
-    blocksBeforeCompactImage.length > 0 &&
-    blocksBeforeCompactImage.every((block) => block.type === "prose")
+    firstCompactIdx >= 0 &&
+    section.compactAside === "left" &&
+    hasSplitAsidePlacements(section.blocks)
   ) {
+    const { introBlocks, centerBlocks, spanBlocks, leftAside, rightAside } =
+      partitionSplitAside(section.blocks, firstCompactIdx);
+
     return (
       <>
-        <FadeInBlock delay={0.08}>
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
-            <div className="min-w-0 flex-1 space-y-6">
-              {blocksBeforeCompactImage.map((block, index) =>
+        {introBlocks.length > 0 ? (
+          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
+            <div className="space-y-6">
+              {introBlocks.map((block, index) =>
                 renderBlock(section.id, block, index)
               )}
             </div>
-            <ArticleFigure
-              src={compactImageBlock.src}
-              alt={compactImageBlock.alt}
-              captionTitle={compactImageBlock.captionTitle}
-              caption={compactImageBlock.caption}
-              fit={compactImageBlock.fit}
-              size="compact"
-            />
+          </FadeInBlock>
+        ) : null}
+        {centerBlocks.length > 0 ? (
+          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
+            <div className="mx-auto w-full max-w-[min(100%,24rem)] [&_figcaption]:text-center">
+              {centerBlocks.map((block, index) =>
+                renderAsideBlock(section.id, block, `${section.id}-center-${index}`)
+              )}
+            </div>
+          </FadeInBlock>
+        ) : null}
+        {spanBlocks.length > 0 ? (
+          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
+            <div className="min-w-0 space-y-6">
+              {spanBlocks.map((block, index) =>
+                renderBlock(section.id, block, introBlocks.length + centerBlocks.length + index)
+              )}
+            </div>
+          </FadeInBlock>
+        ) : null}
+        <FadeInBlock delay={0.08}>
+          <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-end md:gap-8">
+            <div className="min-w-0 flex-1 space-y-8 md:max-w-[34rem]">
+              {leftAside.map((block, index) =>
+                renderAsideBlock(section.id, block, `${section.id}-left-${index}`)
+              )}
+            </div>
+            <div className="flex min-w-0 w-full flex-col gap-8 md:w-auto md:max-w-[9.2rem] md:shrink-0">
+              {rightAside.map((block, index) =>
+                renderAsideBlock(section.id, block, `${section.id}-right-${index}`)
+              )}
+            </div>
           </div>
         </FadeInBlock>
-        {blocksAfterCompactImage.map((block, index) => (
+      </>
+    );
+  }
+
+  const compactAsideRun = collectCompactAsideRun(section.blocks);
+
+  if (compactAsideRun) {
+    const { blocksBefore, compactImageBlocks, asideProseBlocks, blocksAfter, firstIdx } =
+      compactAsideRun;
+    const imagesOnLeft =
+      section.compactAside === "left" && asideProseBlocks.length > 0;
+    const asideEndRightImages = blocksAfter.filter(
+      (block): block is ImageBlock =>
+        block.type === "image" && block.placement === "aside-right"
+    );
+    const tailBlocks = imagesOnLeft
+      ? blocksAfter.filter(
+          (block) => block.type !== "image" || block.placement !== "aside-right"
+        )
+      : [...asideProseBlocks, ...blocksAfter];
+
+    const imageColumn = (
+      <div className="flex min-w-0 w-full shrink-0 flex-col gap-8 md:w-auto">
+        {compactImageBlocks.map((block, imageIndex) => (
+          <ArticleFigure
+            key={`${section.id}-aside-${imageIndex}`}
+            src={block.src}
+            alt={block.alt}
+            captionTitle={block.captionTitle}
+            caption={block.caption}
+            fit={block.fit}
+            frameless={block.frameless}
+            size={block.size && isCompactFigureSize(block.size) ? block.size : "compact"}
+          />
+        ))}
+      </div>
+    );
+
+    const proseColumn = (
+      <div className="min-w-0 flex-1 space-y-6 md:max-w-[34rem]">
+        {(imagesOnLeft ? asideProseBlocks : blocksBefore).map((block, index) =>
+          renderBlock(section.id, block, index)
+        )}
+        {imagesOnLeft
+          ? asideEndRightImages.map((block, imageIndex) => (
+              <div key={`${section.id}-aside-right-${imageIndex}`} className="ml-auto w-fit max-w-full">
+                <ArticleFigure
+                  src={block.src}
+                  alt={block.alt}
+                  captionTitle={block.captionTitle}
+                  caption={block.caption}
+                  fit={block.fit}
+                  frameless={block.frameless}
+                  size={
+                    block.size && isCompactFigureSize(block.size) ? block.size : "compact"
+                  }
+                />
+              </div>
+            ))
+          : null}
+      </div>
+    );
+
+    return (
+      <>
+        {imagesOnLeft && blocksBefore.length > 0 ? (
+          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
+            <div className="space-y-6">
+              {blocksBefore.map((block, index) => renderBlock(section.id, block, index))}
+            </div>
+          </FadeInBlock>
+        ) : null}
+        <FadeInBlock delay={0.08}>
+          <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-start md:gap-8">
+            {imagesOnLeft ? (
+              <>
+                {imageColumn}
+                {proseColumn}
+              </>
+            ) : (
+              <>
+                {proseColumn}
+                {imageColumn}
+              </>
+            )}
+          </div>
+        </FadeInBlock>
+        {tailBlocks.map((block, index) => (
           <FadeInBlock key={`${section.id}-tail-${index}`} delay={0.08}>
-            {renderBlock(section.id, block, compactImageBlockIndex + 1 + index)}
+            {renderBlock(
+              section.id,
+              block,
+              firstIdx + compactImageBlocks.length + index
+            )}
           </FadeInBlock>
         ))}
       </>
@@ -122,7 +330,11 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
               alt={compactAsideImage.alt}
               label={compactAsideImage.label}
               caption={compactAsideImage.caption}
-              size="compact"
+              size={
+                compactAsideImage.size && isCompactFigureSize(compactAsideImage.size)
+                  ? compactAsideImage.size
+                  : "compact"
+              }
             />
           </div>
         </FadeInBlock>
@@ -137,7 +349,7 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
 
   return (
     <>
-      {section.image && section.image.size !== "compact" ? (
+      {section.image && !isCompactFigureSize(section.image.size) ? (
         <ArticleImage
           src={section.image.src}
           alt={section.image.alt}
@@ -208,7 +420,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
       </FrostedMapSection>
 
       <section className="px-6 pb-24 md:pb-32">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto min-w-0 max-w-6xl overflow-x-hidden">
           <FadeInBlock className="mb-12 md:mb-16">
             <CTALink
               href={`${localePrefix}/almanac`}
@@ -245,6 +457,28 @@ export default function AlmanacArticleLayout({ article }: Props) {
               ) : null}
             </div>
           </article>
+
+          {article.pullQuote ? (
+            <EditorialPullQuote
+              eyebrow={article.pullQuote.eyebrow}
+              title={article.pullQuote.title}
+              body={article.pullQuote.body}
+              image={article.pullQuote.image}
+            />
+          ) : null}
+
+          {article.closingImage ? (
+            <FadeInBlock className="mt-12 px-6 md:mt-16">
+              <div className="mx-auto max-w-3xl">
+                <ArticleFigure
+                  src={article.closingImage.src}
+                  alt={article.closingImage.alt}
+                  caption={article.closingImage.caption}
+                  aspectClass={article.closingImage.aspectClass ?? "aspect-[4/3]"}
+                />
+              </div>
+            </FadeInBlock>
+          ) : null}
 
           {(article.prev || article.next) && (
             <FadeInBlock className="mt-20 flex flex-col gap-6 border-t border-ink/10 pt-12 sm:flex-row sm:justify-between">

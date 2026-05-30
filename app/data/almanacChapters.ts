@@ -42,7 +42,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
       "Murun Airport terminal, noted for its mid-century aesthetic by Accidentally Wes Anderson.",
     imageFit: "contain",
     imageCaption:
-      "Mörön Airport (est. 1956). Photographed by @kjphotos1022, as cataloged by the Accidentally Wes Anderson archive.",
+      "Mörön Airport (est. 1956). Photographed by @kjphotos1022, as catalogued by the Accidentally Wes Anderson archive.",
     href: "/almanac/murun",
     ctaLabel: "Read Chapter II",
   },
@@ -54,7 +54,6 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
       "The administrative map of the north was not drawn by accident. Explore the geopolitical history of Khatgal—from its origins as a 1700s military border post to the site of Mongolia's first massive, Soviet-engineered wool factory.",
     imageSrc: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg",
     imageAlt: "Historical photograph of the Sukhbaatar.",
-    imageScale: 0.85,
     imageCaption:
       "The Sukhbaatar. Sourced via the Bidnii Saikhan Khövgsöl digital archive.",
     href: "/almanac/borders-and-industry",
@@ -68,7 +67,6 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
       "Lake Khövsgöl sits exactly on one of Asia's most enduring ecological borders. Understand the historical tension between the nomadic pastoralists of the Buddhist steppe and the hunter-gatherers of the Shamanic taiga.",
     imageSrc: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
     imageAlt: "The Uushigiin Övör Deer Stones at the ancient threshold of the steppe.",
-    imageScale: 0.85,
     imageCaption:
       "The Uushigiin Övör Deer Stones, marking the ancient threshold of the steppe. Sourced via Tour Mongolia.",
     href: "/almanac/forest-and-steppe",
@@ -79,9 +77,11 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     eyebrow: "Chapter V",
     title: "Two Lakes, One Empire: Khövsgöl and Baikal",
     description:
-      "Today, an international border separates Khövsgöl from Russia's Lake Baikal. Discover how an 18th-century treaty severed the geological sister lakes, leaving Baikal to the heavy industrialization and penal colonies of the Soviet taiga, while Khövsgöl remained a pristine sanctuary of the old north.",
-    imageSrc: "/images/gallery/the-resort/DBR_9425.webp",
-    imageAlt: "Lake Khövsgöl and the northern shoreline at Dalai Eej.",
+      "Today, an international border separates Khövsgöl from Russia's Lake Baikal. Discover how an 18th-century treaty severed the geological sister lakes, leaving Baikal to the heavy industrialisation and penal colonies of the Soviet taiga, while Khövsgöl remained a pristine sanctuary of the old north.",
+    imageSrc: "/images/almanac/khovsgol-and-baikal/olkhon-island-shores.jpg",
+    imageAlt: "The shores of Olkhon Island on Lake Baikal.",
+    imageCaption:
+      "The shores of Olkhon Island on Lake Baikal, the ancestral epicentre of the northern taiga. Sourced via Toute la Russie.",
     href: "/almanac/khovsgol-and-baikal",
     ctaLabel: "Read Chapter V",
   },

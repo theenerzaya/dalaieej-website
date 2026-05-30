@@ -65,7 +65,7 @@ export default function LodgePage() {
             <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
               {locale === 'mn'
                 ? "Гол байшин нь бүх өрөөг хамарсан захиалгаар хувийн амралтын газар болно."
-                : "The Lodge offers complete privacy with exclusive full-house bookings, ensuring an intimate and personalized retreat."}
+                : "The Lodge offers complete privacy with exclusive full-house bookings, ensuring an intimate and personalised retreat."}
             </p>
           </motion.div>
 

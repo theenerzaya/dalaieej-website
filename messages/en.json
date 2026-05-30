@@ -10,7 +10,7 @@
     },
     "planner": {
       "title": "Mongolia Itinerary Planner | Gobi to Khövsgöl Heritage Trail",
-      "description": "Plan your journey across the Great Steppe. A curated guide for travelers seeking the intersection of Mongolian history and nature."
+      "description": "Plan your journey across the Great Steppe. A curated guide for travellers seeking the intersection of Mongolian history and nature."
     },
     "booking": {
       "title": "Book Your Stay | Dalai Eej Resort at Lake Khövsgöl",
@@ -54,7 +54,7 @@
     },
     "gettingHere": {
       "title": "How We Get to Lake Khövsgöl | Dalai Eej Resort",
-      "description": "A curated guide on traveling from Ulaanbaatar to Lake Khövsgöl. Discover domestic flight details, scenic overland routes, and private transfer information.",
+      "description": "A curated guide on travelling from Ulaanbaatar to Lake Khövsgöl. Discover domestic flight details, scenic overland routes, and private transfer information.",
       "openGraphTitle": "The Journey to Lake Khövsgöl | Dalai Eej Resort",
       "openGraphDescription": "Whether you prefer a quick domestic flight to Murun or a scenic drive across the Mongolian steppe, discover the best ways to reach our shores."
     },
@@ -74,7 +74,7 @@
       "borders-and-industry": {
         "metaTitle": "The Making of the North: Borders & Industry",
         "description": "From the Zasagt Khan Aimag to Khatgal's Qing border post and Mongolia's first Soviet wool factory—the geopolitical history of Khövsgöl.",
-        "ogImageAlt": "Historical photograph from Khatgal and the Khövsgöl region"
+        "ogImageAlt": "Historical photograph of the Sukhbaatar"
       },
       "forest-and-steppe": {
         "metaTitle": "The Forest and the Steppe: An Ancient Divide",
@@ -84,12 +84,12 @@
       "khovsgol-and-baikal": {
         "metaTitle": "Two Lakes, One Empire: Khövsgöl and Baikal",
         "description": "How the Treaty of Kyakhta severed Khövsgöl from its geological sister Lake Baikal—and why their 20th-century destinies diverged so dramatically.",
-        "ogImageAlt": "Lake Khövsgöl and the northern shoreline at Dalai Eej"
+        "ogImageAlt": "The shores of Olkhon Island on Lake Baikal"
       }
     },
     "fam": {
       "title": "FAM Tour Application | Dalai Eej Resort",
-      "description": "Tour operators and travel agencies: apply for a complimentary familiarization trip to experience Dalai Eej Resort firsthand."
+      "description": "Tour operators and travel agencies: apply for a complimentary familiarisation trip to experience Dalai Eej Resort firsthand."
     }
   },
   "nav": {
@@ -126,8 +126,8 @@
       }
     },
     "dining": {
-      "title": "Flavors of the Steppe",
-      "desc": "Experience warm Mongolian hospitality. From hearty Khorkhog to fresh European favorites, our restaurant serves delicious meals prepared with local ingredients. Enjoy your morning coffee while watching the sunrise over the lake.",
+      "title": "Flavours of the Steppe",
+      "desc": "Experience warm Mongolian hospitality. From hearty Khorkhog to fresh European favourites, our restaurant serves delicious meals prepared with local ingredients. Enjoy your morning coffee while watching the sunrise over the lake.",
       "cta": "View Menu"
     },
     "activities": {
@@ -192,7 +192,7 @@
       },
       "pets": {
         "title": "Pet Policy",
-        "desc": "Pets are welcome on leashes in outdoor areas. Please inform us in advance if traveling with pets."
+        "desc": "Pets are welcome on leashes in outdoor areas. Please inform us in advance if travelling with pets."
       }
     }
   },
@@ -252,10 +252,8 @@
   "almanacPage": {
     "eyebrow": "The Almanac",
     "title": "A Guide to the Northern Frontier",
-    "seriesLead": "A multi-chapter field guide—travel logistics, provincial history, and the ecology of the north.",
-    "intro1": "Lake Khövsgöl is not merely a destination; it is a geographic and cultural fault line.",
-    "intro2": "To travel to the Khaich Valley is to step into a region where the open Central Asian steppe abruptly ends and the dense Siberian taiga begins. It is a landscape that has been shaped by the sweeping territories of the Zasagt Khan, the border administration of the Qing Dynasty, the heavy industry of Soviet socialism, and the ancient, unyielding traditions of the forest tribes.",
-    "archiveNote": "A Note on the Archive: Read the chapters in sequence as a comprehensive guide to the northern frontier, or jump to the specific era that draws you in. Each installment is written to stand alone, designed to deepen your sense of where you are going."
+    "hook": "Lake Khövsgöl is not merely a destination; it is a geographic and cultural fault line. To travel to the Khaich Valley is to step into a region where the open Central Asian steppe abruptly ends and the dense Siberian taiga begins.",
+    "seoMeta": "A multi-chapter field guide spanning travel logistics, provincial history, and ecology. Read in sequence as a comprehensive guide to the northern frontier, or jump to specific eras to deepen your sense of where you are going."
   },
   "cta": {
     "title": "Ready to Experience the Blue Pearl?",
@@ -372,7 +370,7 @@
     },
     "early": {
       "title": "Summer 2026 Early Bird",
-      "desc": "Secure your favorite heritage cabin before the seasonal rush.",
+      "desc": "Secure your favourite heritage cabin before the seasonal rush.",
       "offer": "Prepay & Save 15%"
     },
     "longstay": {
@@ -382,7 +380,7 @@
     },
     "family": {
       "title": "The Big Family Reunion",
-      "desc": "Traveling with extended family? Book neighboring cabins to keep the legacy alive together.",
+      "desc": "Travelling with extended family? Book neighbouring cabins to keep the legacy alive together.",
       "offer": "10% Off when booking 2+ Units"
     },
     "tourOperators": {
@@ -394,7 +392,7 @@
   },
   "fam": {
     "hero": {
-      "title": "Partner Familiarization (FAM) Tour",
+      "title": "Partner Familiarisation (FAM) Tour",
       "subtitle": "Experience the legacy of Dalai Eej firsthand and discover why our guests return year after year."
     },
     "benefits": {
@@ -520,7 +518,7 @@
       "subtitle": "Accessible and carefree",
       "capacity": "Max 2 Adults",
       "bedding": "Double or Twin Configuration",
-      "description": "Situated within the main lodge, these rooms offer a temperate, maintenance-free refuge without the need for a wood stove. Ideal for those prioritizing convenience.",
+      "description": "Situated within the main lodge, these rooms offer a temperate, maintenance-free refuge without the need for a wood stove. Ideal for those prioritising convenience.",
       "features": [
         "Central heating (No wood stove required)",
         "Located on 2nd floor of lodge",

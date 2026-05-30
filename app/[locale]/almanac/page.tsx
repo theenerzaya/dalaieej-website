@@ -18,8 +18,6 @@ export default function AlmanacPage() {
     href: chapter.href ? `${localePrefix}${chapter.href}` : undefined,
   }));
 
-  const introParagraphs = [t("intro1"), t("intro2")];
-
   return (
     <PageShell>
       <ContentSection
@@ -28,37 +26,17 @@ export default function AlmanacPage() {
         align="left"
         className="!pb-12 !pt-28 md:!pb-16 md:!pt-36"
       >
-        <FadeInBlock className="flex max-w-2xl flex-col gap-7">
-          <div className="flex flex-col gap-5">
-            <Eyebrow className="!text-water-deep/70">{t("eyebrow")}</Eyebrow>
-            <Headline as="h1" size="section" align="left" className="!text-left">
-              {t("title")}
-            </Headline>
-            <div className="flex flex-col">
-              <BodyText size="md" className="!text-left text-ink/70">
-                {t("seriesLead")}
-              </BodyText>
-              <BodyText size="md" className="!text-left text-ink/75">
-                {introParagraphs[0]}
-              </BodyText>
-            </div>
-          </div>
-          {introParagraphs.slice(1).map((paragraph) => (
-            <BodyText
-              key={paragraph.slice(0, 32)}
-              size="md"
-              className="!text-left text-ink/75"
-            >
-              {paragraph}
-            </BodyText>
-          ))}
-          <BodyText
-            size="md"
-            align="left"
-            className="!text-left italic text-ink/80"
-          >
-            {t("archiveNote")}
+        <FadeInBlock className="flex max-w-2xl flex-col gap-5">
+          <Eyebrow className="!text-water-deep/70">{t("eyebrow")}</Eyebrow>
+          <Headline as="h1" size="section" align="left" className="!text-left">
+            {t("title")}
+          </Headline>
+          <BodyText size="md" className="!text-left text-ink/75">
+            {t("hook")}
           </BodyText>
+          <p className="font-cta text-[11px] font-medium uppercase leading-relaxed tracking-[0.15em] text-ink/50">
+            {t("seoMeta")}
+          </p>
         </FadeInBlock>
       </ContentSection>
 

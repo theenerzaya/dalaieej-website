@@ -24,7 +24,10 @@ const SOURCES = [
     source: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg",
   },
   { slug: "forest-and-steppe", source: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg" },
-  { slug: "khovsgol-and-baikal", source: "/images/gallery/the-resort/DBR_9425.webp" },
+  {
+    slug: "khovsgol-and-baikal",
+    source: "/images/almanac/khovsgol-and-baikal/olkhon-island-shores.jpg",
+  },
 ];
 
 async function generateOne({ slug, source }) {

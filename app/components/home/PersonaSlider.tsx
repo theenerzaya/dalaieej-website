@@ -245,7 +245,7 @@ export default function PersonaSlider() {
           <Headline as="h2" size="section">
             {locale === "mn"
               ? "Аялагч бүр өөр өөр хүслээр ирдэг. Таных аль нь вэ?"
-              : "Every traveler arrives with a different story. Which is yours?"}
+              : "Every traveller arrives with a different story. Which is yours?"}
           </Headline>
         </motion.div>
       </div>

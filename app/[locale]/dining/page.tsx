@@ -12,7 +12,7 @@ export default function RestaurantPage() {
   const features = [
     { icon: ChefHat, title: locale === 'mn' ? "Мэргэжлийн тогооч" : "Executive Chef", desc: locale === 'mn' ? "Олон улсын туршлагатай" : "Internationally trained culinary artist" },
     { icon: Leaf, title: locale === 'mn' ? "Орон нутгийн бүтээгдэхүүн" : "Local Ingredients", desc: locale === 'mn' ? "Шинэ, органик хүнс" : "Fresh, organic produce from local farms" },
-    { icon: Utensils, title: locale === 'mn' ? "Монгол хоол" : "Mongolian Cuisine", desc: locale === 'mn' ? "Уламжлалт амт" : "Traditional flavors with modern presentation" },
+    { icon: Utensils, title: locale === 'mn' ? "Монгол хоол" : "Mongolian Cuisine", desc: locale === 'mn' ? "Уламжлалт амт" : "Traditional flavours with modern presentation" },
     { icon: Wine, title: locale === 'mn' ? "Дарсны сан" : "Wine Selection", desc: locale === 'mn' ? "Дэлхийн дарс" : "Curated wines from around the world" },
     { icon: Clock, title: locale === 'mn' ? "Өдөр бүр нээлттэй" : "Open Daily", desc: locale === 'mn' ? "Өглөөний цай, үдийн хоол, оройн хоол" : "Breakfast, lunch, and dinner service" },
     { icon: Heart, title: locale === 'mn' ? "Тусгай хоол" : "Dietary Options", desc: locale === 'mn' ? "Вегетариан, веган сонголт" : "Vegetarian, vegan, and allergy-friendly" },

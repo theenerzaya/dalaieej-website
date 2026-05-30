@@ -1,15 +1,20 @@
+export type AsidePlacement = "center" | "aside-span" | "aside-left" | "aside-right";
+
 export type AlmanacContentBlock =
-  | { type: "prose"; text: string }
+  | { type: "prose"; text: string; placement?: AsidePlacement }
   | { type: "subhead"; text: string }
   | {
       type: "image";
       src: string;
       alt: string;
-      captionTitle: string;
+      captionTitle?: string;
       caption: string;
       aspectClass?: string;
       fit?: "cover" | "contain";
-      size?: "default" | "compact" | "centered";
+      size?: "default" | "compact" | "compactLarge" | "compactLargeSm" | "centered";
+      /** Omit ring/background on compact figures (e.g. archival scans). */
+      frameless?: boolean;
+      placement?: AsidePlacement;
     }
   | {
       type: "video";
@@ -23,13 +28,15 @@ export type AlmanacArticleSection = {
   id: string;
   tocLabel: string;
   title: string;
+  /** Compact figure column: default right of intro prose; `left` puts images left of trailing prose. */
+  compactAside?: "left" | "right";
   image?: {
     src: string;
     alt: string;
     label: string;
     caption?: string;
     aspectClass?: string;
-    size?: "default" | "compact";
+    size?: "default" | "compact" | "compactLarge" | "compactLargeSm";
   };
   blocks: AlmanacContentBlock[];
 };
@@ -50,6 +57,18 @@ export type AlmanacArticle = {
     modified: string;
   };
   sections: AlmanacArticleSection[];
+  pullQuote?: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    image?: { src: string; alt: string; objectPosition?: string };
+  };
+  closingImage?: {
+    src: string;
+    alt: string;
+    caption: string;
+    aspectClass?: string;
+  };
   epilogue?: {
     quote: string;
     attribution: string;
@@ -100,7 +119,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "With its retro pastel facades and symmetrical, time-capsule interiors, the building was famously cataloged by Accidentally Wes Anderson for its cinematic aesthetic. It is a quiet, sunlit space that feels a world away from the frantic energy of modern international hubs. In fact, the airport is so woven into the daily fabric of the town that on quiet mornings, you will often see Mörön locals utilizing the perimeter of the runway track for their morning runs.",
+            text: "With its retro pastel facades and symmetrical, time-capsule interiors, the building was famously catalogued by Accidentally Wes Anderson for its cinematic aesthetic. It is a quiet, sunlit space that feels a world away from the frantic energy of modern international hubs. In fact, the airport is so woven into the daily fabric of the town that on quiet mornings, you will often see Mörön locals utilising the perimeter of the runway track for their morning runs.",
           },
         ],
       },
@@ -117,7 +136,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         blocks: [
           {
             type: "prose",
-            text: "Just outside the terminal doors stands a monument that frequently sparks conversation among travelers: a statue of Khainzangiin Gelenkhüü, affectionately known as Shükhert Gelenkhüü (Parachute Gelenkhüü).",
+            text: "Just outside the terminal doors stands a monument that frequently sparks conversation among travellers: a statue of Khainzangiin Gelenkhüü, affectionately known as Shükhert Gelenkhüü (Parachute Gelenkhüü).",
           },
           {
             type: "prose",
@@ -136,7 +155,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "Aviation regulations dictated that two fire engines had to be present on the tarmac to safely receive the international aircraft. The airport, equipped with only one, didn't view this as a setback. Instead, they simply borrowed the municipal fire engine from the town center for the afternoon. The flight landed seamlessly—a testament to the grounded, collaborative nature of the north.",
+            text: "Aviation regulations dictated that two fire engines had to be present on the tarmac to safely receive the international aircraft. The airport, equipped with only one, didn't view this as a setback. Instead, they simply borrowed the municipal fire engine from the town centre for the afternoon. The flight landed seamlessly—a testament to the grounded, collaborative nature of the north.",
           },
         ],
       },
@@ -147,7 +166,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         blocks: [
           {
             type: "prose",
-            text: "As you drive through the streets of Mörön to provision for the lake, you may notice a recurring phrase on the town's signage. The largest, bustling central market in town is named Dalai Eej, and you will spot the same name painted across the facades of countless small, neighborhood kiosks (mukhlag).",
+            text: "As you drive through the streets of Mörön to provision for the lake, you may notice a recurring phrase on the town's signage. The largest, bustling central market in town is named Dalai Eej, and you will spot the same name painted across the facades of countless small, neighbourhood kiosks.",
           },
           {
             type: "prose",
@@ -166,12 +185,12 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
     chapterEyebrow: "Chapter III",
     title: "The Making of the North: Borders & Industry",
     lede: [
-      "To a modern traveler, the administrative map of Mongolia—divided into twenty-one aimags (provinces)—can seem somewhat arbitrary. In reality, the boundaries drawn across the northern steppe are a direct byproduct of centuries of geopolitical shifts, from the colonial administration of the Qing Dynasty to the heavy industry of Soviet socialism.",
+      "To a modern traveller, the administrative map of Mongolia—divided into twenty-one aimags (provinces)—can seem somewhat arbitrary. In reality, the boundaries drawn across the northern steppe are a direct byproduct of centuries of geopolitical shifts, from the colonial administration of the Qing Dynasty to the heavy industry of Soviet socialism.",
     ],
     heroImage: {
-      src: "/images/about-us/images/timeline-1990s-primary.png",
-      alt: "Historical photograph from Khatgal and Khövsgöl region.",
-      objectPosition: "50% 35%",
+      src: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg",
+      alt: "Historical photograph of the Sukhbaatar.",
+      objectPosition: "50% 45%",
     },
     metadata: {
       published: "2025-05-01T00:00:00.000Z",
@@ -201,7 +220,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             alt: "Historical map of the four aimags of Outer Mongolia under Qing administration.",
             captionTitle: "THE FOUR AIMAGS (c. 18th – Early 20th Century)",
             caption:
-              "Before the modern reorganization into twenty-one provinces, Outer Mongolia was administered by the Qing Dynasty as four massive, sweeping aimags. From west to east, they were the realms of the Zasagt Khan, Sain Noyon Khan, Tüsheet Khan, and Setsen Khan. Flanked by special military frontiers (like Khovd in the far west), this four-province structure governed the nomadic movement of the steppe for nearly two hundred years, until the collapse of the Bogd Khanate and the rise of the Soviet-backed Mongolian People's Republic in the 1920s.",
+              "Before the modern reorganisation into twenty-one provinces, Outer Mongolia was administered by the Qing Dynasty as four massive, sweeping aimags. From west to east, they were the realms of the Zasagt Khan, Sain Noyon Khan, Tüsheet Khan, and Setsen Khan. Flanked by special military frontiers (like Khovd in the far west), this four-province structure governed the nomadic movement of the steppe for nearly two hundred years, until the collapse of the Bogd Khanate and the rise of the Soviet-backed Mongolian People's Republic in the 1920s.",
             fit: "contain",
             size: "centered",
           },
@@ -218,7 +237,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "When the modern Khövsgöl province was officially carved out and established in 1931, Khatgal was designated as its first administrative capital. However, logistical realities quickly set in, and just two years later in 1933, the provincial center was permanently relocated 100 km south to the more accessible town of Mörön.",
+            text: "When the modern Khövsgöl province was officially carved out and established in 1931, Khatgal was designated as its first administrative capital. However, logistical realities quickly set in, and just two years later in 1933, the provincial centre was permanently relocated 100 km south to the more accessible town of Mörön.",
           },
         ],
       },
@@ -233,7 +252,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "Built with Soviet engineering and capital, it was a massive milestone for the country—one of the very first fully mechanized light-industry factories in Mongolia. The facility was considered a triumph of national engineering, and its round-the-clock operations were even immortalized in a state documentary capturing an inspection by Mongolian leader Yumjaagiin Tsedenbal. The surviving footage, highlighting the relentless hum of the machinery and the strict quotas of the command economy, perfectly captures the heavy, demanding momentum of the era.",
+            text: "Built with Soviet engineering and capital, it was a massive milestone for the country—one of the very first fully mechanised light-industry factories in Mongolia. The facility was considered a triumph of national engineering, and its round-the-clock operations were even immortalised in a state documentary capturing an inspection by Mongolian leader Yumjaagiin Tsedenbal. The surviving footage, highlighting the relentless hum of the machinery and the strict quotas of the command economy, perfectly captures the heavy, demanding momentum of the era.",
           },
           {
             type: "video",
@@ -249,7 +268,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "Khatgal became a bustling, cinematic center of commerce. Wool and goods were transported not just by modern trucks, but by steamboats across the summer waters, horse-drawn sledges fitted with iron horseshoes over the winter ice, and camel caravans arriving from as far away as the Gobi Desert.",
+            text: "Khatgal became a bustling, cinematic centre of commerce. Wool and goods were transported not just by modern trucks, but by steamboats across the summer waters, horse-drawn sledges fitted with iron horseshoes over the winter ice, and camel caravans arriving from as far away as the Gobi Desert.",
           },
           {
             type: "subhead",
@@ -322,7 +341,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "To the south, the pastoralists thrived on the open plains. As the centuries progressed, the steppe nomads underwent a massive cultural shift, adopting Tibetan Buddhism. High lamas became powerful political figures, vast monasteries were built across the plains, and the nomadic elite embraced the structured, institutionalized religion of the Yellow Hat sect.",
+            text: "To the south, the pastoralists thrived on the open plains. As the centuries progressed, the steppe nomads underwent a massive cultural shift, adopting Tibetan Buddhism. High lamas became powerful political figures, vast monasteries were built across the plains, and the nomadic elite embraced the structured, institutionalised religion of the Yellow Hat sect.",
           },
           {
             type: "subhead",
@@ -330,15 +349,32 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "To the north, deep in the taiga and the neighboring Darkhad Valley, the forest peoples lived an entirely different existence. Relying on hunting, trapping, and reindeer herding, they completely rejected the encroaching Buddhism. The dense, impenetrable forests acted as a fortress, allowing the northern tribes to preserve the original animist faith of the Mongols: Shamanism.",
+            text: "To the north, deep in the taiga and the neighbouring Darkhad Valley, the forest peoples lived an entirely different existence. Relying on hunting, trapping, and reindeer herding, they completely rejected the encroaching Buddhism. The dense, impenetrable forests acted as a fortress, allowing the northern tribes to preserve the original animist faith of the Mongols: Shamanism.",
           },
           {
             type: "prose",
-            text: "To this day, the Khövsgöl region remains the undisputed heartland of Mongolian shamanism—the original religion of Chinggis Khan. While his successors would later bastardize the old ways, adopting foreign faiths and elaborate rituals as they settled into sedentary empires, the Great Khan's own spirituality was notoriously austere. He famously performed no sacrifices, preferring to simply remove his hat and belt to speak directly to the Eternal Blue Sky. When you arrive in Khatgal and look out over the water, you are standing on the ultimate frontier: the exact point where the Buddhist steppe ends, and that ancient, unmediated connection to the taiga begins.",
+            text: "To this day, the Khövsgöl region remains the undisputed heartland of Mongolian shamanism—the original religion of Chinggis Khan. While his successors would later bastardise the old ways, adopting foreign faiths and elaborate rituals as they settled into sedentary empires, the Great Khan's own spirituality was notoriously austere. He famously performed no sacrifices, preferring to simply remove his hat and belt to speak directly to the Eternal Blue Sky. When you arrive in Khatgal and look out over the water, you are standing on the ultimate frontier: the exact point where the Buddhist steppe ends, and that ancient, unmediated connection to the taiga begins.",
           },
         ],
       },
     ],
+    pullQuote: {
+      eyebrow: "Chapter IV",
+      title: "The Primary Carbon Sink",
+      body: "While tropical rainforests dominate global ecological narratives, the Siberian taiga is a far more critical planetary stabiliser. Stretching from the shores of Lake Khövsgöl to the Arctic Circle, it is the largest continuous forest biome on Earth—spanning nearly twice the landmass of the Amazon. Because of the region’s permafrost and low temperatures, organic decay is drastically slowed. As a result, the taiga operates as the world's largest terrestrial carbon vault, securely trapping and sequestering significantly more global carbon in its freezing soils than all tropical rainforests combined.",
+      image: {
+        src: "/forest.webp",
+        alt: "Dense Siberian taiga forest near Lake Khövsgöl.",
+        objectPosition: "50% 40%",
+      },
+    },
+    closingImage: {
+      src: "/library-at-dalai-eej.jpg",
+      alt: "Selections from the estate library at Dalai Eej.",
+      caption:
+        "Selections from the estate library. A curated study of the northern frontier, featuring local cartography, regional ecology, indigenous glossaries, and foundational Mongolian history.",
+      aspectClass: "aspect-[4/3] md:aspect-[16/10]",
+    },
   },
   {
     slug: "khovsgol-and-baikal",
@@ -348,9 +384,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       "To understand Lake Khövsgöl, one must look 200 kilometers across the northern border to its geological older sister: Lake Baikal. Today, a hard international border separates the two, but for centuries, they were the dual anchors of the northern Mongolian frontier.",
     ],
     heroImage: {
-      src: "/images/gallery/the-resort/DBR_9425.webp",
-      alt: "Lake Khövsgöl and the northern shoreline at Dalai Eej.",
-      objectPosition: "50% 55%",
+      src: "/images/almanac/khovsgol-and-baikal/olkhon-island-shores.jpg",
+      alt: "The shores of Olkhon Island on Lake Baikal.",
+      objectPosition: "50% 50%",
     },
     metadata: {
       published: "2025-07-01T00:00:00.000Z",
@@ -380,20 +416,23 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         id: "severing-of-north",
         tocLabel: "The Severing of the North",
         title: "The Severing of the North",
-        image: {
-          src: "/images/gallery/the-resort/DBR_8599.webp",
-          alt: "The pristine waters of Lake Khövsgöl under northern light.",
-          label: "Lake Khövsgöl",
-          aspectClass: "aspect-[4/3]",
-        },
         blocks: [
           {
             type: "prose",
-            text: "The separation of the two lakes was not a natural divide, but an imperial one. As the Russian Empire expanded eastward across Siberia, and the Qing Dynasty secured its grip on the Mongolian steppe, the two powers collided.",
+            text: "The separation of the two lakes was not a natural divide, but an imperial one. For centuries, the dense forests connecting Khövsgöl and Baikal were indistinguishable—a single, sprawling northern territory inhabited by the Buryats. Bound by blood and speaking the Mongolian language, they were not a separate people, but a direct extension of the nomadic world to the south.",
+          },
+          {
+            type: "image",
+            src: "/images/almanac/khovsgol-and-baikal/west-buryat-family-portrait.webp",
+            alt: "A portrait of a West Buryat family, late 19th century.",
+            caption:
+              "A portrait of a West Buryat family, late 19th century. Archival photograph.",
+            fit: "contain",
+            size: "compactLargeSm",
           },
           {
             type: "prose",
-            text: "Through a series of treaties—most notably the Treaty of Kyakhta in 1727—a hard geopolitical line was drawn directly through the northern territories. Lake Baikal was formally absorbed into the Russian Empire, while Lake Khövsgöl remained on the southern side of the border, left as the northernmost frontier of the Mongolian state.",
+            text: "However, as the Russian Empire expanded eastward across Siberia, and the Qing Dynasty secured its grip on the Mongolian steppe, the two powers collided. Through a series of treaties—most notably the Treaty of Kyakhta in 1727—a hard geopolitical line was drawn directly through the taiga. Lake Baikal and the Buryat people were formally absorbed into the Russian Empire, while Lake Khövsgöl remained on the southern side of the border, left as the northernmost frontier of the Mongolian state.",
           },
         ],
       },
@@ -401,25 +440,49 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         id: "transformation-of-taiga",
         tocLabel: "The Transformation of the Taiga",
         title: "The Transformation of the Taiga",
+        compactAside: "left",
         blocks: [
           {
             type: "prose",
             text: "This border would permanently alter the destiny of the two lakes. For millennia, the vast expanse of Siberia surrounding Baikal was the exclusive domain of Mongolic, Turkic, and Tungusic tribes—peoples intimately adapted to the harsh, sacred rhythms of the forest and steppe.",
           },
           {
-            type: "prose",
-            text: "However, as the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Millions of political prisoners and exiles from European Russia and the West were sent eastward into the Gulags. The forced insertion of European prisoners into the freezing, alien expanse of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
+            type: "image",
+            src: "/amos-chapple.jpg",
+            alt: "Decaying remnants of a Soviet labour camp deep in the Siberian taiga.",
+            caption:
+              "The decaying remnants of a Soviet labour camp deep in the Siberian taiga. Photographed by Amos Chapple during a Czech expedition to document the vast penal network that permanently altered the northern frontier. Sourced via RFE/RL.",
+            fit: "cover",
+            size: "compactLarge",
+            placement: "center",
           },
           {
             type: "prose",
-            text: "While Baikal saw its shores industrialized and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma, allowing it to remain the quiet, pristine sanctuary of the old north.",
+            text: "However, as the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Millions of political prisoners and exiles from European Russia and the West were sent eastward into the Gulags. The forced insertion of European prisoners into the freezing, alien expanse of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
+            placement: "aside-span",
+          },
+          {
+            type: "prose",
+            text: "While Baikal saw its shores industrialised and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma, allowing it to remain the quiet, pristine sanctuary of the old north.",
+            placement: "aside-left",
+          },
+          {
+            type: "image",
+            src: "/bamlag.jpg",
+            alt: "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933.",
+            caption:
+              "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933. Archival photograph via the Virtual Museum of the GULAG.",
+            fit: "contain",
+            size: "compactLargeSm",
+            frameless: true,
+            placement: "aside-right",
           },
         ],
       },
     ],
     epilogue: {
       quote:
-        "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of color. It is a marvel.",
+        "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of colour. It is a marvel.",
       attribution: "— A. Chekhov, On the Sister Lake of Baikal, 1890",
     },
   },

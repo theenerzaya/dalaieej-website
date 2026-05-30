@@ -15,7 +15,7 @@ export default function CelebratePage() {
     { icon: Briefcase, title: locale === 'mn' ? "Корпорейт арга хэмжээ" : "Corporate Retreats", desc: locale === 'mn' ? "Баг бүрдүүлэх арга хэмжээ" : "Team building and executive meetings" },
     { icon: Users, title: locale === 'mn' ? "Гэр бүлийн цугларалт" : "Family Reunions", desc: locale === 'mn' ? "Олон үеийн уулзалт" : "Multi-generational gatherings in nature" },
     { icon: Camera, title: locale === 'mn' ? "Фото сешн" : "Photo Shoots", desc: locale === 'mn' ? "Мэргэжлийн гэрэл зураг" : "Professional photography in stunning locations" },
-    { icon: Music, title: locale === 'mn' ? "Хувийн үйл явдал" : "Private Events", desc: locale === 'mn' ? "Тусгай захиалгат арга хэмжээ" : "Customized events for any occasion" },
+    { icon: Music, title: locale === 'mn' ? "Хувийн үйл явдал" : "Private Events", desc: locale === 'mn' ? "Тусгай захиалгат арга хэмжээ" : "Customised events for any occasion" },
   ];
 
   return (

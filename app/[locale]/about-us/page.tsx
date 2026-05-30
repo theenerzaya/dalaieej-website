@@ -77,14 +77,14 @@ const content = {
       {
         num: "06",
         title: "An Open Community",
-        body: "Under the open sky, global travelers and locals come together. We foster a relaxed, welcoming environment built on genuine connection and shared experiences.",
+        body: "Under the open sky, global travellers and locals come together. We foster a relaxed, welcoming environment built on genuine connection and shared experiences.",
       },
     ],
     founderSectionLabel: "Founder's Letter",
     founderHeadline: "A Note from the Family",
     founderListenLabel: "Listen",
     founderBody: [
-      "Khövsgöl is the lake that raised us. Our founder wrote this song to honor the “Deep Blue Mother Ocean”—the pure waters that sustain the Mongolian North. Today, our family works together to share the quiet beauty of the taiga with you. Welcome to our home.",
+      "Khövsgöl is the lake that raised us. Our founder wrote this song to honour the “Deep Blue Mother Ocean”—the pure waters that sustain the Mongolian North. Today, our family works together to share the quiet beauty of the taiga with you. Welcome to our home.",
       "— The Family at Dalai Eej Resort",
     ],
     founderClosing:

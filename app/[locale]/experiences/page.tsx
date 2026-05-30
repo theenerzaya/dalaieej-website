@@ -135,7 +135,7 @@ export default function ExperiencesPage() {
           <p className="font-body text-main/70 mb-8">
             {locale === 'mn' 
               ? "Таны сонирхолд нийцсэн хувийн хөтөлбөр боловсруулна"
-              : "Let us craft a personalized adventure tailored to your interests"}
+              : "Let us craft a personalised adventure tailored to your interests"}
           </p>
           <a
             href={`${localePrefix}/booking`}
