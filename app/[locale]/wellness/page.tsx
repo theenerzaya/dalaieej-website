@@ -49,11 +49,11 @@ export default function WellnessPage() {
       <FrostedMapSection
         aria-label={hero.title}
         className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
-        imageSrc="/images/silogrid/wellness.webp"
+        imageSrc="/spa-anonymous-long.png"
         imagePriority
         frostOpacity={13.87}
         frostBlurPx={6.2}
-        mapObjectPosition="50% 42%"
+        mapObjectPosition="50% 38%"
       >
         <motion.div
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}

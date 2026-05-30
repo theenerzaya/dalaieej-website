@@ -6,62 +6,86 @@ import SiteImage from "@/app/components/SiteImage";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import { BodyText, Eyebrow, Headline } from "@/app/components/ui/Typography";
 
-type TileId = "hero" | "social" | "steam" | "light";
+type TileId = "tl" | "tr" | "bl" | "br";
+
+/** Flex alignment so each image’s inner corner meets the grid center. */
+const CENTER_ANCHOR: Record<TileId, string> = {
+  tl: "items-end justify-end",
+  tr: "items-end justify-start",
+  bl: "items-start justify-end",
+  br: "items-start justify-start",
+};
 
 const TILES: {
   id: TileId;
   src: string;
   alt: { en: string; mn: string };
-  gridClass: string;
+  width: number;
+  height: number;
   sizes: string;
+  cellClassName?: string;
+  imageClassName?: string;
 }[] = [
   {
-    id: "hero",
+    id: "tl",
     src: "/spa-anonymous-main.jpg",
     alt: {
       en: "A couple relaxing in the outdoor hot pool overlooking the lake",
       mn: "Далайн харагдацтай гаднах халуун усан санд амарч буй хос",
     },
-    gridClass: "col-start-1 col-end-8 row-start-1 row-end-7 z-[1]",
-    sizes: "(max-width: 1024px) 85vw, 42vw",
+    width: 900,
+    height: 1200,
+    sizes: "(max-width: 1024px) 72vw, 40vw",
+    cellClassName: "min-h-[16.4rem] sm:min-h-[19.9rem] md:min-h-[23.4rem]",
+    imageClassName: "max-h-[117%] max-w-[117%]",
   },
   {
-    id: "social",
-    src: "/jacuzzi-3.webp",
-    alt: {
-      en: "Guests enjoying the lakeside hot pool together",
-      mn: "Далайн эрэг дээрх халуун усан санд хамтдаа амарч буй зочид",
-    },
-    gridClass: "col-start-6 col-end-11 row-start-5 row-end-11 z-[2]",
-    sizes: "(max-width: 1024px) 70vw, 36vw",
-  },
-  {
-    id: "steam",
+    id: "tr",
     src: "/close-up-1.jpg",
     alt: {
       en: "Steam and water jets in the outdoor spa pool",
       mn: "Гаднах спа усан сангийн уур, усан хошуу",
     },
-    gridClass: "col-start-1 col-end-5 row-start-6 row-end-11 z-[3]",
-    sizes: "(max-width: 1024px) 55vw, 22vw",
+    width: 1200,
+    height: 800,
+    sizes: "(max-width: 1024px) 61vw, 32vw",
   },
   {
-    id: "light",
+    id: "bl",
     src: "/close-up-2.jpg",
     alt: {
       en: "Blue-lit water detail in the hot pool at dusk",
       mn: "Үдэшлэгийн цагт халуун усан сангийн цэнхэр гэрэлтүүлэг",
     },
-    gridClass: "col-start-8 col-end-11 row-start-1 row-end-4 z-[2]",
-    sizes: "(max-width: 1024px) 45vw, 18vw",
+    width: 800,
+    height: 600,
+    sizes: "(max-width: 1024px) 61vw, 32vw",
+  },
+  {
+    id: "br",
+    src: "/jacuzzi-3.webp",
+    alt: {
+      en: "Guests enjoying the lakeside hot pool together",
+      mn: "Далайн эрэг дээрх халуун усан санд хамтдаа амарч буй зочид",
+    },
+    width: 1024,
+    height: 1024,
+    sizes: "(max-width: 1024px) 61vw, 32vw",
   },
 ];
 
+const GRID_CLASS: Record<TileId, string> = {
+  tl: "col-start-1 row-start-1",
+  tr: "col-start-2 row-start-1",
+  bl: "col-start-1 row-start-2",
+  br: "col-start-2 row-start-2",
+};
+
 const STAGGER_MS: Record<TileId, number> = {
-  hero: 0,
-  social: 120,
-  steam: 240,
-  light: 360,
+  tl: 0,
+  tr: 120,
+  bl: 240,
+  br: 360,
 };
 
 const COPY = {
@@ -130,14 +154,12 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
 
           <div
             ref={collageRef}
-            className={cn(
-              "group/collage relative lg:col-span-7",
-              "min-h-[min(72vw,28rem)] sm:min-h-[26rem] lg:min-h-[36rem]",
-            )}
+            className="group/collage lg:col-span-7 flex justify-center lg:justify-end"
           >
             <div
               className={cn(
-                "grid h-full w-full grid-cols-10 grid-rows-10 gap-2 sm:gap-3",
+                "grid w-full max-w-[42.67rem] grid-cols-2 grid-rows-2 gap-px",
+                "[grid-template-columns:1.82fr_0.78fr] [grid-template-rows:1.82fr_0.78fr]",
                 isRevealed && "is-revealed",
               )}
             >
@@ -145,30 +167,37 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
                 <div
                   key={tile.id}
                   className={cn(
-                    "collage-tile relative overflow-hidden bg-ink/5 ring-1 ring-ink/10",
-                    "shadow-[0_18px_48px_-12px_rgba(13,15,28,0.22)]",
-                    "transition-[opacity,transform,z-index] duration-500 ease-out",
+                    "collage-tile flex min-h-[10.5rem] sm:min-h-[12rem] md:min-h-[13.5rem]",
+                    tile.cellClassName,
+                    CENTER_ANCHOR[tile.id],
+                    GRID_CLASS[tile.id],
+                    "transition-[transform] duration-[650ms] ease-[0.22,1,0.36,1]",
+                    "transition-opacity duration-150 ease-out",
                     "motion-reduce:opacity-100 motion-reduce:translate-y-0",
                     isRevealed
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-5",
                     "[@media(hover:hover)]:group-hover/collage:opacity-100",
-                    "[@media(hover:hover)]:group-hover/collage:[&:not(:hover)]:opacity-[0.35]",
-                    "hover:z-20 hover:scale-[1.03] hover:opacity-100",
-                    tile.gridClass,
+                    "[@media(hover:hover)]:group-hover/collage:[&:not(:hover)]:opacity-[0.72]",
+                    "hover:opacity-100",
                   )}
                   style={{
-                    transitionDelay: reduceMotion
-                      ? "0ms"
-                      : `${STAGGER_MS[tile.id]}ms`,
+                    transitionDelay:
+                      reduceMotion || isRevealed
+                        ? "0ms"
+                        : `${STAGGER_MS[tile.id]}ms`,
                   }}
                 >
                   <SiteImage
                     src={tile.src}
                     alt={tile.alt[locale]}
-                    fill
+                    width={tile.width}
+                    height={tile.height}
                     sizes={tile.sizes}
-                    className="object-cover"
+                    className={cn(
+                      "max-h-full max-w-full h-auto w-auto object-contain",
+                      tile.imageClassName,
+                    )}
                   />
                 </div>
               ))}
