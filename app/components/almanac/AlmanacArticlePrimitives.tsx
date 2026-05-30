@@ -17,7 +17,7 @@ const aboutUsPaperBackground = {
 } as const;
 
 const archivalLedgerBackground = {
-  backgroundImage: `url("${assetUrl("/images/about-us/decorations/2022.png")}")`,
+  backgroundImage: `url("${assetUrl("/images/about-us/decorations/2009.png")}")`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -35,22 +35,37 @@ export const COMPACT_LARGE_FIGURE_CLASS =
 export const COMPACT_LARGE_SM_FIGURE_CLASS =
   "mx-auto w-full max-w-[min(100%,17.5rem)] shrink-0 md:mx-0 md:w-[18.75rem] md:max-w-none lg:w-[20rem]";
 
-export type CompactFigureSize = "compact" | "compactLarge" | "compactLargeSm";
+/** 90% of `compactLarge`. */
+export const COMPACT_LARGE_90_FIGURE_CLASS =
+  "mx-auto w-full max-w-[min(100%,18rem)] shrink-0 sm:max-w-[19.8rem] md:mx-0 md:w-[21.6rem] md:max-w-none lg:w-[25.2rem] xl:w-[27rem]";
+
+export type CompactFigureSize =
+  | "compact"
+  | "compactLarge"
+  | "compactLargeSm"
+  | "compactLarge90";
 
 function compactFigureClass(size: CompactFigureSize) {
   if (size === "compactLarge") return COMPACT_LARGE_FIGURE_CLASS;
   if (size === "compactLargeSm") return COMPACT_LARGE_SM_FIGURE_CLASS;
+  if (size === "compactLarge90") return COMPACT_LARGE_90_FIGURE_CLASS;
   return COMPACT_FIGURE_CLASS;
 }
 
 function compactImageSizes(size: CompactFigureSize) {
   if (size === "compactLarge") return "(max-width: 768px) 416px, 480px";
+  if (size === "compactLarge90") return "(max-width: 768px) 374px, 432px";
   if (size === "compactLargeSm") return "(max-width: 768px) 280px, 320px";
   return "(max-width: 768px) 208px, 240px";
 }
 
 export function isCompactFigureSize(size?: string): size is CompactFigureSize {
-  return size === "compact" || size === "compactLarge" || size === "compactLargeSm";
+  return (
+    size === "compact" ||
+    size === "compactLarge" ||
+    size === "compactLargeSm" ||
+    size === "compactLarge90"
+  );
 }
 
 export function ArticleSection({

@@ -15,6 +15,8 @@ const chapterLinkFocus =
 
 export interface AlmanacChapterBlockProps {
   index: number;
+  /** Last chapter on the index — skip sticky so scroll doesn’t “stick” at page end. */
+  isLast?: boolean;
   eyebrow: string;
   title: string;
   description: string;
@@ -29,6 +31,7 @@ export interface AlmanacChapterBlockProps {
 
 export default function AlmanacChapterBlock({
   index,
+  isLast = false,
   eyebrow,
   title,
   description,
@@ -41,6 +44,7 @@ export default function AlmanacChapterBlock({
   ctaLabel,
 }: AlmanacChapterBlockProps) {
   const imageFirst = index % 2 === 0;
+  const stickyImage = !isLast ? "md:sticky md:top-28 md:self-start" : "";
   const articleLabel = ctaLabel ?? `Read ${eyebrow}`;
   const scaledImage = imageScale > 0 && imageScale < 1;
   const figureClassName = [
@@ -80,7 +84,9 @@ export default function AlmanacChapterBlock({
       <article className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
         <div
           className={
-            imageFirst ? "order-1 md:sticky md:top-28" : "order-1 md:order-2 md:sticky md:top-28"
+            imageFirst
+              ? `order-1 ${stickyImage}`
+              : `order-1 md:order-2 ${stickyImage}`
           }
         >
           {href ? (

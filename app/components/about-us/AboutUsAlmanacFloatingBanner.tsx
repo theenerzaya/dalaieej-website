@@ -14,6 +14,7 @@ export function AboutUsAlmanacFloatingBanner({
   href,
   dismissLabel,
 }: {
+  /** Top of the pillars section — banner appears once this band enters view after the timeline. */
   triggerRef: RefObject<HTMLElement | null>;
   /** Sentinel at page bottom — banner hides once this enters the viewport (footer zone). */
   endRef: RefObject<HTMLElement | null>;
@@ -32,19 +33,28 @@ export function AboutUsAlmanacFloatingBanner({
     const el = triggerRef.current;
     if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-          setPastHistory(true);
-        } else if (entry.isIntersecting) {
-          setPastHistory(false);
-        }
-      },
-      { threshold: 0, rootMargin: "0px 0px -8% 0px" }
-    );
+    const update = () => {
+      const top = el.getBoundingClientRect().top;
+      const vh = window.innerHeight;
+      setPastHistory((prev) => {
+        if (top > vh) return false;
+        if (top <= vh * 0.88) return true;
+        return prev;
+      });
+    };
 
+    update();
+    const observer = new IntersectionObserver(update, {
+      threshold: [0, 0.01, 0.1, 0.5, 1],
+    });
     observer.observe(el);
-    return () => observer.disconnect();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, [triggerRef]);
 
   useEffect(() => {

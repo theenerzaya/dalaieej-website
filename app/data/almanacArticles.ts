@@ -11,7 +11,13 @@ export type AlmanacContentBlock =
       caption: string;
       aspectClass?: string;
       fit?: "cover" | "contain";
-      size?: "default" | "compact" | "compactLarge" | "compactLargeSm" | "centered";
+      size?:
+        | "default"
+        | "compact"
+        | "compactLarge"
+        | "compactLargeSm"
+        | "compactLarge90"
+        | "centered";
       /** Omit ring/background on compact figures (e.g. archival scans). */
       frameless?: boolean;
       placement?: AsidePlacement;
@@ -467,6 +473,17 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             placement: "center",
           },
           {
+            type: "image",
+            src: "/bamlag.jpg",
+            alt: "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933.",
+            caption:
+              "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933. Archival photograph via the Virtual Museum of the GULAG.",
+            fit: "contain",
+            size: "compactLarge90",
+            frameless: true,
+            placement: "center",
+          },
+          {
             type: "prose",
             text: "As the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Across the decades, an estimated 18 million prisoners were absorbed into the vast network of gulags spread across the Siberian expanse. The forced insertion of European prisoners into the freezing, alien environment of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
             placement: "aside-span",
@@ -474,18 +491,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           {
             type: "prose",
             text: "While Baikal saw its shores industrialised and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma. It was left in silence, allowing it to remain the pristine sanctuary of the old north.",
-            placement: "aside-left",
-          },
-          {
-            type: "image",
-            src: "/bamlag.jpg",
-            alt: "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933.",
-            caption:
-              "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933. Archival photograph via the Virtual Museum of the GULAG.",
-            fit: "contain",
-            size: "compactLargeSm",
-            frameless: true,
-            placement: "aside-right",
+            placement: "aside-span",
           },
         ],
       },

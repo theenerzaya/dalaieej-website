@@ -39,6 +39,10 @@ function blockPlacement(block: AlmanacContentBlock): AsidePlacement | undefined 
 }
 
 function hasSplitAsidePlacements(blocks: AlmanacContentBlock[]) {
+  const centerImageCount = blocks.filter(
+    (block) => block.type === "image" && blockPlacement(block) === "center"
+  ).length;
+  if (centerImageCount >= 2) return true;
   return blocks.some((block) => {
     const placement = blockPlacement(block);
     return placement === "aside-left" || placement === "aside-right";
@@ -192,7 +196,13 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
         ) : null}
         {centerBlocks.length > 0 ? (
           <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
-            <div className="mx-auto w-full max-w-[min(100%,24rem)] [&_figcaption]:text-center">
+            <div
+              className={
+                centerBlocks.length > 1
+                  ? "mx-auto flex w-full max-w-[min(100%,52rem)] flex-col items-center justify-center gap-8 md:flex-row md:items-center md:justify-center md:gap-8 md:translate-x-[min(6vw,3.25rem)] [&_figure]:mx-0 [&_figcaption]:text-center"
+                  : "mx-auto w-full max-w-[min(100%,24rem)] [&_figcaption]:text-center"
+              }
+            >
               {centerBlocks.map((block, index) =>
                 renderAsideBlock(section.id, block, `${section.id}-center-${index}`)
               )}
@@ -208,20 +218,26 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
             </div>
           </FadeInBlock>
         ) : null}
-        <FadeInBlock delay={0.08}>
-          <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-end md:gap-8">
-            <div className="min-w-0 flex-1 space-y-8 md:max-w-[34rem]">
-              {leftAside.map((block, index) =>
-                renderAsideBlock(section.id, block, `${section.id}-left-${index}`)
-              )}
+        {leftAside.length > 0 || rightAside.length > 0 ? (
+          <FadeInBlock delay={0.08}>
+            <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-end md:gap-8">
+              {leftAside.length > 0 ? (
+                <div className="min-w-0 flex-1 space-y-8 md:max-w-[34rem]">
+                  {leftAside.map((block, index) =>
+                    renderAsideBlock(section.id, block, `${section.id}-left-${index}`)
+                  )}
+                </div>
+              ) : null}
+              {rightAside.length > 0 ? (
+                <div className="flex min-w-0 w-full flex-col gap-8 md:w-auto md:max-w-[9.2rem] md:shrink-0">
+                  {rightAside.map((block, index) =>
+                    renderAsideBlock(section.id, block, `${section.id}-right-${index}`)
+                  )}
+                </div>
+              ) : null}
             </div>
-            <div className="flex min-w-0 w-full flex-col gap-8 md:w-auto md:max-w-[9.2rem] md:shrink-0">
-              {rightAside.map((block, index) =>
-                renderAsideBlock(section.id, block, `${section.id}-right-${index}`)
-              )}
-            </div>
-          </div>
-        </FadeInBlock>
+          </FadeInBlock>
+        ) : null}
       </>
     );
   }
@@ -428,7 +444,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
       </FrostedMapSection>
 
       <section className="px-6 pb-24 md:pb-32">
-        <div className="mx-auto min-w-0 max-w-6xl overflow-x-hidden">
+        <div className="mx-auto min-w-0 max-w-6xl">
           <FadeInBlock className="mb-12 md:mb-16">
             <CTALink
               href={`${localePrefix}/almanac`}
@@ -444,14 +460,14 @@ export default function AlmanacArticleLayout({ article }: Props) {
             className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"
           >
             <aside className="mb-12 lg:mb-0">
-              <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-2">
+              <div className="lg:sticky lg:top-28 lg:self-start">
                 <FadeInBlock>
                   <GettingHereToc items={tocItems} />
                 </FadeInBlock>
               </div>
             </aside>
 
-            <div className="min-w-0 space-y-0">
+            <div className="min-w-0 space-y-0 overflow-x-clip">
               {article.sections.map((section) => (
                 <ArticleSection key={section.id} id={section.id} title={section.title}>
                   <SectionContent section={section} />
@@ -470,67 +486,67 @@ export default function AlmanacArticleLayout({ article }: Props) {
                   attribution={article.epilogue.attribution}
                 />
               ) : null}
+
+              {article.pullQuote ? (
+                <EditorialPullQuote
+                  eyebrow={article.pullQuote.eyebrow}
+                  title={article.pullQuote.title}
+                  body={article.pullQuote.body}
+                  image={article.pullQuote.image}
+                />
+              ) : null}
+
+              {article.closingImage ? (
+                <FadeInBlock className="mt-12 md:mt-16">
+                  <div className="mx-auto max-w-3xl">
+                    <ArticleFigure
+                      src={article.closingImage.src}
+                      alt={article.closingImage.alt}
+                      caption={article.closingImage.caption}
+                      aspectClass={article.closingImage.aspectClass ?? "aspect-[4/3]"}
+                    />
+                  </div>
+                </FadeInBlock>
+              ) : null}
+
+              {article.furtherReading?.length ? (
+                <ArchivalFurtherReading items={article.furtherReading} />
+              ) : null}
+
+              {(article.prev || article.next) && (
+                <FadeInBlock className="mt-20 flex flex-col gap-6 border-t border-ink/10 pt-12 sm:flex-row sm:justify-between">
+                  {article.prev ? (
+                    <Link
+                      href={`${localePrefix}${article.prev.href}`}
+                      className="group font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
+                    >
+                      <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
+                        Previous
+                      </span>
+                      <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
+                        {article.prev.label}
+                      </span>
+                    </Link>
+                  ) : (
+                    <span />
+                  )}
+                  {article.next ? (
+                    <Link
+                      href={`${localePrefix}${article.next.href}`}
+                      className="group text-right font-body text-sm text-ink/60 transition-colors hover:text-water-deep sm:ml-auto"
+                    >
+                      <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
+                        Next
+                      </span>
+                      <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
+                        {article.next.label}
+                      </span>
+                    </Link>
+                  ) : null}
+                </FadeInBlock>
+              )}
             </div>
           </article>
-
-          {article.pullQuote ? (
-            <EditorialPullQuote
-              eyebrow={article.pullQuote.eyebrow}
-              title={article.pullQuote.title}
-              body={article.pullQuote.body}
-              image={article.pullQuote.image}
-            />
-          ) : null}
-
-          {article.closingImage ? (
-            <FadeInBlock className="mt-12 px-6 md:mt-16">
-              <div className="mx-auto max-w-3xl">
-                <ArticleFigure
-                  src={article.closingImage.src}
-                  alt={article.closingImage.alt}
-                  caption={article.closingImage.caption}
-                  aspectClass={article.closingImage.aspectClass ?? "aspect-[4/3]"}
-                />
-              </div>
-            </FadeInBlock>
-          ) : null}
-
-          {article.furtherReading?.length ? (
-            <ArchivalFurtherReading items={article.furtherReading} />
-          ) : null}
-
-          {(article.prev || article.next) && (
-            <FadeInBlock className="mt-20 flex flex-col gap-6 border-t border-ink/10 pt-12 sm:flex-row sm:justify-between">
-              {article.prev ? (
-                <Link
-                  href={`${localePrefix}${article.prev.href}`}
-                  className="group font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
-                >
-                  <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
-                    Previous
-                  </span>
-                  <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
-                    {article.prev.label}
-                  </span>
-                </Link>
-              ) : (
-                <span />
-              )}
-              {article.next ? (
-                <Link
-                  href={`${localePrefix}${article.next.href}`}
-                  className="group text-right font-body text-sm text-ink/60 transition-colors hover:text-water-deep sm:ml-auto"
-                >
-                  <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
-                    Next
-                  </span>
-                  <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
-                    {article.next.label}
-                  </span>
-                </Link>
-              ) : null}
-            </FadeInBlock>
-          )}
         </div>
       </section>
     </PageShell>

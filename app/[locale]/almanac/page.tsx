@@ -49,7 +49,12 @@ export default function AlmanacPage() {
       >
         <div className="flex flex-col gap-28 md:gap-36 lg:gap-40">
           {chapters.map((chapter, index) => (
-            <AlmanacChapterBlock key={chapter.id} index={index} {...chapter} />
+            <AlmanacChapterBlock
+              key={chapter.id}
+              index={index}
+              isLast={index === chapters.length - 1}
+              {...chapter}
+            />
           ))}
         </div>
       </ContentSection>

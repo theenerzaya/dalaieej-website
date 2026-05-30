@@ -467,7 +467,7 @@ export default function AboutUsPage() {
     src: string;
     alt: string;
   } | null>(null);
-  const historyEndRef = useRef<HTMLDivElement | null>(null);
+  const pillarsSectionRef = useRef<HTMLElement | null>(null);
   const bannerEndRef = useRef<HTMLDivElement | null>(null);
   const almanacHref = locale === "mn" ? "/mn/almanac" : "/almanac";
   // Avoid rendering the portal during SSR.
@@ -886,12 +886,12 @@ export default function AboutUsPage() {
             })}
           </div>
         </div>
-        <div ref={historyEndRef} className="h-px w-full" aria-hidden />
       </section>
 
       <SectionAccent />
 
       <section
+        ref={pillarsSectionRef}
         className="relative py-24 md:py-36 overflow-hidden"
         style={{
           backgroundImage: `url("${assetUrl("/images/about-us/images/pillars-background.png")}")`,
@@ -1083,7 +1083,7 @@ export default function AboutUsPage() {
       <div className="pb-24 md:pb-32" />
     </main>
     <AboutUsAlmanacFloatingBanner
-      triggerRef={historyEndRef}
+      triggerRef={pillarsSectionRef}
       endRef={bannerEndRef}
       message={t.almanacBannerMessage}
       ctaLabel={t.almanacBannerCta}

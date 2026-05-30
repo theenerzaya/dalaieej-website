@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Link from "next/link";
 import PageShell from "@/app/components/layout/PageShell";
 import ContentSection from "@/app/components/ui/ContentSection";
 import {
@@ -222,7 +223,7 @@ export default function GettingHerePage() {
             className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"
           >
             <aside className="mb-12 lg:mb-0">
-              <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-2">
+              <div className="lg:sticky lg:top-28 lg:self-start">
                 <FadeInBlock>
                   <GettingHereToc items={TOC_ITEMS} />
                 </FadeInBlock>
@@ -519,6 +520,26 @@ export default function GettingHerePage() {
               </SectionBlock>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section className="px-6 pb-4 md:pb-6">
+        <div className="mx-auto max-w-6xl">
+          <FadeInBlock>
+            <div className="flex justify-end border-t border-ink/10 pt-12">
+              <Link
+                href={`${localePrefix}/almanac/murun`}
+                className="group text-right font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
+              >
+                <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
+                  Next
+                </span>
+                <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
+                  Chapter II — Mörön & Beyond
+                </span>
+              </Link>
+            </div>
+          </FadeInBlock>
         </div>
       </section>
 
