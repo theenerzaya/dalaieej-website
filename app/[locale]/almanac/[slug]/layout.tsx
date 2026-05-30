@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import AlmanacArticleStructuredData from "@/app/components/almanac/AlmanacArticleStructuredData";
 import { getAlmanacArticle } from "@/app/data/almanacArticles";
 import {
@@ -14,6 +14,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const article = getAlmanacArticle(slug);
 
   if (!article) {
@@ -31,6 +32,7 @@ export default async function AlmanacArticleRouteLayout({
   params,
 }: Props) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const article = getAlmanacArticle(slug);
 
   if (!article) {

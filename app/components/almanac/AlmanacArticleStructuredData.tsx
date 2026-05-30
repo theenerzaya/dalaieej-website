@@ -1,6 +1,6 @@
 import { buildAlmanacArticleJsonLd, resolveAlmanacArticleSeoCopy } from "@/lib/almanac-seo";
 import { getAlmanacArticle } from "@/app/data/almanacArticles";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type Props = {
   locale: string;
@@ -8,6 +8,7 @@ type Props = {
 };
 
 export default async function AlmanacArticleStructuredData({ locale, slug }: Props) {
+  setRequestLocale(locale);
   const article = getAlmanacArticle(slug);
   if (!article) return null;
 

@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations } from 'next-intl/server';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 import { absoluteSiteUrl, hreflangLanguages, siteOriginForLocale } from '@/lib/site-urls';
 import { openGraphAssetUrl } from '@/lib/assetUrl';
 import "../globals.css";
@@ -8,9 +9,14 @@ import NavbarWrapper from "../components/NavbarWrapper";
 import Preloader from "../components/Preloader";
 import Footer from "../components/layout/Footer";
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 // Dynamic SEO, Social Media, and Favicon Metadata
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'metadata.index' });
   const tNav = await getTranslations({ locale, namespace: 'nav' });
 
@@ -76,6 +82,7 @@ interface Props {
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
 
   const messages = await getMessages();
   const resortCanonical = absoluteSiteUrl(locale, '');
