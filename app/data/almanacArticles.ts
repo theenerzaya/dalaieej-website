@@ -513,8 +513,13 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
   },
 ];
 
+import { ALMANAC_ARTICLES as MN_ARTICLES } from "./almanacArticles.mn";
+
 export const ALMANAC_ARTICLE_SLUGS = ALMANAC_ARTICLES.map((article) => article.slug);
 
-export function getAlmanacArticle(slug: string): AlmanacArticle | undefined {
+export function getAlmanacArticle(slug: string, locale?: string): AlmanacArticle | undefined {
+  if (locale === "mn") {
+    return MN_ARTICLES.find((article: AlmanacArticle) => article.slug === slug);
+  }
   return ALMANAC_ARTICLES.find((article) => article.slug === slug);
 }

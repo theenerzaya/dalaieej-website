@@ -79,7 +79,7 @@ export function ArticleSection({
 }) {
   return (
     <section id={id} className="scroll-mt-24 pt-16 first:pt-0">
-      <FadeInBlock>
+      <FadeInBlock distance={20}>
         <Headline as="h2" size="sub" className="!text-left mb-8">
           {title}
         </Headline>
@@ -166,8 +166,7 @@ export function ArticleImage({
 }) {
   if (isCompactFigureSize(size)) {
     return (
-      <FadeInBlock delay={0.05}>
-        <figure className={compactFigureClass(size)}>
+      <figure className={compactFigureClass(size)}>
           <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
             <SiteImage
               src={src}
@@ -185,13 +184,11 @@ export function ArticleImage({
             <span className="sr-only">{label}</span>
           )}
         </figure>
-      </FadeInBlock>
     );
   }
 
   return (
-    <FadeInBlock delay={0.05}>
-      <figure>
+    <figure>
         <MediaPlaceholder
           variant="photo"
           label={label}
@@ -206,7 +203,6 @@ export function ArticleImage({
           </figcaption>
         ) : null}
       </figure>
-    </FadeInBlock>
   );
 }
 
@@ -234,16 +230,15 @@ export function ArticleFigure({
   const isCentered = size === "centered";
 
   return (
-    <FadeInBlock delay={0.05}>
-      <figure
-        className={
-          isCompact
-            ? compactFigureClass(size)
-            : isCentered
-              ? "mx-auto w-full max-w-md md:max-w-xl"
-              : undefined
-        }
-      >
+    <figure
+      className={
+        isCompact
+          ? compactFigureClass(size)
+          : isCentered
+            ? "mx-auto w-full max-w-md md:max-w-xl"
+            : undefined
+      }
+    >
         <div
           className={
             isCompact
@@ -313,7 +308,6 @@ export function ArticleFigure({
           </p>
         </figcaption>
       </figure>
-    </FadeInBlock>
   );
 }
 
@@ -329,8 +323,7 @@ export function ArticleVideo({
   credit?: string;
 }) {
   return (
-    <FadeInBlock delay={0.05}>
-      <figure>
+    <figure>
         <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-surface-alt/40">
           <video
             src={src}
@@ -353,7 +346,6 @@ export function ArticleVideo({
           ) : null}
         </figcaption>
       </figure>
-    </FadeInBlock>
   );
 }
 
@@ -374,7 +366,7 @@ export function EditorialPullQuote({
 
   if (!image) {
     return (
-      <FadeInBlock>
+      <FadeInBlock distance={20}>
         <aside className="relative my-20 py-12 md:my-28 md:py-16 px-6 md:px-10" aria-label={title}>
           <Eyebrow className="!text-ink/45">{eyebrow}</Eyebrow>
           <p
@@ -391,7 +383,7 @@ export function EditorialPullQuote({
   }
 
   return (
-    <FadeInBlock className="my-20 -mx-6 w-[calc(100%+3rem)] max-w-none md:my-28 lg:-mx-0 lg:mx-0 lg:w-full">
+    <FadeInBlock distance={20} className="my-20 -mx-6 w-[calc(100%+3rem)] max-w-none md:my-28 lg:-mx-0 lg:mx-0 lg:w-full">
       <FrostedMapSection
         aria-label={title}
         imageSrc={image.src}
@@ -429,7 +421,7 @@ export function EpilogueQuote({
   compact?: boolean;
 }) {
   return (
-    <FadeInBlock>
+    <FadeInBlock distance={20}>
       <div
         className={`${compact ? "mt-12" : "mt-20"} bg-main py-10 md:py-14`}
         style={aboutUsPaperBackground}
@@ -475,7 +467,7 @@ export function ArchivalCard({
   const isMn = locale === "mn";
 
   return (
-    <FadeInBlock className="mt-16 md:mt-20">
+    <FadeInBlock distance={20} className="mt-16 md:mt-20">
       <aside
         className="-mx-6 w-[calc(100%+3rem)] border-y border-ink/12 bg-muted/90 px-6 py-14 shadow-[0_1px_0_rgba(13,15,28,0.04)] md:py-20"
         aria-label={eyebrow}
@@ -530,8 +522,11 @@ export function ArchivalFurtherReading({
 }: {
   items: { title: string; href: string }[];
 }) {
+  const locale = useLocale();
+  const isMn = locale === "mn";
+
   return (
-    <FadeInBlock className="mt-16 md:mt-20">
+    <FadeInBlock distance={20} className="mt-16 md:mt-20">
       <aside
         className="-mx-6 w-[calc(100%+3rem)] bg-main px-6 py-14 md:py-20"
         style={archivalLedgerBackground}
@@ -542,7 +537,7 @@ export function ArchivalFurtherReading({
             id="archival-further-reading-heading"
             className="font-cta text-[10px] font-medium uppercase tracking-[0.34em] text-ink/45"
           >
-            Suggested Further Reading
+            {isMn ? "Санал болгох нэмэлт унших материал" : "Suggested Further Reading"}
           </h2>
           <ul className="mt-8 list-none space-y-4 p-0 [list-style:none]">
             {items.map((item) => (

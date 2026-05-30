@@ -20,7 +20,7 @@ export function generateStaticParams() {
 export default async function AlmanacArticlePage({ params }: Props) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const article = getAlmanacArticle(slug);
+  const article = getAlmanacArticle(slug, locale);
 
   if (!article) {
     notFound();

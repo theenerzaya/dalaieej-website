@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import SiteImage from "@/app/components/SiteImage";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import {
@@ -43,6 +44,7 @@ export default function AlmanacChapterBlock({
   href,
   ctaLabel,
 }: AlmanacChapterBlockProps) {
+  const locale = useLocale();
   const imageFirst = index % 2 === 0;
   const stickyImage = !isLast ? "md:sticky md:top-28 md:self-start" : "";
   const articleLabel = ctaLabel ?? `Read ${eyebrow}`;
@@ -80,8 +82,8 @@ export default function AlmanacChapterBlock({
   );
 
   return (
-    <FadeInBlock>
-      <article className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+    <article className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+      <FadeInBlock delay={index * 0.1} distance={20}>
         <div
           className={
             imageFirst
@@ -101,7 +103,9 @@ export default function AlmanacChapterBlock({
             imageBlock
           )}
         </div>
+      </FadeInBlock>
 
+      <FadeInBlock delay={index * 0.1 + 0.08} distance={20}>
         <div
           className={`flex max-w-md flex-col gap-6 md:gap-7 md:py-4 ${
             imageFirst ? "order-2" : "order-2 md:order-1 md:ml-auto"
@@ -155,11 +159,11 @@ export default function AlmanacChapterBlock({
             </CTALink>
           ) : (
             <p className="mt-1 font-cta text-[11px] font-medium uppercase tracking-[0.3em] text-ink/40 sm:text-xs">
-              Coming soon
+              {locale === "mn" ? "Тун удахгүй" : "Coming soon"}
             </p>
           )}
         </div>
-      </article>
-    </FadeInBlock>
+      </FadeInBlock>
+    </article>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
@@ -32,6 +33,26 @@ import { BodyText, CTALink, Eyebrow, Headline } from "@/app/components/ui/Typogr
 type Props = {
   article: AlmanacArticle;
 };
+
+function appearDelay(index: number) {
+  return Math.min(index * 0.05, 0.3);
+}
+
+function Appear({
+  index = 0,
+  className,
+  children,
+}: {
+  index?: number;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <FadeInBlock delay={appearDelay(index)} distance={20} className={className}>
+      {children}
+    </FadeInBlock>
+  );
+}
 
 type ImageBlock = Extract<AlmanacContentBlock, { type: "image" }>;
 
@@ -135,14 +156,13 @@ function collectCompactAsideRun(blocks: AlmanacContentBlock[]) {
   return { blocksBefore, compactImageBlocks, asideProseBlocks, blocksAfter, firstIdx };
 }
 
-function renderBlock(sectionId: string, block: AlmanacContentBlock, index: number) {
+function renderBlock(_sectionId: string, block: AlmanacContentBlock) {
   if (block.type === "prose") {
-    return <Prose key={`${sectionId}-p-${index}`}>{block.text}</Prose>;
+    return <Prose>{block.text}</Prose>;
   }
   if (block.type === "image") {
     return (
       <ArticleFigure
-        key={`${sectionId}-i-${index}`}
         src={block.src}
         alt={block.alt}
         captionTitle={block.captionTitle}
@@ -157,7 +177,6 @@ function renderBlock(sectionId: string, block: AlmanacContentBlock, index: numbe
   if (block.type === "video") {
     return (
       <ArticleVideo
-        key={`${sectionId}-v-${index}`}
         src={block.src}
         alt={block.alt}
         caption={block.caption}
@@ -168,42 +187,52 @@ function renderBlock(sectionId: string, block: AlmanacContentBlock, index: numbe
   if (block.type === "dataCard") {
     return (
       <InlineDataCard
-        key={`${sectionId}-d-${index}`}
         eyebrow={block.eyebrow}
         body={block.body}
       />
     );
   }
-  return <Subhead key={`${sectionId}-s-${index}`}>{block.text}</Subhead>;
+  return <Subhead>{block.text}</Subhead>;
 }
 
 function FlowSectionContent({ section }: { section: AlmanacArticleSection }) {
+  let animIndex = 0;
+
   return (
     <>
       {section.image && !isCompactFigureSize(section.image.size) ? (
-        <ArticleImage
-          src={section.image.src}
-          alt={section.image.alt}
-          label={section.image.label}
-          caption={section.image.caption}
-          aspectClass={section.image.aspectClass}
-          size={section.image.size}
-        />
+        <Appear index={animIndex++}>
+          <ArticleImage
+            src={section.image.src}
+            alt={section.image.alt}
+            label={section.image.label}
+            caption={section.image.caption}
+            aspectClass={section.image.aspectClass}
+            size={section.image.size}
+          />
+        </Appear>
       ) : null}
-      <FadeInBlock delay={0.08}>
-        <div className="flow-root min-w-0">
-          {section.blocks.map((block, index) => {
-            if (block.type === "prose") {
-              return (
-                <div key={`${section.id}-flow-p-${index}`} className="mb-6 last:mb-0">
-                  <Prose>{block.text}</Prose>
-                </div>
-              );
-            }
-            return renderBlock(section.id, block, index);
-          })}
-        </div>
-      </FadeInBlock>
+      <div className="flow-root min-w-0">
+        {section.blocks.map((block, index) => {
+          const currentIndex = animIndex++;
+          if (block.type === "prose") {
+            return (
+              <Appear
+                key={`${section.id}-flow-p-${index}`}
+                index={currentIndex}
+                className="mb-6 last:mb-0"
+              >
+                <Prose>{block.text}</Prose>
+              </Appear>
+            );
+          }
+          return (
+            <Appear key={`${section.id}-flow-${index}`} index={currentIndex}>
+              {renderBlock(section.id, block)}
+            </Appear>
+          );
+        })}
+      </div>
     </>
   );
 }
@@ -232,57 +261,82 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
     return (
       <>
         {introBlocks.length > 0 ? (
-          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
-            <div className="space-y-6">
-              {introBlocks.map((block, index) =>
-                renderBlock(section.id, block, index)
-              )}
-            </div>
-          </FadeInBlock>
+          <div className="mb-8 space-y-6 md:mb-10">
+            {introBlocks.map((block, index) => (
+              <Appear key={`${section.id}-intro-${index}`} index={index}>
+                {renderBlock(section.id, block)}
+              </Appear>
+            ))}
+          </div>
         ) : null}
         {centerBlocks.length > 0 ? (
-          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
-            <div
-              className={
-                centerBlocks.length > 1
-                  ? "mx-auto flex w-full max-w-[min(100%,52rem)] flex-col items-center justify-center gap-8 md:flex-row md:items-center md:justify-center md:gap-8 md:translate-x-[min(6vw,3.25rem)] [&_figure]:mx-0 [&_figcaption]:text-center"
-                  : "mx-auto w-full max-w-[min(100%,24rem)] [&_figcaption]:text-center"
-              }
-            >
-              {centerBlocks.map((block, index) =>
-                renderAsideBlock(section.id, block, `${section.id}-center-${index}`)
-              )}
-            </div>
-          </FadeInBlock>
+          <div
+            className={
+              centerBlocks.length > 1
+                ? "mb-8 flex w-full max-w-[min(100%,52rem)] flex-col items-center justify-center gap-8 mx-auto md:mb-10 md:flex-row md:items-center md:justify-center md:gap-8 md:translate-x-[min(6vw,3.25rem)] [&_figure]:mx-0 [&_figcaption]:text-center"
+                : "mb-8 mx-auto w-full max-w-[min(100%,24rem)] md:mb-10 [&_figcaption]:text-center"
+            }
+          >
+            {centerBlocks.map((block, index) => (
+              <Appear
+                key={`${section.id}-center-${index}`}
+                index={introBlocks.length + index}
+              >
+                {renderAsideBlock(section.id, block, `${section.id}-center-${index}`)}
+              </Appear>
+            ))}
+          </div>
         ) : null}
         {spanBlocks.length > 0 ? (
-          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
-            <div className="min-w-0 space-y-6">
-              {spanBlocks.map((block, index) =>
-                renderBlock(section.id, block, introBlocks.length + centerBlocks.length + index)
-              )}
-            </div>
-          </FadeInBlock>
+          <div className="mb-8 min-w-0 space-y-6 md:mb-10">
+            {spanBlocks.map((block, index) => (
+              <Appear
+                key={`${section.id}-span-${index}`}
+                index={introBlocks.length + centerBlocks.length + index}
+              >
+                {renderBlock(section.id, block)}
+              </Appear>
+            ))}
+          </div>
         ) : null}
         {leftAside.length > 0 || rightAside.length > 0 ? (
-          <FadeInBlock delay={0.08}>
-            <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-end md:gap-8">
-              {leftAside.length > 0 ? (
-                <div className="min-w-0 flex-1 space-y-8 md:max-w-[34rem]">
-                  {leftAside.map((block, index) =>
-                    renderAsideBlock(section.id, block, `${section.id}-left-${index}`)
-                  )}
-                </div>
-              ) : null}
-              {rightAside.length > 0 ? (
-                <div className="flex min-w-0 w-full flex-col gap-8 md:w-auto md:max-w-[9.2rem] md:shrink-0">
-                  {rightAside.map((block, index) =>
-                    renderAsideBlock(section.id, block, `${section.id}-right-${index}`)
-                  )}
-                </div>
-              ) : null}
-            </div>
-          </FadeInBlock>
+          <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-end md:gap-8">
+            {leftAside.length > 0 ? (
+              <div className="min-w-0 flex-1 space-y-8 md:max-w-[34rem]">
+                {leftAside.map((block, index) => (
+                  <Appear
+                    key={`${section.id}-left-${index}`}
+                    index={
+                      introBlocks.length +
+                      centerBlocks.length +
+                      spanBlocks.length +
+                      index
+                    }
+                  >
+                    {renderAsideBlock(section.id, block, `${section.id}-left-${index}`)}
+                  </Appear>
+                ))}
+              </div>
+            ) : null}
+            {rightAside.length > 0 ? (
+              <div className="flex min-w-0 w-full flex-col gap-8 md:w-auto md:max-w-[9.2rem] md:shrink-0">
+                {rightAside.map((block, index) => (
+                  <Appear
+                    key={`${section.id}-right-${index}`}
+                    index={
+                      introBlocks.length +
+                      centerBlocks.length +
+                      spanBlocks.length +
+                      leftAside.length +
+                      index
+                    }
+                  >
+                    {renderAsideBlock(section.id, block, `${section.id}-right-${index}`)}
+                  </Appear>
+                ))}
+              </div>
+            ) : null}
+          </div>
         ) : null}
       </>
     );
@@ -291,7 +345,7 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
   const compactAsideRun = collectCompactAsideRun(section.blocks);
 
   if (compactAsideRun) {
-    const { blocksBefore, compactImageBlocks, asideProseBlocks, blocksAfter, firstIdx } =
+    const { blocksBefore, compactImageBlocks, asideProseBlocks, blocksAfter } =
       compactAsideRun;
     const imagesOnLeft =
       section.compactAside === "left" && asideProseBlocks.length > 0;
@@ -305,80 +359,94 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
         )
       : [...asideProseBlocks, ...blocksAfter];
 
+    const proseSource = imagesOnLeft ? asideProseBlocks : blocksBefore;
+    const animIndex = imagesOnLeft && blocksBefore.length > 0 ? blocksBefore.length : 0;
+
     const imageColumn = (
       <div className="flex min-w-0 w-full shrink-0 flex-col gap-8 md:w-auto">
         {compactImageBlocks.map((block, imageIndex) => (
-          <ArticleFigure
-            key={`${section.id}-aside-${imageIndex}`}
-            src={block.src}
-            alt={block.alt}
-            captionTitle={block.captionTitle}
-            caption={block.caption}
-            fit={block.fit}
-            frameless={block.frameless}
-            size={block.size && isCompactFigureSize(block.size) ? block.size : "compact"}
-          />
+          <Appear
+            key={`${section.id}-aside-img-${imageIndex}`}
+            index={animIndex + imageIndex}
+          >
+            <ArticleFigure
+              src={block.src}
+              alt={block.alt}
+              captionTitle={block.captionTitle}
+              caption={block.caption}
+              fit={block.fit}
+              frameless={block.frameless}
+              size={block.size && isCompactFigureSize(block.size) ? block.size : "compact"}
+            />
+          </Appear>
         ))}
       </div>
     );
 
+    const proseStartIndex = animIndex + compactImageBlocks.length;
     const proseColumn = (
       <div className="min-w-0 flex-1 space-y-6 md:max-w-[34rem]">
-        {(imagesOnLeft ? asideProseBlocks : blocksBefore).map((block, index) =>
-          renderBlock(section.id, block, index)
-        )}
+        {proseSource.map((block, index) => (
+          <Appear key={`${section.id}-aside-prose-${index}`} index={proseStartIndex + index}>
+            {renderBlock(section.id, block)}
+          </Appear>
+        ))}
         {imagesOnLeft
           ? asideEndRightImages.map((block, imageIndex) => (
-              <div key={`${section.id}-aside-right-${imageIndex}`} className="ml-auto w-fit max-w-full">
-                <ArticleFigure
-                  src={block.src}
-                  alt={block.alt}
-                  captionTitle={block.captionTitle}
-                  caption={block.caption}
-                  fit={block.fit}
-                  frameless={block.frameless}
-                  size={
-                    block.size && isCompactFigureSize(block.size) ? block.size : "compact"
-                  }
-                />
-              </div>
+              <Appear
+                key={`${section.id}-aside-right-${imageIndex}`}
+                index={proseStartIndex + proseSource.length + imageIndex}
+              >
+                <div className="ml-auto w-fit max-w-full">
+                  <ArticleFigure
+                    src={block.src}
+                    alt={block.alt}
+                    captionTitle={block.captionTitle}
+                    caption={block.caption}
+                    fit={block.fit}
+                    frameless={block.frameless}
+                    size={
+                      block.size && isCompactFigureSize(block.size) ? block.size : "compact"
+                    }
+                  />
+                </div>
+              </Appear>
             ))
           : null}
       </div>
     );
 
+    const tailStartIndex =
+      proseStartIndex + proseSource.length + (imagesOnLeft ? asideEndRightImages.length : 0);
+
     return (
       <>
         {imagesOnLeft && blocksBefore.length > 0 ? (
-          <FadeInBlock delay={0.08} className="mb-8 md:mb-10">
-            <div className="space-y-6">
-              {blocksBefore.map((block, index) => renderBlock(section.id, block, index))}
-            </div>
-          </FadeInBlock>
-        ) : null}
-        <FadeInBlock delay={0.08}>
-          <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-start md:gap-8">
-            {imagesOnLeft ? (
-              <>
-                {imageColumn}
-                {proseColumn}
-              </>
-            ) : (
-              <>
-                {proseColumn}
-                {imageColumn}
-              </>
-            )}
+          <div className="mb-8 space-y-6 md:mb-10">
+            {blocksBefore.map((block, index) => (
+              <Appear key={`${section.id}-before-${index}`} index={index}>
+                {renderBlock(section.id, block)}
+              </Appear>
+            ))}
           </div>
-        </FadeInBlock>
+        ) : null}
+        <div className="flex min-w-0 flex-col gap-8 md:flex-row md:items-start md:gap-8">
+          {imagesOnLeft ? (
+            <>
+              {imageColumn}
+              {proseColumn}
+            </>
+          ) : (
+            <>
+              {proseColumn}
+              {imageColumn}
+            </>
+          )}
+        </div>
         {tailBlocks.map((block, index) => (
-          <FadeInBlock key={`${section.id}-tail-${index}`} delay={0.08}>
-            {renderBlock(
-              section.id,
-              block,
-              firstIdx + compactImageBlocks.length + index
-            )}
-          </FadeInBlock>
+          <Appear key={`${section.id}-tail-${index}`} index={tailStartIndex + index}>
+            {renderBlock(section.id, block)}
+          </Appear>
         ))}
       </>
     );
@@ -386,15 +454,21 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
 
   if (compactAsideImage && proseBlocks.length > 0) {
     const nonProseBlocks = section.blocks.filter((block) => block.type !== "prose");
+    const proseCount = section.blocks.filter((block) => block.type === "prose").length;
+
     return (
       <>
-        <FadeInBlock delay={0.08}>
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
-            <div className="min-w-0 flex-1 space-y-6">
-              {section.blocks.map((block, index) =>
-                block.type === "prose" ? renderBlock(section.id, block, index) : null
-              )}
-            </div>
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
+          <div className="min-w-0 flex-1 space-y-6">
+            {section.blocks.map((block, index) =>
+              block.type === "prose" ? (
+                <Appear key={`${section.id}-p-${index}`} index={index}>
+                  {renderBlock(section.id, block)}
+                </Appear>
+              ) : null
+            )}
+          </div>
+          <Appear index={proseCount} className="shrink-0">
             <ArticleImage
               src={compactAsideImage.src}
               alt={compactAsideImage.alt}
@@ -406,12 +480,12 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
                   : "compact"
               }
             />
-          </div>
-        </FadeInBlock>
+          </Appear>
+        </div>
         {nonProseBlocks.map((block, index) => (
-          <FadeInBlock key={`${section.id}-b-${index}`} delay={0.08}>
-            {renderBlock(section.id, block, index)}
-          </FadeInBlock>
+          <Appear key={`${section.id}-b-${index}`} index={proseCount + 1 + index}>
+            {renderBlock(section.id, block)}
+          </Appear>
         ))}
       </>
     );
@@ -420,19 +494,24 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
   return (
     <>
       {section.image && !isCompactFigureSize(section.image.size) ? (
-        <ArticleImage
-          src={section.image.src}
-          alt={section.image.alt}
-          label={section.image.label}
-          caption={section.image.caption}
-          aspectClass={section.image.aspectClass}
-          size={section.image.size}
-        />
+        <Appear index={0}>
+          <ArticleImage
+            src={section.image.src}
+            alt={section.image.alt}
+            label={section.image.label}
+            caption={section.image.caption}
+            aspectClass={section.image.aspectClass}
+            size={section.image.size}
+          />
+        </Appear>
       ) : null}
       {section.blocks.map((block, index) => (
-        <FadeInBlock key={`${section.id}-${index}`} delay={0.08}>
-          {renderBlock(section.id, block, index)}
-        </FadeInBlock>
+        <Appear
+          key={`${section.id}-${index}`}
+          index={section.image && !isCompactFigureSize(section.image.size) ? index + 1 : index}
+        >
+          {renderBlock(section.id, block)}
+        </Appear>
       ))}
     </>
   );
@@ -491,13 +570,13 @@ export default function AlmanacArticleLayout({ article }: Props) {
 
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto min-w-0 max-w-6xl">
-          <FadeInBlock className="mb-12 md:mb-16">
+          <FadeInBlock distance={20} className="mb-12 md:mb-16">
             <CTALink
               href={`${localePrefix}/almanac`}
               arrow={false}
               className="!text-ink/50 hover:!text-water-deep [&>span]:!border-ink/20 [&>span]:group-hover:!border-water-deep/40"
             >
-              ← The Almanac
+              ← {locale === "mn" ? "Алманах" : "The Almanac"}
             </CTALink>
           </FadeInBlock>
 
@@ -507,7 +586,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
           >
             <aside className="mb-12 lg:mb-0">
               <div className="lg:sticky lg:top-28 lg:self-start">
-                <FadeInBlock>
+                <FadeInBlock distance={20}>
                   <GettingHereToc items={tocItems} />
                 </FadeInBlock>
               </div>
@@ -545,7 +624,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
               ) : null}
 
               {article.closingImage ? (
-                <FadeInBlock className="mt-12 md:mt-16">
+                <Appear className="mt-12 md:mt-16">
                   <div className="mx-auto max-w-3xl">
                     <ArticleFigure
                       src={article.closingImage.src}
@@ -554,7 +633,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
                       aspectClass={article.closingImage.aspectClass ?? "aspect-[4/3]"}
                     />
                   </div>
-                </FadeInBlock>
+                </Appear>
               ) : null}
 
               {article.epilogue ? (
@@ -570,14 +649,14 @@ export default function AlmanacArticleLayout({ article }: Props) {
               ) : null}
 
               {(article.prev || article.next) && (
-                <FadeInBlock className="mt-20 flex flex-col gap-6 border-t border-ink/10 pt-12 sm:flex-row sm:justify-between">
+                <FadeInBlock distance={20} className="mt-20 flex flex-col gap-6 border-t border-ink/10 pt-12 sm:flex-row sm:justify-between">
                   {article.prev ? (
                     <Link
                       href={`${localePrefix}${article.prev.href}`}
                       className="group font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
                     >
                       <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
-                        Previous
+                        {locale === "mn" ? "Өмнөх" : "Previous"}
                       </span>
                       <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
                         {article.prev.label}
@@ -592,7 +671,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
                       className="group text-right font-body text-sm text-ink/60 transition-colors hover:text-water-deep sm:ml-auto"
                     >
                       <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
-                        Next
+                        {locale === "mn" ? "Дараах" : "Next"}
                       </span>
                       <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
                         {article.next.label}

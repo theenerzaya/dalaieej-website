@@ -5,15 +5,17 @@ import PageShell from "@/app/components/layout/PageShell";
 import ContentSection from "@/app/components/ui/ContentSection";
 import AlmanacChapterBlock from "@/app/components/almanac/AlmanacChapterBlock";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
-import { ALMANAC_CHAPTERS } from "@/app/data/almanacChapters";
+import { ALMANAC_CHAPTERS as EN_CHAPTERS } from "@/app/data/almanacChapters";
+import { ALMANAC_CHAPTERS as MN_CHAPTERS } from "@/app/data/almanacChapters.mn";
 import { BodyText, Eyebrow, Headline } from "@/app/components/ui/Typography";
 
 export default function AlmanacPage() {
   const locale = useLocale();
   const t = useTranslations("almanacPage");
   const localePrefix = locale === "mn" ? "/mn" : "";
+  const sourceChapters = locale === "mn" ? MN_CHAPTERS : EN_CHAPTERS;
 
-  const chapters = ALMANAC_CHAPTERS.map((chapter) => ({
+  const chapters = sourceChapters.map((chapter) => ({
     ...chapter,
     href: chapter.href ? `${localePrefix}${chapter.href}` : undefined,
   }));
@@ -26,18 +28,26 @@ export default function AlmanacPage() {
         align="left"
         className="!pb-12 !pt-28 md:!pb-16 md:!pt-36"
       >
-        <FadeInBlock className="flex max-w-2xl flex-col gap-5">
-          <Eyebrow className="!text-water-deep/70">{t("eyebrow")}</Eyebrow>
-          <Headline as="h1" size="section" align="left" className="!text-left">
-            {t("title")}
-          </Headline>
-          <BodyText size="md" className="!text-left text-ink/75">
-            {t("hook")}
-          </BodyText>
-          <p className="font-cta text-[11px] font-medium uppercase leading-relaxed tracking-[0.15em] text-ink/50">
-            {t("seoMeta")}
-          </p>
-        </FadeInBlock>
+        <div className="flex max-w-2xl flex-col gap-5">
+          <FadeInBlock distance={20}>
+            <Eyebrow className="!text-water-deep/70">{t("eyebrow")}</Eyebrow>
+          </FadeInBlock>
+          <FadeInBlock delay={0.06} distance={20}>
+            <Headline as="h1" size="section" align="left" className="!text-left">
+              {t("title")}
+            </Headline>
+          </FadeInBlock>
+          <FadeInBlock delay={0.12} distance={20}>
+            <BodyText size="md" className="!text-left text-ink/75">
+              {t("hook")}
+            </BodyText>
+          </FadeInBlock>
+          <FadeInBlock delay={0.18} distance={20}>
+            <p className="font-cta text-[11px] font-medium uppercase leading-relaxed tracking-[0.15em] text-ink/50">
+              {t("seoMeta")}
+            </p>
+          </FadeInBlock>
+        </div>
       </ContentSection>
 
       <ContentSection

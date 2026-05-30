@@ -22,6 +22,8 @@ import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
 import SiteImage from "@/app/components/SiteImage";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { ALMANAC_CHAPTERS as EN_CHAPTERS } from "@/app/data/almanacChapters";
+import { ALMANAC_CHAPTERS as MN_CHAPTERS } from "@/app/data/almanacChapters.mn";
 import { Car, Ship } from "lucide-react";
 
 const MAP_URL =
@@ -143,6 +145,8 @@ function CarrierCard({
 export default function GettingHerePage() {
   const locale = useLocale();
   const localePrefix = locale === "mn" ? "/mn" : "";
+  const chapters = locale === "mn" ? MN_CHAPTERS : EN_CHAPTERS;
+  const nextChapter = chapters.find((c) => c.id === "chapter-ii");
   const reduceMotion = useReducedMotion();
 
   const transferOptions: TransferOption[] = [
@@ -526,17 +530,19 @@ export default function GettingHerePage() {
         <div className="mx-auto max-w-6xl">
           <FadeInBlock>
             <div className="flex justify-end border-t border-ink/10 pt-12">
-              <Link
-                href={`${localePrefix}/almanac/murun`}
-                className="group text-right font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
-              >
-                <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
-                  Next
-                </span>
-                <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
-                  Chapter II — Field Notes from Mörön
-                </span>
-              </Link>
+              {nextChapter ? (
+                <Link
+                  href={`${localePrefix}${nextChapter.href}`}
+                  className="group text-right font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
+                >
+                  <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
+                    {locale === "mn" ? "Дараах" : "Next"}
+                  </span>
+                  <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
+                    {nextChapter.eyebrow} — {nextChapter.title}
+                  </span>
+                </Link>
+              ) : null}
             </div>
           </FadeInBlock>
         </div>

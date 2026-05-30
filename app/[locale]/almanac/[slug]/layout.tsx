@@ -15,7 +15,7 @@ type Props = {
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const article = getAlmanacArticle(slug);
+  const article = getAlmanacArticle(slug, locale);
 
   if (!article) {
     return {};
@@ -33,7 +33,7 @@ export default async function AlmanacArticleRouteLayout({
 }: Props) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const article = getAlmanacArticle(slug);
+  const article = getAlmanacArticle(slug, locale);
 
   if (!article) {
     notFound();

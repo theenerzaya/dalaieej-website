@@ -9,7 +9,7 @@ type Props = {
 
 export default async function AlmanacArticleStructuredData({ locale, slug }: Props) {
   setRequestLocale(locale);
-  const article = getAlmanacArticle(slug);
+  const article = getAlmanacArticle(slug, locale);
   if (!article) return null;
 
   const t = await getTranslations({ locale, namespace: "metadata.almanacArticles" });

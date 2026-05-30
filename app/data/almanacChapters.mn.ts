@@ -1,0 +1,88 @@
+export type AlmanacChapter = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  imageSrc: string;
+  imageAlt: string;
+  /** Defaults to cover. Use contain to avoid cropping wide images on the index. */
+  imageFit?: "cover" | "contain";
+  /** Thumbnail width as a fraction of the column (e.g. 0.85 = 15% smaller). */
+  imageScale?: number;
+  imageCaption?: string;
+  href?: string;
+  ctaLabel?: string;
+};
+
+export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
+  {
+    id: "chapter-i",
+    eyebrow: "I Бүлэг",
+    title: "Аян зам: Улаанбаатараас Хөвсгөл рүү",
+    description:
+      "Тал нутгийг туулах аяллын цогц хөтөч. Дотоодын нислэгээс эхлээд Транс-Сибирийн төмөр замын галт тэргээр өнгөрүүлэх кино мэт шөнө хүртэл, бид умардын хязгаарт ингэж л хүрдэг.",
+    imageSrc:
+      "/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg",
+    imageAlt:
+      "Транс-Сибирийн төмөр замын унтлагын купены архивын гэрэл зураг.",
+    imageFit: "contain",
+    imageCaption:
+      "Дэвид Боуи Транс-Сибирийн төмөр замд, 1973 он. Гэрэл зургийг Жефф МакКормак.",
+    href: "/getting-here",
+    ctaLabel: "I бүлгийг унших",
+  },
+  {
+    id: "chapter-ii",
+    eyebrow: "II Бүлэг",
+    title: "Мөрөн хотын тэмдэглэл",
+    description:
+      "Засмал зам дуусахаас өмнө Мөрөн хот угтана — өөрийн гэсэн хэмнэлтэй, өвөрмөц нэгэн өртөө. Уэс Андерсоны кино шиг нисэх онгоцны буудал, умард нутгийн Икарус, мөн нуур руу явах замд Далай Ээжийг олох нь.",
+    imageSrc: "/images/almanac/murun/hero-wes-anderson-terminal.webp",
+    imageAlt:
+      "Accidentally Wes Anderson-ийн онцлон тэмдэглэсэн, өнгөрсөн зууны дунд үеийн хэв маяг бүхий Мөрөн нисэх онгоцны буудал.",
+    imageFit: "contain",
+    imageCaption:
+      "Мөрөн нисэх онгоцны буудал (1956 онд байгуулагдсан). Accidentally Wes Anderson архивын каталогид орсон @kjphotos1022-ийн гэрэл зураг.",
+    href: "/almanac/murun",
+    ctaLabel: "II бүлгийг унших",
+  },
+  {
+    id: "chapter-iii",
+    eyebrow: "III Бүлэг",
+    title: "Умард нутаг бүрэлдсэн нь: Хил ба Аж үйлдвэр",
+    description:
+      "Умард нутгийн газрын зургийг санамсаргүй зураагүй юм. 1700-аад оны хилийн харуулаас эхлээд Зөвлөлтийн инженерийн шийдлээр баригдсан Монголын анхны аварга том ноосны үйлдвэр хүртэлх Хатгал тосгоны геополитикийн түүхтэй танилцаарай.",
+    imageSrc: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg",
+    imageAlt: "Сүхбаатар хөлөг онгоцны түүхэн гэрэл зураг.",
+    imageCaption:
+      "Сүхбаатар хөлөг онгоц. 'Бидний сайхан Хөвсгөл' цахим архиваас авав.",
+    href: "/almanac/borders-and-industry",
+    ctaLabel: "III бүлгийг унших",
+  },
+  {
+    id: "chapter-iv",
+    eyebrow: "IV Бүлэг",
+    title: "Ой тайга ба Тал нутаг: Эртний зааг",
+    description:
+      "Хөвсгөл нуур Ази тивийн хамгийн бат бөх экологийн зааг дээр яг оршдог. Буддын шашинт тал нутгийн нүүдэлчид болон Бөөгийн мөргөлт тайгын анчин, түүвэрчдийн хоорондох түүхэн зааг ялгааг олж мэдээрэй.",
+    imageSrc: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
+    imageAlt: "Тал нутгийн эртний босго болох Уушигийн өврийн буган чулуун хөшөө.",
+    imageCaption:
+      "Тал нутгийн эртний босгыг илтгэх Уушигийн өврийн буган чулуун хөшөө. Tour Mongolia-гаас авав.",
+    href: "/almanac/forest-and-steppe",
+    ctaLabel: "IV бүлгийг унших",
+  },
+  {
+    id: "chapter-v",
+    eyebrow: "V Бүлэг",
+    title: "Хоёр нуур, Нэг эзэнт гүрэн: Хөвсгөл ба Байгал",
+    description:
+      "Өнөөдөр Хөвсгөл болон Оросын Байгал нуурыг улсын хил тусгаарлаж байна. 18-р зууны гэрээгээр геологийн гарал нэгт эгч дүү нууруудыг хэрхэн салгаж, Байгал нуурыг Зөвлөлтийн тайгын хүнд үйлдвэржилт, цөллөгийн лагерьт үлдээж, харин Хөвсгөл нуур хуучны умард нутгийн онгон дагшин орон зай болон үлдсэнийг олж мэдээрэй.",
+    imageSrc: "/images/almanac/khovsgol-and-baikal/olkhon-island-shores.jpg",
+    imageAlt: "Байгал нуур дахь Ольхон арлын эрэг.",
+    imageCaption:
+      "Хойд тайгын өвөг дээдсийн төв болох Байгал нуурын Ольхон арлын эрэг. Toute la Russie-с авав.",
+    href: "/almanac/khovsgol-and-baikal",
+    ctaLabel: "V бүлгийг унших",
+  },
+];
