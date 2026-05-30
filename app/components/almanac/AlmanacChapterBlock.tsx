@@ -48,7 +48,7 @@ export default function AlmanacChapterBlock({
   const imageFirst = index % 2 === 0;
   const stickyImage = !isLast ? "md:sticky md:top-28 md:self-start" : "";
   const articleLabel =
-    locale === "mn" ? `${eyebrow} унших` : ctaLabel ?? `Read ${eyebrow}`;
+    locale === "mn" ? `${eyebrow} унших` : `${eyebrow} — Read`;
   const scaledImage = imageScale > 0 && imageScale < 1;
   const figureClassName = [
     scaledImage ? undefined : "w-full",

@@ -29,7 +29,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "David Bowie on the Trans-Siberian Railway, 1973. Photograph by Geoff MacCormack.",
     href: "/getting-here",
-    ctaLabel: "Read Chapter I",
+    ctaLabel: "Read",
   },
   {
     id: "chapter-ii",
@@ -44,7 +44,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "Mörön Airport (est. 1956). Photographed by @kjphotos1022, as catalogued by the Accidentally Wes Anderson archive.",
     href: "/almanac/murun",
-    ctaLabel: "Read Chapter II",
+    ctaLabel: "Read",
   },
   {
     id: "chapter-iii",
@@ -57,7 +57,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "The Sukhbaatar. Sourced via the Bidnii Saikhan Khövgsöl digital archive.",
     href: "/almanac/borders-and-industry",
-    ctaLabel: "Read Chapter III",
+    ctaLabel: "Read",
   },
   {
     id: "chapter-iv",
@@ -70,7 +70,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "The Uushigiin Övör Deer Stones, marking the ancient threshold of the steppe. Sourced via Tour Mongolia.",
     href: "/almanac/forest-and-steppe",
-    ctaLabel: "Read Chapter IV",
+    ctaLabel: "Read",
   },
   {
     id: "chapter-v",
@@ -83,6 +83,6 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "The shores of Olkhon Island on Lake Baikal, the ancestral epicentre of the northern taiga. Sourced via Toute la Russie.",
     href: "/almanac/khovsgol-and-baikal",
-    ctaLabel: "Read Chapter V",
+    ctaLabel: "Read",
   },
 ];
