@@ -15,6 +15,7 @@ import {
   ArchivalFurtherReading,
   EditorialPullQuote,
   EpilogueQuote,
+  InlineDataCard,
   isCompactFigureSize,
   Prose,
   Subhead,
@@ -163,10 +164,54 @@ function renderBlock(sectionId: string, block: AlmanacContentBlock, index: numbe
       />
     );
   }
+  if (block.type === "dataCard") {
+    return (
+      <InlineDataCard
+        key={`${sectionId}-d-${index}`}
+        eyebrow={block.eyebrow}
+        body={block.body}
+      />
+    );
+  }
   return <Subhead key={`${sectionId}-s-${index}`}>{block.text}</Subhead>;
 }
 
+function FlowSectionContent({ section }: { section: AlmanacArticleSection }) {
+  return (
+    <>
+      {section.image && !isCompactFigureSize(section.image.size) ? (
+        <ArticleImage
+          src={section.image.src}
+          alt={section.image.alt}
+          label={section.image.label}
+          caption={section.image.caption}
+          aspectClass={section.image.aspectClass}
+          size={section.image.size}
+        />
+      ) : null}
+      <FadeInBlock delay={0.08}>
+        <div className="flow-root min-w-0">
+          {section.blocks.map((block, index) => {
+            if (block.type === "prose") {
+              return (
+                <div key={`${section.id}-flow-p-${index}`} className="mb-6 last:mb-0">
+                  <Prose>{block.text}</Prose>
+                </div>
+              );
+            }
+            return renderBlock(section.id, block, index);
+          })}
+        </div>
+      </FadeInBlock>
+    </>
+  );
+}
+
 function SectionContent({ section }: { section: AlmanacArticleSection }) {
+  if (section.layout === "flow") {
+    return <FlowSectionContent section={section} />;
+  }
+
   const compactAsideImage =
     section.image && isCompactFigureSize(section.image.size) ? section.image : null;
   const proseBlocks = section.blocks.filter((block) => block.type === "prose");
@@ -480,13 +525,6 @@ export default function AlmanacArticleLayout({ article }: Props) {
                   ) : null}
                 </ArticleSection>
               ))}
-              {article.epilogue ? (
-                <EpilogueQuote
-                  quote={article.epilogue.quote}
-                  attribution={article.epilogue.attribution}
-                />
-              ) : null}
-
               {article.pullQuote ? (
                 <EditorialPullQuote
                   eyebrow={article.pullQuote.eyebrow}
@@ -507,6 +545,14 @@ export default function AlmanacArticleLayout({ article }: Props) {
                     />
                   </div>
                 </FadeInBlock>
+              ) : null}
+
+              {article.epilogue ? (
+                <EpilogueQuote
+                  quote={article.epilogue.quote}
+                  attribution={article.epilogue.attribution}
+                  compact
+                />
               ) : null}
 
               {article.furtherReading?.length ? (

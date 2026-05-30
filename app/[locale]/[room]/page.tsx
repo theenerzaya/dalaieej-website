@@ -247,7 +247,7 @@ export default function RoomDetailPage() {
   const roomImageBasePath = roomSlug ? `/images/rooms/${roomSlug}` : "";
   const heroImage = roomImageBasePath ? assetUrl(`${roomImageBasePath}/00.webp`) : "";
 
-  const galleryFallbackImages = useMemo(() => {
+  const galleryFallbackImages = (() => {
     const alternates = ROOM_IMAGE_POOL.filter((image) => image !== roomImage);
     if (alternates.length === 0) return [roomImage, roomImage, roomImage, roomImage];
     const rotation = safeRoomIndex % alternates.length;
@@ -255,7 +255,7 @@ export default function RoomDetailPage() {
     return [roomImage, rotatedAlternates[0], rotatedAlternates[1], rotatedAlternates[2]].map(
       (image) => image ?? roomImage,
     );
-  }, [roomImage, safeRoomIndex]);
+  })();
   const localGalleryImages = useMemo(
     () =>
       ["01", "02", "03", "04"].map((index) => assetUrl(`${roomImageBasePath}/${index}.webp`)),

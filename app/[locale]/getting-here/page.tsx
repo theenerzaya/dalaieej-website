@@ -3,7 +3,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import PageShell from "@/app/components/layout/PageShell";
-import ContentSection from "@/app/components/ui/ContentSection";
 import {
   BodyText,
   CTALink,

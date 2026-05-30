@@ -38,9 +38,8 @@ import {
   type ReactNode,
   createContext,
   useContext,
-  useEffect,
   useRef,
-  useState,
+  useSyncExternalStore,
 } from "react";
 
 /* -------------------------------------------------------------------------- */
@@ -56,11 +55,11 @@ export const EASE_OUT_EXPO = [0.22, 1, 0.36, 1] as const;
  * on the static branch, then enable motion after mount.
  */
 function useClientReady() {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    setReady(true);
-  }, []);
-  return ready;
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 }
 
 const DEFAULT_VIEW_OPTS: UseInViewOptions = { once: true, amount: 0.35 };

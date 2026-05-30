@@ -28,6 +28,11 @@ export type AlmanacContentBlock =
       alt: string;
       caption: string;
       credit?: string;
+    }
+  | {
+      type: "dataCard";
+      eyebrow: string;
+      body: string;
     };
 
 export type AlmanacArticleSection = {
@@ -36,6 +41,8 @@ export type AlmanacArticleSection = {
   title: string;
   /** Compact figure column: default right of intro prose; `left` puts images left of trailing prose. */
   compactAside?: "left" | "right";
+  /** `flow` — inline data cards float beside prose within the section. */
+  layout?: "default" | "flow";
   image?: {
     src: string;
     alt: string;
@@ -335,6 +342,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         id: "two-ways-of-life",
         tocLabel: "Two Ways of Life, Two Faiths",
         title: "Two Ways of Life, Two Faiths",
+        layout: "flow",
         image: {
           src: "/images/personas/frontier-en.jpg",
           alt: "The open steppe meeting the northern forest at Khövsgöl.",
@@ -359,6 +367,11 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             text: "The Forest and the Old Gods",
           },
           {
+            type: "dataCard",
+            eyebrow: "THE TAIGA BIOME",
+            body: "The largest continuous forest on Earth. Originating in the Khövsgöl basin and stretching to the Arctic Circle, this freezing expanse relies on permafrost to act as the planet’s primary carbon sink, sequestering more carbon than the Amazon rainforest.",
+          },
+          {
             type: "prose",
             text: "To the north, deep in the taiga and the neighbouring Darkhad Valley, the forest peoples lived an entirely different existence. Relying on hunting, trapping, and reindeer herding, they completely rejected the encroaching Buddhism. The dense, impenetrable forests acted as a fortress, allowing the northern tribes to preserve the original animist faith of the Mongols: Shamanism.",
           },
@@ -369,16 +382,6 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         ],
       },
     ],
-    pullQuote: {
-      eyebrow: "Chapter IV",
-      title: "The Primary Carbon Sink",
-      body: "While tropical rainforests dominate global ecological narratives, the Siberian taiga is a far more critical planetary stabiliser. Stretching from the shores of Lake Khövsgöl to the Arctic Circle, it is the largest continuous forest biome on Earth—spanning nearly twice the landmass of the Amazon. Because of the region’s permafrost and low temperatures, organic decay is drastically slowed. As a result, the taiga operates as the world's largest terrestrial carbon vault, securely trapping and sequestering significantly more global carbon in its freezing soils than all tropical rainforests combined.",
-      image: {
-        src: "/forest.webp",
-        alt: "Dense Siberian taiga forest near Lake Khövsgöl.",
-        objectPosition: "50% 40%",
-      },
-    },
     closingImage: {
       src: "/library-at-dalai-eej.jpg",
       alt: "Selections from the estate library at Dalai Eej.",
@@ -422,11 +425,6 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             text: "More importantly, they were historically part of the same unified cultural expanse. The very name Baikal is a Russian adaptation of the Mongolian word Baigal (Байгаль), which simply translates to \"nature.\" To the Mongols who inhabited its shores, the lake was the ultimate natural phenomenon.",
           },
         ],
-        epilogue: {
-          quote:
-            "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of colour. It is a marvel.",
-          attribution: "— A. Chekhov, On the Sister Lake of Baikal, 1890",
-        },
       },
       {
         id: "severing-of-north",
@@ -470,32 +468,23 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
               "The decaying remnants of a Soviet labour camp deep in the Siberian taiga. Photographed by Amos Chapple during a Czech expedition to document the vast penal network that permanently altered the northern frontier. Sourced via RFE/RL.",
             fit: "cover",
             size: "compactLarge",
-            placement: "center",
-          },
-          {
-            type: "image",
-            src: "/bamlag.jpg",
-            alt: "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933.",
-            caption:
-              "Prisoners of the Baikal-Amur Corrective Labor Camp, 1933. Archival photograph via the Virtual Museum of the GULAG.",
-            fit: "contain",
-            size: "compactLarge90",
-            frameless: true,
-            placement: "center",
           },
           {
             type: "prose",
             text: "As the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Across the decades, an estimated 18 million prisoners were absorbed into the vast network of gulags spread across the Siberian expanse. The forced insertion of European prisoners into the freezing, alien environment of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
-            placement: "aside-span",
           },
           {
             type: "prose",
             text: "While Baikal saw its shores industrialised and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma. It was left in silence, allowing it to remain the pristine sanctuary of the old north.",
-            placement: "aside-span",
           },
         ],
       },
     ],
+    epilogue: {
+      quote:
+        "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of colour. It is a marvel.",
+      attribution: "— A. Chekhov, On the Sister Lake of Baikal, 1890",
+    },
     furtherReading: [
       {
         title:

@@ -110,6 +110,45 @@ export function Prose({ children }: { children: ReactNode }) {
   );
 }
 
+/** Narrow index-card aside for inline almanac facts (floats beside chapter prose). */
+export function InlineDataCard({
+  eyebrow,
+  body,
+  className,
+}: {
+  eyebrow: string;
+  body: string;
+  className?: string;
+}) {
+  const locale = useLocale();
+  const isMn = locale === "mn";
+
+  return (
+    <aside
+      aria-label={eyebrow}
+      className={[
+        "w-full max-w-[18.75rem] border border-ink/12 bg-muted/90 px-5 py-4 shadow-[0_1px_0_rgba(13,15,28,0.04)]",
+        "md:float-right md:clear-right md:ml-8 md:mb-5 md:mt-0.5",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <p
+        className={[
+          "font-cta uppercase text-ink/55 mb-2.5",
+          isMn
+            ? "text-[10px] font-light tracking-[0.2em]"
+            : "text-[10px] font-medium tracking-[0.28em]",
+        ].join(" ")}
+      >
+        {eyebrow}
+      </p>
+      <p className="font-body text-sm leading-[1.65] text-ink/68">{body}</p>
+    </aside>
+  );
+}
+
 export function ArticleImage({
   src,
   alt,
