@@ -190,10 +190,10 @@ export default function GettingHerePage() {
   ];
 
   return (
-    <PageShell>
+    <PageShell offsetNavbar={false}>
       <FrostedMapSection
         aria-label={t("hero.title")}
-        className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
+        className="pb-16 md:pb-24 pt-[calc(var(--navbar-h)+2.5rem)] md:pt-[calc(var(--navbar-h)+3.5rem)] min-h-[min(58vh,32rem)]"
         imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
         imagePriority
         frostOpacity={13.87}
@@ -224,6 +224,11 @@ export default function GettingHerePage() {
             {t("hero.subtitle")}
           </BodyText>
         </motion.div>
+        <div
+          id="hero-nav-sentinel"
+          aria-hidden
+          className="pointer-events-none h-px w-full shrink-0"
+        />
       </FrostedMapSection>
 
       <section className="px-6 pb-24 md:pb-32">
