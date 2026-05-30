@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import { X, Play, Pause } from "lucide-react";
 import { AboutHeroLoupe } from "@/app/components/about-us/AboutHeroLoupe";
+import { AboutUsAlmanacFloatingBanner } from "@/app/components/about-us/AboutUsAlmanacFloatingBanner";
 import { assetUrl } from "@/lib/assetUrl";
 
 const content = {
@@ -98,6 +99,9 @@ const content = {
     heroImageAlt: "Dalai Eej Resort",
     heroExpandImage: "View image full screen",
     heroCloseFullscreen: "Close full screen",
+    almanacBannerMessage: "Discover the history of the Khaich Valley.",
+    almanacBannerCta: "Read the Almanac",
+    almanacBannerDismiss: "Dismiss banner",
   },
   mn: {
     heroTitle: "Бидний тухай",
@@ -183,6 +187,9 @@ const content = {
     heroImageAlt: "Далай ээж ресорт",
     heroExpandImage: "Зургийг бүтэн дэлгэцээр харах",
     heroCloseFullscreen: "Хаах",
+    almanacBannerMessage: "Хайчин хөдийн түүхийг судлаарай.",
+    almanacBannerCta: "Алманах унших",
+    almanacBannerDismiss: "Хаах",
   },
 };
 
@@ -460,6 +467,9 @@ export default function AboutUsPage() {
     src: string;
     alt: string;
   } | null>(null);
+  const lastPillarRef = useRef<HTMLDivElement | null>(null);
+  const bannerEndRef = useRef<HTMLDivElement | null>(null);
+  const almanacHref = locale === "mn" ? "/mn/almanac" : "/almanac";
   // Avoid rendering the portal during SSR.
   const [portalMounted] = useState(() => typeof window !== "undefined");
 
@@ -903,9 +913,11 @@ export default function AboutUsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-5">
             {t.pillars.map((pillar, i) => {
               const isHospitalityPillar = i === 2;
+              const isLastPillar = i === t.pillars.length - 1;
               return (
                 <motion.div
                   key={pillar.num}
+                  ref={isLastPillar ? lastPillarRef : undefined}
                   initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2, margin: "-10% 0px" }}
@@ -1068,8 +1080,17 @@ export default function AboutUsPage() {
       />
       */}
 
+      <div ref={bannerEndRef} className="h-px w-full" aria-hidden />
       <div className="pb-24 md:pb-32" />
     </main>
+    <AboutUsAlmanacFloatingBanner
+      triggerRef={lastPillarRef}
+      endRef={bannerEndRef}
+      message={t.almanacBannerMessage}
+      ctaLabel={t.almanacBannerCta}
+      href={almanacHref}
+      dismissLabel={t.almanacBannerDismiss}
+    />
     {portalMounted && fullscreenImage
       ? createPortal(
           <div

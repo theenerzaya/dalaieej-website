@@ -39,6 +39,10 @@ export type AlmanacArticleSection = {
     size?: "default" | "compact" | "compactLarge" | "compactLargeSm";
   };
   blocks: AlmanacContentBlock[];
+  epilogue?: {
+    quote: string;
+    attribution: string;
+  };
 };
 
 export type AlmanacArticle = {
@@ -73,6 +77,7 @@ export type AlmanacArticle = {
     quote: string;
     attribution: string;
   };
+  furtherReading?: { title: string; href: string }[];
   prev?: { href: string; label: string };
   next?: { href: string; label: string };
 };
@@ -390,7 +395,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
     },
     metadata: {
       published: "2025-07-01T00:00:00.000Z",
-      modified: "2026-05-30T00:00:00.000Z",
+      modified: "2026-05-30T12:00:00.000Z",
     },
     prev: {
       href: "/almanac/forest-and-steppe",
@@ -404,13 +409,18 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         blocks: [
           {
             type: "prose",
-            text: "Khövsgöl and Baikal are intrinsically linked. They sit within the same massive tectonic rift valley, and the waters of Khövsgöl eventually flow all the way into Baikal via the Eg and Selenge rivers.",
+            text: "Khövsgöl and Baikal are geologically bound. They sit within the same massive tectonic rift valley, and the waters of Khövsgöl eventually flow all the way into Baikal via the Eg and Selenge rivers.",
           },
           {
             type: "prose",
             text: "More importantly, they were historically part of the same unified cultural expanse. The very name Baikal is a Russian adaptation of the Mongolian word Baigal (Байгаль), which simply translates to \"nature.\" To the Mongols who inhabited its shores, the lake was the ultimate natural phenomenon.",
           },
         ],
+        epilogue: {
+          quote:
+            "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of colour. It is a marvel.",
+          attribution: "— A. Chekhov, On the Sister Lake of Baikal, 1890",
+        },
       },
       {
         id: "severing-of-north",
@@ -444,7 +454,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         blocks: [
           {
             type: "prose",
-            text: "This border would permanently alter the destiny of the two lakes. For millennia, the vast expanse of Siberia surrounding Baikal was the exclusive domain of Mongolic, Turkic, and Tungusic tribes—peoples intimately adapted to the harsh, sacred rhythms of the forest and steppe.",
+            text: "This geopolitical fracture would permanently alter the destiny of the two lakes. For millennia, the vast expanse of Siberia surrounding Baikal was the exclusive domain of Mongolic, Turkic, and Tungusic tribes—peoples intimately adapted to the harsh, sacred rhythms of the forest and steppe.",
           },
           {
             type: "image",
@@ -458,12 +468,12 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "prose",
-            text: "However, as the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Millions of political prisoners and exiles from European Russia and the West were sent eastward into the Gulags. The forced insertion of European prisoners into the freezing, alien expanse of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
+            text: "As the Russian—and later Soviet—state tightened its grip on Siberia, the taiga was repurposed. The deep forests around Baikal, once the sanctuary of indigenous hunters and shamans, were transformed into the backbone of the Soviet penal system. Across the decades, an estimated 18 million prisoners were absorbed into the vast network of gulags spread across the Siberian expanse. The forced insertion of European prisoners into the freezing, alien environment of the Asian taiga remains one of the great geographic and psychological traumas of the 20th century.",
             placement: "aside-span",
           },
           {
             type: "prose",
-            text: "While Baikal saw its shores industrialised and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma, allowing it to remain the quiet, pristine sanctuary of the old north.",
+            text: "While Baikal saw its shores industrialised and its surrounding forests turned into penal colonies, Khövsgöl experienced a very different 20th century. Sheltered just south of the border, the \"Mother Ocean\" of Mongolia was largely spared this mass demographic trauma. It was left in silence, allowing it to remain the pristine sanctuary of the old north.",
             placement: "aside-left",
           },
           {
@@ -480,11 +490,29 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         ],
       },
     ],
-    epilogue: {
-      quote:
-        "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of colour. It is a marvel.",
-      attribution: "— A. Chekhov, On the Sister Lake of Baikal, 1890",
-    },
+    furtherReading: [
+      {
+        title:
+          "The Letters of Anton Chekhov: Siberian Correspondence and Sakhalin Field Notes, 1890.",
+        href: "https://www.gutenberg.org/ebooks/6408",
+      },
+      {
+        title: "Presidential Library of Russia. The Treaty of Kyakhta, 1727.",
+        href: "https://www.prlib.ru/en/history/619680",
+      },
+      {
+        title: "Virtual Museum of the Gulag. Bamlag Archive, 1933.",
+        href: "https://gulag.online/",
+      },
+      {
+        title: "Helsinki Gulag Echoes. Bamlag Records by Dr. M. Nakonechnyi, 2021.",
+        href: "https://blogs.helsinki.fi/gulagechoes/2021/06/03/bamlags-lingering-shadow/",
+      },
+      {
+        title: "Radio Free Europe. Siberian Penal Network Expeditions, 2018.",
+        href: "https://www.rferl.org/a/the-gulag-hunters-recording-what-remains-of-stalins-labor-camps/29574803.html",
+      },
+    ],
   },
 ];
 

@@ -16,6 +16,14 @@ const aboutUsPaperBackground = {
   backgroundBlendMode: "multiply",
 } as const;
 
+const archivalLedgerBackground = {
+  backgroundImage: `url("${assetUrl("/images/about-us/decorations/2022.png")}")`,
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundBlendMode: "multiply",
+} as const;
+
 /** Matches the David Bowie archival photo on Getting Here (Chapter I). */
 export const COMPACT_FIGURE_CLASS =
   "mx-auto w-full max-w-[13rem] shrink-0 md:mx-0 md:w-[14rem] md:max-w-none lg:w-[15rem]";
@@ -359,14 +367,17 @@ export function EditorialPullQuote({
 export function EpilogueQuote({
   quote,
   attribution,
+  compact = false,
 }: {
   quote: string;
   attribution: string;
+  /** Tighter top margin when placed mid-article after a section. */
+  compact?: boolean;
 }) {
   return (
     <FadeInBlock>
       <div
-        className="mt-20 bg-main py-10 md:py-14"
+        className={`${compact ? "mt-12" : "mt-20"} bg-main py-10 md:py-14`}
         style={aboutUsPaperBackground}
       >
         <div className="flex flex-col items-start gap-8 pl-[5%] pr-6 md:flex-row md:items-end md:justify-between md:gap-10 md:pr-[5%]">
@@ -391,6 +402,45 @@ export function EpilogueQuote({
           </figure>
         </div>
       </div>
+    </FadeInBlock>
+  );
+}
+
+export function ArchivalFurtherReading({
+  items,
+}: {
+  items: { title: string; href: string }[];
+}) {
+  return (
+    <FadeInBlock className="mt-16 md:mt-20">
+      <aside
+        className="-mx-6 w-[calc(100%+3rem)] bg-main px-6 py-14 md:py-20"
+        style={archivalLedgerBackground}
+        aria-labelledby="archival-further-reading-heading"
+      >
+        <div className="mx-auto max-w-3xl">
+          <h2
+            id="archival-further-reading-heading"
+            className="font-cta text-[10px] font-medium uppercase tracking-[0.34em] text-ink/45"
+          >
+            Suggested Further Reading
+          </h2>
+          <ul className="mt-8 list-none space-y-4 p-0 [list-style:none]">
+            {items.map((item) => (
+              <li key={item.href} className="list-none [list-style:none]">
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-cta text-[11px] font-normal leading-relaxed tracking-[0.16em] text-[#3f464d] no-underline transition-colors duration-300 hover:text-[#8b939c]"
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
     </FadeInBlock>
   );
 }

@@ -12,6 +12,7 @@ import {
   ArticleImage,
   ArticleSection,
   ArticleVideo,
+  ArchivalFurtherReading,
   EditorialPullQuote,
   EpilogueQuote,
   isCompactFigureSize,
@@ -22,6 +23,7 @@ import type {
   AlmanacArticle,
   AlmanacArticleSection,
   AlmanacContentBlock,
+  AsidePlacement,
 } from "@/app/data/almanacArticles";
 import { BodyText, CTALink, Eyebrow, Headline } from "@/app/components/ui/Typography";
 
@@ -31,30 +33,38 @@ type Props = {
 
 type ImageBlock = Extract<AlmanacContentBlock, { type: "image" }>;
 
+function blockPlacement(block: AlmanacContentBlock): AsidePlacement | undefined {
+  if (block.type === "prose" || block.type === "image") return block.placement;
+  return undefined;
+}
+
 function hasSplitAsidePlacements(blocks: AlmanacContentBlock[]) {
-  return blocks.some(
-    (block) => block.placement === "aside-left" || block.placement === "aside-right"
-  );
+  return blocks.some((block) => {
+    const placement = blockPlacement(block);
+    return placement === "aside-left" || placement === "aside-right";
+  });
 }
 
 function partitionSplitAside(blocks: AlmanacContentBlock[], firstCompactIdx: number) {
   const headBlocks = blocks.slice(0, firstCompactIdx);
-  const introBlocks = headBlocks.filter(
-    (block) => block.placement !== "aside-span" && block.placement !== "center"
-  );
+  const introBlocks = headBlocks.filter((block) => {
+    const placement = blockPlacement(block);
+    return placement !== "aside-span" && placement !== "center";
+  });
   const centerBlocks: AlmanacContentBlock[] = [];
   const spanBlocks: AlmanacContentBlock[] = [];
   const leftAside: AlmanacContentBlock[] = [];
   const rightAside: AlmanacContentBlock[] = [];
 
   for (const block of blocks.slice(firstCompactIdx)) {
-    if (block.placement === "center") {
+    const placement = blockPlacement(block);
+    if (placement === "center") {
       centerBlocks.push(block);
-    } else if (block.placement === "aside-span") {
+    } else if (placement === "aside-span") {
       spanBlocks.push(block);
-    } else if (block.placement === "aside-right") {
+    } else if (placement === "aside-right") {
       rightAside.push(block);
-    } else if (block.placement === "aside-left") {
+    } else if (placement === "aside-left") {
       leftAside.push(block);
     }
   }
@@ -90,13 +100,11 @@ function collectCompactAsideRun(blocks: AlmanacContentBlock[]) {
   if (firstIdx < 0) return null;
 
   let lastIdx = firstIdx;
-  while (
-    lastIdx + 1 < blocks.length &&
-    blocks[lastIdx + 1].type === "image" &&
-    isCompactFigureSize(blocks[lastIdx + 1].size) &&
-    blocks[lastIdx + 1].placement !== "aside-right" &&
-    blocks[lastIdx + 1].placement !== "center"
-  ) {
+  while (lastIdx + 1 < blocks.length) {
+    const next = blocks[lastIdx + 1];
+    if (next.type !== "image") break;
+    if (!isCompactFigureSize(next.size)) break;
+    if (next.placement === "aside-right" || next.placement === "center") break;
     lastIdx += 1;
   }
 
@@ -447,6 +455,13 @@ export default function AlmanacArticleLayout({ article }: Props) {
               {article.sections.map((section) => (
                 <ArticleSection key={section.id} id={section.id} title={section.title}>
                   <SectionContent section={section} />
+                  {section.epilogue ? (
+                    <EpilogueQuote
+                      quote={section.epilogue.quote}
+                      attribution={section.epilogue.attribution}
+                      compact
+                    />
+                  ) : null}
                 </ArticleSection>
               ))}
               {article.epilogue ? (
@@ -478,6 +493,10 @@ export default function AlmanacArticleLayout({ article }: Props) {
                 />
               </div>
             </FadeInBlock>
+          ) : null}
+
+          {article.furtherReading?.length ? (
+            <ArchivalFurtherReading items={article.furtherReading} />
           ) : null}
 
           {(article.prev || article.next) && (
