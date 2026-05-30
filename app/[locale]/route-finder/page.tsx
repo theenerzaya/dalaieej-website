@@ -173,7 +173,7 @@ export default function RouteFinderPage() {
           <p><strong>Address:</strong> Mergen&apos;s Ridge, Haichin Am, eastern shore of Lake Khövsgöl (13 km from Khatgal), Khövsgöl Province, Mongolia</p>
           <p><strong>Location Notes:</strong> 50.4° N, 100.1° E</p>
           <p><strong>Email:</strong> <a href="mailto:hello@dalaieej.com" className="underline hover:text-stone-500">hello@dalaieej.com</a></p>
-          <p className="pt-4 text-sm">For all inquiries: <a href="tel:+97677809010" className="underline hover:text-stone-500">+976 77 809010</a></p>
+          <p className="pt-4 text-sm">For all inquiries: <a href="tel:+9767780190" className="underline hover:text-stone-500">+976 77 80190</a></p>
           <p className="text-sm text-stone-500">Available via Whatsapp, WeChat, Telegram and KakaoTalk</p>
         </div>
 

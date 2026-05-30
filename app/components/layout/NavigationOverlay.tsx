@@ -113,8 +113,8 @@ const mainNavItems: MainNavItem[] = [
   },
 ];
 
-const PHONE_DISPLAY = "+976 77 809010";
-const PHONE_HREF = "tel:+97677809010";
+const PHONE_DISPLAY = "+976 77 80190";
+const PHONE_HREF = "tel:+9767780190";
 
 const socialLinks: Array<{
   href: string;

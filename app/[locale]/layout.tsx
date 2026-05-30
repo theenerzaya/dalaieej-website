@@ -105,7 +105,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             description:
               "A quiet refuge on Lake Khövsgöl's eastern shore. Wooden cabins, deep waters, slow days. Northern Mongolia.",
             image: `${resortImageBase}/images/og-heritage.jpg`,
-            telephone: '+97677809010',
+            telephone: '+9767780190',
             email: 'hello@dalaieej.com',
             address: {
               '@type': 'PostalAddress',
