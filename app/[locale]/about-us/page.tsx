@@ -467,7 +467,7 @@ export default function AboutUsPage() {
     src: string;
     alt: string;
   } | null>(null);
-  const lastPillarRef = useRef<HTMLDivElement | null>(null);
+  const historyEndRef = useRef<HTMLDivElement | null>(null);
   const bannerEndRef = useRef<HTMLDivElement | null>(null);
   const almanacHref = locale === "mn" ? "/mn/almanac" : "/almanac";
   // Avoid rendering the portal during SSR.
@@ -886,6 +886,7 @@ export default function AboutUsPage() {
             })}
           </div>
         </div>
+        <div ref={historyEndRef} className="h-px w-full" aria-hidden />
       </section>
 
       <SectionAccent />
@@ -913,11 +914,9 @@ export default function AboutUsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-5">
             {t.pillars.map((pillar, i) => {
               const isHospitalityPillar = i === 2;
-              const isLastPillar = i === t.pillars.length - 1;
               return (
                 <motion.div
                   key={pillar.num}
-                  ref={isLastPillar ? lastPillarRef : undefined}
                   initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2, margin: "-10% 0px" }}
@@ -1084,7 +1083,7 @@ export default function AboutUsPage() {
       <div className="pb-24 md:pb-32" />
     </main>
     <AboutUsAlmanacFloatingBanner
-      triggerRef={lastPillarRef}
+      triggerRef={historyEndRef}
       endRef={bannerEndRef}
       message={t.almanacBannerMessage}
       ctaLabel={t.almanacBannerCta}

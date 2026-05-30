@@ -4,7 +4,7 @@ import { useEffect, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
-import Link from "next/link";
+import { CTALink } from "@/app/components/ui/Typography";
 
 export function AboutUsAlmanacFloatingBanner({
   triggerRef,
@@ -24,7 +24,7 @@ export function AboutUsAlmanacFloatingBanner({
 }) {
   const reduceMotion = useReducedMotion();
   const [portalMounted] = useState(() => typeof window !== "undefined");
-  const [pastPillar, setPastPillar] = useState(false);
+  const [pastHistory, setPastHistory] = useState(false);
   const [reachedFooter, setReachedFooter] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -35,9 +35,9 @@ export function AboutUsAlmanacFloatingBanner({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-          setPastPillar(true);
+          setPastHistory(true);
         } else if (entry.isIntersecting) {
-          setPastPillar(false);
+          setPastHistory(false);
         }
       },
       { threshold: 0, rootMargin: "0px 0px -8% 0px" }
@@ -60,7 +60,7 @@ export function AboutUsAlmanacFloatingBanner({
     return () => observer.disconnect();
   }, [endRef]);
 
-  const visible = pastPillar && !reachedFooter && !dismissed;
+  const visible = pastHistory && !reachedFooter && !dismissed;
 
   if (!portalMounted) return null;
 
@@ -76,25 +76,27 @@ export function AboutUsAlmanacFloatingBanner({
           transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="pointer-events-none fixed inset-x-0 bottom-0 z-[160] flex justify-center px-4 pb-5 pt-2 md:px-6 md:pb-6"
         >
-          <div className="pointer-events-auto flex w-full max-w-3xl items-center gap-3 rounded-full border border-white/10 bg-[#2f3129]/95 py-3 pl-5 pr-3 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm md:gap-4 md:py-3.5 md:pl-7 md:pr-4">
-            <p className="min-w-0 flex-1 font-body text-sm leading-snug text-white/88 md:text-[0.9375rem]">
-              {message}{" "}
-              <Link
-                href={href}
-                className="font-cta text-[10px] font-medium uppercase tracking-[0.2em] text-white/95 underline decoration-white/35 underline-offset-[5px] transition-colors hover:text-white hover:decoration-white/70 md:text-[11px] md:tracking-[0.22em]"
-              >
-                {ctaLabel}
-                <span aria-hidden> →</span>
-              </Link>
-            </p>
+          <div className="pointer-events-auto relative w-full max-w-3xl rounded-full border border-white/10 bg-[#2f3129]/95 px-10 py-3.5 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm md:px-12 md:py-4">
             <button
               type="button"
               onClick={() => setDismissed(true)}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/55 transition-colors hover:bg-white/10 hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
+              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-white/55 transition-colors hover:bg-white/10 hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 md:right-3"
               aria-label={dismissLabel}
             >
               <X className="h-4 w-4" strokeWidth={1.75} aria-hidden />
             </button>
+            <div className="flex flex-col items-center gap-2 text-center sm:gap-2.5">
+              <p className="font-body text-sm leading-snug text-white/85 md:text-[0.9375rem]">
+                {message}
+              </p>
+              <CTALink
+                href={href}
+                tone="dark"
+                className="!text-white [&>span]:!border-white/50 hover:[&>span]:!border-white"
+              >
+                {ctaLabel}
+              </CTALink>
+            </div>
           </div>
         </motion.aside>
       ) : null}
