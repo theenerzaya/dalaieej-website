@@ -8,6 +8,7 @@ export const ALMANAC_OG_WIDTH = 1200;
 export const ALMANAC_OG_HEIGHT = 630;
 const PUBLISHER_NAME = "Dalai Eej Resort";
 const ALMANAC_SERIES_NAME = "The Almanac";
+const ALMANAC_SERIES_NAME_MN = "Товчоон";
 
 export type AlmanacArticleSeoCopy = {
   metaTitle: string;
@@ -31,13 +32,13 @@ export function resolveAlmanacArticleSeoCopy(
 }
 
 export function buildAlmanacArticlePageTitle(metaTitle: string, locale: string): string {
-  const series = locale === "mn" ? "Алманах" : ALMANAC_SERIES_NAME;
+  const series = locale === "mn" ? ALMANAC_SERIES_NAME_MN : ALMANAC_SERIES_NAME;
   const brand = locale === "mn" ? "Далай ээж ресорт" : PUBLISHER_NAME;
   return `${metaTitle} | ${series} | ${brand}`;
 }
 
 export function buildAlmanacArticleOpenGraphTitle(metaTitle: string, locale: string): string {
-  const series = locale === "mn" ? "Алманах" : ALMANAC_SERIES_NAME;
+  const series = locale === "mn" ? ALMANAC_SERIES_NAME_MN : ALMANAC_SERIES_NAME;
   return `${metaTitle} | ${series}`;
 }
 
@@ -119,7 +120,7 @@ export function buildAlmanacArticleJsonLd({
   const hubUrl = absoluteSiteUrl(locale, "/almanac");
   const image = openGraphAssetUrl(almanacArticleOgImagePath(slug), locale);
   const { published, modified } = article.metadata;
-  const seriesName = locale === "mn" ? "Алманах" : ALMANAC_SERIES_NAME;
+  const seriesName = locale === "mn" ? ALMANAC_SERIES_NAME_MN : ALMANAC_SERIES_NAME;
 
   return {
     "@context": "https://schema.org",

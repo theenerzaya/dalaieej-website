@@ -188,7 +188,7 @@ const content = {
     heroExpandImage: "Зургийг бүтэн дэлгэцээр харах",
     heroCloseFullscreen: "Хаах",
     almanacBannerMessage: "Хайчин хөдийн түүхийг судлаарай.",
-    almanacBannerCta: "Алманах унших",
+    almanacBannerCta: "Товчоон унших",
     almanacBannerDismiss: "Хаах",
   },
 };
