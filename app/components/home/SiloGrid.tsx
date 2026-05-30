@@ -31,14 +31,14 @@ const silos = [
   },
   {
     id: "wellness",
-    href: "/cabins",
+    href: "/",
     en: "Wellness",
     mn: "Алжаал тайлах",
     image: "/images/silogrid/wellness.webp"
   },
   {
     id: "adventure",
-    href: "/restaurant",
+    href: "/",
     en: "Experiences",
     mn: "Аялал",
     image: "/images/silogrid/wilderness.webp"
