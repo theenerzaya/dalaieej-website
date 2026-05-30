@@ -10,6 +10,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { useCallback, useMemo } from "react";
+import { useLocale } from "next-intl";
 
 const MAP_CONTAINER_STYLE = { width: "100%", height: "100%" };
 
@@ -26,6 +27,7 @@ type Props = {
 };
 
 export default function AccessRoadMap({ className = "" }: Props) {
+  const locale = useLocale();
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
 
   const { isLoaded, loadError } = useJsApiLoader({
@@ -70,11 +72,12 @@ export default function AccessRoadMap({ className = "" }: Props) {
         className={`flex aspect-[16/10] w-full flex-col items-center justify-center gap-4 rounded-sm bg-leaf/10 px-6 text-center ${className}`}
       >
         <p className="font-body text-sm text-ink/70 max-w-md">
-          GPS trace of the official resort access road from the main-road turnoff
-          to guest parking.
+          {locale === "mn"
+            ? "Төв замаас салж ресортын зогсоол хүрэх албан ёсны замын GPS мэдээлэл."
+            : "GPS trace of the official resort access road from the main-road turnoff to guest parking."}
         </p>
         <CTALink href={accessRoadTrace.kmlPath} external>
-          Download GPS Route (KML)
+          {locale === "mn" ? "GPS зам татах (KML)" : "Download GPS Route (KML)"}
         </CTALink>
       </div>
     );
@@ -85,7 +88,9 @@ export default function AccessRoadMap({ className = "" }: Props) {
       <div
         className={`flex aspect-[16/10] w-full items-center justify-center rounded-sm bg-leaf/10 px-6 ${className}`}
       >
-        <p className="font-body text-sm text-ink/60">Map could not be loaded.</p>
+        <p className="font-body text-sm text-ink/60">
+          {locale === "mn" ? "Газрын зураг ачааллаж чадсангүй." : "Map could not be loaded."}
+        </p>
       </div>
     );
   }
@@ -131,7 +136,7 @@ export default function AccessRoadMap({ className = "" }: Props) {
       </div>
       <div className="mt-4">
         <CTALink href={accessRoadTrace.kmlPath} external>
-          Download GPS Route (KML)
+          {locale === "mn" ? "GPS зам татах (KML)" : "Download GPS Route (KML)"}
         </CTALink>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale } from "next-intl";
 
 export type GettingHereTocItem = {
   id: string;
@@ -12,7 +13,9 @@ type Props = {
   title?: string;
 };
 
-export default function GettingHereToc({ items, title = "On this page" }: Props) {
+export default function GettingHereToc({ items, title }: Props) {
+  const locale = useLocale();
+  const displayTitle = title ?? (locale === "mn" ? "Энэ хуудсанд" : "On this page");
   const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
 
   useEffect(() => {
@@ -44,9 +47,9 @@ export default function GettingHereToc({ items, title = "On this page" }: Props)
   };
 
   return (
-    <nav aria-label={title} className="getting-here-toc">
+    <nav aria-label={displayTitle} className="getting-here-toc">
       <p className="font-cta text-[11px] sm:text-xs font-medium uppercase tracking-[0.3em] text-ink/45 mb-5">
-        {title}
+        {displayTitle}
       </p>
       <ol className="space-y-3">
         {items.map((item) => {

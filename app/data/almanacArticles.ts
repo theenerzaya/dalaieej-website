@@ -28,6 +28,8 @@ export type AlmanacContentBlock =
       alt: string;
       caption: string;
       credit?: string;
+      /** `viewport-75` — 75% of the viewport width, centered (breaks out of the prose column). */
+      width?: "default" | "viewport-75";
     }
   | {
       type: "dataCard";
@@ -67,7 +69,13 @@ export type AlmanacArticle = {
     src: string;
     alt: string;
     objectPosition?: string;
+    /** Override default hero frost wash (percent). */
+    frostOpacity?: number;
+    /** Override default hero frost blur (px). */
+    frostBlurPx?: number;
   };
+  /** Navbar floats transparent over the hero until scroll (wellness-style). */
+  translucentNavbar?: boolean;
   metadata: {
     /** ISO 8601 — used for Open Graph and Article JSON-LD */
     published: string;
@@ -96,6 +104,13 @@ export type AlmanacArticle = {
     body: string;
     image: { src: string; alt: string };
     link?: { label: string; href: string };
+  };
+  journalInset?: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    src: string;
+    alt: string;
   };
   prev?: { href: string; label: string };
   next?: { href: string; label: string };
@@ -266,6 +281,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             type: "video",
             src: "/images/almanac/borders-and-industry/khatgal-wool-factory.mp4",
             alt: "Archival footage of the Khatgal Wool Washing Factory.",
+            width: "viewport-75",
             caption:
               "Archival footage of the Khatgal Wool Washing Factory (c. 1980–1988), capturing an inspection by state leader Yumjaagiin Tsedenbal. The audio's explicit directives for the floor staff to \"work harder\" offer a raw glimpse into the intense demands of the Five-Year Plan.",
             credit: "Sourced via the Ergen Dursakhad Saikhan digital archive.",
@@ -313,6 +329,13 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         href: "https://maps.app.goo.gl/Gpk4Ab9zjAQ6DchU9",
       },
     },
+    journalInset: {
+      eyebrow: "LOCAL DISPATCH",
+      title: "A Playground of Black Ice…",
+      body: "Rosy-cheeked and entirely unbothered by the -50°C (-58°F) winter, the local children skate in perfect single file across the Mother Sea. To the rest of the world, this is a formidable, 262-meter-deep frozen expanse. But here in our Khatgal, it is simply the backyard where they play and grow up.",
+      src: "/kids.mp4",
+      alt: "Children skating in single file across the frozen surface of Lake Khövsgöl near Khatgal.",
+    },
   },
   {
     slug: "forest-and-steppe",
@@ -326,7 +349,10 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       src: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
       alt: "The Uushigiin Övör Deer Stones at the ancient threshold of the steppe.",
       objectPosition: "50% 45%",
+      frostOpacity: 34,
+      frostBlurPx: 9,
     },
+    translucentNavbar: true,
     metadata: {
       published: "2025-06-01T00:00:00.000Z",
       modified: "2026-05-30T00:00:00.000Z",
@@ -404,6 +430,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       alt: "The shores of Olkhon Island on Lake Baikal.",
       objectPosition: "50% 50%",
     },
+    translucentNavbar: true,
     metadata: {
       published: "2025-07-01T00:00:00.000Z",
       modified: "2026-05-30T12:00:00.000Z",
@@ -518,8 +545,6 @@ import { ALMANAC_ARTICLES as MN_ARTICLES } from "./almanacArticles.mn";
 export const ALMANAC_ARTICLE_SLUGS = ALMANAC_ARTICLES.map((article) => article.slug);
 
 export function getAlmanacArticle(slug: string, locale?: string): AlmanacArticle | undefined {
-  if (locale === "mn") {
-    return MN_ARTICLES.find((article: AlmanacArticle) => article.slug === slug);
-  }
-  return ALMANAC_ARTICLES.find((article) => article.slug === slug);
+  const articles = locale === "mn" ? MN_ARTICLES : ALMANAC_ARTICLES;
+  return articles.find((article) => article.slug === slug);
 }

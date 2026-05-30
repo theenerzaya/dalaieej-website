@@ -316,14 +316,24 @@ export function ArticleVideo({
   alt,
   caption,
   credit,
+  width = "default",
 }: {
   src: string;
   alt: string;
   caption: string;
   credit?: string;
+  width?: "default" | "viewport-75";
 }) {
+  const isViewportWide = width === "viewport-75";
+
   return (
-    <figure>
+    <figure
+      className={
+        isViewportWide
+          ? "relative left-1/2 w-[75vw] max-w-[75vw] -translate-x-1/2"
+          : undefined
+      }
+    >
         <div className="relative aspect-video w-full overflow-hidden rounded-sm bg-surface-alt/40">
           <video
             src={src}
@@ -448,6 +458,67 @@ export function EpilogueQuote({
           </figure>
         </div>
       </div>
+    </FadeInBlock>
+  );
+}
+
+export function JournalInsetVideo({
+  eyebrow,
+  title,
+  body,
+  src,
+  alt,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  src: string;
+  alt: string;
+}) {
+  const locale = useLocale();
+  const isMn = locale === "mn";
+  const editorialClass = isMn ? "font-editorial-mn" : "font-editorial-en";
+
+  return (
+    <FadeInBlock distance={20} className="mt-10 md:mt-12">
+      <aside className="mx-auto max-w-3xl" aria-label={eyebrow}>
+        <figure className="mx-auto w-full md:max-w-[360px]">
+          <div className="mb-3 text-center">
+            <p
+              className={[
+                "font-cta uppercase text-ink/45",
+                isMn
+                  ? "text-[10px] font-light tracking-[0.2em]"
+                  : "text-[10px] font-medium tracking-[0.28em]",
+              ].join(" ")}
+            >
+              [ {eyebrow} ]
+            </p>
+            <p
+              className={`mt-2.5 text-pretty text-lg leading-snug text-ink/82 sm:text-xl ${editorialClass} italic font-light`}
+            >
+              {title}
+            </p>
+          </div>
+          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[4px] bg-surface-alt/40">
+            <video
+              src={src}
+              controls
+              playsInline
+              preload="metadata"
+              className="h-full w-full object-cover [filter:grayscale(15%)_contrast(105%)]"
+              aria-label={alt}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <figcaption className="mt-4 text-center">
+            <p className="mx-auto max-w-sm font-body text-sm leading-[1.65] text-ink/68">
+              {body}
+            </p>
+          </figcaption>
+        </figure>
+      </aside>
     </FadeInBlock>
   );
 }

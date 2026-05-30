@@ -9,6 +9,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
 import { CTAButton } from "./ui/Typography";
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
+import { isAlmanacTranslucentNavPathname } from "@/lib/almanacTranslucentNav";
 import { withLocalePath } from "@/lib/localePath";
 import { siteOriginForLocale } from "@/lib/site-urls";
 import { assetUrl } from "@/lib/assetUrl";
@@ -38,7 +39,10 @@ export default function Navbar() {
   const isHome = isHomePathname(pathname);
   const isWellness = isWellnessPathname(pathname);
   const isAboutUs = isAboutUsPathname(pathname);
-  const heroPast = useHeroPastForNav(isHome || isWellness, pathname);
+  const heroPast = useHeroPastForNav(
+    isHome || isWellness || isAlmanacTranslucentNavPathname(pathname),
+    pathname,
+  );
   const showFullChrome = isBookingPage || heroPast;
   const paperNav = isAboutUs && !isBookingPage;
 

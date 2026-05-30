@@ -41,7 +41,7 @@ export default function EditorialIntro() {
           <Headline as="h2" size="section">
             {locale === 'mn' ? (
               <>
-                Анир нам, ариун дагшин.
+                Анир нам, онгон байгаль.
                 <br />
                 ХӨВСГӨЛИЙН ЗҮРХЭН ЦЭГ.
               </>

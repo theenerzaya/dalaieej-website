@@ -20,8 +20,9 @@ import TransferOptions, {
 import AccessRoadMap from "@/app/components/getting-here/AccessRoadMap";
 import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
 import SiteImage from "@/app/components/SiteImage";
+import accessRoadTrace from "@/app/data/accessRoadTrace.json";
 import { motion, useReducedMotion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ALMANAC_CHAPTERS as EN_CHAPTERS } from "@/app/data/almanacChapters";
 import { ALMANAC_CHAPTERS as MN_CHAPTERS } from "@/app/data/almanacChapters.mn";
 import { Car, Ship } from "lucide-react";
@@ -44,16 +45,6 @@ const ITINERARY_EMAIL_BODY = [
   "Thank you,",
 ].join("\n");
 const ITINERARY_MAILTO = `mailto:hello@dalaieej.com?subject=${encodeURIComponent(ITINERARY_EMAIL_SUBJECT)}&body=${encodeURIComponent(ITINERARY_EMAIL_BODY)}`;
-
-const TOC_ITEMS: GettingHereTocItem[] = [
-  { id: "domestic-flights", label: "I. The Quickest Route: Domestic Flights" },
-  { id: "overland-driving", label: "II. The Overland Expedition: Driving the Steppe" },
-  {
-    id: "coaches-railway",
-    label: "III. Intercity Coaches & Railway Options",
-  },
-  { id: "murun-to-resort", label: "IV. The Final Leg: Murun to the Resort" },
-];
 
 function SectionBlock({
   id,
@@ -100,6 +91,11 @@ function Prose({ children }: { children: ReactNode }) {
   );
 }
 
+function OptionalProse({ text }: { text: string }) {
+  if (!text) return null;
+  return <Prose>{text}</Prose>;
+}
+
 function BulletList({ items }: { items: ReactNode[] }) {
   return (
     <ul className="list-disc space-y-2 pl-5 font-body text-base md:text-lg text-ink/75 leading-relaxed">
@@ -144,29 +140,37 @@ function CarrierCard({
 
 export default function GettingHerePage() {
   const locale = useLocale();
+  const t = useTranslations("gettingHerePage");
   const localePrefix = locale === "mn" ? "/mn" : "";
   const chapters = locale === "mn" ? MN_CHAPTERS : EN_CHAPTERS;
   const nextChapter = chapters.find((c) => c.id === "chapter-ii");
   const reduceMotion = useReducedMotion();
 
+  const TOC_ITEMS: GettingHereTocItem[] = [
+    { id: "domestic-flights", label: t("toc.section1") },
+    { id: "overland-driving", label: t("toc.section2") },
+    { id: "coaches-railway", label: t("toc.section3") },
+    { id: "murun-to-resort", label: t("toc.section4") },
+  ];
+
   const transferOptions: TransferOption[] = [
     {
       id: "resort-transfer",
       icon: Ship,
-      title: "Resort Transfer",
-      meta: "270,000 MNT (Each Way)",
-      body: "We offer a private transfer—a 100 km drive followed by a scenic speedboat arrival. Share your itinerary with us to time your welcome perfectly.",
+      title: t("section4.transfer1.title"),
+      meta: t("section4.transfer1.meta"),
+      body: t("section4.transfer1.body"),
       href: ITINERARY_MAILTO,
-      linkLabel: "Share your itinerary",
+      linkLabel: t("section4.transfer1.link"),
     },
     {
       id: "ubcab",
       icon: Car,
-      title: "UBCab",
-      meta: "App Booking",
-      body: "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
+      title: t("section4.transfer2.title"),
+      meta: t("section4.transfer2.meta"),
+      body: t("section4.transfer2.body"),
       href: "https://onelink.to/ubcab",
-      linkLabel: "Get UBCab",
+      linkLabel: t("section4.transfer2.link"),
       external: true,
     },
   ];
@@ -174,7 +178,7 @@ export default function GettingHerePage() {
   return (
     <PageShell>
       <FrostedMapSection
-        aria-label="How We Get to Khövsgöl"
+        aria-label={t("hero.title")}
         className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
         imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
         imagePriority
@@ -188,10 +192,10 @@ export default function GettingHerePage() {
           transition={{ duration: reduceMotion ? 0 : 0.7 }}
         >
           <Eyebrow className="!text-water-deep/70 mb-6">
-            The Journey
+            {t("hero.eyebrow")}
           </Eyebrow>
           <Headline as="h1" size="section">
-            How We Get to Khövsgöl
+            {t("hero.title")}
           </Headline>
         </motion.div>
         <motion.div
@@ -203,8 +207,7 @@ export default function GettingHerePage() {
           }}
         >
           <BodyText size="md" className="max-w-2xl">
-            A comprehensive guide to travelling from Ulaanbaatar to the Khaich
-            Valley.
+            {t("hero.subtitle")}
           </BodyText>
         </motion.div>
       </FrostedMapSection>
@@ -217,12 +220,12 @@ export default function GettingHerePage() {
               arrow={false}
               className="!text-ink/50 hover:!text-water-deep [&>span]:!border-ink/20 [&>span]:group-hover:!border-water-deep/40"
             >
-              ← The Almanac
+              {t("backToAlmanac")}
             </CTALink>
           </FadeInBlock>
 
           <article
-            aria-label="Arrival guide"
+            aria-label={t("ariaArrivalGuide")}
             className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"
           >
             <aside className="mb-12 lg:mb-0">
@@ -236,42 +239,32 @@ export default function GettingHerePage() {
             <div className="min-w-0 space-y-0">
               <SectionBlock
                 id="domestic-flights"
-                eyebrow="Section I"
-                title="The Quickest Route: Domestic Flights"
+                eyebrow={t("section1.eyebrow")}
+                title={t("section1.title")}
               >
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
                     variant="photo"
-                    label="Murun Airport"
+                    label={t("media.murunAirport.label")}
                     imageSrc="/images/getting-here/murun-airport-exterior.jpg"
-                    imageAlt="Murun Airport terminal viewed from an aircraft on the tarmac, with the wing and steppe mountains beyond."
+                    imageAlt={t("media.murunAirport.alt")}
                     aspectClass="aspect-[4/3] md:aspect-[21/9]"
                     imageClassName="object-cover"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
                   <Prose>
-                    The most efficient route to the resort begins with a domestic
-                    flight from Ulaanbaatar (UBN) to Murun Airport (MXV).
+                    {t("section1.p1")}
                   </Prose>
-                  <Prose>
-                    During the peak summer season, domestic flights run almost daily.
-                    The flight takes approximately one hour, with one-way tickets
-                    starting from 300,000 MNT per person.
-                  </Prose>
-                  <Prose>
-                    Because July represents the absolute peak of the Mongolian summer, domestic
-                    flights sell out exceptionally quickly. We strongly advise
-                    securing your air travel as early as possible directly with the
-                    carriers:
-                  </Prose>
+                  <OptionalProse text={t("section1.p2")} />
+                  <OptionalProse text={t("section1.p3")} />
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
                   <div className="grid gap-4 md:grid-cols-1">
                     <CarrierCard
-                      name="MIAT Mongolian Airlines"
-                      description="Check schedules and book directly on the"
-                      linkLabel="MIAT website"
+                      name={t("section1.miat.name")}
+                      description={t("section1.miat.desc")}
+                      linkLabel={t("section1.miat.link")}
                       href={
                         locale === "mn"
                           ? "https://miat.com/mn"
@@ -280,9 +273,9 @@ export default function GettingHerePage() {
                       external
                     />
                     <CarrierCard
-                      name="Hunnu Air"
-                      description="View timetables and book directly on the"
-                      linkLabel="Hunnu Air website"
+                      name={t("section1.hunnu.name")}
+                      description={t("section1.hunnu.desc")}
+                      linkLabel={t("section1.hunnu.link")}
                       href={
                         locale === "mn"
                           ? "https://www.hunnuair.com/mn/timetable"
@@ -291,8 +284,8 @@ export default function GettingHerePage() {
                       external
                     />
                     <CarrierCard
-                      name="Chinggis Airlines (Nomin Holdings)"
-                      description="For availability on this newer premium option, please contact their operator, Tumee, directly via Viber at +97699838351."
+                      name={t("section1.chinggis.name")}
+                      description={t("section1.chinggis.desc")}
                       href="#"
                     />
                   </div>
@@ -301,99 +294,112 @@ export default function GettingHerePage() {
 
               <SectionBlock
                 id="overland-driving"
-                eyebrow="Section II"
-                title="The Overland Expedition: Driving the Steppe"
+                eyebrow={t("section2.eyebrow")}
+                title={t("section2.title")}
               >
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
                     variant="photo"
-                    label="Overland route through Bulgan province"
+                    label={t("media.overlandRoute.label")}
                     imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
-                    imageAlt="A vehicle stopped on a paved road across the open steppe in Bulgan province, Mongolia."
+                    imageAlt={t("media.overlandRoute.alt")}
                     aspectClass="aspect-[4/3]"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
                   <Prose>
-                    For those who wish to experience the vastness of the Mongolian
-                    landscape at their own pace, driving overland is a spectacular
-                    option. The 1,000 km route from Ulaanbaatar is fully paved.
+                    {t("section2.p1")}
                   </Prose>
-                  <Subhead>Pacing the Journey</Subhead>
+                  <Subhead>{t("section2.sub1")}</Subhead>
                   <Prose>
-                    If you plan to complete the drive to Lake Khövsgöl in a single
-                    day, an early departure is essential. We strongly advise setting
-                    out from Ulaanbaatar no later than 9:00 AM sharp. To comfortably
-                    complete the journey and arrive before nightfall, aim to safely
-                    maintain a cruising speed of 100 km/h where the open road allows.
+                    {t("section2.p2")}
                   </Prose>
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
-                  <Subhead>The Erdenet Pit Stop</Subhead>
+                  <Subhead>{t("section2.sub2")}</Subhead>
                   <Prose>
-                    We highly recommend breaking up the trip with a stop in Erdenet
-                    for lunch and refueling. As one of Mongolia&apos;s wealthiest
-                    cities per capita, Erdenet offers a charming glimpse into
-                    Soviet-era urban planning. Filled with character, you will find
-                    an eclectic mix of options to recharge, from cosy local
-                    &quot;tea houses&quot; to excellent standalone restaurants.
+                    {t("section2.p3")}
                   </Prose>
-                  <Subhead>The Heart of Bulgan</Subhead>
+                  <Subhead>{t("section2.sub3")}</Subhead>
                   <Prose>
-                    As you leave Erdenet and continue northwest, the road opens up
-                    into Bulgan province. If you are familiar with airag—Mongolia&apos;s
-                    traditional fermented mare&apos;s milk—Bulgan is the undisputed
-                    heartland for it. As you drive through, the definitive place to
-                    stop and taste the best airag in the country is at the Tuluu Pass
-                    (Түлүүгийн даваа).
+                    {t("section2.p4")}
                   </Prose>
                 </FadeInBlock>
               </SectionBlock>
 
               <SectionBlock
                 id="coaches-railway"
-                eyebrow="Section III"
-                title="Intercity Coaches & Railway Options"
+                eyebrow={t("section3.eyebrow")}
+                title={t("section3.title")}
               >
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
                     variant="photo"
-                    label="Train travel in Mongolia"
+                    label={t("media.trainTravel.label")}
                     imageSrc="/images/getting-here/train.jpg"
-                    imageAlt="A passenger train on the railway in Mongolia."
+                    imageAlt={t("media.trainTravel.alt")}
                     aspectClass="aspect-[8/5] md:aspect-[21/9]"
                     imageClassName="object-cover"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
-                  <Subhead>Intercity Coaches</Subhead>
+                  <Subhead>{t("section3.sub1")}</Subhead>
+                  <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
+                    <div className="min-w-0 flex-1 space-y-6">
+                      <Prose>
+                        {t("section3.p1")}
+                      </Prose>
+                      <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
+                        <CTALink
+                          href="https://eticket.ubtz.mn/search"
+                          external
+                        >
+                          {t("section3.ubtzLink")}
+                        </CTALink>
+                      </div>
+                      {t("section3.motorbike") ? (
+                        <Prose>
+                          <span dangerouslySetInnerHTML={{ __html: t.raw("section3.motorbike") }} />
+                        </Prose>
+                      ) : null}
+                    </div>
+                    <figure className="mx-auto w-[13rem] shrink-0 md:mx-0 md:w-[14rem] lg:w-[15rem]">
+                      <p className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/45 mb-2">
+                        {t("section3.bowieEyebrow")}
+                      </p>
+                      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
+                        <SiteImage
+                          src="/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
+                          alt={t("section3.bowieCaption")}
+                          title="David Bowie on the Trans-Siberian Railway"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 208px, 240px"
+                        />
+                      </div>
+                      <figcaption className="mt-3 font-body text-sm leading-snug text-ink/60">
+                        {t("section3.bowieCaption")}
+                        <span className="mt-1 block text-ink/50">
+                          ({t("section3.bowieCredit")})
+                        </span>
+                      </figcaption>
+                    </figure>
+                  </div>
+                </FadeInBlock>
+                <FadeInBlock delay={0.15}>
+                  <Subhead>{t("section3.sub2")}</Subhead>
                   <Prose>
-                    For a direct overland route, air-conditioned intercity coaches
-                    depart from Ulaanbaatar&apos;s Old Dragon Terminal (Хуучин
-                    Драгон). Tickets are 110,000 MNT for adults and 55,800 MNT for
-                    children (ages 6–12). All tickets automatically include travel
-                    insurance (up to 10 million MNT in compensation).
+                    {t("section3.p2")}
                   </Prose>
-                  <BulletList
-                    items={[
-                      <>
-                        <strong className="font-medium text-ink">The VIP Coach:</strong>{" "}
-                        Departs once a week on Sundays at 21:10. This premium option
-                        features spacious, reclining seating and phone charging ports
-                        so you can sleep comfortably and wake up in the north.
-                      </>,
-                      <>
-                        <strong className="font-medium text-ink">Standard Coaches:</strong>{" "}
-                        Depart six times a day, offering flexibility for your
-                        schedule.
-                      </>,
-                      <>
-                        <strong className="font-medium text-ink">Booking:</strong>{" "}
-                        Tickets can be purchased online via the Transdep E-Ticket
-                        Portal.
-                      </>,
-                    ]}
-                  />
+                  {t("section3.vipCoach") ? (
+                    <BulletList
+                      items={[
+                        <span key="vip" dangerouslySetInnerHTML={{ __html: t.raw("section3.vipCoach") }} />,
+                        <span key="standard" dangerouslySetInnerHTML={{ __html: t.raw("section3.standardCoach") }} />,
+                        <span key="booking" dangerouslySetInnerHTML={{ __html: t.raw("section3.bookingCoach") }} />,
+                      ]}
+                    />
+                  ) : null}
                   <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
                     <CTALink
                       href={
@@ -403,109 +409,52 @@ export default function GettingHerePage() {
                       }
                       external
                     >
-                      Transdep E-Ticket Portal
+                      {t("section3.transdepLink")}
                     </CTALink>
-                  </div>
-                </FadeInBlock>
-                <FadeInBlock delay={0.15}>
-                  <Subhead>The Trans-Siberian Railway</Subhead>
-                  <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
-                    <div className="min-w-0 flex-1 space-y-6">
-                      <Prose>
-                        There is no direct train to Murun; the railway ends in
-                        Erdenet. However, the route is a spur of the legendary
-                        Trans-Siberian Railway—the very same iconic railway famously
-                        travelled by David Bowie. Taking the overnight sleeper train to
-                        Erdenet is a deeply nostalgic, romantic way to travel. Once
-                        you arrive, independent drivers are waiting at the station ready to take you the rest of the way directly to Khatgal and the lake (please remember to negotiate your fare to your final destination before departing). Tickets available via the
-                      </Prose>
-                      <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
-                        <CTALink
-                          href="https://eticket.ubtz.mn/search"
-                          external
-                        >
-                          UBTZ E-Ticket Portal
-                        </CTALink>
-                      </div>
-                      <Prose>
-                        <strong className="font-medium text-ink">
-                          For Motorbike Expeditions:
-                        </strong>{" "}
-                        You can transport your motorbike on the train to
-                        Erdenet, bypassing the heaviest city traffic and officially
-                        beginning your ride from there.
-                      </Prose>
-                    </div>
-                    <figure className="mx-auto w-[13rem] shrink-0 md:mx-0 md:w-[14rem] lg:w-[15rem]">
-                      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
-                        <SiteImage
-                          src="/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
-                          alt="Black and white archival photograph of David Bowie travelling in a sleeper cabin on the Trans-Siberian Railway."
-                          title="David Bowie on the Trans-Siberian Railway"
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 208px, 240px"
-                        />
-                      </div>
-                      <figcaption className="mt-3 font-body text-sm leading-snug text-ink/60">
-                        David Bowie on the Trans-Siberian Railway, 1973.
-                        Photograph by Geoff MacCormack.
-                      </figcaption>
-                    </figure>
                   </div>
                 </FadeInBlock>
               </SectionBlock>
 
               <SectionBlock
                 id="murun-to-resort"
-                eyebrow="Section IV"
-                title="The Final Leg: Murun to the Resort"
+                eyebrow={t("section4.eyebrow")}
+                title={t("section4.title")}
               >
                 <FadeInBlock delay={0.05}>
                   <MediaPlaceholder
                     variant="photo"
-                    label="Murun Airport terminal"
+                    label={t("media.murunTerminal.label")}
                     imageSrc="/images/getting-here/murun-airport-terminal-interior.jpg"
-                    imageAlt="Travellers in the Murun Airport terminal with Dalai Eej Resort signage visible."
+                    imageAlt={t("media.murunTerminal.alt")}
                     aspectClass="aspect-[4/3] md:aspect-[21/9]"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
-                  <Subhead>Provisioning in Murun</Subhead>
+                  <Subhead>{t("section4.sub1")}</Subhead>
                   <Prose>
-                    If you are driving yourself, Murun is your final major outpost.
-                    Before you leave the city limits for the lake, we highly recommend
-                    a stop at the Nomin Supermarket. Depending on your planned level
-                    of adventure, this is the definitive place to load up on essential
-                    supplies—from rechargeable batteries and flashlights to barbecue
-                    provisions and rain boots.
+                    {t("section4.p1")}
                   </Prose>
                 </FadeInBlock>
                 <FadeInBlock delay={0.12}>
-                  <Subhead>Navigating the Final Approach</Subhead>
+                  <Subhead>{t("section4.sub2")}</Subhead>
                   <Prose>
-                    The resort is located 13 km beyond the village of Khatgal, tucked
-                    into the Khaich Valley on the eastern shore of the lake. If you are
-                    driving this final leg, please note that while our
-                    Google Maps pin is highly accurate, the final approach to the resort
-                    can be adventurous.
+                    {t("section4.p2")}
                   </Prose>
-                  <Prose>
-                    The first 8 km out of Khatgal is a graded gravel road, but the
-                    final 5 km is an unpaved, natural dirt track. Because of this, we
-                    require travelling in a 4x4 vehicle and highly recommend having
-                    an experienced driver at the wheel.
-                  </Prose>
-                  <BodyText
-                    size="md"
-                    className="!text-left max-w-none italic text-ink/55"
-                  >
-                    Once you pass the Khatgal village edge, you will need to navigate
-                    around the tree line.
-                  </BodyText>
+                  <OptionalProse text={t("section4.p3")} />
+                  {t("section4.note") ? (
+                    <BodyText
+                      size="md"
+                      className="!text-left max-w-none italic text-ink/55"
+                    >
+                      {t("section4.note")}
+                    </BodyText>
+                  ) : null}
                   <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
                     <CTALink href={MAP_URL} external>
-                      View on Google Maps
+                      {t("section4.mapLink")}
+                    </CTALink>
+                    <CTALink href={accessRoadTrace.kmlPath} external>
+                      {t("section4.kmlLink")}
                     </CTALink>
                   </div>
                   <FadeInBlock delay={0.05} className="mt-6">
@@ -513,10 +462,9 @@ export default function GettingHerePage() {
                   </FadeInBlock>
                 </FadeInBlock>
                 <FadeInBlock delay={0.15}>
-                  <Subhead>Taxis and Private Transfers</Subhead>
+                  <Subhead>{t("section4.sub3")}</Subhead>
                   <Prose>
-                    If you did not drive your own vehicle to Murun, you have two
-                    options for the final stretch:
+                    {t("section4.p4")}
                   </Prose>
                   <TransferOptions options={transferOptions} />
                 </FadeInBlock>
@@ -549,22 +497,22 @@ export default function GettingHerePage() {
       </section>
 
       <FrostedMapSection
-        aria-label="The destination"
+        aria-label={t("destination.eyebrow")}
         className="py-24 md:py-32"
         contentClassName="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center"
         fadeTop
         fadeBottom={false}
       >
         <FadeInBlock className="flex w-full flex-col items-center gap-8 text-center">
-          <Eyebrow className="!text-water-deep/70">The destination</Eyebrow>
+          <Eyebrow className="!text-water-deep/70">{t("destination.eyebrow")}</Eyebrow>
           <Headline as="h2" size="sub">
-            The journey is just the prelude.
+            {t("destination.title")}
           </Headline>
           <BodyText size="md" className="max-w-xl">
-            Discover the accommodations and exclusive spaces waiting at Dalai Eej.
+            {t("destination.subtitle")}
           </BodyText>
           <CTALink href={`${localePrefix}/accommodation`} arrow>
-            Explore accommodations
+            {t("destination.link")}
           </CTALink>
         </FadeInBlock>
       </FrostedMapSection>

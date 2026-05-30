@@ -15,6 +15,7 @@ import {
   ArticleVideo,
   ArchivalCard,
   ArchivalFurtherReading,
+  JournalInsetVideo,
   EditorialPullQuote,
   EpilogueQuote,
   InlineDataCard,
@@ -181,6 +182,7 @@ function renderBlock(_sectionId: string, block: AlmanacContentBlock) {
         alt={block.alt}
         caption={block.caption}
         credit={block.credit}
+        width={block.width}
       />
     );
   }
@@ -519,7 +521,7 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
 
 export default function AlmanacArticleLayout({ article }: Props) {
   const locale = useLocale();
-  const localePrefix = locale === "mn" ? "/mn" : "";
+  const localePrefix = locale === "mn" ? "/mn" : "/en";
   const reduceMotion = useReducedMotion();
 
   const tocItems = article.sections.map((section) => ({
@@ -527,15 +529,21 @@ export default function AlmanacArticleLayout({ article }: Props) {
     label: section.tocLabel,
   }));
 
+  const translucentNav = article.translucentNavbar ?? false;
+
   return (
-    <PageShell>
+    <PageShell offsetNavbar={!translucentNav}>
       <FrostedMapSection
         aria-label={article.title}
-        className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(52vh,28rem)]"
+        className={
+          translucentNav
+            ? "pb-16 md:pb-24 pt-[calc(var(--navbar-h)+2.5rem)] md:pt-[calc(var(--navbar-h)+3.5rem)] min-h-[min(52vh,28rem)]"
+            : "pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(52vh,28rem)]"
+        }
         imageSrc={article.heroImage.src}
         imagePriority
-        frostOpacity={14}
-        frostBlurPx={6}
+        frostOpacity={article.heroImage.frostOpacity ?? 14}
+        frostBlurPx={article.heroImage.frostBlurPx ?? 6}
         mapObjectPosition={article.heroImage.objectPosition ?? "50% 50%"}
         contentClassName="mx-auto flex max-w-3xl flex-col items-start gap-8 px-6 text-left"
       >
@@ -566,6 +574,13 @@ export default function AlmanacArticleLayout({ article }: Props) {
             </BodyText>
           ))}
         </motion.div>
+        {translucentNav ? (
+          <div
+            id="hero-nav-sentinel"
+            aria-hidden
+            className="pointer-events-none h-px w-full shrink-0"
+          />
+        ) : null}
       </FrostedMapSection>
 
       <section className="px-6 pb-24 md:pb-32">
@@ -576,7 +591,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
               arrow={false}
               className="!text-ink/50 hover:!text-water-deep [&>span]:!border-ink/20 [&>span]:group-hover:!border-water-deep/40"
             >
-              ← {locale === "mn" ? "Алманах" : "The Almanac"}
+              ← {locale === "mn" ? "Товчоон" : "The Almanac"}
             </CTALink>
           </FadeInBlock>
 
@@ -611,6 +626,16 @@ export default function AlmanacArticleLayout({ article }: Props) {
                   body={article.archivalCard.body}
                   image={article.archivalCard.image}
                   link={article.archivalCard.link}
+                />
+              ) : null}
+
+              {article.journalInset ? (
+                <JournalInsetVideo
+                  eyebrow={article.journalInset.eyebrow}
+                  title={article.journalInset.title}
+                  body={article.journalInset.body}
+                  src={article.journalInset.src}
+                  alt={article.journalInset.alt}
                 />
               ) : null}
 

@@ -664,5 +664,119 @@
     "arrivalBody": "Peak summer domestic flights to Murun sell out quickly. Read our complete guide on flights, overland routes, and coordinating your transfer.",
     "arrivalCta": "Read the Arrival Guide",
     "backToHome": "Back to Home"
+  },
+  "gettingHerePage": {
+    "hero": {
+      "eyebrow": "The Journey",
+      "title": "How We Get to Khövsgöl",
+      "subtitle": "A comprehensive guide to travelling from Ulaanbaatar to the Khaich Valley."
+    },
+    "backToAlmanac": "← The Almanac",
+    "toc": {
+      "section1": "I. The Quickest Route: Domestic Flights",
+      "section2": "II. The Overland Expedition: Driving the Steppe",
+      "section3": "III. Intercity Coaches & Railway Options",
+      "section4": "IV. The Final Leg: Murun to the Resort"
+    },
+    "section1": {
+      "eyebrow": "Section I",
+      "title": "The Quickest Route: Domestic Flights",
+      "p1": "The most efficient route to the resort begins with a domestic flight from Ulaanbaatar (UBN) to Murun Airport (MXV).",
+      "p2": "During the peak summer season, domestic flights run almost daily. The flight takes approximately one hour, with one-way tickets starting from 300,000 MNT per person.",
+      "p3": "Because July represents the absolute peak of the Mongolian summer, domestic flights sell out exceptionally quickly. We strongly advise securing your air travel as early as possible directly with the carriers:",
+      "miat": {
+        "name": "MIAT Mongolian Airlines",
+        "desc": "Check schedules and book directly on the",
+        "link": "MIAT website"
+      },
+      "hunnu": {
+        "name": "Hunnu Air",
+        "desc": "View timetables and book directly on the",
+        "link": "Hunnu Air website"
+      },
+      "chinggis": {
+        "name": "Chinggis Airlines (Nomin Holdings)",
+        "desc": "For availability on this newer premium option, please contact their operator, Tumee, directly via Viber at +97699838351."
+      }
+    },
+    "section2": {
+      "eyebrow": "Section II",
+      "title": "The Overland Expedition: Driving the Steppe",
+      "p1": "For those who wish to experience the vastness of the Mongolian landscape at their own pace, driving overland is a spectacular option. The 1,000 km route from Ulaanbaatar is fully paved.",
+      "sub1": "Pacing the Journey",
+      "p2": "If you plan to complete the drive to Lake Khövsgöl in a single day, an early departure is essential. We strongly advise setting out from Ulaanbaatar no later than 9:00 AM sharp. To comfortably complete the journey and arrive before nightfall, aim to safely maintain a cruising speed of 100 km/h where the open road allows.",
+      "sub2": "The Erdenet Pit Stop",
+      "p3": "We highly recommend breaking up the trip with a stop in Erdenet for lunch and refueling. As one of Mongolia's wealthiest cities per capita, Erdenet offers a charming glimpse into Soviet-era urban planning. Filled with character, you will find an eclectic mix of options to recharge, from cosy local \"tea houses\" to excellent standalone restaurants.",
+      "sub3": "The Heart of Bulgan",
+      "p4": "As you leave Erdenet and continue northwest, the road opens up into Bulgan province. If you are familiar with airag—Mongolia's traditional fermented mare's milk—Bulgan is the undisputed heartland for it. As you drive through, the definitive place to stop and taste the best airag in the country is at the Tuluu Pass (Түлүүгийн даваа)."
+    },
+    "section3": {
+      "eyebrow": "Section III",
+      "title": "Intercity Coaches & Railway Options",
+      "sub1": "The Trans-Siberian Railway",
+      "p1": "There is no direct train to Murun; the railway ends in Erdenet. However, the route is a spur of the legendary Trans-Siberian Railway—the very same iconic railway famously travelled by David Bowie. Taking the overnight sleeper train to Erdenet is a deeply nostalgic, romantic way to travel. Once you arrive, independent drivers are waiting at the station ready to take you the rest of the way directly to Khatgal and the lake (please remember to negotiate your fare to your final destination before departing). Tickets available via the",
+      "vipCoach": "<strong className=\"font-medium text-ink\">The VIP Coach:</strong> Departs once a week on Sundays at 21:10. This premium option features spacious, reclining seating and phone charging ports so you can sleep comfortably and wake up in the north.",
+      "standardCoach": "<strong className=\"font-medium text-ink\">Standard Coaches:</strong> Depart six times a day, offering flexibility for your schedule.",
+      "bookingCoach": "<strong className=\"font-medium text-ink\">Booking:</strong> Tickets can be purchased online via the Transdep E-Ticket Portal.",
+      "transdepLink": "Transdep E-Ticket Portal",
+      "sub2": "Intercity Coaches",
+      "p2": "For a direct overland route, air-conditioned intercity coaches depart from Ulaanbaatar's Old Dragon Terminal (Хуучин Драгон). Tickets are 110,000 MNT for adults and 55,800 MNT for children (ages 6–12). All tickets automatically include travel insurance (up to 10 million MNT in compensation).",
+      "ubtzLink": "UBTZ E-Ticket Portal",
+      "motorbike": "<strong className=\"font-medium text-ink\">For Motorbike Expeditions:</strong> You can transport your motorbike on the train to Erdenet, bypassing the heaviest city traffic and officially beginning your ride from there.",
+      "bowieEyebrow": "Archival photograph",
+      "bowieCaption": "David Bowie on the Trans-Siberian Railway, 1973.",
+      "bowieCredit": "Photograph by Geoff MacCormack"
+    },
+    "section4": {
+      "eyebrow": "Section IV",
+      "title": "The Final Leg: Murun to the Resort",
+      "sub1": "Provisioning in Murun",
+      "p1": "If you are driving yourself, Murun is your final major outpost. Before you leave the city limits for the lake, we highly recommend a stop at the Nomin Supermarket. Depending on your planned level of adventure, this is the definitive place to load up on essential supplies—from rechargeable batteries and flashlights to barbecue provisions and rain boots.",
+      "sub2": "Navigating the Final Approach",
+      "p2": "The resort is located 13 km beyond the village of Khatgal, tucked into the Khaich Valley on the eastern shore of the lake. If you are driving this final leg, please note that while our Google Maps pin is highly accurate, the final approach to the resort can be adventurous.",
+      "p3": "The first 8 km out of Khatgal is a graded gravel road, but the final 5 km is an unpaved, natural dirt track. Because of this, we require travelling in a 4x4 vehicle and highly recommend having an experienced driver at the wheel.",
+      "note": "Once you pass the Khatgal village edge, you will need to navigate around the tree line.",
+      "mapLink": "View on Google Maps",
+      "kmlLink": "Download GPS Route (KML)",
+      "sub3": "Taxis and Private Transfers",
+      "p4": "If you did not drive your own vehicle to Murun, you have two options for the final stretch:",
+      "transfer1": {
+        "title": "Resort Transfer",
+        "meta": "270,000 MNT (Each Way)",
+        "body": "We offer a private transfer—a 100 km drive followed by a scenic speedboat arrival. Share your itinerary with us to time your welcome perfectly.",
+        "link": "Share your itinerary"
+      },
+      "transfer2": {
+        "title": "UBCab",
+        "meta": "App Booking",
+        "body": "You can reliably hail a taxi directly from Murun to Khatgal using the UBCab app.",
+        "link": "Get UBCab"
+      }
+    },
+    "ariaArrivalGuide": "Arrival guide",
+    "media": {
+      "murunAirport": {
+        "label": "Murun Airport",
+        "alt": "Murun Airport terminal viewed from an aircraft on the tarmac, with the wing and steppe mountains beyond."
+      },
+      "overlandRoute": {
+        "label": "Overland route through Bulgan province",
+        "alt": "A vehicle stopped on a paved road across the open steppe in Bulgan province, Mongolia."
+      },
+      "trainTravel": {
+        "label": "Train travel in Mongolia",
+        "alt": "A passenger train on the railway in Mongolia."
+      },
+      "murunTerminal": {
+        "label": "Murun Airport terminal",
+        "alt": "Travellers in the Murun Airport terminal with Dalai Eej Resort signage visible."
+      }
+    },
+    "destination": {
+      "eyebrow": "The destination",
+      "title": "The journey is just the prelude.",
+      "subtitle": "Discover the accommodations and exclusive spaces waiting at Dalai Eej.",
+      "link": "Explore accommodations"
+    }
   }
 }

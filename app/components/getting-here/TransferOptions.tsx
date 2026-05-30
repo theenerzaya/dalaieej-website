@@ -45,9 +45,11 @@ function TransferOptionCard({ option }: { option: TransferOption }) {
         <p className="font-cta text-[11px] uppercase tracking-[0.2em] text-ink/80">
           {title}
         </p>
-        <p className="mt-1 font-cta text-[10px] uppercase tracking-[0.22em] text-ink/45">
-          {meta}
-        </p>
+        {meta ? (
+          <p className="mt-1 font-cta text-[10px] uppercase tracking-[0.22em] text-ink/45">
+            {meta}
+          </p>
+        ) : null}
       </div>
       <p className="flex-1 font-body text-sm leading-relaxed text-ink/70">
         {body}
