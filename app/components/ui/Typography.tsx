@@ -54,7 +54,7 @@ function cx(...parts: Array<string | false | null | undefined>) {
 
 export interface EyebrowProps extends ComponentPropsWithoutRef<"p"> {
   tone?: Tone;
-  as?: "p" | "span";
+  as?: "p" | "span" | "h1";
 }
 
 export function Eyebrow({

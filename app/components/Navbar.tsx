@@ -16,6 +16,10 @@ function isHomePathname(pathname: string) {
   return /^\/(en|mn)\/?$/.test(pathname) || pathname === "/";
 }
 
+function isWellnessPathname(pathname: string) {
+  return /\/wellness(\/|$)/.test(pathname);
+}
+
 function isAboutUsPathname(pathname: string) {
   // localePrefix is always: /{locale}/about-us (en | mn)
   return /\/about-us(\/|$)/.test(pathname);
@@ -31,8 +35,9 @@ export default function Navbar() {
 
   const isBookingPage = pathname.includes('/booking') || pathname.includes('/checkout') || pathname.includes('/payment');
   const isHome = isHomePathname(pathname);
+  const isWellness = isWellnessPathname(pathname);
   const isAboutUs = isAboutUsPathname(pathname);
-  const heroPast = useHeroPastForNav(isHome);
+  const heroPast = useHeroPastForNav(isHome || isWellness);
   const showFullChrome = isBookingPage || heroPast;
   const paperNav = isAboutUs && !isBookingPage;
 

@@ -24,7 +24,8 @@ const TILES: {
   height: number;
   sizes: string;
   cellClassName?: string;
-  imageClassName?: string;
+  /** Scale from inner corner so the image bleeds past the grid edge. */
+  jut?: "tl" | "br";
 }[] = [
   {
     id: "tl",
@@ -35,9 +36,9 @@ const TILES: {
     },
     width: 900,
     height: 1200,
-    sizes: "(max-width: 1024px) 72vw, 40vw",
-    cellClassName: "min-h-[16.4rem] sm:min-h-[19.9rem] md:min-h-[23.4rem]",
-    imageClassName: "max-h-[117%] max-w-[117%]",
+    sizes: "(max-width: 1024px) 70vw, 58vw",
+    cellClassName: "overflow-visible z-[1]",
+    jut: "tl",
   },
   {
     id: "tr",
@@ -48,18 +49,18 @@ const TILES: {
     },
     width: 1200,
     height: 800,
-    sizes: "(max-width: 1024px) 61vw, 32vw",
+    sizes: "(max-width: 1024px) 70vw, 48vw",
   },
   {
     id: "bl",
     src: "/close-up-2.jpg",
     alt: {
       en: "Blue-lit water detail in the hot pool at dusk",
-      mn: "Үдэшлэгийн цагт халуун усан сангийн цэнхэр гэрэлтүүлэг",
+      mn: "Үдшийн бүрий дэх халуун усан сангийн цэнхэр туяа",
     },
     width: 800,
     height: 600,
-    sizes: "(max-width: 1024px) 61vw, 32vw",
+    sizes: "(max-width: 1024px) 70vw, 48vw",
   },
   {
     id: "br",
@@ -70,9 +71,43 @@ const TILES: {
     },
     width: 1024,
     height: 1024,
-    sizes: "(max-width: 1024px) 61vw, 32vw",
+    sizes: "(max-width: 1024px) 70vw, 48vw",
+    cellClassName: "overflow-visible z-[1]",
+    jut: "br",
   },
 ];
+
+/** Scale from the inner corner (grid +) so hover grows outward, not toward center. */
+const TILE_IMAGE_TRANSFORM: Record<
+  TileId,
+  { origin: string; scale: string; hoverScale: string; sizing: string }
+> = {
+  tl: {
+    origin: "origin-bottom-right",
+    scale: "scale-[1.08] lg:scale-[1.04]",
+    hoverScale:
+      "motion-safe:[@media(hover:hover)]:group-hover/tile:scale-[1.14] lg:group-hover/tile:scale-[1.1]",
+    sizing: "w-full max-w-none object-[50%_22%]",
+  },
+  tr: {
+    origin: "origin-bottom-left",
+    scale: "scale-100",
+    hoverScale: "motion-safe:[@media(hover:hover)]:group-hover/tile:scale-[1.08]",
+    sizing: "max-h-full max-w-full w-auto",
+  },
+  bl: {
+    origin: "origin-top-right",
+    scale: "scale-100",
+    hoverScale: "motion-safe:[@media(hover:hover)]:group-hover/tile:scale-[1.08]",
+    sizing: "max-h-full max-w-full w-auto",
+  },
+  br: {
+    origin: "origin-top-left",
+    scale: "scale-[1.08]",
+    hoverScale: "motion-safe:[@media(hover:hover)]:group-hover/tile:scale-[1.16]",
+    sizing: "w-full max-w-none",
+  },
+};
 
 const GRID_CLASS: Record<TileId, string> = {
   tl: "col-start-1 row-start-1",
@@ -97,7 +132,7 @@ const COPY = {
   mn: {
     eyebrow: "ХӨВСГӨЛД АНХ УДАА",
     headline: "Хөвсгөлийн хамгийн дулаахан эрэг",
-    body: "Хөвсгөл далайн ус, салхи хэчнээн жихүүн байдгийг бид бүгд мэднэ. Тийм ч учраас бид эдлэн газартаа олон улсын стандартын, гаднах халуун усан санг суурилуулсан юм. Одоо далайн эрэг хүн бүрт нээлттэй боллоо—хүүхдүүд даарахгүйгээр усанд тоглож, аав ээжүүд маань салхинаас нөмөрлөн халуун рашаанд суух мэт тухлах боломжтой. Хөвсгөлийн байгалийг хамгийн дулаанаар мэдрэх цэг.",
+    body: "Хөвсгөлийн салхи, далайн ус хэчнээн жихүүн байдгийг бид сайн мэднэ. Тиймдээ ч бид эдлэн газартаа олон улсын жишигт нийцсэн гаднах халуун усан санг байгуулсан юм. Ингэснээр далайн эрэг хүн бүхэнд ээлтэй болж, хүүхэд багачууд даарахгүйгээр усанд тоглож, аав ээжүүд салхинаас нөмөрлөн байгалийн халуун рашаанд суух мэт алжаалаа тайлах боломж бүрдлээ. Энэ бол хойд нутгийн онгон байгалийг хамгийн дулаан, таатайгаар мэдрэх онцгой орон зай юм.",
   },
 } as const;
 
@@ -138,12 +173,12 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
 
   return (
     <section id="hot-pool" aria-label={t.headline} className="scroll-mt-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-x-14 xl:gap-x-16 lg:items-start">
-          <div className="lg:col-span-5 lg:pt-4">
+      <div className="mx-auto max-w-6xl lg:max-w-7xl">
+        <div className="flex flex-col gap-16 lg:gap-20">
+          <div className="w-full">
             <FadeInBlock>
-              <Eyebrow className="!text-water-deep/70 mb-4">{t.eyebrow}</Eyebrow>
-              <Headline as="h2" size="sub" className="!text-left mb-6">
+              <Eyebrow className="!text-water-deep/70 mb-8">{t.eyebrow}</Eyebrow>
+              <Headline as="h2" size="sub" className="!text-left mb-12">
                 {t.headline}
               </Headline>
               <BodyText size="md" className="!text-left max-w-none text-ink/75">
@@ -154,12 +189,13 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
 
           <div
             ref={collageRef}
-            className="group/collage lg:col-span-7 flex justify-center lg:justify-end"
+            className="group/collage flex justify-center overflow-visible"
           >
             <div
               className={cn(
-                "grid w-full max-w-[42.67rem] grid-cols-2 grid-rows-2 gap-px",
-                "[grid-template-columns:1.82fr_0.78fr] [grid-template-rows:1.82fr_0.78fr]",
+                "grid w-full max-w-[49.07rem] lg:max-w-[58rem] xl:max-w-[64rem] grid-cols-2 gap-px overflow-visible",
+                "[grid-template-columns:2.09fr_0.9fr] grid-rows-[auto_auto]",
+                "p-3 sm:p-4 lg:p-5 xl:p-6",
                 isRevealed && "is-revealed",
               )}
             >
@@ -167,11 +203,11 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
                 <div
                   key={tile.id}
                   className={cn(
-                    "collage-tile flex min-h-[10.5rem] sm:min-h-[12rem] md:min-h-[13.5rem]",
+                    "collage-tile group/tile flex min-h-[12.1rem] sm:min-h-[13.8rem] md:min-h-0 lg:min-h-0",
                     tile.cellClassName,
                     CENTER_ANCHOR[tile.id],
                     GRID_CLASS[tile.id],
-                    "transition-[transform] duration-[650ms] ease-[0.22,1,0.36,1]",
+                    "transition-[transform,opacity] duration-[650ms] ease-[0.22,1,0.36,1]",
                     "transition-opacity duration-150 ease-out",
                     "motion-reduce:opacity-100 motion-reduce:translate-y-0",
                     isRevealed
@@ -179,7 +215,7 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
                       : "opacity-0 translate-y-5",
                     "[@media(hover:hover)]:group-hover/collage:opacity-100",
                     "[@media(hover:hover)]:group-hover/collage:[&:not(:hover)]:opacity-[0.72]",
-                    "hover:opacity-100",
+                    "hover:opacity-100 [@media(hover:hover)]:hover:z-10",
                   )}
                   style={{
                     transitionDelay:
@@ -195,8 +231,12 @@ export default function WellnessSaunaCollage({ locale }: WellnessSaunaCollagePro
                     height={tile.height}
                     sizes={tile.sizes}
                     className={cn(
-                      "max-h-full max-w-full h-auto w-auto object-contain",
-                      tile.imageClassName,
+                      "h-auto object-contain will-change-transform",
+                      TILE_IMAGE_TRANSFORM[tile.id].sizing,
+                      TILE_IMAGE_TRANSFORM[tile.id].origin,
+                      TILE_IMAGE_TRANSFORM[tile.id].scale,
+                      TILE_IMAGE_TRANSFORM[tile.id].hoverScale,
+                      "transition-transform duration-300 ease-[0.22,1,0.36,1] motion-reduce:transition-none",
                     )}
                   />
                 </div>

@@ -15,25 +15,27 @@ import WellnessSaunaCollage from "@/app/components/wellness/WellnessSaunaCollage
 
 type LocaleKey = "en" | "mn";
 
-const HERO_COPY: Record<
-  LocaleKey,
-  { eyebrow: string; title: string; body: string }
-> = {
-  en: {
-    eyebrow: "Wellness",
-    title: "Restore Your Rhythm",
-    body: "Restore mind, body, and spirit in the tranquility of nature's embrace.",
-  },
-  mn: {
-    eyebrow: "Сэргээлт",
-    title: "Байгальд Уусах",
-    body: "Байгалийн тайван орчинд бие сэтгэлийг сэргээх.",
-  },
+const HERO_COPY: Record<LocaleKey, { title: string }> = {
+  en: { title: "Wellness" },
+  mn: { title: "Алжаал тайлах" },
 };
 
-const BOOK_CTA_COPY: Record<LocaleKey, { bookTitle: string; bookCta: string }> = {
-  en: { bookTitle: "Book a Treatment", bookCta: "Reserve Now" },
-  mn: { bookTitle: "Цаг захиалах", bookCta: "Захиалах" },
+const BOOK_CTA_COPY: Record<
+  LocaleKey,
+  { eyebrow: string; title: string; body: string; cta: string }
+> = {
+  en: {
+    eyebrow: "Plan your stay",
+    title: "Enter the Sanctuary",
+    body: "Access to the shoreline hot pool, private sauna, and dedicated wellness services is reserved exclusively for our guests. Secure your dates at the resort to begin your recovery.",
+    cta: "Book your stay",
+  },
+  mn: {
+    eyebrow: "Амралтаа төлөвлөх",
+    title: "Амар амгалангийн орон зай",
+    body: "Далайн хөвөөнд байрлах халуун усан сан, хувийн саун болон алжаал тайлах тусгай үйлчилгээг зөвхөн манай зочид хүртэх боломжтой. Бие, сэтгэлээ сэргээх аяллаа эхлүүлэхийн тулд амрах өдрөө урьдчилан захиалаарай.",
+    cta: "Амралтаа захиалах",
+  },
 };
 
 export default function WellnessPage() {
@@ -45,10 +47,10 @@ export default function WellnessPage() {
   const bookCta = BOOK_CTA_COPY[lang];
 
   return (
-    <PageShell>
+    <PageShell offsetNavbar={false}>
       <FrostedMapSection
         aria-label={hero.title}
-        className="pb-16 md:pb-24 pt-10 md:pt-14 min-h-[min(58vh,32rem)]"
+        className="flex min-h-[min(46.2vh,24.2rem)] items-center pb-12 md:pb-16 pt-[calc(var(--navbar-h)+2.5rem)] md:pt-[calc(var(--navbar-h)+3.5rem)]"
         imageSrc="/spa-anonymous-long.png"
         imagePriority
         frostOpacity={13.87}
@@ -59,53 +61,42 @@ export default function WellnessPage() {
           initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.7 }}
+          className="flex flex-col items-center"
         >
-          <Eyebrow className="!text-water-deep/70 mb-6">{hero.eyebrow}</Eyebrow>
           <Headline as="h1" size="section">
             {hero.title}
           </Headline>
-        </motion.div>
-        <motion.div
-          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: reduceMotion ? 0 : 0.6,
-            delay: reduceMotion ? 0 : 0.15,
-          }}
-        >
-          <BodyText size="md" className="max-w-2xl">
-            {hero.body}
-          </BodyText>
+          <div
+            id="hero-nav-sentinel"
+            aria-hidden
+            className="pointer-events-none h-px w-full shrink-0"
+          />
         </motion.div>
       </FrostedMapSection>
 
-      <section className="px-6 pb-24 md:pb-32">
-        <div className="mx-auto max-w-6xl space-y-20 md:space-y-28">
-          <WellnessSaunaCollage locale={lang} />
-        </div>
+      <section className="px-6 pt-24 md:pt-32 pb-20 md:pb-32">
+        <WellnessSaunaCollage locale={lang} />
       </section>
 
       <FrostedMapSection
-        aria-label={bookCta.bookTitle}
-        className="py-24 md:py-32"
-        imageSrc="/images/gallery/wellness/DBR_3098.webp"
+        aria-label={bookCta.title}
+        className="mt-16 lg:mt-20 pt-24 md:pt-32 pb-24 md:pb-32"
+        imageSrc="/images/map/sauna.webp"
         contentClassName="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center"
         fadeTop
         fadeBottom={false}
-        mapObjectPosition="50% 40%"
+        mapObjectPosition="50% 58%"
       >
         <FadeInBlock className="flex w-full flex-col items-center gap-8 text-center">
-          <Eyebrow className="!text-water-deep/70">Plan your stay</Eyebrow>
+          <Eyebrow className="!text-water-deep/70">{bookCta.eyebrow}</Eyebrow>
           <Headline as="h2" size="sub">
-            {bookCta.bookTitle}
+            {bookCta.title}
           </Headline>
           <BodyText size="md" className="max-w-xl">
-            {lang === "mn"
-              ? "Далайн эрэг дээрх спа, саун, йогийн цагийг урьдчилан захиалаарай."
-              : "Reserve spa, sauna, and yoga sessions ahead of your arrival on the lake shore."}
+            {bookCta.body}
           </BodyText>
           <CTALink href={`${localePrefix}/booking`} arrow>
-            {bookCta.bookCta}
+            {bookCta.cta}
           </CTALink>
         </FadeInBlock>
       </FrostedMapSection>
