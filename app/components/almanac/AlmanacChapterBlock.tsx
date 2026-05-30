@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useLocale } from "next-intl";
 import SiteImage from "@/app/components/SiteImage";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
+import AlmanacChapterMarker from "@/app/components/almanac/AlmanacChapterMarker";
 import {
   BodyText,
   CTALink,
-  Eyebrow,
   Headline,
 } from "@/app/components/ui/Typography";
 
@@ -47,7 +47,8 @@ export default function AlmanacChapterBlock({
   const locale = useLocale();
   const imageFirst = index % 2 === 0;
   const stickyImage = !isLast ? "md:sticky md:top-28 md:self-start" : "";
-  const articleLabel = ctaLabel ?? `Read ${eyebrow}`;
+  const articleLabel =
+    locale === "mn" ? `${eyebrow} унших` : ctaLabel ?? `Read ${eyebrow}`;
   const scaledImage = imageScale > 0 && imageScale < 1;
   const figureClassName = [
     scaledImage ? undefined : "w-full",
@@ -82,7 +83,18 @@ export default function AlmanacChapterBlock({
   );
 
   return (
-    <article className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+    <article
+      className={index > 0 ? "mt-28 md:mt-36 lg:mt-40" : undefined}
+    >
+      <FadeInBlock delay={index * 0.1} distance={16}>
+        <AlmanacChapterMarker
+          label={eyebrow}
+          href={href}
+          linkLabel={articleLabel}
+        />
+      </FadeInBlock>
+
+      <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
       <FadeInBlock delay={index * 0.1} distance={20}>
         <div
           className={
@@ -111,22 +123,6 @@ export default function AlmanacChapterBlock({
             imageFirst ? "order-2" : "order-2 md:order-1 md:ml-auto"
           }`}
         >
-          {href ? (
-            <Link
-              href={href}
-              className={`group block w-fit ${chapterLinkFocus}`}
-              aria-label={articleLabel}
-            >
-              <Eyebrow
-                as="span"
-                className="!text-water-deep/70 mb-0 transition-colors group-hover:!text-water-deep"
-              >
-                {eyebrow}
-              </Eyebrow>
-            </Link>
-          ) : (
-            <Eyebrow className="!text-water-deep/70 mb-0">{eyebrow}</Eyebrow>
-          )}
           {href ? (
             <Link
               href={href}
@@ -164,6 +160,7 @@ export default function AlmanacChapterBlock({
           )}
         </div>
       </FadeInBlock>
+      </div>
     </article>
   );
 }

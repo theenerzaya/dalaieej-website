@@ -24,11 +24,12 @@ export default function AlmanacPage() {
     <PageShell>
       <ContentSection
         tone="surface"
-        width="narrow"
+        width="wide"
         align="left"
-        className="!pb-12 !pt-28 md:!pb-16 md:!pt-36"
+        stack={false}
+        className="!pt-28 !pb-32 md:!pt-36 md:!pb-44"
       >
-        <div className="flex max-w-2xl flex-col gap-5">
+        <div className="mb-10 flex max-w-2xl flex-col gap-5 md:mb-12">
           <FadeInBlock distance={20}>
             <Eyebrow className="!text-water-deep/70">{t("eyebrow")}</Eyebrow>
           </FadeInBlock>
@@ -48,16 +49,8 @@ export default function AlmanacPage() {
             </p>
           </FadeInBlock>
         </div>
-      </ContentSection>
 
-      <ContentSection
-        tone="surface"
-        width="wide"
-        align="left"
-        stack={false}
-        className="!pt-8 !pb-32 md:!pb-44"
-      >
-        <div className="flex flex-col gap-28 md:gap-36 lg:gap-40">
+        <div className="flex flex-col">
           {chapters.map((chapter, index) => (
             <AlmanacChapterBlock
               key={chapter.id}

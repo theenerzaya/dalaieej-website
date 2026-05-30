@@ -29,7 +29,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "Английн алдарт рок од Дэвид Боуи Транс-Сибирийн төмөр замаар аялах үедээ, 1973 он. Гэрэл зургийг Жефф МакКормак.",
     href: "/getting-here",
-    ctaLabel: "I бүлгийг унших",
+    ctaLabel: "Унших",
   },
   {
     id: "chapter-ii",
@@ -44,7 +44,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "Мөрөн нисэх онгоцны буудал (1956 онд байгуулагдсан). Accidentally Wes Anderson архивын каталогид орсон @kjphotos1022-ийн гэрэл зураг.",
     href: "/almanac/murun",
-    ctaLabel: "II бүлгийг унших",
+    ctaLabel: "Унших",
   },
   {
     id: "chapter-iii",
@@ -57,7 +57,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "Сүхбаатар хөлөг онгоц. 'Бидний сайхан Хөвсгөл' цахим архиваас авав.",
     href: "/almanac/borders-and-industry",
-    ctaLabel: "III бүлгийг унших",
+    ctaLabel: "Унших",
   },
   {
     id: "chapter-iv",
@@ -70,7 +70,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "Тал нутгийн эртний босгыг илтгэх Уушигийн өврийн буган чулуун хөшөө. Tour Mongolia-гаас авав.",
     href: "/almanac/forest-and-steppe",
-    ctaLabel: "IV бүлгийг унших",
+    ctaLabel: "Унших",
   },
   {
     id: "chapter-v",
@@ -83,6 +83,6 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageCaption:
       "Хойд тайгын өвөг дээдсийн төв болох Байгал нуурын Ольхон арлын эрэг. Toute la Russie-с авав.",
     href: "/almanac/khovsgol-and-baikal",
-    ctaLabel: "V бүлгийг унших",
+    ctaLabel: "Унших",
   },
 ];
