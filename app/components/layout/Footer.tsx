@@ -21,6 +21,7 @@ export default function Footer() {
     { key: "dining", href: "/restaurant", active: true },
     { key: "wellness", href: "/wellness", active: false },
     { key: "adventures", href: "/experiences", active: false },
+    { key: "stories", href: "/almanac", active: true },
   ];
 
   const resortLinks: {
