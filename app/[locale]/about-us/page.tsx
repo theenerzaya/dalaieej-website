@@ -187,7 +187,7 @@ const content = {
     heroImageAlt: "Далай ээж ресорт",
     heroExpandImage: "Зургийг бүтэн дэлгэцээр харах",
     heroCloseFullscreen: "Хаах",
-    almanacBannerMessage: "Хайчин хөдийн түүхийг судлаарай.",
+    almanacBannerMessage: "Хайчийн хөдийн түүхийг судлаарай.",
     almanacBannerCta: "Товчоон унших",
     almanacBannerDismiss: "Хаах",
   },
