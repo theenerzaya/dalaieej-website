@@ -5,6 +5,14 @@ import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import MediaPlaceholder from "@/app/components/getting-here/MediaPlaceholder";
 import SiteImage from "@/app/components/SiteImage";
 import { BodyText, Headline } from "@/app/components/ui/Typography";
+import { assetUrl } from "@/lib/assetUrl";
+
+const aboutUsPaperBackground = {
+  backgroundImage: `url("${assetUrl("/images/about-us/decorations/paper.jpg")}")`,
+  backgroundRepeat: "repeat",
+  backgroundSize: "720px 720px",
+  backgroundBlendMode: "multiply",
+} as const;
 
 /** Matches the David Bowie archival photo on Getting Here (Chapter I). */
 export const COMPACT_FIGURE_CLASS =
@@ -244,6 +252,32 @@ export function ArticleVideo({
           ) : null}
         </figcaption>
       </figure>
+    </FadeInBlock>
+  );
+}
+
+export function EpilogueQuote({
+  quote,
+  attribution,
+}: {
+  quote: string;
+  attribution: string;
+}) {
+  return (
+    <FadeInBlock>
+      <div
+        className="mt-20 bg-main py-10 md:py-14"
+        style={aboutUsPaperBackground}
+      >
+        <blockquote className="ml-[5%] max-w-2xl pr-6 text-left md:pr-10">
+          <p className="font-editorial-mn text-lg leading-relaxed text-ink/85 md:text-xl">
+            &ldquo;{quote}&rdquo;
+          </p>
+          <footer className="mt-4 font-cta text-[11px] font-normal uppercase not-italic tracking-[0.15em] text-ink/60">
+            {attribution}
+          </footer>
+        </blockquote>
+      </div>
     </FadeInBlock>
   );
 }

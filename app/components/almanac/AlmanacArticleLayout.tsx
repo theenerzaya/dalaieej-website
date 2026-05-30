@@ -12,6 +12,7 @@ import {
   ArticleImage,
   ArticleSection,
   ArticleVideo,
+  EpilogueQuote,
   Prose,
   Subhead,
 } from "@/app/components/almanac/AlmanacArticlePrimitives";
@@ -236,6 +237,12 @@ export default function AlmanacArticleLayout({ article }: Props) {
                   <SectionContent section={section} />
                 </ArticleSection>
               ))}
+              {article.epilogue ? (
+                <EpilogueQuote
+                  quote={article.epilogue.quote}
+                  attribution={article.epilogue.attribution}
+                />
+              ) : null}
             </div>
           </article>
 

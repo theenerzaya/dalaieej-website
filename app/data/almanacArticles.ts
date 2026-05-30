@@ -50,6 +50,10 @@ export type AlmanacArticle = {
     modified: string;
   };
   sections: AlmanacArticleSection[];
+  epilogue?: {
+    quote: string;
+    attribution: string;
+  };
   prev?: { href: string; label: string };
   next?: { href: string; label: string };
 };
@@ -413,6 +417,11 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         ],
       },
     ],
+    epilogue: {
+      quote:
+        "The water is unusually transparent, so that you can look through it as through air... I have never in my life seen such richness of color. It is a marvel.",
+      attribution: "— A. Chekhov, On the Sister Lake of Baikal, 1890",
+    },
   },
 ];
 
