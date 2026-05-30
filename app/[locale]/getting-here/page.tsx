@@ -396,7 +396,11 @@ export default function GettingHerePage() {
                       items={[
                         <span key="vip" dangerouslySetInnerHTML={{ __html: t.raw("section3.vipCoach") }} />,
                         <span key="standard" dangerouslySetInnerHTML={{ __html: t.raw("section3.standardCoach") }} />,
-                        <span key="booking" dangerouslySetInnerHTML={{ __html: t.raw("section3.bookingCoach") }} />,
+                        ...(t("section3.bookingCoach")
+                          ? [
+                              <span key="booking">{t("section3.bookingCoach")}</span>,
+                            ]
+                          : []),
                       ]}
                     />
                   ) : null}
@@ -453,6 +457,9 @@ export default function GettingHerePage() {
                     <CTALink href={MAP_URL} external>
                       {t("section4.mapLink")}
                     </CTALink>
+                  </div>
+                  <OptionalProse text={t("section4.kmlDesc")} />
+                  <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
                     <CTALink href={accessRoadTrace.kmlPath} external>
                       {t("section4.kmlLink")}
                     </CTALink>

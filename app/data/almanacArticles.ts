@@ -164,18 +164,18 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         title: "The Northern Icarus",
         image: {
           src: "/images/almanac/murun/gelenkhuu-statue.jpg",
-          alt: "Bronze monument to Shükhert Gelenkhüü outside Mörön Airport.",
+          alt: "Bronze monument to Shükherch Gelenkhüü outside Mörön Airport.",
           label: "Monument to Gelenkhüü",
           size: "compact",
         },
         blocks: [
           {
             type: "prose",
-            text: "Stepping out of the terminal, arrivals are met by a bronze monument that captures the sheer, unapologetic defiance of the province. It depicts Shükhert Gelenkhüü, a local from the 1930s who became so consumed by the concept of flight that he engineered his own wings out of sheepskin and eagle feathers and threw himself from a 170-meter cliff.",
+            text: "Stepping out of the terminal, arrivals are met by a bronze monument that captures the sheer, unapologetic defiance of the province. It depicts Shükherch Gelenkhüü, a local from the 1930s who became so consumed by the concept of flight that he engineered his own wings out of sheepskin and eagle feathers and threw himself from a 170-meter cliff.",
           },
           {
             type: "prose",
-            text: "To domestic guests, the premise instantly evokes Byambyn Rinchen's acclaimed short story, Shukherch Bunya (Parachutist Bunya). But there is a sharp divergence between national fiction and northern reality. In Rinchen's tale, the aviator's ambition ends in tragedy and death. Gelenkhüü, however, survived his fall—brilliantly—by driving his own flock of sheep to the base of the cliff beforehand to act as a physical cushion.",
+            text: "To domestic guests, the premise instantly evokes Byambyn Rinchen's acclaimed short story, Shükherch Bunya (Parachutist Bunya). But there is a sharp divergence between national fiction and northern reality. In Rinchen's tale, the aviator's ambition ends in tragedy and death. Gelenkhüü, however, survived his fall—brilliantly—by driving his own flock of sheep to the base of the cliff beforehand to act as a physical cushion.",
           },
         ],
       },
