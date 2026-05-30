@@ -34,9 +34,9 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
   {
     id: "chapter-ii",
     eyebrow: "Chapter II",
-    title: "The Northern Gateway: Mörön & Beyond",
+    title: "Field Notes from Mörön",
     description:
-      "Before the pavement ends, there is Mörön. Discover the mid-century, cinematic charm of the provincial capital, the legend of the north’s first aviator, and why the locals refer to the water solely as Dalai Eej (Mother Ocean).",
+      "Before the pavement ends, there is Mörön—a quirky logistical hub on its own frequency. The Wes Anderson runway, the Northern Icarus, and finding Dalai Eej on the road to the lake.",
     imageSrc: "/images/almanac/murun/hero-wes-anderson-terminal.webp",
     imageAlt:
       "Murun Airport terminal, noted for its mid-century aesthetic by Accidentally Wes Anderson.",

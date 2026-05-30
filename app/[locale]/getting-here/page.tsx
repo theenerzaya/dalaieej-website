@@ -534,7 +534,7 @@ export default function GettingHerePage() {
                   Next
                 </span>
                 <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
-                  Chapter II — Mörön & Beyond
+                  Chapter II — Field Notes from Mörön
                 </span>
               </Link>
             </div>

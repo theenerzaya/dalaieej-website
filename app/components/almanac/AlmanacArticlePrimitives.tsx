@@ -460,6 +460,71 @@ export function EpilogueQuote({
   );
 }
 
+export function ArchivalCard({
+  eyebrow,
+  body,
+  image,
+  link,
+}: {
+  eyebrow: string;
+  body: string;
+  image: { src: string; alt: string };
+  link?: { label: string; href: string };
+}) {
+  const locale = useLocale();
+  const isMn = locale === "mn";
+
+  return (
+    <FadeInBlock className="mt-16 md:mt-20">
+      <aside
+        className="-mx-6 w-[calc(100%+3rem)] border-y border-ink/12 bg-muted/90 px-6 py-14 shadow-[0_1px_0_rgba(13,15,28,0.04)] md:py-20"
+        aria-label={eyebrow}
+      >
+        <div className="mx-auto flex max-w-3xl flex-col gap-8 md:flex-row md:items-start md:gap-10">
+          <figure className={COMPACT_FIGURE_CLASS}>
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
+              <SiteImage
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes="(max-width: 768px) 208px, 240px"
+                className="object-cover"
+              />
+            </div>
+          </figure>
+          <div className="min-w-0 flex-1">
+            <p
+              className={[
+                "font-cta uppercase text-ink/55 mb-2.5",
+                isMn
+                  ? "text-[10px] font-light tracking-[0.2em]"
+                  : "text-[10px] font-medium tracking-[0.28em]",
+              ].join(" ")}
+            >
+              {eyebrow}
+            </p>
+            <p className="font-body text-sm leading-[1.65] text-ink/68">
+              {body}
+            </p>
+            {link ? (
+              <p className="mt-6">
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-cta text-[11px] font-normal uppercase tracking-[0.2em] text-ink/45 no-underline transition-[color,text-decoration-color] duration-300 hover:text-ink/70 hover:underline"
+                >
+                  [ {link.label} ]
+                </a>
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </aside>
+    </FadeInBlock>
+  );
+}
+
 export function ArchivalFurtherReading({
   items,
 }: {

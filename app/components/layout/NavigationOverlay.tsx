@@ -105,7 +105,7 @@ const mainNavItems: MainNavItem[] = [
   },
   {
     id: "contact",
-    href: "/contact",
+    href: "#contact",
     image: "/images/address.webp",
     label: { en: "Contact", mn: "Холбоо барих" },
     meta: { en: "Plan your stay with us", mn: "Бидэнтэй төлөвлөөрэй" },
@@ -142,6 +142,11 @@ function getPathWithoutLocale(pathname: string): string {
   return pathname;
 }
 
+function getNavItemHref(locale: string, href: string): string {
+  if (href.startsWith("#")) return href;
+  return withLocalePath(locale, href);
+}
+
 export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
   const locale = useLocale();
   const pathname = usePathname();
@@ -169,6 +174,29 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
       left: el.offsetLeft - 24,
       behavior: reduceMotion ? "auto" : "smooth",
     });
+  };
+
+  const handleNavClick = (href: string) => (event: React.MouseEvent) => {
+    if (!href.startsWith("#")) {
+      onClose();
+      return;
+    }
+
+    event.preventDefault();
+    onClose();
+
+    // Wait for overlay exit + body scroll unlock before scrolling.
+    window.setTimeout(() => {
+      const id = href.slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+      window.history.replaceState(null, "", href);
+    }, 320);
   };
 
   const goToLocaleHost = (targetLocale: "en" | "mn") => {
@@ -273,7 +301,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 <Link
                   href={withLocalePath(locale, "/")}
                   onClick={onClose}
-                  className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
+                  className="absolute left-1/2 top-[calc(50%+5rem*0.10/2)] z-20 -translate-x-1/2 -translate-y-1/2 transition-opacity hover:opacity-90"
                 >
                   <SiteImage
                     src="/branding/logos/logo-white.png"
@@ -285,13 +313,13 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                   />
                 </Link>
 
-                <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12">
+                <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12 pointer-events-none">
                   {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
-                  <div className="hidden min-w-0 flex-1 items-center md:flex md:w-[35%] md:max-w-[35%] md:flex-none">
+                  <div className="pointer-events-auto hidden min-w-0 flex-1 items-center md:flex md:w-[35%] md:max-w-[35%] md:flex-none">
                     {languageToggle}
                   </div>
 
-                  <div className="ml-auto flex shrink-0 items-center">
+                  <div className="pointer-events-auto ml-auto flex shrink-0 items-center">
                     <CTAButton
                       href={withLocalePath(locale, "/booking")}
                       variant="secondary"
@@ -347,8 +375,8 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         >
                           {item.available ? (
                             <Link
-                              href={withLocalePath(locale, item.href)}
-                              onClick={onClose}
+                              href={getNavItemHref(locale, item.href)}
+                              onClick={handleNavClick(item.href)}
                               className={linkClass}
                             >
                               <span>{label}</span>
@@ -486,8 +514,8 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       return (
                         <Link
                           key={item.id}
-                          href={withLocalePath(locale, item.href)}
-                          onClick={onClose}
+                          href={getNavItemHref(locale, item.href)}
+                          onClick={handleNavClick(item.href)}
                           className="shrink-0"
                         >
                           {card}

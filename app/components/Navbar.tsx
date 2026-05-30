@@ -9,6 +9,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import NavigationOverlay from "./layout/NavigationOverlay";
 import { CTAButton } from "./ui/Typography";
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
+import { withLocalePath } from "@/lib/localePath";
 import { siteOriginForLocale } from "@/lib/site-urls";
 import { assetUrl } from "@/lib/assetUrl";
 
@@ -37,7 +38,7 @@ export default function Navbar() {
   const isHome = isHomePathname(pathname);
   const isWellness = isWellnessPathname(pathname);
   const isAboutUs = isAboutUsPathname(pathname);
-  const heroPast = useHeroPastForNav(isHome || isWellness);
+  const heroPast = useHeroPastForNav(isHome || isWellness, pathname);
   const showFullChrome = isBookingPage || heroPast;
   const paperNav = isAboutUs && !isBookingPage;
 
@@ -99,7 +100,7 @@ export default function Navbar() {
           </div>
 
           <Link
-            href={localePrefix || "/"}
+            href={withLocalePath(locale, "/")}
             className={`group/brand absolute left-1/2 top-[calc(50%+5rem*0.05/2)] z-10 -translate-x-1/2 -translate-y-1/2 hover:opacity-90 transition-all duration-500 ${
               showFullChrome ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}

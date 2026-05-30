@@ -31,7 +31,7 @@ const silos = [
   },
   {
     id: "wellness",
-    href: "/",
+    href: "/wellness",
     en: "Wellness",
     mn: "Алжаал тайлах",
     image: "/images/silogrid/wellness.webp"

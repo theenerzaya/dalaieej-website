@@ -12,6 +12,7 @@ import {
   ArticleImage,
   ArticleSection,
   ArticleVideo,
+  ArchivalCard,
   ArchivalFurtherReading,
   EditorialPullQuote,
   EpilogueQuote,
@@ -525,6 +526,15 @@ export default function AlmanacArticleLayout({ article }: Props) {
                   ) : null}
                 </ArticleSection>
               ))}
+              {article.archivalCard ? (
+                <ArchivalCard
+                  eyebrow={article.archivalCard.eyebrow}
+                  body={article.archivalCard.body}
+                  image={article.archivalCard.image}
+                  link={article.archivalCard.link}
+                />
+              ) : null}
+
               {article.pullQuote ? (
                 <EditorialPullQuote
                   eyebrow={article.pullQuote.eyebrow}

@@ -134,6 +134,11 @@ export default async function LocaleLayout({ children, params }: Props) {
         </a>
         <NavbarWrapper />
         <div className="relative z-10">{children}</div>
+        <div
+          id="contact"
+          className="scroll-mt-[var(--navbar-h)]"
+          aria-hidden="true"
+        />
         <Footer />
       </NextIntlClientProvider>
     </div>

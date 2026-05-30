@@ -91,6 +91,12 @@ export type AlmanacArticle = {
     attribution: string;
   };
   furtherReading?: { title: string; href: string }[];
+  archivalCard?: {
+    eyebrow: string;
+    body: string;
+    image: { src: string; alt: string };
+    link?: { label: string; href: string };
+  };
   prev?: { href: string; label: string };
   next?: { href: string; label: string };
 };
@@ -99,9 +105,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
   {
     slug: "murun",
     chapterEyebrow: "Chapter II",
-    title: "The Northern Gateway: Mörön & Beyond",
+    title: "Field Notes from Mörön",
     lede: [
-      "Before the pavement ends and the wilderness of the Khaich Valley begins, there is Mörön. More than just a transit hub, the capital of Khövsgöl province is a town of unexpected charm, deep local heritage, and a slow, intentional pace of life.",
+      "Before the pavement ends and the absolute isolation of the Khaich Valley begins, there is Mörön. It is less of a grand provincial capital and more of a quirky logistical hub—a frontier town that operates entirely on its own highly specific, deeply charming frequency.",
     ],
     heroImage: {
       src: "/images/almanac/murun/hero-wes-anderson-terminal.webp",
@@ -122,9 +128,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
     },
     sections: [
       {
-        id: "wes-anderson-airport",
-        tocLabel: "The Wes Anderson Airport",
-        title: "The Wes Anderson Airport",
+        id: "wes-anderson-runway",
+        tocLabel: "The Wes Anderson Runway",
+        title: "The Wes Anderson Runway",
         image: {
           src: "/images/almanac/murun/airport-exterior.jpg",
           alt: "Murun Airport terminal viewed from the tarmac, with the wing and steppe mountains beyond.",
@@ -133,66 +139,50 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         blocks: [
           {
             type: "prose",
-            text: "For most of our guests, the journey north begins on the tarmac of Mörön Airport (MXV). Regarded as the finest of Mongolia's domestic airstrips, the terminal is a masterclass in mid-century provincial architecture.",
-          },
-          {
-            type: "prose",
-            text: "With its retro pastel facades and symmetrical, time-capsule interiors, the building was famously catalogued by Accidentally Wes Anderson for its cinematic aesthetic. It is a quiet, sunlit space that feels a world away from the frantic energy of modern international hubs. In fact, the airport is so woven into the daily fabric of the town that on quiet mornings, you will often see Mörön locals utilising the perimeter of the runway track for their morning runs.",
+            text: "The journey north usually begins on the tarmac of Mörön Airport (MXV). While a previous, pastel iteration of its architecture once caught the eye of the Accidentally Wes Anderson catalogue, the modern reality of the airstrip is much more grounded. It is so deeply woven into the daily fabric of the town that, before the first flights arrive, the perimeter of the runway is routinely repurposed by the local jogging club as their morning training track.",
           },
         ],
       },
       {
-        id: "first-aviator",
-        tocLabel: "The First Aviator of the North",
-        title: "The First Aviator of the North",
+        id: "northern-icarus",
+        tocLabel: "The Northern Icarus",
+        title: "The Northern Icarus",
         image: {
           src: "/images/almanac/murun/gelenkhuu-statue.jpg",
-          alt: "Statue of Khainzangiin Gelenkhüü outside Mörön Airport.",
+          alt: "Bronze monument to Shükhert Gelenkhüü outside Mörön Airport.",
           label: "Monument to Gelenkhüü",
           size: "compact",
         },
         blocks: [
           {
             type: "prose",
-            text: "Just outside the terminal doors stands a monument that frequently sparks conversation among travellers: a statue of Khainzangiin Gelenkhüü, affectionately known as Shükhert Gelenkhüü (Parachute Gelenkhüü).",
+            text: "Stepping out of the terminal, arrivals are met by a bronze monument that captures the sheer, unapologetic defiance of the province. It depicts Shükhert Gelenkhüü, a local from the 1930s who became so consumed by the concept of flight that he engineered his own wings out of sheepskin and eagle feathers and threw himself from a 170-meter cliff.",
           },
           {
             type: "prose",
-            text: "A local Khövsgöl legend from the 1930s, Gelenkhüü was a rebel monk who became so captivated after seeing his first airplane that he built himself a pair of wings using sheepskin and eagle feathers, and jumped from a 170-meter cliff. He survived the fall (brilliantly, by driving his flock of sheep to the bottom of the cliff beforehand to act as a cushion). Stepping out of the terminal and passing his statue serves as a quiet nod to the daring, pioneering spirit of the province.",
+            text: "To domestic guests, the premise instantly evokes Byambyn Rinchen's acclaimed short story, Shukherch Bunya (Parachutist Bunya). But there is a sharp divergence between national fiction and northern reality. In Rinchen's tale, the aviator's ambition ends in tragedy and death. Gelenkhüü, however, survived his fall—brilliantly—by driving his own flock of sheep to the base of the cliff beforehand to act as a physical cushion.",
           },
         ],
       },
       {
-        id: "community-effort",
-        tocLabel: "A Community Effort",
-        title: "A Community Effort: The International Milestone",
+        id: "international-fire-engine",
+        tocLabel: "The International Fire Engine",
+        title: "The International Fire Engine",
         blocks: [
           {
             type: "prose",
-            text: "Mörön is a place defined by its resourcefulness and community spirit. Recently, the airport celebrated a massive historic milestone: receiving its first-ever direct international flight from South Korea.",
-          },
-          {
-            type: "prose",
-            text: "Aviation regulations dictated that two fire engines had to be present on the tarmac to safely receive the international aircraft. The airport, equipped with only one, didn't view this as a setback. Instead, they simply borrowed the municipal fire engine from the town centre for the afternoon. The flight landed seamlessly—a testament to the grounded, collaborative nature of the north.",
+            text: "Mörön is defined by its resourcefulness. When the airport recently celebrated a massive milestone—receiving its first-ever direct international flight from South Korea—aviation protocol dictated that two fire engines had to be present on the tarmac. Equipped with only one, the airport was unfazed. They simply borrowed the municipal fire engine from the town square for the afternoon. The flight landed flawlessly.",
           },
         ],
       },
       {
-        id: "dalai-eej-namesake",
+        id: "finding-dalai-eej",
         tocLabel: "Finding Dalai Eej",
-        title: "The Namesake: Finding 'Dalai Eej'",
+        title: "Finding Dalai Eej",
         blocks: [
           {
             type: "prose",
-            text: "As you drive through the streets of Mörön to provision for the lake, you may notice a recurring phrase on the town's signage. The largest, bustling central market in town is named Dalai Eej, and you will spot the same name painted across the facades of countless small, neighbourhood kiosks.",
-          },
-          {
-            type: "prose",
-            text: "Translating to \"Mother Ocean,\" Dalai Eej is the reverent title locals have given to Lake Khövsgöl for centuries. Seeing the name scattered throughout the town is a reminder that the lake is not just a destination on a map; it is the spiritual and economic gravity of the entire province.",
-          },
-          {
-            type: "prose",
-            text: "It is this exact reverence that we carry with us as you leave the town behind, navigating the final roads toward the pristine eastern shores and our namesake resort.",
+            text: "As you drive through the streets to provision for the lake, the local reverence for your final destination becomes obvious. The town's bustling central market is named Dalai Eej (\"Mother Ocean\"), and you will spot the exact same name painted across the facades of countless neighborhood kiosks. It is a fun, recurring primer on the lake's cultural gravity as you navigate the final roads toward the pristine eastern shores.",
           },
         ],
       },
@@ -216,7 +206,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
     },
     prev: {
       href: "/almanac/murun",
-      label: "Chapter II — Mörön & Beyond",
+      label: "Chapter II — Field Notes from Mörön",
     },
     next: {
       href: "/almanac/forest-and-steppe",
@@ -311,6 +301,18 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         ],
       },
     ],
+    archivalCard: {
+      eyebrow: "THE SUKHBAATAR MUSEUM",
+      body: "A stark physical record of the northern frontier. Located at the former Khatgal petroleum base, this open-air archive preserves the Sukhbaatar-1 and a sunken fleet of Soviet logistics machinery hauled from depths of 171 meters.",
+      image: {
+        src: "/sukhbaatar-museum.jpeg",
+        alt: "The Sukhbaatar Museum open-air archive at the former Khatgal petroleum base.",
+      },
+      link: {
+        label: "View Coordinates",
+        href: "https://maps.app.goo.gl/Gpk4Ab9zjAQ6DchU9",
+      },
+    },
   },
   {
     slug: "forest-and-steppe",
@@ -463,9 +465,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           {
             type: "image",
             src: "/amos-chapple.jpg",
-            alt: "Decaying remnants of a Soviet labour camp deep in the Siberian taiga.",
+            alt: "Decaying remnants of the Soviet penal network, deep in the Siberian taiga.",
             caption:
-              "The decaying remnants of a Soviet labour camp deep in the Siberian taiga. Photographed by Amos Chapple during a Czech expedition to document the vast penal network that permanently altered the northern frontier. Sourced via RFE/RL.",
+              "The decaying remnants of the Soviet penal network, deep in the Siberian taiga. Photograph by Amos Chapple / RFE/RL.",
             fit: "cover",
             size: "compactLarge",
           },
