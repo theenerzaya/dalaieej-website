@@ -81,7 +81,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     imageSrc: "/images/almanac/khovsgol-and-baikal/olkhon-island-shores.jpg",
     imageAlt: "Байгал нуур дахь Ольхон арлын эрэг.",
     imageCaption:
-      "Хойд тайгын өвөг дээдсийн төв болох Байгал нуурын Ольхон арлын эрэг. Toute la Russie-с авав.",
+      "Ольхон арлын эрэг. Байгал нуурын зүрхэнд орших хойд тайгын өвөг дээдсийн унаган голомт. Toute la Russie-с авав.",
     href: "/almanac/khovsgol-and-baikal",
     ctaLabel: "Унших",
   },
