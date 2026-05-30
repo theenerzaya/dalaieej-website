@@ -71,11 +71,6 @@ export default function AccessRoadMap({ className = "" }: Props) {
       <div
         className={`flex aspect-[16/10] w-full flex-col items-center justify-center gap-4 rounded-sm bg-leaf/10 px-6 text-center ${className}`}
       >
-        <p className="font-body text-sm text-ink/70 max-w-md">
-          {locale === "mn"
-            ? "Төв замаас салж ресортын зогсоол хүрэх албан ёсны замын GPS мэдээлэл."
-            : "GPS trace of the official resort access road from the main-road turnoff to guest parking."}
-        </p>
         <CTALink href={accessRoadTrace.kmlPath} external>
           {locale === "mn" ? "GPS зам татах (KML)" : "Download GPS Route (KML)"}
         </CTALink>

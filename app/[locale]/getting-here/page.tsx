@@ -96,6 +96,20 @@ function OptionalProse({ text }: { text: string }) {
   return <Prose>{text}</Prose>;
 }
 
+function LabelledText({
+  label,
+  body,
+}: {
+  label: string;
+  body: string;
+}) {
+  return (
+    <>
+      <strong className="font-medium text-ink">{label}</strong> {body}
+    </>
+  );
+}
+
 function BulletList({ items }: { items: ReactNode[] }) {
   return (
     <ul className="list-disc space-y-2 pl-5 font-body text-base md:text-lg text-ink/75 leading-relaxed">
@@ -359,7 +373,10 @@ export default function GettingHerePage() {
                       </div>
                       {t("section3.motorbike") ? (
                         <Prose>
-                          <span dangerouslySetInnerHTML={{ __html: t.raw("section3.motorbike") }} />
+                          <LabelledText
+                            label={t("section3.motorbikeLabel")}
+                            body={t("section3.motorbike")}
+                          />
                         </Prose>
                       ) : null}
                     </div>
@@ -370,7 +387,7 @@ export default function GettingHerePage() {
                       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
                         <SiteImage
                           src="/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
-                          alt={t("section3.bowieCaption")}
+                          alt={t("section3.bowieAlt")}
                           title="David Bowie on the Trans-Siberian Railway"
                           fill
                           className="object-cover"
@@ -378,10 +395,8 @@ export default function GettingHerePage() {
                         />
                       </div>
                       <figcaption className="mt-3 font-body text-sm leading-snug text-ink/60">
-                        {t("section3.bowieCaption")}
-                        <span className="mt-1 block text-ink/50">
-                          ({t("section3.bowieCredit")})
-                        </span>
+                        <p>{t("section3.bowieCaption")}</p>
+                        <p className="mt-1">{t("section3.bowieCredit")}</p>
                       </figcaption>
                     </figure>
                   </div>
@@ -394,11 +409,27 @@ export default function GettingHerePage() {
                   {t("section3.vipCoach") ? (
                     <BulletList
                       items={[
-                        <span key="vip" dangerouslySetInnerHTML={{ __html: t.raw("section3.vipCoach") }} />,
-                        <span key="standard" dangerouslySetInnerHTML={{ __html: t.raw("section3.standardCoach") }} />,
+                        <LabelledText
+                          key="vip"
+                          label={t("section3.vipCoachLabel")}
+                          body={t("section3.vipCoach")}
+                        />,
+                        <LabelledText
+                          key="standard"
+                          label={t("section3.standardCoachLabel")}
+                          body={t("section3.standardCoach")}
+                        />,
                         ...(t("section3.bookingCoach")
                           ? [
-                              <span key="booking">{t("section3.bookingCoach")}</span>,
+                              locale === "en" ? (
+                                <LabelledText
+                                  key="booking"
+                                  label={t("section3.bookingCoachLabel")}
+                                  body={t("section3.bookingCoach")}
+                                />
+                              ) : (
+                                <span key="booking">{t("section3.bookingCoach")}</span>
+                              ),
                             ]
                           : []),
                       ]}
@@ -456,12 +487,6 @@ export default function GettingHerePage() {
                   <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
                     <CTALink href={MAP_URL} external>
                       {t("section4.mapLink")}
-                    </CTALink>
-                  </div>
-                  <OptionalProse text={t("section4.kmlDesc")} />
-                  <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
-                    <CTALink href={accessRoadTrace.kmlPath} external>
-                      {t("section4.kmlLink")}
                     </CTALink>
                   </div>
                   <FadeInBlock delay={0.05} className="mt-6">
