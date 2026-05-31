@@ -100,12 +100,16 @@ export type AlmanacArticle = {
   };
   furtherReading?: { title: string; href: string }[];
   archivalCard?: {
+    id?: string;
+    tocLabel?: string;
     eyebrow: string;
     body: string;
     image: { src: string; alt: string };
     link?: { label: string; href: string };
   };
   journalInset?: {
+    id?: string;
+    tocLabel?: string;
     eyebrow: string;
     title: string;
     body: string;
@@ -330,6 +334,8 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       },
     },
     journalInset: {
+      id: "local-dispatch",
+      tocLabel: "Local Dispatch",
       eyebrow: "LOCAL DISPATCH",
       title: "A Playground of Black Ice…",
       body: "Rosy-cheeked and entirely unbothered by the -50°C (-58°F) winter, the local children skate in perfect single file across the Mother Sea. To the rest of the world, this is a formidable, 262-meter-deep frozen expanse. But here in our Khatgal, it is simply the backyard where they play and grow up.",

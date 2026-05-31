@@ -463,12 +463,14 @@ export function EpilogueQuote({
 }
 
 export function JournalInsetVideo({
+  id,
   eyebrow,
   title,
   body,
   src,
   alt,
 }: {
+  id?: string;
   eyebrow: string;
   title: string;
   body: string;
@@ -481,7 +483,11 @@ export function JournalInsetVideo({
 
   return (
     <FadeInBlock distance={20} className="mt-10 md:mt-12">
-      <aside className="mx-auto max-w-3xl" aria-label={eyebrow}>
+      <aside
+        id={id}
+        className={["mx-auto max-w-3xl", id ? "scroll-mt-24" : ""].filter(Boolean).join(" ")}
+        aria-label={eyebrow}
+      >
         <figure className="mx-auto w-full md:max-w-[360px]">
           <div className="mb-3 text-center">
             <p
@@ -524,11 +530,13 @@ export function JournalInsetVideo({
 }
 
 export function ArchivalCard({
+  id,
   eyebrow,
   body,
   image,
   link,
 }: {
+  id?: string;
   eyebrow: string;
   body: string;
   image: { src: string; alt: string };
@@ -540,7 +548,13 @@ export function ArchivalCard({
   return (
     <FadeInBlock distance={20} className="mt-16 md:mt-20">
       <aside
-        className="-mx-6 w-[calc(100%+3rem)] border-y border-ink/12 bg-muted/90 px-6 py-14 shadow-[0_1px_0_rgba(13,15,28,0.04)] md:py-20"
+        id={id}
+        className={[
+          "-mx-6 w-[calc(100%+3rem)] border-y border-ink/12 bg-muted/90 px-6 py-14 shadow-[0_1px_0_rgba(13,15,28,0.04)] md:py-20",
+          id ? "scroll-mt-24" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         aria-label={eyebrow}
       >
         <div className="mx-auto flex max-w-3xl flex-col gap-8 md:flex-row md:items-start md:gap-10">

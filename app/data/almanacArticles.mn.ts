@@ -100,12 +100,16 @@ export type AlmanacArticle = {
   };
   furtherReading?: { title: string; href: string }[];
   archivalCard?: {
+    id?: string;
+    tocLabel?: string;
     eyebrow: string;
     body: string;
     image: { src: string; alt: string };
     link?: { label: string; href: string };
   };
   journalInset?: {
+    id?: string;
+    tocLabel?: string;
     eyebrow: string;
     title: string;
     body: string;
@@ -315,6 +319,8 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       },
     },
     journalInset: {
+      id: "local-dispatch",
+      tocLabel: "Нутгийн тэмдэглэл",
       eyebrow: "НУТГИЙН ТЭМДЭГЛЭЛ",
       title: "Мөсөн талбайн мөрөөдөлтэй хүүхдүүд…",
       body: "Далай ээжийнхээ хар мөсөн дээгүүр цуваалан гулгах улаан хацартай, чийрэг багачууд. Манай Хатгалд энэ их хөлдүү далай зүгээр л тэдний тоглож өсдөг гадаах талбай нь билээ.",

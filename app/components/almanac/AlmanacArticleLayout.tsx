@@ -524,10 +524,18 @@ export default function AlmanacArticleLayout({ article }: Props) {
   const localePrefix = locale === "mn" ? "/mn" : "/en";
   const reduceMotion = useReducedMotion();
 
-  const tocItems = article.sections.map((section) => ({
-    id: section.id,
-    label: section.tocLabel,
-  }));
+  const tocItems = [
+    ...article.sections.map((section) => ({
+      id: section.id,
+      label: section.tocLabel,
+    })),
+    ...(article.archivalCard?.id && article.archivalCard.tocLabel
+      ? [{ id: article.archivalCard.id, label: article.archivalCard.tocLabel }]
+      : []),
+    ...(article.journalInset?.id && article.journalInset.tocLabel
+      ? [{ id: article.journalInset.id, label: article.journalInset.tocLabel }]
+      : []),
+  ];
 
   const translucentNav = article.translucentNavbar ?? false;
 
@@ -622,6 +630,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
               ))}
               {article.archivalCard ? (
                 <ArchivalCard
+                  id={article.archivalCard.id}
                   eyebrow={article.archivalCard.eyebrow}
                   body={article.archivalCard.body}
                   image={article.archivalCard.image}
@@ -631,6 +640,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
 
               {article.journalInset ? (
                 <JournalInsetVideo
+                  id={article.journalInset.id}
                   eyebrow={article.journalInset.eyebrow}
                   title={article.journalInset.title}
                   body={article.journalInset.body}
