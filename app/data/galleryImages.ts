@@ -1,6 +1,6 @@
 /**
  * Raster images under public/images: every .webp; .jpg/.jpeg under 900 KiB (except
- * gallery/DBR_* — any size, jpg or webp). Excludes about-us/ and getting-here/. Byte-identical files omitted.
+ * gallery/DBR_* — any size, jpg or webp). Excludes about-us/, almanac/getting-here/, almanac/og/, footer/, archive/. Byte-identical files omitted.
  * Regenerate: npm run sync-gallery-images
  */
 export type GalleryImageSource = {
@@ -16,6 +16,9 @@ export const GALLERY_IMAGES: GalleryImageSource[] = [
   { src: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg", category: "resort", alt: "almanac — borders and industry — hero sukhbaatar", ratio: "portrait" },
   { src: "/images/almanac/borders-and-industry/zasagt-khan-aimags-map.jpg", category: "resort", alt: "almanac — borders and industry — zasagt khan aimags map", ratio: "square" },
   { src: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg", category: "resort", alt: "almanac — forest and steppe — hero deer stones", ratio: "landscape" },
+  { src: "/images/almanac/khovsgol-and-baikal/chekhov-penal-library.jpg", category: "resort", alt: "almanac — khovsgol and baikal — chekhov penal library", ratio: "square" },
+  { src: "/images/almanac/khovsgol-and-baikal/eg-river-bridge.jpeg", category: "resort", alt: "almanac — khovsgol and baikal — eg river bridge", ratio: "landscape" },
+  { src: "/images/almanac/khovsgol-and-baikal/gulag-remnants-amos-chapple.jpg", category: "resort", alt: "almanac — khovsgol and baikal — gulag remnants amos chapple", ratio: "square" },
   { src: "/images/almanac/khovsgol-and-baikal/olkhon-island-shores.jpg", category: "resort", alt: "almanac — khovsgol and baikal — olkhon island shores", ratio: "square" },
   { src: "/images/almanac/khovsgol-and-baikal/west-buryat-family-portrait.webp", category: "resort", alt: "almanac — khovsgol and baikal — west buryat family portrait", ratio: "square" },
   { src: "/images/almanac/murun/airport-exterior.jpg", category: "resort", alt: "almanac — murun — airport exterior", ratio: "landscape" },
@@ -165,11 +168,6 @@ export const GALLERY_IMAGES: GalleryImageSource[] = [
   { src: "/images/nav-overlay/stay.jpg", category: "rooms", alt: "nav overlay — stay", ratio: "landscape" },
   { src: "/images/nav-overlay/wellness.jpg", category: "wellness", alt: "nav overlay — wellness", ratio: "square" },
   { src: "/images/og-heritage.jpg", category: "resort", alt: "og heritage", ratio: "landscape" },
-  { src: "/images/og/almanac/borders-and-industry.jpg", category: "resort", alt: "og — almanac — borders and industry", ratio: "square" },
-  { src: "/images/og/almanac/forest-and-steppe.jpg", category: "resort", alt: "og — almanac — forest and steppe", ratio: "portrait" },
-  { src: "/images/og/almanac/hub.jpg", category: "resort", alt: "og — almanac — hub", ratio: "square" },
-  { src: "/images/og/almanac/khovsgol-and-baikal.jpg", category: "resort", alt: "og — almanac — khovsgol and baikal", ratio: "square" },
-  { src: "/images/og/almanac/murun.jpg", category: "resort", alt: "og — almanac — murun", ratio: "landscape" },
   { src: "/images/personas/disconnect-en.jpg", category: "wellness", alt: "personas — disconnect en", ratio: "landscape" },
   { src: "/images/personas/disconnect-mn.jpg", category: "wellness", alt: "personas — disconnect mn", ratio: "portrait" },
   { src: "/images/personas/frontier-en.jpg", category: "adventures", alt: "personas — frontier en", ratio: "square" },
@@ -230,4 +228,8 @@ export const GALLERY_IMAGES: GalleryImageSource[] = [
   { src: "/images/specialoffers/erdenet-jubilee.jpg", category: "resort", alt: "specialoffers — erdenet jubilee", ratio: "landscape" },
   { src: "/images/specialoffers/family-getaway.jpg", category: "resort", alt: "specialoffers — family getaway", ratio: "landscape" },
   { src: "/images/specialoffers/shoulder-season.jpg", category: "resort", alt: "specialoffers — shoulder season", ratio: "square" },
+  { src: "/images/wellness/jacuzzi.webp", category: "resort", alt: "wellness — jacuzzi", ratio: "square" },
+  { src: "/images/wellness/sauna-detail-1.jpg", category: "resort", alt: "wellness — sauna detail 1", ratio: "square" },
+  { src: "/images/wellness/sauna-detail-2.jpg", category: "resort", alt: "wellness — sauna detail 2", ratio: "portrait" },
+  { src: "/images/wellness/sauna-exterior.jpg", category: "resort", alt: "wellness — sauna exterior", ratio: "portrait" },
 ];
