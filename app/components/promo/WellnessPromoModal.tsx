@@ -14,7 +14,30 @@ import {
   playfairDisplayItalic,
 } from "@/app/fonts";
 
+const STORAGE_KEY = "dalaieej-wellness-promo-dismissed-at";
+const DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
 const SHOW_DELAY_MS = 1300;
+
+function isDismissedRecently(): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const dismissedAt = Date.parse(raw);
+    if (Number.isNaN(dismissedAt)) return false;
+    return Date.now() - dismissedAt < DISMISS_MS;
+  } catch {
+    return false;
+  }
+}
+
+function persistDismiss() {
+  try {
+    localStorage.setItem(STORAGE_KEY, new Date().toISOString());
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
 
 /** Portals to `document.body` sit outside `[locale]/layout` — re-apply font variables so editorial titles load. */
 const portalFontVariables = [
@@ -38,10 +61,13 @@ export default function WellnessPromoModal() {
   const bookingHref = `${localePrefix}/booking`;
 
   const dismiss = useCallback(() => {
+    persistDismiss();
     setOpen(false);
   }, []);
 
   useEffect(() => {
+    if (isDismissedRecently()) return;
+
     const timer = window.setTimeout(() => setOpen(true), SHOW_DELAY_MS);
     return () => window.clearTimeout(timer);
   }, []);
