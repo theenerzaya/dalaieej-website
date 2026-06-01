@@ -8,6 +8,7 @@ import { araboto, cormorantGaramondItalic, montserrat, playfairDisplayItalic } f
 import NavbarWrapper from "../components/NavbarWrapper";
 import Preloader from "../components/Preloader";
 import Footer from "../components/layout/Footer";
+import WellnessPromoModal from "../components/promo/WellnessPromoModal";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -129,6 +130,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       />
       <NextIntlClientProvider messages={messages}>
         <Preloader />
+        <WellnessPromoModal />
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-main focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-surface">
           Skip to main content
         </a>

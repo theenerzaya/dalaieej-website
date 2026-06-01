@@ -784,5 +784,15 @@
       "subtitle": "Discover the accommodations and exclusive spaces waiting at Dalai Eej.",
       "link": "Explore accommodations"
     }
+  },
+  "promo": {
+    "wellness": {
+      "eyebrow": "Wellness",
+      "headline": "Elevated Wellness",
+      "body": "Immerse yourself in the elements. Experience complete tranquility with uninterrupted views from our new outdoor jacuzzi.",
+      "cta": "EXPLORE DATES",
+      "imageAlt": "Outdoor hot pool overlooking Lake Khövsgöl at Dalai Eej Resort",
+      "closeLabel": "Close"
+    }
   }
 }
