@@ -22,7 +22,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     description:
       "A comprehensive, logistical guide to navigating the steppe. From securing domestic flights to the cinematic overnight journey on the Trans-Siberian railway, this is how we get to the northern province.",
     imageSrc:
-      "/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg",
+      "/images/almanac/getting-here/david-bowie-trans-siberian-railway-1973.jpg",
     imageAlt:
       "Archival photograph of a sleeper cabin on the Trans-Siberian Railway.",
     imageFit: "contain",

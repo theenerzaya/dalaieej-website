@@ -22,7 +22,7 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     description:
       "Тал нутгийг туулах аяллын цогц хөтөч. Дотоодын нислэгээс эхлээд Транс-Сибирийн төмөр замын галт тэргээр өнгөрүүлэх кино мэт шөнө хүртэл, бид умардын хязгаарт ингэж л хүрдэг.",
     imageSrc:
-      "/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg",
+      "/images/almanac/getting-here/david-bowie-trans-siberian-railway-1973.jpg",
     imageAlt:
       "Транс-Сибирийн төмөр замын унтлагын купены архивын гэрэл зураг.",
     imageFit: "contain",

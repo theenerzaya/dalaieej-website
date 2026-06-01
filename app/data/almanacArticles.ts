@@ -325,7 +325,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       eyebrow: "THE SUKHBAATAR MUSEUM",
       body: "A stark physical record of the northern frontier. Located at the former Khatgal petroleum base, this open-air archive preserves the Sukhbaatar-1 and a sunken fleet of Soviet logistics machinery hauled from depths of 171 meters.",
       image: {
-        src: "/sukhbaatar-museum.jpeg",
+        src: "/images/almanac/borders-and-industry/sukhbaatar-museum.jpeg",
         alt: "The Sukhbaatar Museum open-air archive at the former Khatgal petroleum base.",
       },
       link: {
@@ -339,7 +339,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       eyebrow: "LOCAL DISPATCH",
       title: "A Playground of Black Ice…",
       body: "Rosy-cheeked and entirely unbothered by the -50°C (-58°F) winter, the local children skate in perfect single file across the Mother Sea. To the rest of the world, this is a formidable, 262-meter-deep frozen expanse. But here in our Khatgal, it is simply the backyard where they play and grow up.",
-      src: "/kids.mp4",
+      src: "/images/almanac/borders-and-industry/khatgal-ice-skating.mp4",
       alt: "Children skating in single file across the frozen surface of Lake Khövsgöl near Khatgal.",
     },
   },
@@ -417,7 +417,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       },
     ],
     closingImage: {
-      src: "/library-at-dalai-eej.jpg",
+      src: "/images/almanac/forest-and-steppe/estate-library.jpg",
       alt: "Selections from the estate library at Dalai Eej.",
       caption:
         "Selections from the estate library. A curated study of the northern frontier, featuring local cartography, regional ecology, indigenous glossaries, and foundational Mongolian history.",
@@ -497,7 +497,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "image",
-            src: "/amos-chapple.jpg",
+            src: "/images/almanac/khovsgol-and-baikal/gulag-remnants-amos-chapple.jpg",
             alt: "Decaying remnants of the Soviet penal network, deep in the Siberian taiga.",
             caption:
               "The decaying remnants of the Soviet penal network, deep in the Siberian taiga. Photograph by Amos Chapple / RFE/RL.",

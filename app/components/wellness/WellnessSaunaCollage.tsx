@@ -29,7 +29,7 @@ const TILES: {
 }[] = [
   {
     id: "tl",
-    src: "/spa-anonymous-main.jpg",
+    src: "/images/wellness/sauna-exterior.jpg",
     alt: {
       en: "A couple relaxing in the outdoor hot pool overlooking the lake",
       mn: "Далайн харагдацтай гаднах халуун усан санд амарч буй хос",
@@ -42,7 +42,7 @@ const TILES: {
   },
   {
     id: "tr",
-    src: "/close-up-1.jpg",
+    src: "/images/wellness/sauna-detail-1.jpg",
     alt: {
       en: "Steam and water jets in the outdoor spa pool",
       mn: "Гаднах спа усан сангийн уур, усан хошуу",
@@ -53,7 +53,7 @@ const TILES: {
   },
   {
     id: "bl",
-    src: "/close-up-2.jpg",
+    src: "/images/wellness/sauna-detail-2.jpg",
     alt: {
       en: "Blue-lit water detail in the hot pool at dusk",
       mn: "Үдшийн бүрий дэх халуун усан сангийн цэнхэр туяа",
@@ -64,7 +64,7 @@ const TILES: {
   },
   {
     id: "br",
-    src: "/jacuzzi-3.webp",
+    src: "/images/wellness/jacuzzi.webp",
     alt: {
       en: "Guests enjoying the lakeside hot pool together",
       mn: "Далайн эрэг дээрх халуун усан санд хамтдаа амарч буй зочид",

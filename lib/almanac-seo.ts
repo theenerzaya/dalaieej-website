@@ -3,7 +3,7 @@ import { openGraphAssetUrl } from "@/lib/assetUrl";
 import type { AlmanacArticle } from "@/app/data/almanacArticles";
 import { absoluteSiteUrl } from "@/lib/site-urls";
 
-export const ALMANAC_HUB_OG_IMAGE = "/images/og/almanac/hub.jpg";
+export const ALMANAC_HUB_OG_IMAGE = "/images/almanac/og/hub.jpg";
 export const ALMANAC_OG_WIDTH = 1200;
 export const ALMANAC_OG_HEIGHT = 630;
 const PUBLISHER_NAME = "Dalai Eej Resort";
@@ -17,7 +17,7 @@ export type AlmanacArticleSeoCopy = {
 };
 
 export function almanacArticleOgImagePath(slug: string): string {
-  return `/images/og/almanac/${slug}.jpg`;
+  return `/images/almanac/og/${slug}.jpg`;
 }
 
 export function resolveAlmanacArticleSeoCopy(

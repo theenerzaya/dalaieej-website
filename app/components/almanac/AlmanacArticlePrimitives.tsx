@@ -448,7 +448,7 @@ export function EpilogueQuote({
           <figure className="w-28 shrink-0 md:w-32">
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-ink/5">
               <SiteImage
-                src="/chekhov-penal-library-small.jpg"
+                src="/images/almanac/khovsgol-and-baikal/chekhov-penal-library.jpg"
                 alt="Anton Chekhov at the Baikal penal colony library."
                 fill
                 sizes="128px"

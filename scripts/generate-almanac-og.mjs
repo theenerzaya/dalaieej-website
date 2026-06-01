@@ -11,7 +11,7 @@ import path from "node:path";
 import sharp from "sharp";
 
 const PUBLIC_DIR = path.resolve(process.cwd(), "public");
-const OUT_DIR = path.join(PUBLIC_DIR, "images/og/almanac");
+const OUT_DIR = path.join(PUBLIC_DIR, "images/almanac/og");
 const OG_WIDTH = 1200;
 const OG_HEIGHT = 630;
 
@@ -50,7 +50,7 @@ async function main() {
   for (const entry of SOURCES) {
     await generateOne(entry);
   }
-  console.log(`\nDone. Images written to public/images/og/almanac/`);
+  console.log(`\nDone. Images written to public/images/almanac/og/`);
 }
 
 main().catch((err) => {

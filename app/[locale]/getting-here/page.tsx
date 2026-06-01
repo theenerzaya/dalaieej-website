@@ -194,7 +194,7 @@ export default function GettingHerePage() {
       <FrostedMapSection
         aria-label={t("hero.title")}
         className="pb-16 md:pb-24 pt-[calc(var(--navbar-h)+2.5rem)] md:pt-[calc(var(--navbar-h)+3.5rem)] min-h-[min(58vh,32rem)]"
-        imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
+        imageSrc="/images/almanac/getting-here/bulgan-province-overland-road.jpeg"
         imagePriority
         frostOpacity={13.87}
         frostBlurPx={6.2}
@@ -265,7 +265,7 @@ export default function GettingHerePage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.murunAirport.label")}
-                    imageSrc="/images/getting-here/murun-airport-exterior.jpg"
+                    imageSrc="/images/almanac/getting-here/murun-airport-exterior.jpg"
                     imageAlt={t("media.murunAirport.alt")}
                     aspectClass="aspect-[4/3] md:aspect-[21/9]"
                     imageClassName="object-cover"
@@ -320,7 +320,7 @@ export default function GettingHerePage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.overlandRoute.label")}
-                    imageSrc="/images/getting-here/bulgan-province-overland-road.jpeg"
+                    imageSrc="/images/almanac/getting-here/bulgan-province-overland-road.jpeg"
                     imageAlt={t("media.overlandRoute.alt")}
                     aspectClass="aspect-[4/3]"
                   />
@@ -355,7 +355,7 @@ export default function GettingHerePage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.trainTravel.label")}
-                    imageSrc="/images/getting-here/train.jpg"
+                    imageSrc="/images/almanac/getting-here/train.jpg"
                     imageAlt={t("media.trainTravel.alt")}
                     aspectClass="aspect-[8/5] md:aspect-[21/9]"
                     imageClassName="object-cover"
@@ -391,7 +391,7 @@ export default function GettingHerePage() {
                       </p>
                       <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5">
                         <SiteImage
-                          src="/images/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
+                          src="/images/almanac/getting-here/david-bowie-trans-siberian-railway-1973.jpg"
                           alt={t("section3.bowieAlt")}
                           title="David Bowie on the Trans-Siberian Railway"
                           fill
@@ -464,7 +464,7 @@ export default function GettingHerePage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.murunTerminal.label")}
-                    imageSrc="/images/getting-here/murun-airport-terminal-interior.jpg"
+                    imageSrc="/images/almanac/getting-here/murun-airport-terminal-interior.jpg"
                     imageAlt={t("media.murunTerminal.alt")}
                     aspectClass="aspect-[4/3] md:aspect-[21/9]"
                   />

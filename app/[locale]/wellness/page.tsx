@@ -51,7 +51,7 @@ export default function WellnessPage() {
       <FrostedMapSection
         aria-label={hero.title}
         className="flex min-h-[min(46.2vh,24.2rem)] items-center pb-12 md:pb-16 pt-[calc(var(--navbar-h)+2.5rem)] md:pt-[calc(var(--navbar-h)+3.5rem)]"
-        imageSrc="/spa-anonymous-long.png"
+        imageSrc="/images/wellness/sauna-hero.png"
         imagePriority
         frostOpacity={13.87}
         frostBlurPx={6.2}

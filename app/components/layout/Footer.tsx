@@ -8,7 +8,56 @@ import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Eyebrow } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
+import { FOOTER_PARTNERS } from "@/lib/footerPartners";
 import { withLocalePath } from "@/lib/localePath";
+
+/** Shared row height — logos scale to fill this box (vertical centres align). */
+const PARTNER_ROW_HEIGHT = "h-7 md:h-8";
+
+const PARTNER_LOGO_CLASS =
+  "block h-full w-auto object-contain object-center opacity-80 transition-opacity";
+
+const PARTNER_LOGO_MAX_HEIGHT: Record<string, string> = {
+  bradt: "max-h-7 md:max-h-8",
+  "ha-travel": "max-h-7 md:max-h-8",
+  telegraph: "max-h-[34px] md:max-h-[38px]",
+};
+
+const PARTNER_LOGO_MAX_WIDTH: Record<string, string> = {
+  bradt: "max-w-[92px]",
+  "ha-travel": "max-w-[112px]",
+  telegraph: "max-w-[92px]",
+};
+
+const PARTNER_ITEM_CLASS = `flex ${PARTNER_ROW_HEIGHT} items-center justify-center`;
+
+function FooterPartnerLogo({
+  id,
+  src,
+  alt,
+  className,
+}: {
+  id: string;
+  src: string;
+  alt: string;
+  className?: string;
+}) {
+  return (
+    <img
+      src={assetUrl(src)}
+      alt={alt}
+      draggable={false}
+      className={[
+        PARTNER_LOGO_CLASS,
+        PARTNER_LOGO_MAX_HEIGHT[id] ?? "max-h-7 md:max-h-8",
+        PARTNER_LOGO_MAX_WIDTH[id] ?? "max-w-[92px]",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    />
+  );
+}
 
 export default function Footer() {
   const locale = useLocale();
@@ -173,6 +222,35 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
+
+            <nav aria-label={t("asFeaturedIn")} className="mt-6 md:mt-8">
+              <ul
+                className={`flex flex-wrap lg:flex-nowrap items-center gap-x-4 lg:gap-x-5 gap-y-3 ${PARTNER_ROW_HEIGHT}`}
+              >
+                {FOOTER_PARTNERS.map((partner) => (
+                  <li key={partner.id} className={PARTNER_ITEM_CLASS}>
+                    {partner.href ? (
+                      <a
+                        href={partner.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={partner.ariaLabel ?? partner.alt}
+                        className={`${PARTNER_ITEM_CLASS} hover:[&_img]:opacity-100`}
+                      >
+                        <FooterPartnerLogo id={partner.id} src={partner.src} alt="" />
+                      </a>
+                    ) : (
+                      <span
+                        className={PARTNER_ITEM_CLASS}
+                        aria-label={partner.alt}
+                      >
+                        <FooterPartnerLogo id={partner.id} src={partner.src} alt="" />
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </div>
 

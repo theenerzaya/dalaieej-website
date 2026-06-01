@@ -310,7 +310,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       eyebrow: "СҮХБААТАР ХӨЛӨГ ОНГОЦНЫ МУЗЕЙ",
       body: "Умард хязгаарын түүхийн бодит гэрч. Хатгалын хуучин нефть баазад байрлах энэхүү ил задгай архивт 171 метрийн гүнээс татан гаргасан Зөвлөлтийн үеийн хүнд машин механизм болон Сүхбаатар-1 хөлөг онгоц хадгалагдаж буй. Энэхүү живсэн флот нь 20-р зууны хүнд тээвэр, ложистикийн амьд түүх юм.",
       image: {
-        src: "/sukhbaatar-museum.jpeg",
+        src: "/images/almanac/borders-and-industry/sukhbaatar-museum.jpeg",
         alt: "Хатгалын хуучин нефть бааз дахь Сүхбаатар хөлөг онгоцны ил задгай музей.",
       },
       link: {
@@ -324,7 +324,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       eyebrow: "НУТГИЙН ТЭМДЭГЛЭЛ",
       title: "Мөсөн талбайн мөрөөдөлтэй хүүхдүүд…",
       body: "Далай ээжийнхээ хар мөсөн дээгүүр цуваалан гулгах улаан хацартай, чийрэг багачууд. Манай Хатгалд энэ их хөлдүү далай зүгээр л тэдний тоглож өсдөг гадаах талбай нь билээ.",
-      src: "/kids.mp4",
+      src: "/images/almanac/borders-and-industry/khatgal-ice-skating.mp4",
       alt: "Хатгалын ойролцоо Хөвсгөл нуурын мөсөн гадаргуу дээр хацартай гулгаж буй хүүхдүүд.",
     },
   },
@@ -406,7 +406,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       },
     ],
     closingImage: {
-      src: "/library-at-dalai-eej.jpg",
+      src: "/images/almanac/forest-and-steppe/estate-library.jpg",
       alt: "Далай Ээж ресортын номын сан.",
       caption:
         "Далай Ээж ресортын номын сангаас. Хоймор нутгийн түүх, байгаль, хүн ардын тухай өгүүлэх архивын цуглуулга.",
@@ -482,7 +482,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           },
           {
             type: "image",
-            src: "/amos-chapple.jpg",
+            src: "/images/almanac/khovsgol-and-baikal/gulag-remnants-amos-chapple.jpg",
             alt: "Сибирийн гүн тайга дахь Зөвлөлтийн шоронгийн сүлжээний үлдэгдэл.",
             captionTitle: "АРХИВЫН ГЭРЭЛ ЗУРАГ",
             caption:

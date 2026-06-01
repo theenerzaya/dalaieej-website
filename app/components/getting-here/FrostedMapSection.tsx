@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import SiteImage from "@/app/components/SiteImage";
 
-const DEFAULT_IMAGE_SRC = "/images/getting-here/travel-route-map.jpg";
+const DEFAULT_IMAGE_SRC = "/images/almanac/getting-here/travel-route-map.jpg";
 
 type FrostedMapSectionProps = {
   children: ReactNode;
