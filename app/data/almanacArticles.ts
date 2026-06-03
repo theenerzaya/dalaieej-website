@@ -51,6 +51,7 @@ export type AlmanacArticleSection = {
     label: string;
     caption?: string;
     aspectClass?: string;
+    fit?: "cover" | "contain";
     size?: "default" | "compact" | "compactLarge" | "compactLargeSm";
   };
   blocks: AlmanacContentBlock[];
@@ -106,6 +107,7 @@ export type AlmanacArticle = {
     body: string;
     image: { src: string; alt: string };
     link?: { label: string; href: string };
+    review?: { quote: string; attribution: string };
   };
   journalInset?: {
     id?: string;
@@ -332,6 +334,10 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         label: "View Coordinates",
         href: "https://maps.app.goo.gl/Gpk4Ab9zjAQ6DchU9",
       },
+      review: {
+        quote: "A post-apocalyptic setting.",
+        attribution: "Andrzej Wróbel",
+      },
     },
     journalInset: {
       id: "local-dispatch",
@@ -377,12 +383,6 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         tocLabel: "Two Ways of Life, Two Faiths",
         title: "Two Ways of Life, Two Faiths",
         layout: "flow",
-        image: {
-          src: "/images/personas/frontier-en.jpg",
-          alt: "The open steppe meeting the northern forest at Khövsgöl.",
-          label: "Steppe and taiga at the northern frontier",
-          aspectClass: "aspect-[4/3] md:aspect-[21/9]",
-        },
         blocks: [
           {
             type: "prose",
@@ -408,6 +408,17 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           {
             type: "prose",
             text: "To the north, deep in the taiga and the neighbouring Darkhad Valley, the forest peoples lived an entirely different existence. Relying on hunting, trapping, and reindeer herding, they completely rejected the encroaching Buddhism. The dense, impenetrable forests acted as a fortress, allowing the northern tribes to preserve the original animist faith of the Mongols: Shamanism.",
+          },
+          {
+            type: "image",
+            src: "/images/almanac/forest-and-steppe/liquid-soul-shaman.png",
+            alt: "A Mongolian shaman in ceremonial dress, standing on the open steppe.",
+            captionTitle: "The Liquid Soul",
+            caption:
+              "To the shamans who guided the Great Khans, the spirit was not made of breath or air, but water.",
+            fit: "contain",
+            size: "centered",
+            frameless: true,
           },
           {
             type: "prose",

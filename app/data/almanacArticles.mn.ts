@@ -51,6 +51,7 @@ export type AlmanacArticleSection = {
     label: string;
     caption?: string;
     aspectClass?: string;
+    fit?: "cover" | "contain";
     size?: "default" | "compact" | "compactLarge" | "compactLargeSm";
   };
   blocks: AlmanacContentBlock[];
@@ -106,6 +107,7 @@ export type AlmanacArticle = {
     body: string;
     image: { src: string; alt: string };
     link?: { label: string; href: string };
+    review?: { quote: string; attribution: string };
   };
   journalInset?: {
     id?: string;
@@ -317,6 +319,10 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         label: "БАЙРШИЛ ХАРАХ",
         href: "https://maps.app.goo.gl/Gpk4Ab9zjAQ6DchU9",
       },
+      review: {
+        quote: "A post-apocalyptic setting.",
+        attribution: "Andrzej Wróbel",
+      },
     },
     journalInset: {
       id: "local-dispatch",
@@ -362,12 +368,6 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
         tocLabel: "Оюун санааны зааг",
         title: "Оюун санааны зааг: Судар ба Онгод",
         layout: "flow",
-        image: {
-          src: "/images/personas/frontier-en.jpg",
-          alt: "Хөвсгөлд задгай хээр тал хойд тайгатай нийлж буй байдал.",
-          label: "Хойд хязгаар дахь хээр тал ба тайга",
-          aspectClass: "aspect-[4/3] md:aspect-[21/9]",
-        },
         blocks: [
           {
             type: "prose",
@@ -393,6 +393,17 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
           {
             type: "prose",
             text: "Харин хойд зүгт, гүн тайга хийгээд Дархадын хотгорт \"ойн иргэд\" тэс өөр хэмнэлээр амьдарна. Ан гөрөө хийж, цаа буга маллан амьжиргаагаа залгуулдаг тэд шинээр дэлгэрч буй Буддын шашныг дагалгүй, өөрсдийн язгуур уламжлалаа хадгалж үлджээ. Хүн нэвтрэхэд бэрх битүү хөвч нь байгалийн аварга хэрэм цайз болж, хойд зүгийн овгуудад гаднын шашны нөлөөнөөс ангид үлдэж, эртний Бөө мөргөлөө унаган төрхөөр нь авч үлдэх боломжийг олгосон юм.",
+          },
+          {
+            type: "image",
+            src: "/images/almanac/forest-and-steppe/liquid-soul-shaman.png",
+            alt: "Тал хээр дээр зогсож буй ёслолын хувцас өмссөн Монгол бөө.",
+            captionTitle: "ШИНГЭН СҮНС",
+            caption:
+              "Их хаануудыг чиглүүлсэн бööд өнгөрсөн хүний сүнс амьсгал эсвэл агаарт биш, харин уснаас бий болдог гэж итгэдэг байсан.",
+            fit: "contain",
+            size: "centered",
+            frameless: true,
           },
           {
             type: "prose",

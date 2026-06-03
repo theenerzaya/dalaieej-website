@@ -155,6 +155,7 @@ export function ArticleImage({
   label,
   caption,
   aspectClass = "aspect-[4/3] md:aspect-[21/9]",
+  fit = "cover",
   size = "default",
 }: {
   src: string;
@@ -162,6 +163,7 @@ export function ArticleImage({
   label: string;
   caption?: string;
   aspectClass?: string;
+  fit?: "cover" | "contain";
   size?: "default" | CompactFigureSize;
 }) {
   if (isCompactFigureSize(size)) {
@@ -184,6 +186,28 @@ export function ArticleImage({
             <span className="sr-only">{label}</span>
           )}
         </figure>
+    );
+  }
+
+  if (fit === "contain") {
+    return (
+      <figure>
+        <div className="mx-auto max-w-full overflow-hidden rounded-sm ring-1 ring-ink/10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={assetUrl(src)}
+            alt={alt}
+            className="block h-auto w-full"
+          />
+        </div>
+        {caption ? (
+          <figcaption className="mx-auto mt-3 max-w-lg text-center font-body text-sm leading-snug text-ink/60">
+            {caption}
+          </figcaption>
+        ) : (
+          <span className="sr-only">{label}</span>
+        )}
+      </figure>
     );
   }
 
@@ -535,12 +559,14 @@ export function ArchivalCard({
   body,
   image,
   link,
+  review,
 }: {
   id?: string;
   eyebrow: string;
   body: string;
   image: { src: string; alt: string };
   link?: { label: string; href: string };
+  review?: { quote: string; attribution: string };
 }) {
   const locale = useLocale();
   const isMn = locale === "mn";
@@ -584,7 +610,7 @@ export function ArchivalCard({
               {body}
             </p>
             {link ? (
-              <p className="mt-6">
+              <p className="mt-6 text-center">
                 <a
                   href={link.href}
                   target="_blank"
@@ -594,6 +620,16 @@ export function ArchivalCard({
                   [ {link.label} ]
                 </a>
               </p>
+            ) : null}
+            {review ? (
+              <blockquote className="mt-6 text-center">
+                <p className="font-editorial-mn text-base italic leading-relaxed text-ink/75">
+                  &ldquo;{review.quote}&rdquo;
+                </p>
+                <footer className="mt-2 font-cta text-[10px] font-normal uppercase not-italic tracking-[0.15em] text-ink/50">
+                  — {review.attribution}
+                </footer>
+              </blockquote>
             ) : null}
           </div>
         </div>

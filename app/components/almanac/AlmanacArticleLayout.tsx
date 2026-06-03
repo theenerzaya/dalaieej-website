@@ -210,6 +210,7 @@ function FlowSectionContent({ section }: { section: AlmanacArticleSection }) {
             label={section.image.label}
             caption={section.image.caption}
             aspectClass={section.image.aspectClass}
+            fit={section.image.fit}
             size={section.image.size}
           />
         </Appear>
@@ -229,7 +230,11 @@ function FlowSectionContent({ section }: { section: AlmanacArticleSection }) {
             );
           }
           return (
-            <Appear key={`${section.id}-flow-${index}`} index={currentIndex}>
+            <Appear
+              key={`${section.id}-flow-${index}`}
+              index={currentIndex}
+              className={block.type === "image" ? "my-8" : undefined}
+            >
               {renderBlock(section.id, block)}
             </Appear>
           );
@@ -503,6 +508,7 @@ function SectionContent({ section }: { section: AlmanacArticleSection }) {
             label={section.image.label}
             caption={section.image.caption}
             aspectClass={section.image.aspectClass}
+            fit={section.image.fit}
             size={section.image.size}
           />
         </Appear>
@@ -635,6 +641,7 @@ export default function AlmanacArticleLayout({ article }: Props) {
                   body={article.archivalCard.body}
                   image={article.archivalCard.image}
                   link={article.archivalCard.link}
+                  review={article.archivalCard.review}
                 />
               ) : null}
 
