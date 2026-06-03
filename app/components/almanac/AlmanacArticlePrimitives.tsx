@@ -610,7 +610,7 @@ export function ArchivalCard({
               {body}
             </p>
             {link ? (
-              <p className="mt-6 text-center">
+              <p className="mt-6 text-center md:text-left">
                 <a
                   href={link.href}
                   target="_blank"
@@ -622,7 +622,7 @@ export function ArchivalCard({
               </p>
             ) : null}
             {review ? (
-              <blockquote className="mt-6 text-center">
+              <blockquote className="mt-6 text-center md:text-left">
                 <p className="font-editorial-mn text-base italic leading-relaxed text-ink/75">
                   &ldquo;{review.quote}&rdquo;
                 </p>
