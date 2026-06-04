@@ -359,11 +359,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       "Lake Khövsgöl sits exactly on this ancient geographic fault line. As you travel north from Mörön toward Khatgal, you are physically crossing from the Central Asian steppe into the Siberian taiga. The landscape shifts abruptly from the rolling, arid grasslands that defined the Mongol Empire into dense, alpine forests of larch and pine.",
     ],
     heroImage: {
-      src: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
+      src: "/images/almanac/forest-and-steppe/deerstones-close.jpg",
       alt: "The Uushigiin Övör Deer Stones at the ancient threshold of the steppe.",
-      objectPosition: "50% 45%",
-      frostOpacity: 34,
-      frostBlurPx: 9,
+      objectPosition: "50% 8%",
     },
     translucentNavbar: true,
     metadata: {

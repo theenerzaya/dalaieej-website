@@ -572,10 +572,10 @@ export default function AlmanacArticleLayout({ article }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.7 }}
         >
-          <Eyebrow className="!text-water-deep/70 mb-5">
+          <Eyebrow tone="dark" className="!text-main/70 mb-5">
             {article.chapterEyebrow}
           </Eyebrow>
-          <Headline as="h1" size="section" align="left" className="!text-left">
+          <Headline as="h1" size="section" align="left" tone="dark" className="!text-left">
             {article.title}
           </Headline>
         </motion.div>

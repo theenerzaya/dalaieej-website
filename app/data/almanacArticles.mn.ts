@@ -344,11 +344,9 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       "Хөвсгөл нуур яг энэхүү эртний газарзүйн зааг дээр оршдог. Мөрөнгөөс хойш Хатгалыг зорих замд та Төв Азийн хуурай хээр талаас Сибирийн хөвч тайга руу биеэрээ нэвтрэн орно. Монголын эзэнт гүрнийг тодорхойлогч цэлгэр уудам тал нутаг гэнэтхэн шинэс, нарс моддоор битүү хучигдсан хөвчөөр солигдох нь тэр.",
     ],
     heroImage: {
-      src: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg",
+      src: "/images/almanac/forest-and-steppe/deerstones-close.jpg",
       alt: "Хээр талын эртний заагт орших Уушигийн Өвөрийн Буган чулуун хөшөө.",
-      objectPosition: "50% 45%",
-      frostOpacity: 34,
-      frostBlurPx: 9,
+      objectPosition: "50% 8%",
     },
     translucentNavbar: true,
     metadata: {

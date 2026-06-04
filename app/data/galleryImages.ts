@@ -15,7 +15,7 @@ export const GALLERY_IMAGES: GalleryImageSource[] = [
   { src: "/images/address.webp", category: "resort", alt: "address", ratio: "square" },
   { src: "/images/almanac/borders-and-industry/hero-sukhbaatar.jpeg", category: "resort", alt: "almanac — borders and industry — hero sukhbaatar", ratio: "portrait" },
   { src: "/images/almanac/borders-and-industry/zasagt-khan-aimags-map.jpg", category: "resort", alt: "almanac — borders and industry — zasagt khan aimags map", ratio: "square" },
-  { src: "/images/almanac/forest-and-steppe/hero-deer-stones.jpg", category: "resort", alt: "almanac — forest and steppe — hero deer stones", ratio: "landscape" },
+  { src: "/images/almanac/forest-and-steppe/deerstones-close.jpg", category: "resort", alt: "almanac — forest and steppe — deer stones close", ratio: "landscape" },
   { src: "/images/almanac/khovsgol-and-baikal/chekhov-penal-library.jpg", category: "resort", alt: "almanac — khovsgol and baikal — chekhov penal library", ratio: "square" },
   { src: "/images/almanac/khovsgol-and-baikal/eg-river-bridge.jpeg", category: "resort", alt: "almanac — khovsgol and baikal — eg river bridge", ratio: "landscape" },
   { src: "/images/almanac/khovsgol-and-baikal/gulag-remnants-amos-chapple.jpg", category: "resort", alt: "almanac — khovsgol and baikal — gulag remnants amos chapple", ratio: "square" },
