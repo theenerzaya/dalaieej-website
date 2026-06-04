@@ -17,7 +17,8 @@ export type AlmanacContentBlock =
         | "compactLarge"
         | "compactLargeSm"
         | "compactLarge90"
-        | "centered";
+        | "centered"
+        | "featured";
       /** Omit ring/background on compact figures (e.g. archival scans). */
       frameless?: boolean;
       placement?: AsidePlacement;
@@ -417,7 +418,7 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             caption:
               "To the shamans who guided the Great Khans, the spirit was not made of breath or air, but water.",
             fit: "contain",
-            size: "centered",
+            size: "featured",
             frameless: true,
           },
           {

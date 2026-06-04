@@ -247,20 +247,23 @@ export function ArticleFigure({
   aspectClass?: string;
   /** "contain" shows the full image at its natural aspect ratio (e.g. maps). */
   fit?: "cover" | "contain";
-  size?: "default" | CompactFigureSize | "centered";
+  size?: "default" | CompactFigureSize | "centered" | "featured";
   frameless?: boolean;
 }) {
   const isCompact = isCompactFigureSize(size);
   const isCentered = size === "centered";
+  const isFeatured = size === "featured";
 
   return (
     <figure
       className={
         isCompact
           ? compactFigureClass(size)
-          : isCentered
-            ? "mx-auto w-full max-w-md md:max-w-xl"
-            : undefined
+          : isFeatured
+            ? "clear-both mx-auto w-full"
+            : isCentered
+              ? "mx-auto w-full max-w-md md:max-w-xl"
+              : undefined
       }
     >
         <div
@@ -270,7 +273,9 @@ export function ArticleFigure({
                 ? "relative aspect-[3/2] w-full overflow-hidden rounded-sm"
                 : "relative aspect-[3/2] w-full overflow-hidden rounded-sm bg-ink/5"
               : fit === "contain"
-                ? "mx-auto max-w-full overflow-hidden rounded-sm ring-1 ring-ink/10"
+                ? frameless
+                  ? "mx-auto max-w-full overflow-hidden rounded-sm"
+                  : "mx-auto max-w-full overflow-hidden rounded-sm ring-1 ring-ink/10"
                 : `relative w-full overflow-hidden rounded-sm ring-1 ring-ink/10 ${aspectClass}`
           }
         >
@@ -303,7 +308,9 @@ export function ArticleFigure({
           className={
             isCompact
               ? "mt-3"
-              : "mx-auto mt-4 max-w-2xl text-center"
+              : isFeatured
+                ? "mx-auto mt-5 max-w-3xl text-center md:mt-6"
+                : "mx-auto mt-4 max-w-2xl text-center"
           }
         >
           {captionTitle ? (

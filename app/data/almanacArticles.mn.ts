@@ -17,7 +17,8 @@ export type AlmanacContentBlock =
         | "compactLarge"
         | "compactLargeSm"
         | "compactLarge90"
-        | "centered";
+        | "centered"
+        | "featured";
       /** Omit ring/background on compact figures (e.g. archival scans). */
       frameless?: boolean;
       placement?: AsidePlacement;
@@ -398,11 +399,11 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
             type: "image",
             src: "/images/almanac/forest-and-steppe/liquid-soul-shaman.png",
             alt: "Тал хээр дээр зогсож буй ёслолын хувцас өмссөн Монгол бөө.",
-            captionTitle: "ШИНГЭН СҮНС",
+            captionTitle: "УСАН СҮЛД",
             caption:
-              "Их хаануудыг чиглүүлсэн бööд өнгөрсөн хүний сүнс амьсгал эсвэл агаарт биш, харин уснаас бий болдог гэж итгэдэг байсан.",
+              "Их хаадын замыг заагч бөө нарын хувьд сүнс сүлд гэдэг хий агаар, амьсгал бус, харин уснаас бүрэлддэг байжээ.",
             fit: "contain",
-            size: "centered",
+            size: "featured",
             frameless: true,
           },
           {

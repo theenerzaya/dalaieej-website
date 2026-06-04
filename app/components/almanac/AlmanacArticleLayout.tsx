@@ -233,7 +233,13 @@ function FlowSectionContent({ section }: { section: AlmanacArticleSection }) {
             <Appear
               key={`${section.id}-flow-${index}`}
               index={currentIndex}
-              className={block.type === "image" ? "my-8" : undefined}
+              className={
+                block.type === "image"
+                  ? block.size === "featured"
+                    ? "clear-both my-10 md:my-16"
+                    : "my-8"
+                  : undefined
+              }
             >
               {renderBlock(section.id, block)}
             </Appear>

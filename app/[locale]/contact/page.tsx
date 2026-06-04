@@ -70,7 +70,7 @@ export default function LocationPage() {
               <h4 className="font-serif text-lg text-leaf mb-2">
                 {locale === 'mn' ? "Утас" : "Phone"}
               </h4>
-              <p className="font-body text-leaf/70">+976 77 80190</p>
+              <p className="font-body text-leaf/70">+976 77 809010</p>
             </div>
             <div className="text-center">
               <Mail className="w-10 h-10 text-leaf mx-auto mb-4" />
