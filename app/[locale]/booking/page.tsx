@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
+import { useState, useEffect, useMemo, type MouseEvent } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -408,7 +408,6 @@ function BookingContent() {
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
-  const lastFetchedGuestsRef = useRef<{ a: number; c: number } | null>(null);
 
   const totalGuests = totalAdults + totalChildren;
   const cartCapacity = cart.reduce((sum, item) => sum + (item.maxGuests * item.quantity), 0);
@@ -532,18 +531,18 @@ function BookingContent() {
     if (urlChildren) setTotalChildren(parsedChildren);
 
     setNumberOfNights(calculateNights(effectiveCheckin, effectiveCheckout));
-    fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "", parsedAdults, parsedChildren);
+    fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "");
   }, [searchParams]);
   /* eslint-enable react-hooks/exhaustive-deps */
   
-  const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "", adults: number = totalAdults, children: number = totalChildren) => {
+  const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "") => {
     setLoading(true);
     setError("");
     setRooms([]);
     setPropertyTermsAndConditions(null);
 
     try {
-      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&adults=${adults}&children=${children}`;
+      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=2&quoteChildren=0`;
 
       if (promo) {
         url += `&promo=${encodeURIComponent(promo)}`;
@@ -578,22 +577,9 @@ function BookingContent() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      lastFetchedGuestsRef.current = { a: adults, c: children };
       setLoading(false);
     }
   };
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    if (!searched || !checkin || !checkout) return;
-    const last = lastFetchedGuestsRef.current;
-    if (last && last.a === totalAdults && last.c === totalChildren) return;
-    const id = window.setTimeout(() => {
-      void fetchAvailability(checkin, checkout, appliedPromo, totalAdults, totalChildren);
-    }, 450);
-    return () => clearTimeout(id);
-  }, [totalAdults, totalChildren, searched, checkin, checkout]);
-  /* eslint-enable react-hooks/exhaustive-deps */
 
   const handleSearch = () => {
     if (!checkin || !checkout) {
@@ -601,7 +587,7 @@ function BookingContent() {
       return;
     }
     setNumberOfNights(calculateNights(checkin, checkout));
-    fetchAvailability(checkin, checkout, appliedPromo, totalAdults, totalChildren);
+    fetchAvailability(checkin, checkout, appliedPromo);
   };
 
   const handleApplyPromo = async () => {
@@ -652,53 +638,93 @@ function BookingContent() {
     }).filter(Boolean) as CartItem[]);
   };
 
-  const proceedToCheckout = () => {
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const distributeGuests = () => {
+    const distributed: CartItem[] = [];
+    let remainingAdults = totalAdults;
+    let remainingChildren = totalChildren;
+
+    for (const item of cart) {
+      for (let i = 0; i < item.quantity; i++) {
+        const roomCapacity = item.maxGuests;
+        const adultsForRoom = Math.min(remainingAdults, roomCapacity);
+        remainingAdults -= adultsForRoom;
+
+        const spaceLeft = roomCapacity - adultsForRoom;
+        const childrenForRoom = Math.min(remainingChildren, spaceLeft);
+        remainingChildren -= childrenForRoom;
+
+        const finalAdults = adultsForRoom > 0 ? adultsForRoom : (childrenForRoom > 0 ? 0 : 1);
+
+        distributed.push({
+          ...item,
+          quantity: 1,
+          adults: finalAdults,
+          children: childrenForRoom,
+        });
+      }
+    }
+    return distributed;
+  };
+
+  const quoteCartLineRates = async (lines: CartItem[]) => {
+    const nights = numberOfNights;
+    return Promise.all(
+      lines.map(async (item) => {
+        try {
+          let url = `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}&quoteAdults=${item.adults}&quoteChildren=${item.children}`;
+          if (appliedPromo) url += `&promo=${encodeURIComponent(appliedPromo)}`;
+          const response = await fetch(url);
+          const data: AvailabilityData = await response.json();
+          if (!response.ok || !data.rooms) return item;
+          const match = data.rooms.find(
+            (r) => r.roomTypeID === item.roomTypeID && r.rateID === item.rateID
+          );
+          if (!match) return item;
+          return {
+            ...item,
+            pricePerNight:
+              nights > 0 ? (match.totalRate || 0) / nights : match.totalRate || 0,
+          };
+        } catch {
+          return item;
+        }
+      })
+    );
+  };
+
+  const proceedToCheckout = async () => {
     if (cart.length === 0) {
       setError(currentLocale === 'mn' ? "Өрөө сонгоно уу" : "Please select a room");
       return;
     }
     if (cartCapacity < totalGuests) return;
 
-    const distributeGuests = () => {
-      const distributed: CartItem[] = [];
-      let remainingAdults = totalAdults;
-      let remainingChildren = totalChildren;
+    setCheckoutLoading(true);
+    setError("");
 
-      for (const item of cart) {
-        for (let i = 0; i < item.quantity; i++) {
-          const roomCapacity = item.maxGuests;
-          const adultsForRoom = Math.min(remainingAdults, roomCapacity);
-          remainingAdults -= adultsForRoom;
+    try {
+      const distributedCart = await quoteCartLineRates(distributeGuests());
+      const checkoutParams = new URLSearchParams({
+        checkin,
+        checkout,
+        nights: String(numberOfNights),
+        totalAdults: String(totalAdults),
+        totalChildren: String(totalChildren),
+        cart: encodeURIComponent(JSON.stringify(distributedCart)),
+      });
 
-          const spaceLeft = roomCapacity - adultsForRoom;
-          const childrenForRoom = Math.min(remainingChildren, spaceLeft);
-          remainingChildren -= childrenForRoom;
-
-          const finalAdults = adultsForRoom > 0 ? adultsForRoom : (childrenForRoom > 0 ? 0 : 1);
-
-          distributed.push({
-            ...item,
-            quantity: 1,
-            adults: finalAdults,
-            children: childrenForRoom,
-          });
-        }
-      }
-      return distributed;
-    };
-
-    const distributedCart = distributeGuests();
-    const checkoutParams = new URLSearchParams({
-      checkin,
-      checkout,
-      nights: String(numberOfNights),
-      totalAdults: String(totalAdults),
-      totalChildren: String(totalChildren),
-      cart: encodeURIComponent(JSON.stringify(distributedCart)),
-    });
-
-    if (appliedPromo) checkoutParams.set('promo', appliedPromo);
-    window.location.href = `${localePrefix}/checkout?${checkoutParams.toString()}`;
+      if (appliedPromo) checkoutParams.set('promo', appliedPromo);
+      window.location.href = `${localePrefix}/checkout?${checkoutParams.toString()}`;
+    } catch {
+      setError(
+        currentLocale === "mn"
+          ? "Үнийг шинэчлэхэд алдаа гарлаа. Дахин оролдоно уу."
+          : "Could not refresh pricing. Please try again."
+      );
+      setCheckoutLoading(false);
+    }
   };
 
   const [minDate, setMinDate] = useState("");
@@ -861,7 +887,7 @@ function BookingContent() {
     );
   };
 
-  const resultsCount = groupedRooms.filter(g => (g.maxGuests || 0) >= totalGuests).length;
+  const resultsCount = groupedRooms.length;
 
   const hasBlockedRatesInResults = useMemo(() => {
     return rooms.some((r) => {
@@ -1002,6 +1028,10 @@ function BookingContent() {
                     </div>
                   </div>
                 </div>
+
+                <p className="font-body text-main/50 text-xs leading-relaxed">
+                  {t("multiRoomHint")}
+                </p>
 
                 <div>
                   <label htmlFor="promo-code" className="block font-body text-main text-sm mb-1">
@@ -1165,15 +1195,22 @@ function BookingContent() {
 
                 <button
                   type="button"
-                  onClick={proceedToCheckout}
-                  disabled={cartCapacity < totalGuests}
+                  onClick={() => void proceedToCheckout()}
+                  disabled={cartCapacity < totalGuests || checkoutLoading}
                   className={`hidden lg:block w-full mt-5 py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
-                    cartCapacity >= totalGuests
+                    cartCapacity >= totalGuests && !checkoutLoading
                       ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                       : 'bg-main/10 text-main/40 cursor-not-allowed'
                   }`}
                 >
-                  {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
+                  {checkoutLoading ? (
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {currentLocale === 'mn' ? 'Бэлтгэж байна...' : 'Preparing...'}
+                    </span>
+                  ) : (
+                    currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'
+                  )}
                 </button>
 
                 <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-main/40 font-body">
@@ -1246,7 +1283,6 @@ function BookingContent() {
               })()}
 
               {groupedRooms
-                .filter(group => (group.maxGuests || 0) >= totalGuests)
                 .map((group, index) => {
                   const photos = group.photos || [];
                   const primaryRoom = group.rates[0];
@@ -1417,15 +1453,22 @@ function BookingContent() {
               </div>
               <button
                 type="button"
-                onClick={proceedToCheckout}
-                disabled={cartCapacity < totalGuests}
+                onClick={() => void proceedToCheckout()}
+                disabled={cartCapacity < totalGuests || checkoutLoading}
                 className={`px-6 py-3 font-cta uppercase tracking-[0.28em] text-[11px] transition-colors whitespace-nowrap ${
-                  cartCapacity >= totalGuests
+                  cartCapacity >= totalGuests && !checkoutLoading
                     ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                     : 'bg-main/10 text-main/40 cursor-not-allowed'
                 }`}
               >
-                {currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'}
+                {checkoutLoading ? (
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    {currentLocale === 'mn' ? 'Бэлтгэж байна...' : 'Preparing...'}
+                  </span>
+                ) : (
+                  currentLocale === 'mn' ? 'Одоо захиалах' : 'Book Now'
+                )}
               </button>
             </div>
           </div>

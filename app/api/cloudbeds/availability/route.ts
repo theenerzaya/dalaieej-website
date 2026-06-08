@@ -143,19 +143,24 @@ export async function GET(request: NextRequest) {
     }
 
     const promo = searchParams.get("promo");
-    const adults = searchParams.get("adults");
-    const children = searchParams.get("children");
     const rooms = searchParams.get("rooms") || "1";
 
-    const adultsNum = Math.max(1, parseInt(adults || "1", 10) || 1);
-    const childrenNum = Math.max(0, parseInt(children || "0", 10) || 0);
+    /** Cloudbeds filters room types by party size. Use minimal occupancy so all types return (multi-room bookings). */
+    const inventoryAdults = 1;
+    const inventoryChildren = 0;
+
+    /** Occupancy used for displayed totals only (per-room quote), not inventory discovery. */
+    const quoteAdultsRaw = searchParams.get("quoteAdults") ?? searchParams.get("adults");
+    const quoteChildrenRaw = searchParams.get("quoteChildren") ?? searchParams.get("children");
+    const quoteAdultsNum = Math.max(1, parseInt(quoteAdultsRaw || "2", 10) || 2);
+    const quoteChildrenNum = Math.max(0, parseInt(quoteChildrenRaw || "0", 10) || 0);
 
     const params: Record<string, string> = {
       startDate: checkin,
       endDate: checkout,
       rooms,
-      adults: String(adultsNum),
-      children: String(childrenNum),
+      adults: String(inventoryAdults),
+      children: String(inventoryChildren),
     };
 
     if (promo) {
@@ -250,7 +255,7 @@ export async function GET(request: NextRequest) {
     const baseRates = new Map<string, number>();
     for (const room of propertyRooms) {
       if (!room.derivedType && !room.derivedValue) {
-        baseRates.set(room.roomTypeID, stayTotalForRoom(room, adultsNum, childrenNum));
+        baseRates.set(room.roomTypeID, stayTotalForRoom(room, quoteAdultsNum, quoteChildrenNum));
       }
     }
 
@@ -262,7 +267,7 @@ export async function GET(request: NextRequest) {
         })
         .filter(Boolean);
 
-      const fullStayTotal = stayTotalForRoom(room, adultsNum, childrenNum);
+      const fullStayTotal = stayTotalForRoom(room, quoteAdultsNum, quoteChildrenNum);
       
       let originalRate: number | undefined;
       if (room.derivedType && room.derivedValue) {

@@ -454,6 +454,7 @@
     "enterPromo": "Enter code",
     "apply": "Apply",
     "promoApplied": "Promo code applied!",
+    "multiRoomHint": "Enter the total guests across all cabins. You can book multiple rooms of the same type using the quantity controls.",
     "restrictionsNotice": "Some prices may be greyed out for your dates. That usually means this rate has a minimum or maximum length of stay, or check-in / check-out is not allowed on the days you picked. Try changing your dates or select another rate.",
     "restrictionClosedToArrival": "Check-in is not allowed on {date} for this rate.",
     "restrictionClosedToDeparture": "Check-out is not allowed on {date} for this rate.",
