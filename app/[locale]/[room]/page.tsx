@@ -13,6 +13,7 @@ import {
   type Variants,
 } from "framer-motion";
 import { AnimatedText, ImageReveal, Reveal } from "@/app/components/cabins/animations";
+import DateInput from "@/app/components/ui/DateInput";
 import {
   ArrowRight,
   BedDouble,
@@ -445,13 +446,13 @@ export default function RoomDetailPage() {
               <label htmlFor="room-checkin" className="block font-body text-main text-sm mb-1">
                 {t.checkIn} <span className="text-main/50">{t.required}</span>
               </label>
-              <input id="room-checkin" type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none" />
+              <DateInput id="room-checkin" value={checkin} onChange={setCheckin} className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0" />
             </div>
             <div>
               <label htmlFor="room-checkout" className="block font-body text-main text-sm mb-1">
                 {t.checkOut} <span className="text-main/50">{t.required}</span>
               </label>
-              <input id="room-checkout" type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} min={checkin} className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none" />
+              <DateInput id="room-checkout" value={checkout} onChange={setCheckout} min={checkin} className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0" />
             </div>
             <div>
               <span id="room-adults" className="block font-body text-main text-sm mb-1">{t.adults}</span>

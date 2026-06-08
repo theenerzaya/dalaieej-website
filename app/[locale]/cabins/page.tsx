@@ -35,6 +35,7 @@ import {
 import SiteImage from "@/app/components/SiteImage";
 import { assetUrl } from "@/lib/assetUrl";
 import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
+import DateInput from "@/app/components/ui/DateInput";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
 // stays clean and no WebGL code ships to other routes.
@@ -387,12 +388,11 @@ export default function CabinsPage() {
                 >
                   {t.checkIn} <span className="text-main/60">{t.required}</span>
                 </label>
-                <input
+                <DateInput
                   id="cbns-checkin"
-                  type="date"
                   value={checkin}
-                  onChange={(e) => setCheckin(e.target.value)}
-                  className="w-full bg-transparent border-0 border-b border-main/40 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none [color-scheme:dark]"
+                  onChange={setCheckin}
+                  className="w-full bg-transparent border-0 border-b border-main/40 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0"
                 />
               </div>
 
@@ -403,13 +403,12 @@ export default function CabinsPage() {
                 >
                   {t.checkOut} <span className="text-main/60">{t.required}</span>
                 </label>
-                <input
+                <DateInput
                   id="cbns-checkout"
-                  type="date"
                   value={checkout}
-                  onChange={(e) => setCheckout(e.target.value)}
+                  onChange={setCheckout}
                   min={checkin}
-                  className="w-full bg-transparent border-0 border-b border-main/40 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none [color-scheme:dark]"
+                  className="w-full bg-transparent border-0 border-b border-main/40 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0"
                 />
               </div>
 

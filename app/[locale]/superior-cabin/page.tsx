@@ -59,6 +59,7 @@ import {
   Wifi,
 } from "lucide-react";
 import { assetUrl } from "@/lib/assetUrl";
+import DateInput from "@/app/components/ui/DateInput";
 
 /** Jul 1–5 for the upcoming summer window (matches the booking page's default). */
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
@@ -575,12 +576,11 @@ export default function SuperiorCabinPage() {
               <label htmlFor="sc-checkin" className="block font-body text-main text-sm mb-1">
                 {t.checkIn} <span className="text-main/50">{t.required}</span>
               </label>
-              <input
+              <DateInput
                 id="sc-checkin"
-                type="date"
                 value={checkin}
-                onChange={(e) => setCheckin(e.target.value)}
-                className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
+                onChange={setCheckin}
+                className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0"
               />
             </div>
 
@@ -588,13 +588,12 @@ export default function SuperiorCabinPage() {
               <label htmlFor="sc-checkout" className="block font-body text-main text-sm mb-1">
                 {t.checkOut} <span className="text-main/50">{t.required}</span>
               </label>
-              <input
+              <DateInput
                 id="sc-checkout"
-                type="date"
                 value={checkout}
-                onChange={(e) => setCheckout(e.target.value)}
+                onChange={setCheckout}
                 min={checkin}
-                className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
+                className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0"
               />
             </div>
 

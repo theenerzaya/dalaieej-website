@@ -8,6 +8,8 @@ import { Suspense } from "react";
 import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
+import { formatIsoDateAsDots } from "@/lib/dateFormat";
+import DateInput from "@/app/components/ui/DateInput";
 
 interface RoomRestrictions {
   closedToArrival: boolean;
@@ -265,12 +267,7 @@ function stripHtml(html: string): string {
 }
 
 function formatDate(dateStr: string): string {
-  if (!dateStr) return "";
-  const date = new Date(dateStr + "T00:00:00");
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  return formatIsoDateAsDots(dateStr);
 }
 
 function calculateNights(checkinDate: string, checkoutDate: string): number {
@@ -958,13 +955,12 @@ function BookingContent() {
                   <label htmlFor="checkin-date" className="block font-body text-main text-sm mb-1">
                     {t('checkIn')}: <span className="text-main/50">*</span>
                   </label>
-                  <input
+                  <DateInput
                     id="checkin-date"
-                    type="date"
                     value={checkin}
-                    onChange={(e) => setCheckin(e.target.value)}
+                    onChange={setCheckin}
                     min={minDate}
-                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
+                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0"
                   />
                 </div>
 
@@ -972,13 +968,12 @@ function BookingContent() {
                   <label htmlFor="checkout-date" className="block font-body text-main text-sm mb-1">
                     {t('checkOut')}: <span className="text-main/50">*</span>
                   </label>
-                  <input
+                  <DateInput
                     id="checkout-date"
-                    type="date"
                     value={checkout}
-                    onChange={(e) => setCheckout(e.target.value)}
+                    onChange={setCheckout}
                     min={checkin || minDate}
-                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none"
+                    className="w-full bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none transition-colors appearance-none !rounded-none !px-0"
                   />
                 </div>
 

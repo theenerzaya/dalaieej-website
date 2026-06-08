@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
 import { CTAButton } from "./ui/Typography";
+import DateInput from "./ui/DateInput";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 
 function useNavOpen() {
@@ -86,10 +87,9 @@ export default function AvailabilityBar() {
             <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
               {t('checkIn')}
             </label>
-            <input
-              type="date"
+            <DateInput
               value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
+              onChange={setCheckIn}
               min={minDate}
               className={inputClasses}
             />
@@ -99,10 +99,9 @@ export default function AvailabilityBar() {
             <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
               {t('checkOut')}
             </label>
-            <input
-              type="date"
+            <DateInput
               value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
+              onChange={setCheckOut}
               min={checkIn || minDate}
               className={inputClasses}
             />
