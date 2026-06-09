@@ -82,45 +82,6 @@ function normDetailDate(value: unknown): string {
   return s.length >= 10 ? s.slice(0, 10) : s;
 }
 
-/** Cloudbeds returns adultsExtraCharge / childrenExtraCharge as an array of single-key objects. */
-function flattenExtraChargeMap(extra: unknown): Record<string, number> {
-  const out: Record<string, number> = {};
-  if (extra == null) return out;
-  const rows = Array.isArray(extra) ? extra : [extra];
-  for (const row of rows) {
-    if (row && typeof row === "object" && !Array.isArray(row)) {
-      for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
-        const n = parseCloudbedsMoney(v);
-        if (!Number.isNaN(n)) out[k] = n;
-      }
-    }
-  }
-  return out;
-}
-
-function extraChargeForGuestCount(map: Record<string, number>, count: number): number {
-  if (count <= 0) return 0;
-  const direct = map[String(count)];
-  if (direct != null) return direct;
-  const numericKeys = Object.keys(map)
-    .map((k) => parseInt(k, 10))
-    .filter((n) => !Number.isNaN(n))
-    .sort((a, b) => a - b);
-  let best = 0;
-  for (const k of numericKeys) {
-    if (k <= count) best = map[String(k)] ?? best;
-  }
-  return best;
-}
-
-/** Full stay total: base roomRate plus occupancy-based extras (per-person / extra guest). */
-function stayTotalForRoom(room: Record<string, unknown>, adults: number, children: number): number {
-  const base = parseCloudbedsMoney(room.roomRate);
-  const adultExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.adultsExtraCharge), adults);
-  const childExtra = extraChargeForGuestCount(flattenExtraChargeMap(room.childrenExtraCharge), children);
-  return base + adultExtra + childExtra;
-}
-
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -145,15 +106,15 @@ export async function GET(request: NextRequest) {
     const promo = searchParams.get("promo");
     const rooms = searchParams.get("rooms") || "1";
 
-    /** Cloudbeds filters room types by party size. Use minimal occupancy so all types return (multi-room bookings). */
-    const inventoryAdults = 1;
-    const inventoryChildren = 0;
-
-    /** Occupancy used for displayed totals only (per-room quote), not inventory discovery. */
+    /** Occupancy for checkout repricing (per cart line). Listing uses minimal occupancy so all room types return. */
     const quoteAdultsRaw = searchParams.get("quoteAdults") ?? searchParams.get("adults");
     const quoteChildrenRaw = searchParams.get("quoteChildren") ?? searchParams.get("children");
-    const quoteAdultsNum = Math.max(1, parseInt(quoteAdultsRaw || "2", 10) || 2);
+    const quoteAdultsNum = Math.max(1, parseInt(quoteAdultsRaw || "1", 10) || 1);
     const quoteChildrenNum = Math.max(0, parseInt(quoteChildrenRaw || "0", 10) || 0);
+
+    const repricing = searchParams.get("repricing") === "true";
+    const inventoryAdults = repricing ? quoteAdultsNum : 1;
+    const inventoryChildren = repricing ? quoteChildrenNum : 0;
 
     const params: Record<string, string> = {
       startDate: checkin,
@@ -252,10 +213,14 @@ export async function GET(request: NextRequest) {
     const currency = propertyData.propertyCurrency?.currencyCode || "MNT";
     const propertyRooms = propertyData.propertyRooms || [];
 
+    /** roomRate from Cloudbeds is the stay total for the occupancy used in this request. */
+    const stayTotalForOccupancy = (room: Record<string, unknown>) =>
+      parseCloudbedsMoney(room.roomRate);
+
     const baseRates = new Map<string, number>();
     for (const room of propertyRooms) {
       if (!room.derivedType && !room.derivedValue) {
-        baseRates.set(room.roomTypeID, stayTotalForRoom(room, quoteAdultsNum, quoteChildrenNum));
+        baseRates.set(room.roomTypeID, stayTotalForOccupancy(room));
       }
     }
 
@@ -267,7 +232,7 @@ export async function GET(request: NextRequest) {
         })
         .filter(Boolean);
 
-      const fullStayTotal = stayTotalForRoom(room, quoteAdultsNum, quoteChildrenNum);
+      const fullStayTotal = stayTotalForOccupancy(room);
       
       let originalRate: number | undefined;
       if (room.derivedType && room.derivedValue) {

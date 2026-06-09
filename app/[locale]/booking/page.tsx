@@ -539,7 +539,7 @@ function BookingContent() {
     setPropertyTermsAndConditions(null);
 
     try {
-      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=2&quoteChildren=0`;
+      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}`;
 
       if (promo) {
         url += `&promo=${encodeURIComponent(promo)}`;
@@ -670,7 +670,7 @@ function BookingContent() {
     return Promise.all(
       lines.map(async (item) => {
         try {
-          let url = `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}&quoteAdults=${item.adults}&quoteChildren=${item.children}`;
+          let url = `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}&quoteAdults=${item.adults}&quoteChildren=${item.children}&repricing=true`;
           if (appliedPromo) url += `&promo=${encodeURIComponent(appliedPromo)}`;
           const response = await fetch(url);
           const data: AvailabilityData = await response.json();
