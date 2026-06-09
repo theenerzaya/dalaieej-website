@@ -71,31 +71,89 @@ function CheckoutContent() {
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [repricingCart, setRepricingCart] = useState(false);
   const [error, setError] = useState("");
+
+  const repriceCartLines = async (
+    checkIn: string,
+    checkOut: string,
+    lines: CartRoom[],
+    nightCount: number,
+    promo?: string | null
+  ): Promise<CartRoom[]> => {
+    return Promise.all(
+      lines.map(async (item) => {
+        let url = `/api/cloudbeds/availability?checkin=${checkIn}&checkout=${checkOut}&quoteAdults=${item.adults}&quoteChildren=${item.children}&repricing=true`;
+        if (promo) url += `&promo=${encodeURIComponent(promo)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!response.ok || !data.rooms) {
+          throw new Error(
+            currentLocale === "mn"
+              ? `${item.roomTypeName}: үнийг шалгаж чадсангүй`
+              : `Could not verify price for ${item.roomTypeName}`
+          );
+        }
+        const match = data.rooms.find(
+          (r: { roomTypeID: string; rateID: string }) =>
+            r.roomTypeID === item.roomTypeID && String(r.rateID) === String(item.rateID)
+        ) as { totalRate: number } | undefined;
+        if (!match || !(match.totalRate > 0)) {
+          throw new Error(
+            currentLocale === "mn"
+              ? `${item.roomTypeName} энэ зочид тоонд боломжгүй эсвэл үнэ олдсонгүй`
+              : `${item.roomTypeName} is not available at this guest count or rate`
+          );
+        }
+        return {
+          ...item,
+          pricePerNight:
+            nightCount > 0 ? match.totalRate / nightCount : match.totalRate,
+        };
+      })
+    );
+  };
 
   useEffect(() => {
     const urlCheckin = searchParams.get("checkin");
     const urlCheckout = searchParams.get("checkout");
     const urlNights = searchParams.get("nights");
     const urlCart = searchParams.get("cart");
+    const urlPromo = searchParams.get("promo");
 
     if (urlCheckin) setCheckin(urlCheckin);
     if (urlCheckout) setCheckout(urlCheckout);
-    if (urlNights) setNights(parseInt(urlNights));
+    const nightCount = urlNights ? parseInt(urlNights, 10) : 1;
+    if (urlNights) setNights(nightCount);
 
     if (urlCart) {
       try {
         const decodedCart = decodeURIComponent(urlCart);
-        const parsedCart = JSON.parse(decodedCart);
+        const parsedCart = JSON.parse(decodedCart) as CartRoom[];
         setCartRooms(parsedCart);
 
         if (urlCheckin && urlCheckout && parsedCart.length > 0) {
           fetchAddons(urlCheckin, urlCheckout, normalizeCloudbedsRoomTypeID(parsedCart[0].roomTypeID));
+          setRepricingCart(true);
+          setError("");
+          void repriceCartLines(urlCheckin, urlCheckout, parsedCart, nightCount, urlPromo)
+            .then(setCartRooms)
+            .catch((e: unknown) => {
+              setError(
+                e instanceof Error
+                  ? e.message
+                  : currentLocale === "mn"
+                    ? "Үнийг шинэчлэхэд алдаа гарлаа"
+                    : "Could not refresh pricing"
+              );
+            })
+            .finally(() => setRepricingCart(false));
         }
       } catch (e) {
         console.error("Failed to parse cart:", e);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run when URL cart changes
   }, [searchParams]);
 
   const fetchAddons = async (checkIn: string, checkOut: string, roomType: string) => {
@@ -599,7 +657,7 @@ function CheckoutContent() {
                 <button
                   type="button"
                   onClick={handleProceedToPayment}
-                  disabled={loading || !termsAccepted}
+                  disabled={loading || repricingCart || !termsAccepted}
                   className={`w-full py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors flex items-center justify-center gap-2 ${
                     termsAccepted && !loading
                       ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'

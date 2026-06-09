@@ -82,6 +82,58 @@ function normDetailDate(value: unknown): string {
   return s.length >= 10 ? s.slice(0, 10) : s;
 }
 
+/** Cloudbeds returns adultsExtraCharge / childrenExtraCharge as an array of single-key objects. */
+function flattenExtraChargeMap(extra: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (extra == null) return out;
+  const rows = Array.isArray(extra) ? extra : [extra];
+  for (const row of rows) {
+    if (row && typeof row === "object" && !Array.isArray(row)) {
+      for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
+        const n = parseCloudbedsMoney(v);
+        if (!Number.isNaN(n)) out[k] = n;
+      }
+    }
+  }
+  return out;
+}
+
+function extraChargeForGuestCount(map: Record<string, number>, count: number): number {
+  if (count <= 0) return 0;
+  const direct = map[String(count)];
+  if (direct != null) return direct;
+  const numericKeys = Object.keys(map)
+    .map((k) => parseInt(k, 10))
+    .filter((n) => !Number.isNaN(n))
+    .sort((a, b) => a - b);
+  let best = 0;
+  for (const k of numericKeys) {
+    if (k <= count) best = map[String(k)] ?? best;
+  }
+  return best;
+}
+
+/**
+ * Stay total for quoted occupancy. `roomRate` comes from inventory discovery (minimal adults);
+ * extra-guest charges for the quoted party are added on top.
+ */
+function stayTotalForRoom(
+  room: Record<string, unknown>,
+  quoteAdults: number,
+  quoteChildren: number
+): number {
+  const base = parseCloudbedsMoney(room.roomRate);
+  const adultExtra = extraChargeForGuestCount(
+    flattenExtraChargeMap(room.adultsExtraCharge),
+    quoteAdults
+  );
+  const childExtra = extraChargeForGuestCount(
+    flattenExtraChargeMap(room.childrenExtraCharge),
+    quoteChildren
+  );
+  return base + adultExtra + childExtra;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -112,16 +164,13 @@ export async function GET(request: NextRequest) {
     const quoteAdultsNum = Math.max(1, parseInt(quoteAdultsRaw || "1", 10) || 1);
     const quoteChildrenNum = Math.max(0, parseInt(quoteChildrenRaw || "0", 10) || 0);
 
-    const repricing = searchParams.get("repricing") === "true";
-    const inventoryAdults = repricing ? quoteAdultsNum : 1;
-    const inventoryChildren = repricing ? quoteChildrenNum : 0;
-
+  /** Always query minimal occupancy so every room type is returned; quote party size via extras. */
     const params: Record<string, string> = {
       startDate: checkin,
       endDate: checkout,
       rooms,
-      adults: String(inventoryAdults),
-      children: String(inventoryChildren),
+      adults: "1",
+      children: "0",
     };
 
     if (promo) {
@@ -213,14 +262,13 @@ export async function GET(request: NextRequest) {
     const currency = propertyData.propertyCurrency?.currencyCode || "MNT";
     const propertyRooms = propertyData.propertyRooms || [];
 
-    /** roomRate from Cloudbeds is the stay total for the occupancy used in this request. */
-    const stayTotalForOccupancy = (room: Record<string, unknown>) =>
-      parseCloudbedsMoney(room.roomRate);
+    const stayTotal = (room: Record<string, unknown>) =>
+      stayTotalForRoom(room, quoteAdultsNum, quoteChildrenNum);
 
     const baseRates = new Map<string, number>();
     for (const room of propertyRooms) {
       if (!room.derivedType && !room.derivedValue) {
-        baseRates.set(room.roomTypeID, stayTotalForOccupancy(room));
+        baseRates.set(room.roomTypeID, stayTotal(room));
       }
     }
 
@@ -232,7 +280,7 @@ export async function GET(request: NextRequest) {
         })
         .filter(Boolean);
 
-      const fullStayTotal = stayTotalForOccupancy(room);
+      const fullStayTotal = stayTotal(room);
       
       let originalRate: number | undefined;
       if (room.derivedType && room.derivedValue) {

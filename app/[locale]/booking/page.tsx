@@ -531,7 +531,13 @@ function BookingContent() {
     fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "");
   }, [searchParams]);
   /* eslint-enable react-hooks/exhaustive-deps */
-  
+
+  useEffect(() => {
+    if (!searched || !checkin || !checkout) return;
+    fetchAvailability(checkin, checkout, appliedPromo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch when party size changes
+  }, [totalAdults, totalChildren]);
+
   const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "") => {
     setLoading(true);
     setError("");
@@ -539,7 +545,7 @@ function BookingContent() {
     setPropertyTermsAndConditions(null);
 
     try {
-      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}`;
+      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=${totalAdults}&quoteChildren=${totalChildren}`;
 
       if (promo) {
         url += `&promo=${encodeURIComponent(promo)}`;
@@ -612,7 +618,10 @@ function BookingContent() {
         pricePerNight: numberOfNights > 0 ? (room.totalRate || 0) / numberOfNights : (room.totalRate || 0),
         currency: room.currency || 'MNT',
         adults: Math.min(totalAdults, room.maxGuests || 2),
-        children: 0,
+        children: Math.min(
+          totalChildren,
+          Math.max(0, (room.maxGuests || 2) - Math.min(totalAdults, room.maxGuests || 2))
+        ),
         quantity: 1,
       };
       const cartWithoutSameRoomType = cart.filter(item => item.roomTypeID !== room.roomTypeID);
@@ -667,28 +676,37 @@ function BookingContent() {
 
   const quoteCartLineRates = async (lines: CartItem[]) => {
     const nights = numberOfNights;
-    return Promise.all(
+    const repriced = await Promise.all(
       lines.map(async (item) => {
-        try {
-          let url = `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}&quoteAdults=${item.adults}&quoteChildren=${item.children}&repricing=true`;
-          if (appliedPromo) url += `&promo=${encodeURIComponent(appliedPromo)}`;
-          const response = await fetch(url);
-          const data: AvailabilityData = await response.json();
-          if (!response.ok || !data.rooms) return item;
-          const match = data.rooms.find(
-            (r) => r.roomTypeID === item.roomTypeID && r.rateID === item.rateID
+        let url = `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}&quoteAdults=${item.adults}&quoteChildren=${item.children}&repricing=true`;
+        if (appliedPromo) url += `&promo=${encodeURIComponent(appliedPromo)}`;
+        const response = await fetch(url);
+        const data: AvailabilityData = await response.json();
+        if (!response.ok || !data.rooms) {
+          throw new Error(
+            currentLocale === "mn"
+              ? `${item.roomTypeName}: үнийг шалгаж чадсангүй`
+              : `Could not verify price for ${item.roomTypeName}`
           );
-          if (!match) return item;
-          return {
-            ...item,
-            pricePerNight:
-              nights > 0 ? (match.totalRate || 0) / nights : match.totalRate || 0,
-          };
-        } catch {
-          return item;
         }
+        const match = data.rooms.find(
+          (r) => r.roomTypeID === item.roomTypeID && r.rateID === item.rateID
+        );
+        if (!match || !(match.totalRate > 0)) {
+          throw new Error(
+            currentLocale === "mn"
+              ? `${item.roomTypeName} (${item.rateName}) энэ зочид тоонд боломжгүй эсвэл үнэ олдсонгүй`
+              : `${item.roomTypeName} (${item.rateName}) is not available at this guest count or rate`
+          );
+        }
+        return {
+          ...item,
+          pricePerNight:
+            nights > 0 ? match.totalRate / nights : match.totalRate,
+        };
       })
     );
+    return repriced;
   };
 
   const proceedToCheckout = async () => {
@@ -714,11 +732,13 @@ function BookingContent() {
 
       if (appliedPromo) checkoutParams.set('promo', appliedPromo);
       window.location.href = `${localePrefix}/checkout?${checkoutParams.toString()}`;
-    } catch {
+    } catch (err) {
       setError(
-        currentLocale === "mn"
-          ? "Үнийг шинэчлэхэд алдаа гарлаа. Дахин оролдоно уу."
-          : "Could not refresh pricing. Please try again."
+        err instanceof Error
+          ? err.message
+          : currentLocale === "mn"
+            ? "Үнийг шинэчлэхэд алдаа гарлаа. Дахин оролдоно уу."
+            : "Could not refresh pricing. Please try again."
       );
       setCheckoutLoading(false);
     }
