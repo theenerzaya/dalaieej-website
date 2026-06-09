@@ -18,6 +18,10 @@ interface BankUrl {
   link: string;
 }
 
+/** Manual bank transfer (alternative to QPay QR) */
+const MANUAL_TRANSFER_ACCOUNT = "MN180019009030008730";
+const MANUAL_TRANSFER_ACCOUNT_NAME = "Г. Энэрзаяа";
+
 function StripePaymentForm({ 
   amount, 
   bookingId, 
@@ -458,7 +462,7 @@ function PaymentContent() {
   /* eslint-enable react-hooks/exhaustive-deps */
 
   const copyAccountNumber = () => {
-    navigator.clipboard.writeText("5765050027");
+    navigator.clipboard.writeText(MANUAL_TRANSFER_ACCOUNT);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -820,12 +824,14 @@ function PaymentContent() {
                   <div className="bg-surface-alt/10 rounded-xl p-4 space-y-3">
                     <div>
                       <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('bank')}</p>
-                      <p className="text-main font-medium font-body">Khan Bank</p>
+                      <p className="text-main font-medium font-body">
+                        {currentLocale === "mn" ? "Транс Банк" : "Trans Bank"}
+                      </p>
                     </div>
                     <div>
                       <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('accountNumber')}</p>
                       <div className="flex items-center gap-2">
-                        <p className="text-main font-mono text-lg">5765050027</p>
+                        <p className="text-main font-mono text-sm sm:text-base break-all">{MANUAL_TRANSFER_ACCOUNT}</p>
                         <button
                           onClick={copyAccountNumber}
                           className="p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -841,7 +847,7 @@ function PaymentContent() {
                     </div>
                     <div>
                       <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('accountName')}</p>
-                      <p className="text-main font-medium font-body">Dalai Eej Resort</p>
+                      <p className="text-main font-medium font-body">{MANUAL_TRANSFER_ACCOUNT_NAME}</p>
                     </div>
                     <div>
                       <p className="text-main/60 text-xs uppercase tracking-wider font-body">{t('amount')}</p>
