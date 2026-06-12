@@ -1,12 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Calendar } from "lucide-react";
-import {
-  formatIsoDateAsDots,
-  maskDotsDateInput,
-  parseDotsDateToIso,
-} from "@/lib/dateFormat";
+import { formatIsoDateAsDots } from "@/lib/dateFormat";
 
 type Props = {
   id?: string;
@@ -20,110 +15,57 @@ type Props = {
   placeholder?: string;
 };
 
+/**
+ * Calendar-first date field: tap anywhere to open the native picker.
+ * Displays selected dates as DD.MM.YYYY (no manual typing).
+ */
 export default function DateInput({
   id,
   value,
   onChange,
   min,
-  className,
+  className = "",
   required,
   placeholder = "DD.MM.YYYY",
 }: Props) {
-  const nativeRef = useRef<HTMLInputElement>(null);
-  const [display, setDisplay] = useState(() => formatIsoDateAsDots(value));
-  const [focused, setFocused] = useState(false);
+  const display = value ? formatIsoDateAsDots(value) : "";
 
-  useEffect(() => {
-    if (!focused) {
-      setDisplay(formatIsoDateAsDots(value));
-    }
-  }, [value, focused]);
-
-  const commitIso = (iso: string) => {
-    if (min && iso < min) return;
-    onChange(iso);
-    setDisplay(formatIsoDateAsDots(iso));
-  };
-
-  const handleChange = (raw: string) => {
-    const masked = maskDotsDateInput(raw);
-    setDisplay(masked);
-
-    if (masked === "") {
-      onChange("");
-      return;
-    }
-
-    const iso = parseDotsDateToIso(masked);
-    if (!iso) return;
-    commitIso(iso);
-  };
-
-  const handleBlur = () => {
-    setFocused(false);
-    const iso = parseDotsDateToIso(display);
-    if (iso) {
-      commitIso(iso);
-      return;
-    }
-    setDisplay(formatIsoDateAsDots(value));
-  };
-
-  const openCalendar = () => {
-    const el = nativeRef.current;
-    if (!el) return;
-    try {
-      el.showPicker?.();
-    } catch {
-      el.focus();
-      el.click();
-    }
-  };
-
-  const handleNativeChange = (iso: string) => {
+  const handleChange = (iso: string) => {
     if (!iso) {
       onChange("");
-      setDisplay("");
       return;
     }
-    commitIso(iso);
+    if (min && iso < min) return;
+    onChange(iso);
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full cursor-pointer">
+      <input
+        type="text"
+        readOnly
+        value={display}
+        placeholder={placeholder}
+        tabIndex={-1}
+        aria-hidden
+        className={`${className} pr-8 cursor-pointer caret-transparent select-none`}
+      />
       <input
         id={id}
-        type="text"
-        inputMode="numeric"
-        autoComplete="off"
-        spellCheck={false}
-        placeholder={placeholder}
-        value={display}
-        onChange={(e) => handleChange(e.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={handleBlur}
-        required={required}
-        className={className ? `${className} pr-8` : "pr-8"}
-        aria-label={placeholder}
-      />
-      <button
-        type="button"
-        onClick={openCalendar}
-        className="absolute right-0 top-1/2 -translate-y-1/2 p-1 text-main/45 hover:text-main transition-colors"
-        aria-label="Open calendar"
-      >
-        <Calendar className="w-4 h-4" aria-hidden />
-      </button>
-      <input
-        ref={nativeRef}
         type="date"
         value={value}
         min={min}
-        tabIndex={-1}
-        aria-hidden
-        onChange={(e) => handleNativeChange(e.target.value)}
-        className="sr-only"
+        required={required}
+        onChange={(e) => handleChange(e.target.value)}
+        className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0 [color-scheme:dark]"
+        aria-label={placeholder}
       />
+      <span
+        className="pointer-events-none absolute right-0 top-1/2 z-0 -translate-y-1/2 p-1 text-main/45"
+        aria-hidden
+      >
+        <Calendar className="h-4 w-4" />
+      </span>
     </div>
   );
 }
