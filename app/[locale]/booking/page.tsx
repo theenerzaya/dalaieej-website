@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, type MouseEvent } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Users, Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
+import { Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 import { formatIsoDateAsDots } from "@/lib/dateFormat";
@@ -52,6 +52,8 @@ interface RoomTypeGroup {
 }
 
 interface CartItem {
+  /** Unique id — one cart row per physical room (quantity is always 1). */
+  id: string;
   roomTypeID: string;
   roomTypeName: string;
   rateID: string;
@@ -61,7 +63,33 @@ interface CartItem {
   currency: string;
   adults: number;
   children: number;
-  quantity: number;
+  quantity: 1;
+}
+
+function newCartLineId(): string {
+  return `line-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function sumCartAdults(lines: CartItem[]): number {
+  return lines.reduce((sum, item) => sum + item.adults, 0);
+}
+
+function sumCartChildren(lines: CartItem[]): number {
+  return lines.reduce((sum, item) => sum + item.children, 0);
+}
+
+/** Sensible defaults when adding another cabin (prefer 2 adults when party allows). */
+function defaultGuestsForNewUnit(
+  maxGuests: number,
+  remainingAdults: number,
+  remainingChildren: number
+): { adults: number; children: number } {
+  if (remainingAdults <= 0 && remainingChildren <= 0) {
+    return { adults: 1, children: 0 };
+  }
+  const adults = Math.min(maxGuests, Math.max(1, Math.min(2, remainingAdults || 1)));
+  const children = Math.min(remainingChildren, Math.max(0, maxGuests - adults));
+  return { adults, children };
 }
 
 interface AvailabilityData {
@@ -407,9 +435,16 @@ function BookingContent() {
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
 
   const totalGuests = totalAdults + totalChildren;
-  const cartCapacity = cart.reduce((sum, item) => sum + (item.maxGuests * item.quantity), 0);
-  const cartTotal = cart.reduce((sum, item) => sum + (item.pricePerNight * item.quantity * numberOfNights), 0);
-  const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCapacity = cart.reduce((sum, item) => sum + item.maxGuests, 0);
+  const assignedAdults = sumCartAdults(cart);
+  const assignedChildren = sumCartChildren(cart);
+  const assignedGuests = assignedAdults + assignedChildren;
+  const guestsFullyAssigned =
+    cart.length > 0 &&
+    assignedAdults === totalAdults &&
+    assignedChildren === totalChildren;
+  const cartTotal = cart.reduce((sum, item) => sum + item.pricePerNight * numberOfNights, 0);
+  const totalRooms = cart.length;
 
   const depositDueNow = useMemo(
     () =>
@@ -417,7 +452,7 @@ function BookingContent() {
         cart.map((item) => ({
           rateName: item.rateName,
           pricePerNight: item.pricePerNight,
-          quantity: item.quantity,
+          quantity: 1,
         })),
         numberOfNights
       ),
@@ -431,9 +466,7 @@ function BookingContent() {
     for (const item of cart) {
       const room = rooms.find((r) => r.roomTypeID === item.roomTypeID && r.rateID === item.rateID);
       const label =
-        item.quantity > 1
-          ? `${item.roomTypeName} (${item.quantity}×) · ${translateRateName(item.rateName, currentLocale)}`
-          : `${item.roomTypeName} · ${translateRateName(item.rateName, currentLocale)}`;
+        `${item.roomTypeName} · ${translateRateName(item.rateName, currentLocale)}`;
 
       if (isNonRefundableRate(item.rateName)) {
         lines.push({
@@ -462,7 +495,10 @@ function BookingContent() {
     return lines;
   }, [cart, rooms, currentLocale]);
 
-  const cartKey = (roomTypeID: string, rateID: string) => `${roomTypeID}__${rateID}`;
+  const rateKey = (roomTypeID: string, rateID: string) => `${roomTypeID}__${rateID}`;
+
+  const countCartLinesForRate = (roomTypeID: string, rateID: string) =>
+    cart.filter((item) => rateKey(item.roomTypeID, item.rateID) === rateKey(roomTypeID, rateID)).length;
 
   const groupedRooms = useMemo<RoomTypeGroup[]>(() => {
     const groups = new Map<string, RoomTypeGroup>();
@@ -545,7 +581,7 @@ function BookingContent() {
     setPropertyTermsAndConditions(null);
 
     try {
-      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=${totalAdults}&quoteChildren=${totalChildren}`;
+      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=${Math.max(1, Math.min(2, totalAdults))}&quoteChildren=0`;
 
       if (promo) {
         url += `&promo=${encodeURIComponent(promo)}`;
@@ -603,75 +639,74 @@ function BookingContent() {
     setPromoLoading(false);
   };
 
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [repricingLineId, setRepricingLineId] = useState<string | null>(null);
+
+  const buildCartLineFromRoom = (room: Room, existingCart: CartItem[]): CartItem => {
+    const remainingAdults = totalAdults - sumCartAdults(existingCart);
+    const remainingChildren = totalChildren - sumCartChildren(existingCart);
+    const maxGuests = room.maxGuests || 2;
+    const { adults, children } = defaultGuestsForNewUnit(
+      maxGuests,
+      remainingAdults,
+      remainingChildren
+    );
+    return {
+      id: newCartLineId(),
+      roomTypeID: room.roomTypeID,
+      roomTypeName: room.roomTypeName,
+      rateID: room.rateID,
+      rateName: room.rateName,
+      maxGuests,
+      pricePerNight:
+        numberOfNights > 0 ? (room.totalRate || 0) / numberOfNights : room.totalRate || 0,
+      currency: room.currency || "MNT",
+      adults,
+      children,
+      quantity: 1,
+    };
+  };
+
   const toggleRoomSelection = (room: Room) => {
-    const key = cartKey(room.roomTypeID, room.rateID);
-    const exists = cart.find(item => cartKey(item.roomTypeID, item.rateID) === key);
+    const key = rateKey(room.roomTypeID, room.rateID);
+    const exists = cart.some((item) => rateKey(item.roomTypeID, item.rateID) === key);
     if (exists) {
-      setCart(cart.filter(item => cartKey(item.roomTypeID, item.rateID) !== key));
+      setCart(cart.filter((item) => rateKey(item.roomTypeID, item.rateID) !== key));
     } else {
-      const newItem: CartItem = {
-        roomTypeID: room.roomTypeID,
-        roomTypeName: room.roomTypeName,
-        rateID: room.rateID,
-        rateName: room.rateName,
-        maxGuests: room.maxGuests || 2,
-        pricePerNight: numberOfNights > 0 ? (room.totalRate || 0) / numberOfNights : (room.totalRate || 0),
-        currency: room.currency || 'MNT',
-        adults: Math.min(totalAdults, room.maxGuests || 2),
-        children: Math.min(
-          totalChildren,
-          Math.max(0, (room.maxGuests || 2) - Math.min(totalAdults, room.maxGuests || 2))
-        ),
-        quantity: 1,
-      };
-      const cartWithoutSameRoomType = cart.filter(item => item.roomTypeID !== room.roomTypeID);
+      const newItem = buildCartLineFromRoom(room, cart);
+      const cartWithoutSameRoomType = cart.filter((item) => item.roomTypeID !== room.roomTypeID);
       setCart([...cartWithoutSameRoomType, newItem]);
     }
   };
 
-  const updateRoomQuantity = (roomTypeID: string, rateID: string, delta: number) => {
-    const room = rooms.find(r => r.roomTypeID === roomTypeID && r.rateID === rateID);
-    const maxAvailable = room?.roomsAvailable || 10;
-    const key = cartKey(roomTypeID, rateID);
-
-    setCart(cart.map(item => {
-      if (cartKey(item.roomTypeID, item.rateID) === key) {
-        const newQty = item.quantity + delta;
-        if (newQty <= 0) return null;
-        return { ...item, quantity: Math.min(maxAvailable, newQty) };
-      }
-      return item;
-    }).filter(Boolean) as CartItem[]);
+  const addCartLineForRate = (room: Room) => {
+    setCart((prev) => {
+      const key = rateKey(room.roomTypeID, room.rateID);
+      const currentCount = prev.filter(
+        (item) => rateKey(item.roomTypeID, item.rateID) === key
+      ).length;
+      if (currentCount >= (room.roomsAvailable || 10)) return prev;
+      return [...prev, buildCartLineFromRoom(room, prev)];
+    });
   };
 
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const removeCartLine = (lineId: string) => {
+    setCart(cart.filter((item) => item.id !== lineId));
+  };
 
-  const distributeGuests = () => {
-    const distributed: CartItem[] = [];
-    let remainingAdults = totalAdults;
-    let remainingChildren = totalChildren;
-
-    for (const item of cart) {
-      for (let i = 0; i < item.quantity; i++) {
-        const roomCapacity = item.maxGuests;
-        const adultsForRoom = Math.min(remainingAdults, roomCapacity);
-        remainingAdults -= adultsForRoom;
-
-        const spaceLeft = roomCapacity - adultsForRoom;
-        const childrenForRoom = Math.min(remainingChildren, spaceLeft);
-        remainingChildren -= childrenForRoom;
-
-        const finalAdults = adultsForRoom > 0 ? adultsForRoom : (childrenForRoom > 0 ? 0 : 1);
-
-        distributed.push({
-          ...item,
-          quantity: 1,
-          adults: finalAdults,
-          children: childrenForRoom,
-        });
-      }
+  const updateRoomQuantity = (room: Room, delta: number) => {
+    const key = rateKey(room.roomTypeID, room.rateID);
+    const linesForRate = cart.filter(
+      (item) => rateKey(item.roomTypeID, item.rateID) === key
+    );
+    if (delta > 0) {
+      addCartLineForRate(room);
+      return;
     }
-    return distributed;
+    if (delta < 0 && linesForRate.length > 0) {
+      const lastLine = linesForRate[linesForRate.length - 1];
+      removeCartLine(lastLine.id);
+    }
   };
 
   const quoteCartLineRates = async (lines: CartItem[]) => {
@@ -709,25 +744,76 @@ function BookingContent() {
     return repriced;
   };
 
+  const repriceCartLine = async (line: CartItem): Promise<CartItem> => {
+    const [repriced] = await quoteCartLineRates([line]);
+    return repriced;
+  };
+
+  const updateCartLineGuests = async (
+    lineId: string,
+    field: "adults" | "children",
+    delta: number
+  ) => {
+    const line = cart.find((item) => item.id === lineId);
+    if (!line) return;
+
+    let adults = line.adults;
+    let children = line.children;
+    if (field === "adults") {
+      adults = Math.max(
+        1,
+        Math.min(line.maxGuests - children, adults + delta)
+      );
+    } else {
+      children = Math.max(
+        0,
+        Math.min(line.maxGuests - adults, children + delta)
+      );
+    }
+
+    const updated: CartItem = { ...line, adults, children };
+    setCart((prev) => prev.map((item) => (item.id === lineId ? updated : item)));
+
+    setRepricingLineId(lineId);
+    try {
+      const repriced = await repriceCartLine(updated);
+      setCart((prev) => prev.map((item) => (item.id === lineId ? repriced : item)));
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : currentLocale === "mn"
+            ? "Үнийг шинэчлэхэд алдаа гарлаа"
+            : "Could not refresh pricing"
+      );
+    } finally {
+      setRepricingLineId(null);
+    }
+  };
+
   const proceedToCheckout = async () => {
     if (cart.length === 0) {
       setError(currentLocale === 'mn' ? "Өрөө сонгоно уу" : "Please select a room");
       return;
     }
     if (cartCapacity < totalGuests) return;
+    if (!guestsFullyAssigned) {
+      setError(t("guestsAssignedMismatch", { total: totalGuests }));
+      return;
+    }
 
     setCheckoutLoading(true);
     setError("");
 
     try {
-      const distributedCart = await quoteCartLineRates(distributeGuests());
+      const repricedCart = await quoteCartLineRates(cart);
       const checkoutParams = new URLSearchParams({
         checkin,
         checkout,
         nights: String(numberOfNights),
         totalAdults: String(totalAdults),
         totalChildren: String(totalChildren),
-        cart: encodeURIComponent(JSON.stringify(distributedCart)),
+        cart: encodeURIComponent(JSON.stringify(repricedCart)),
       });
 
       if (appliedPromo) checkoutParams.set('promo', appliedPromo);
@@ -786,8 +872,8 @@ function BookingContent() {
   const renderRateRow = (rate: Room) => {
     const perNight = numberOfNights > 0 ? rate.totalRate / numberOfNights : rate.totalRate;
     const originalPerNight = rate.originalRate && numberOfNights > 0 ? rate.originalRate / numberOfNights : undefined;
-    const rateCartItem = cart.find(c => cartKey(c.roomTypeID, c.rateID) === cartKey(rate.roomTypeID, rate.rateID));
-    const isInCart = !!rateCartItem;
+    const rateLineCount = countCartLinesForRate(rate.roomTypeID, rate.rateID);
+    const isInCart = rateLineCount > 0;
     const otherRateInCart = !isInCart && cart.some(c => c.roomTypeID === rate.roomTypeID);
     const blocked = isRateBlocked(rate.restrictions);
     const restrictionMsgs = getRestrictionMessages(rate.restrictions);
@@ -860,16 +946,16 @@ function BookingContent() {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 border border-main/20 px-1.5 py-1">
                 <button
-                  onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, -1)}
+                  onClick={() => updateRoomQuantity(rate, -1)}
                   className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
                   aria-label={currentLocale === 'mn' ? 'Хасах' : 'Decrease'}
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="w-6 text-center font-body text-main text-sm">{rateCartItem.quantity}</span>
+                <span className="w-6 text-center font-body text-main text-sm">{rateLineCount}</span>
                 <button
-                  onClick={() => updateRoomQuantity(rate.roomTypeID, rate.rateID, 1)}
-                  disabled={rateCartItem.quantity >= rate.roomsAvailable}
+                  onClick={() => updateRoomQuantity(rate, 1)}
+                  disabled={rateLineCount >= rate.roomsAvailable}
                   className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors disabled:opacity-30"
                   aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
                 >
@@ -1103,30 +1189,111 @@ function BookingContent() {
                   <ArrowRight className="w-4 h-4 text-main/40" />
                   <span>{formatDate(checkout)}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-main/60 font-body mb-5">
+                <div className="flex items-center gap-1.5 text-xs text-main/60 font-body mb-4">
                   <Moon className="w-3.5 h-3.5" />
                   <span>{numberOfNights} {currentLocale === 'mn' ? 'шөнө' : `Night${numberOfNights > 1 ? 's' : ''}`}</span>
                 </div>
 
+                <div
+                  className={`mb-4 px-3 py-2 text-xs font-body border ${
+                    guestsFullyAssigned
+                      ? "border-bark/30 bg-bark/10 text-bark"
+                      : "border-orange-500/30 bg-orange-500/10 text-orange-200"
+                  }`}
+                >
+                  {t("guestsAssigned", { assigned: assignedGuests, total: totalGuests })}
+                </div>
+
                 <div className="space-y-4 mb-5">
-                  {cart.map((item) => (
-                    <div key={cartKey(item.roomTypeID, item.rateID)} className="pb-4 border-b border-main/10 last:border-0 last:pb-0">
+                  {cart.map((item) => {
+                    const siblingKey = rateKey(item.roomTypeID, item.rateID);
+                    const siblings = cart.filter(
+                      (c) => rateKey(c.roomTypeID, c.rateID) === siblingKey
+                    );
+                    const cabinIndex = siblings.findIndex((c) => c.id === item.id) + 1;
+                    const isRepricing = repricingLineId === item.id;
+
+                    return (
+                    <div key={item.id} className="pb-4 border-b border-main/10 last:border-0 last:pb-0">
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <p className="font-body text-main text-sm">{item.roomTypeName}</p>
+                          {siblings.length > 1 && (
+                            <p className="text-main/45 text-[10px] font-cta uppercase tracking-[0.2em] mt-0.5">
+                              {t("cabinLabel", { number: cabinIndex })}
+                            </p>
+                          )}
                           <p className="text-main/50 text-xs font-body">{translateRateName(item.rateName, currentLocale)}</p>
                         </div>
                         <p className={`${editorialFont} italic text-sm text-main whitespace-nowrap`}>
-                          {(item.pricePerNight * item.quantity * numberOfNights).toLocaleString()}
+                          {isRepricing ? (
+                            <Loader2 className="w-4 h-4 animate-spin inline" />
+                          ) : (
+                            (item.pricePerNight * numberOfNights).toLocaleString()
+                          )}
                         </p>
                       </div>
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center gap-1.5 text-xs text-main/60 font-body">
-                          <Users className="w-3.5 h-3.5" />
-                          <span>{item.quantity > 1 ? `${item.quantity} × ` : ''}{item.maxGuests}</span>
+
+                      <div className="mt-3 space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs text-main/60 font-body">{t("adultsShort")}</span>
+                          <div className="flex items-center gap-1 border border-main/20 px-1">
+                            <button
+                              type="button"
+                              onClick={() => void updateCartLineGuests(item.id, "adults", -1)}
+                              disabled={isRepricing || item.adults <= 1}
+                              className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
+                              aria-label={currentLocale === "mn" ? "Хасах" : "Decrease adults"}
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="w-5 text-center text-xs font-body text-main">{item.adults}</span>
+                            <button
+                              type="button"
+                              onClick={() => void updateCartLineGuests(item.id, "adults", 1)}
+                              disabled={isRepricing || item.adults + item.children >= item.maxGuests}
+                              className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
+                              aria-label={currentLocale === "mn" ? "Нэмэх" : "Increase adults"}
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs text-main/60 font-body">{t("childrenShort")}</span>
+                          <div className="flex items-center gap-1 border border-main/20 px-1">
+                            <button
+                              type="button"
+                              onClick={() => void updateCartLineGuests(item.id, "children", -1)}
+                              disabled={isRepricing || item.children <= 0}
+                              className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
+                              aria-label={currentLocale === "mn" ? "Хасах" : "Decrease children"}
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="w-5 text-center text-xs font-body text-main">{item.children}</span>
+                            <button
+                              type="button"
+                              onClick={() => void updateCartLineGuests(item.id, "children", 1)}
+                              disabled={isRepricing || item.adults + item.children >= item.maxGuests}
+                              className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
+                              aria-label={currentLocale === "mn" ? "Нэмэх" : "Increase children"}
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-main/40 font-body">
+                          {currentLocale === "mn"
+                            ? `Хамгийн ихдээ ${item.maxGuests} зочин`
+                            : `Up to ${item.maxGuests} guests`}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-end mt-2">
                         <button
-                          onClick={() => toggleRoomSelection({ roomTypeID: item.roomTypeID, rateID: item.rateID, roomTypeName: item.roomTypeName, rateName: item.rateName, totalRate: item.pricePerNight * numberOfNights, currency: item.currency, maxGuests: item.maxGuests, roomsAvailable: 0, description: '', photos: [], features: [] })}
+                          type="button"
+                          onClick={() => removeCartLine(item.id)}
                           className="w-7 h-7 flex items-center justify-center border border-main/20 text-main/60 hover:border-red-400/60 hover:text-red-400 transition-colors"
                           aria-label={currentLocale === 'mn' ? 'Устгах' : 'Remove'}
                         >
@@ -1134,7 +1301,8 @@ function BookingContent() {
                         </button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="border-t border-main/15 pt-4 space-y-2 text-sm font-body">
@@ -1211,9 +1379,9 @@ function BookingContent() {
                 <button
                   type="button"
                   onClick={() => void proceedToCheckout()}
-                  disabled={cartCapacity < totalGuests || checkoutLoading}
+                  disabled={cartCapacity < totalGuests || !guestsFullyAssigned || checkoutLoading || !!repricingLineId}
                   className={`hidden lg:block w-full mt-5 py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
-                    cartCapacity >= totalGuests && !checkoutLoading
+                    cartCapacity >= totalGuests && guestsFullyAssigned && !checkoutLoading && !repricingLineId
                       ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                       : 'bg-main/10 text-main/40 cursor-not-allowed'
                   }`}
@@ -1307,7 +1475,7 @@ function BookingContent() {
                     ? localGallery
                     : (photos.length > 0 ? photos : [placeholderImages[index % placeholderImages.length]]);
                   const maxGuests = group.maxGuests || 2;
-                  const hasCartItem = group.rates.some(r => cart.some(c => cartKey(c.roomTypeID, c.rateID) === cartKey(r.roomTypeID, r.rateID)));
+                  const hasCartItem = group.rates.some((r) => countCartLinesForRate(r.roomTypeID, r.rateID) > 0);
 
                   const perNightValues = group.rates
                     .filter((r) => r.totalRate > 0)
@@ -1469,9 +1637,9 @@ function BookingContent() {
               <button
                 type="button"
                 onClick={() => void proceedToCheckout()}
-                disabled={cartCapacity < totalGuests || checkoutLoading}
+                disabled={cartCapacity < totalGuests || !guestsFullyAssigned || checkoutLoading || !!repricingLineId}
                 className={`px-6 py-3 font-cta uppercase tracking-[0.28em] text-[11px] transition-colors whitespace-nowrap ${
-                  cartCapacity >= totalGuests && !checkoutLoading
+                  cartCapacity >= totalGuests && guestsFullyAssigned && !checkoutLoading && !repricingLineId
                     ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                     : 'bg-main/10 text-main/40 cursor-not-allowed'
                 }`}

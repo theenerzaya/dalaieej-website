@@ -13,6 +13,7 @@ import { normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 import { formatIsoDateAsDots } from "@/lib/dateFormat";
 
 interface CartRoom {
+  id?: string;
   roomTypeID: string;
   roomTypeName: string;
   rateID: string;
