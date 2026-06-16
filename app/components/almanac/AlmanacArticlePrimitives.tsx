@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { useLocale } from "next-intl";
 import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
@@ -618,14 +619,29 @@ export function ArchivalCard({
             </p>
             {link ? (
               <p className="mt-6 text-center md:text-left">
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-cta text-[11px] font-normal uppercase tracking-[0.2em] text-ink/45 no-underline transition-[color,text-decoration-color] duration-300 hover:text-ink/70 hover:underline"
-                >
-                  [ {link.label} ]
-                </a>
+                {link.href.startsWith("http") ? (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-baseline gap-1 font-cta text-[11px] font-normal uppercase tracking-[0.2em] text-ink/45 no-underline transition-[color,text-decoration-color] duration-300 hover:text-ink/70 hover:underline"
+                  >
+                    [ {link.label} ]
+                    <span aria-hidden className="text-[0.85em] leading-none">
+                      ↗
+                    </span>
+                  </a>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="inline-flex items-baseline gap-1 font-cta text-[11px] font-normal uppercase tracking-[0.2em] text-ink/45 no-underline transition-[color,text-decoration-color] duration-300 hover:text-ink/70 hover:underline"
+                  >
+                    [ {link.label} ]
+                    <span aria-hidden className="text-[0.85em] leading-none">
+                      →
+                    </span>
+                  </Link>
+                )}
               </p>
             ) : null}
             {review ? (

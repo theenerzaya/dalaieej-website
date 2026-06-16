@@ -4,12 +4,19 @@ export const ALMANAC_TRANSLUCENT_NAV_SLUGS = [
   "khovsgol-and-baikal",
 ] as const;
 
-/** Chapter I — standalone getting-here page (EN + MN). */
-export const GETTING_HERE_TRANSLUCENT_NAV = "/getting-here";
+/** Standalone almanac-style pages with hero-over-nav (EN + MN). */
+export const TRANSLUCENT_NAV_STANDALONE_ROUTES = [
+  "/getting-here",
+  "/experiences",
+] as const;
 
 export function isAlmanacTranslucentNavPathname(pathname: string | null): boolean {
   if (!pathname) return false;
-  if (pathname.includes(GETTING_HERE_TRANSLUCENT_NAV)) return true;
+  if (
+    TRANSLUCENT_NAV_STANDALONE_ROUTES.some((route) => pathname.includes(route))
+  ) {
+    return true;
+  }
   return ALMANAC_TRANSLUCENT_NAV_SLUGS.some((slug) =>
     pathname.includes(`/almanac/${slug}`),
   );

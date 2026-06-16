@@ -1,150 +1,536 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
-import { Compass, Fish, Mountain, Tent, Camera, Users } from "lucide-react";
+import type { ReactNode } from "react";
+import Link from "next/link";
+import PageShell from "@/app/components/layout/PageShell";
+import {
+  BodyText,
+  CTALink,
+  Eyebrow,
+  Headline,
+} from "@/app/components/ui/Typography";
+import GettingHereToc, {
+  type GettingHereTocItem,
+} from "@/app/components/getting-here/GettingHereToc";
+import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
+import MediaPlaceholder from "@/app/components/getting-here/MediaPlaceholder";
+import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
+import { ArchivalCard } from "@/app/components/almanac/AlmanacArticlePrimitives";
+import { ALMANAC_CHAPTERS as EN_CHAPTERS } from "@/app/data/almanacChapters";
+import { ALMANAC_CHAPTERS as MN_CHAPTERS } from "@/app/data/almanacChapters.mn";
+import { motion, useReducedMotion } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
+
+const EXPERIENCE_LINKS = {
+  tumenEkh:
+    "https://www.facebook.com/p/Tumen-Ekh-ensembleofficial-page-100090139782969/",
+  tsagaanLavai: "https://tsagaanlavai.mn/?lang=en",
+  khyasaaMountain:
+    "https://www.wikiloc.com/hiking-trails/mongolia-khyasaayaa-uul-5154270",
+  sukhbaatarMuseum: "https://maps.app.goo.gl/Gpk4Ab9zjAQ6DchU9",
+  localMarket: "https://maps.app.goo.gl/8hhA5upPR6Y28aKGA",
+  galleria: "https://maps.app.goo.gl/5NyPbFWGRdUsezpQ9",
+  stateDepartmentStore: "https://maps.app.goo.gl/xU8nJ39YZW67TL1m8",
+} as const;
+
+const PROSE_LINK_CLASS =
+  "font-medium text-ink underline decoration-ink/25 underline-offset-2 transition-colors hover:text-water-deep hover:decoration-water-deep/40";
+
+function InlineExternalArrow() {
+  return (
+    <span aria-hidden className="inline-block text-[0.85em] leading-none">
+      ↗
+    </span>
+  );
+}
+
+function ExternalProseLink({
+  href,
+  children,
+  arrow = true,
+}: {
+  href: string;
+  children: ReactNode;
+  arrow?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${PROSE_LINK_CLASS}${arrow ? " inline-flex items-baseline gap-0.5" : ""}`}
+    >
+      {children}
+      {arrow ? <InlineExternalArrow /> : null}
+    </a>
+  );
+}
+
+function SectionBlock({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <section id={id} className="scroll-mt-24 pt-16 first:pt-0">
+      <FadeInBlock>
+        <Headline as="h2" size="sub" className="!text-left mb-8">
+          {title}
+        </Headline>
+      </FadeInBlock>
+      <div className="space-y-6">{children}</div>
+    </section>
+  );
+}
+
+function Subhead({ children }: { children: ReactNode }) {
+  return (
+    <Headline
+      as="h3"
+      size="sub"
+      align="left"
+      className="!text-ink/90 mt-10 mb-4 text-xl md:!text-2xl"
+    >
+      {children}
+    </Headline>
+  );
+}
+
+function Prose({ children }: { children: ReactNode }) {
+  return (
+    <BodyText size="md" className="!text-left max-w-none text-ink/75">
+      {children}
+    </BodyText>
+  );
+}
+
+function LabelledText({
+  label,
+  body,
+}: {
+  label: string;
+  body: string;
+}) {
+  return (
+    <>
+      <strong className="font-medium text-ink">{label}</strong> {body}
+    </>
+  );
+}
+
+const MAP_LINK_CLASS =
+  "inline-flex items-center gap-1 font-body text-sm text-ink/70 underline decoration-ink/25 underline-offset-2 transition-colors hover:text-water-deep hover:decoration-water-deep/40";
+
+function MapSiteLinks({
+  links,
+}: {
+  links: { label: string; href: string }[];
+}) {
+  return (
+    <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
+      {links.map((link) => (
+        <a
+          key={link.href}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={MAP_LINK_CLASS}
+        >
+          {link.label}
+          <InlineExternalArrow />
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function RateCard({
+  name,
+  meta,
+  description,
+}: {
+  name: string;
+  meta?: string;
+  description: ReactNode;
+}) {
+  return (
+    <div className="bg-surface-alt/80 p-6 md:p-8">
+      <div
+        className={
+          meta
+            ? "mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
+            : "mb-3"
+        }
+      >
+        <p className="font-cta text-[11px] uppercase tracking-[0.25em] text-leaf">
+          {name}
+        </p>
+        {meta ? (
+          <p className="font-cta text-[10px] uppercase tracking-[0.22em] text-ink/45 sm:shrink-0 sm:text-right">
+            {meta}
+          </p>
+        ) : null}
+      </div>
+      <Prose>{description}</Prose>
+    </div>
+  );
+}
 
 export default function ExperiencesPage() {
   const locale = useLocale();
-  const localePrefix = locale === 'mn' ? '/mn' : '';
+  const t = useTranslations("experiencesPage");
+  const localePrefix = locale === "mn" ? "/mn" : "";
+  const chapters = locale === "mn" ? MN_CHAPTERS : EN_CHAPTERS;
+  const prevChapter = chapters.find((c) => c.id === "chapter-v");
+  const reduceMotion = useReducedMotion();
 
-  const experiences = [
-    { 
-      icon: Fish, 
-      title: locale === 'mn' ? "Загас барих" : "Fishing Expeditions",
-      desc: locale === 'mn' ? "Хөвсгөл нуурын цэвэр усанд загас барих" : "Fly fishing in the pristine waters of Lake Khövsgöl",
-      image: "/images/gallery/adventures/DBR_3442.webp"
-    },
-    { 
-      icon: Mountain, 
-      title: locale === 'mn' ? "Уулын аялал" : "Mountain Treks",
-      desc: locale === 'mn' ? "Хөтөчтэй уулын аялал" : "Guided hikes through ancient forests and alpine meadows",
-      image: "/images/gallery/adventures/DBR_3494.webp"
-    },
-    { 
-      icon: Tent, 
-      title: locale === 'mn' ? "Нүүдлийн амьдрал" : "Nomadic Life",
-      desc: locale === 'mn' ? "Нүүдэлчдийн гэрт айлчлах" : "Visit authentic nomadic families and their herds",
-      image: "/images/gallery/adventures/DBR_3892.webp"
-    },
-    { 
-      icon: Compass, 
-      title: locale === 'mn' ? "Морин аялал" : "Horseback Riding",
-      desc: locale === 'mn' ? "Монгол морьтой аялах" : "Explore the steppe on Mongolian horses",
-      image: "/images/gallery/adventures/DBR_4306.webp"
-    },
-    { 
-      icon: Camera, 
-      title: locale === 'mn' ? "Гэрэл зургийн аялал" : "Photography Tours",
-      desc: locale === 'mn' ? "Үзэсгэлэнт газруудаар аялах" : "Capture stunning landscapes with expert guides",
-      image: "/images/gallery/adventures/DBR_4316.webp"
-    },
-    { 
-      icon: Users, 
-      title: locale === 'mn' ? "Соёлын аялал" : "Cultural Tours",
-      desc: locale === 'mn' ? "Орон нутгийн соёлтой танилцах" : "Discover local traditions, crafts, and ceremonies",
-      image: "/images/gallery/adventures/DBR_4329.webp"
-    },
+  const experienceRichTags = {
+    tumenEkh: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.tumenEkh}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    tsagaanLavai: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.tsagaanLavai}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    khyasaa: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.khyasaaMountain}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    galleria: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.galleria}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    stateDepartmentStore: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.stateDepartmentStore}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+  };
+
+  const ulaanbaatarRichTags = {
+    tumenEkh: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.tumenEkh} arrow={false}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    tsagaanLavai: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.tsagaanLavai} arrow={false}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    galleria: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.galleria} arrow={false}>
+        {chunks}
+      </ExternalProseLink>
+    ),
+    stateDepartmentStore: (chunks: ReactNode) => (
+      <ExternalProseLink
+        href={EXPERIENCE_LINKS.stateDepartmentStore}
+        arrow={false}
+      >
+        {chunks}
+      </ExternalProseLink>
+    ),
+  };
+
+  const TOC_ITEMS: GettingHereTocItem[] = [
+    { id: "boat-expeditions", label: t("toc.boatExpeditions") },
+    { id: "horseback", label: t("toc.horseback") },
+    { id: "deep-taiga", label: t("toc.deepTaiga") },
+    { id: "khatgal-western-shore", label: t("toc.khatgalWesternShore") },
+    { id: "peninsula-leisure", label: t("toc.peninsulaLeisure") },
+    { id: "sauna", label: t("toc.sauna") },
+    { id: "ulaanbaatar", label: t("toc.ulaanbaatar") },
+    { id: "getting-here", label: t("toc.gettingHere") },
   ];
 
   return (
-    <main className="min-h-screen bg-white pt-24 md:pt-16">
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="/images/gallery/adventures/DBR_4391.webp"
-            alt="Experiences"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-leaf/60 via-leaf/40 to-leaf/80" />
-        </div>
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="font-serif text-5xl md:text-7xl text-main mb-6"
-          >
-            {locale === 'mn' ? "Дурсамж Бүтээх" : "Roam the Wilds"}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-main/90 text-lg md:text-xl max-w-2xl mx-auto"
-          >
-            {locale === 'mn' 
-              ? "Хөвсгөлийн байгаль, соёлын онцгой туршлагууд"
-              : "Curated adventures that reveal the soul of Lake Khövsgöl and its timeless traditions"}
-          </motion.p>
-        </div>
-      </section>
+    <PageShell offsetNavbar={false}>
+      <FrostedMapSection
+        aria-label={t("hero.title")}
+        className="pb-16 md:pb-24 pt-[calc(var(--navbar-h)+2.5rem)] md:pt-[calc(var(--navbar-h)+3.5rem)] min-h-[min(58vh,32rem)]"
+        imageSrc="/images/gallery/adventures/DBR_4391.webp"
+        imagePriority
+        frostOpacity={13.87}
+        frostBlurPx={6.2}
+        mapObjectPosition="50% 45%"
+      >
+        <motion.div
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.7 }}
+        >
+          <Headline as="h1" size="section">
+            {t("hero.title")}
+          </Headline>
+        </motion.div>
+        <motion.div
+          initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.6,
+            delay: reduceMotion ? 0 : 0.15,
+          }}
+        >
+          <BodyText size="md" className="max-w-2xl">
+            {t("hero.subtitle")}
+          </BodyText>
+        </motion.div>
+        <div
+          id="hero-nav-sentinel"
+          aria-hidden
+          className="pointer-events-none h-px w-full shrink-0"
+        />
+      </FrostedMapSection>
 
-      <section className="py-20 px-4 bg-surface-alt">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="font-serif text-4xl md:text-5xl text-leaf mb-6">
-              {locale === 'mn' ? "Онцгой адал явдал" : "Signature Adventures"}
-            </h2>
-            <p className="font-body text-leaf/70 text-lg max-w-3xl mx-auto">
-              {locale === 'mn'
-                ? "Манай туршлагатай хөтчүүд таныг Хөвсгөлийн нууц газруудаар хөтөлнө."
-                : "Our expert guides lead you through unforgettable journeys across land, water, and culture."}
-            </p>
-          </motion.div>
+      <section className="px-6 pb-24 md:pb-32">
+        <div className="mx-auto max-w-6xl">
+          <FadeInBlock className="mb-12 md:mb-16">
+            <CTALink
+              href={`${localePrefix}/almanac`}
+              arrow={false}
+              className="!text-ink/50 hover:!text-water-deep [&>span]:!border-ink/20 [&>span]:group-hover:!border-water-deep/40"
+            >
+              {t("backToAlmanac")}
+            </CTALink>
+          </FadeInBlock>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+          <article
+            aria-label={t("ariaGuide")}
+            className="lg:grid lg:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"
+          >
+            <aside className="mb-12 lg:mb-0">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <FadeInBlock>
+                  <GettingHereToc items={TOC_ITEMS} title={t("tocTitle")} />
+                </FadeInBlock>
+              </div>
+            </aside>
+
+            <div className="min-w-0 space-y-0">
+              <SectionBlock
+                id="boat-expeditions"
+                title={t("boatExpeditions.title")}
               >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={exp.image}
-                    alt={exp.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                <FadeInBlock delay={0.05}>
+                  <MediaPlaceholder
+                    variant="photo"
+                    label={t("media.boatExpeditions.label")}
+                    imageSrc="/images/gallery/adventures/DBR_3442.webp"
+                    imageAlt={t("media.boatExpeditions.alt")}
+                    aspectClass="aspect-[4/3] md:aspect-[21/9]"
+                    imageClassName="object-cover"
                   />
-                </div>
-                <div className="p-6">
-                  <exp.icon className="w-8 h-8 text-leaf mb-3" />
-                  <h3 className="font-serif text-xl text-leaf mb-2">{exp.title}</h3>
-                  <p className="font-body text-leaf/60">{exp.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </FadeInBlock>
+                <FadeInBlock delay={0.1}>
+                  <Prose>{t("boatExpeditions.intro")}</Prose>
+                  <div className="grid gap-4 pt-2">
+                    <RateCard
+                      name={t("boatExpeditions.expedition1.name")}
+                      meta={t("boatExpeditions.expedition1.meta")}
+                      description={t("boatExpeditions.expedition1.desc")}
+                    />
+                    <RateCard
+                      name={t("boatExpeditions.expedition2.name")}
+                      meta={t("boatExpeditions.expedition2.meta")}
+                      description={t("boatExpeditions.expedition2.desc")}
+                    />
+                    <RateCard
+                      name={t("boatExpeditions.expedition3.name")}
+                      meta={t("boatExpeditions.expedition3.meta")}
+                      description={t("boatExpeditions.expedition3.desc")}
+                    />
+                  </div>
+                  <Prose>
+                    <LabelledText
+                      label={t("boatExpeditions.captainsNoteLabel")}
+                      body={t("boatExpeditions.captainsNote")}
+                    />
+                  </Prose>
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock id="horseback" title={t("horseback.title")}>
+                <FadeInBlock delay={0.1}>
+                  <Prose>{t("horseback.body")}</Prose>
+                  <Prose>
+                    <LabelledText
+                      label={t("horseback.rateLabel")}
+                      body={t("horseback.rate")}
+                    />
+                  </Prose>
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock id="deep-taiga" title={t("deepTaiga.title")}>
+                <FadeInBlock delay={0.1}>
+                  <Prose>{t("deepTaiga.body")}</Prose>
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock
+                id="khatgal-western-shore"
+                title={t("khatgalWesternShore.title")}
+              >
+                <FadeInBlock delay={0.05}>
+                  <MediaPlaceholder
+                    variant="photo"
+                    label={t("media.westernShore.label")}
+                    imageSrc="/images/almanac/borders-and-industry/sukhbaatar-museum.jpeg"
+                    imageAlt={t("media.westernShore.alt")}
+                    aspectClass="aspect-[4/3]"
+                  />
+                </FadeInBlock>
+                <FadeInBlock delay={0.1}>
+                  <Subhead>{t("khatgalWesternShore.khyasaaTitle")}</Subhead>
+                  <Prose>
+                    {t.rich("khatgalWesternShore.khyasaa", experienceRichTags)}
+                  </Prose>
+                  <Subhead>{t("khatgalWesternShore.museumTitle")}</Subhead>
+                  <Prose>{t("khatgalWesternShore.museumBody")}</Prose>
+                  <MapSiteLinks
+                    links={[
+                      {
+                        label: t("khatgalWesternShore.mapLinks.museum"),
+                        href: EXPERIENCE_LINKS.sukhbaatarMuseum,
+                      },
+                      {
+                        label: t("khatgalWesternShore.mapLinks.market"),
+                        href: EXPERIENCE_LINKS.localMarket,
+                      },
+                    ]}
+                  />
+                  <ArchivalCard
+                    eyebrow={t("khatgalWesternShore.openAirArchive.eyebrow")}
+                    body={t("khatgalWesternShore.openAirArchive.body")}
+                    image={{
+                      src: "/images/almanac/borders-and-industry/sukhbaatar-museum.jpeg",
+                      alt: t("khatgalWesternShore.openAirArchive.imageAlt"),
+                    }}
+                    link={{
+                      label: t("khatgalWesternShore.openAirArchive.link"),
+                      href: `${localePrefix}/almanac/borders-and-industry`,
+                    }}
+                  />
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock
+                id="peninsula-leisure"
+                title={t("peninsulaLeisure.title")}
+              >
+                <FadeInBlock delay={0.05}>
+                  <MediaPlaceholder
+                    variant="photo"
+                    label={t("media.peninsulaLeisure.label")}
+                    imageSrc="/images/gallery/adventures/DBR_3494.webp"
+                    imageAlt={t("media.peninsulaLeisure.alt")}
+                    aspectClass="aspect-[4/3]"
+                  />
+                </FadeInBlock>
+                <FadeInBlock delay={0.1}>
+                  <Subhead>{t("peninsulaLeisure.kayakingTitle")}</Subhead>
+                  <Prose>{t("peninsulaLeisure.kayaking")}</Prose>
+                  <Subhead>{t("peninsulaLeisure.walksTitle")}</Subhead>
+                  <Prose>{t("peninsulaLeisure.walks")}</Prose>
+                  <Subhead>{t("peninsulaLeisure.mergenTitle")}</Subhead>
+                  <Prose>{t("peninsulaLeisure.mergen")}</Prose>
+                  <Subhead>{t("peninsulaLeisure.picnicsTitle")}</Subhead>
+                  <Prose>{t("peninsulaLeisure.picnics")}</Prose>
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock id="sauna" title={t("sauna.title")}>
+                <FadeInBlock delay={0.1}>
+                  <Prose>{t("sauna.body")}</Prose>
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock id="ulaanbaatar" title={t("ulaanbaatar.title")}>
+                <FadeInBlock delay={0.1}>
+                  <Prose>{t("ulaanbaatar.intro")}</Prose>
+                  <div className="grid gap-4 pt-2">
+                    <RateCard
+                      name={t("ulaanbaatar.artsLabel")}
+                      description={t.rich("ulaanbaatar.arts", ulaanbaatarRichTags)}
+                    />
+                    <RateCard
+                      name={t("ulaanbaatar.cashmereLabel")}
+                      description={t.rich(
+                        "ulaanbaatar.cashmere",
+                        ulaanbaatarRichTags
+                      )}
+                    />
+                  </div>
+                </FadeInBlock>
+              </SectionBlock>
+
+              <SectionBlock id="getting-here" title={t("gettingHere.title")}>
+                <FadeInBlock delay={0.1}>
+                  <Prose>{t("gettingHere.body")}</Prose>
+                  <div className="pt-2">
+                    <CTALink href={`${localePrefix}/getting-here`} arrow>
+                      {t("gettingHere.cta")}
+                    </CTALink>
+                  </div>
+                </FadeInBlock>
+              </SectionBlock>
+            </div>
+          </article>
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-leaf">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-main mb-6">
-            {locale === 'mn' ? "Тусгай хөтөлбөр" : "Custom Itineraries"}
-          </h2>
-          <p className="font-body text-main/70 mb-8">
-            {locale === 'mn' 
-              ? "Таны сонирхолд нийцсэн хувийн хөтөлбөр боловсруулна"
-              : "Let us craft a personalised adventure tailored to your interests"}
-          </p>
-          <a
-            href={`${localePrefix}/booking`}
-            className="inline-block px-8 py-4 bg-surface-alt text-leaf font-body text-lg hover:bg-white transition-colors rounded"
-          >
-            {locale === 'mn' ? "Холбогдох" : "Plan Your Adventure"}
-          </a>
+      <section className="px-6 pb-4 md:pb-6">
+        <div className="mx-auto max-w-6xl">
+          <FadeInBlock>
+            <div className="flex justify-start border-t border-ink/10 pt-12">
+              {prevChapter ? (
+                <Link
+                  href={`${localePrefix}${prevChapter.href}`}
+                  className="group font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
+                >
+                  <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
+                    {locale === "mn" ? "Өмнөх" : "Previous"}
+                  </span>
+                  <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
+                    {prevChapter.eyebrow} — {prevChapter.title}
+                  </span>
+                </Link>
+              ) : null}
+            </div>
+          </FadeInBlock>
         </div>
       </section>
-    </main>
+
+      <FrostedMapSection
+        aria-label={t("destination.eyebrow")}
+        className="py-24 md:py-32"
+        contentClassName="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center"
+        fadeTop
+        fadeBottom={false}
+      >
+        <FadeInBlock className="flex w-full flex-col items-center gap-8 text-center">
+          <Eyebrow className="!text-water-deep/70">{t("destination.eyebrow")}</Eyebrow>
+          <Headline as="h2" size="sub">
+            {t("destination.title")}
+          </Headline>
+          <BodyText size="md" className="max-w-xl">
+            {t("destination.subtitle")}
+          </BodyText>
+          <CTALink href={`${localePrefix}/cabins`} arrow>
+            {t("destination.link")}
+          </CTALink>
+        </FadeInBlock>
+      </FrostedMapSection>
+    </PageShell>
   );
 }

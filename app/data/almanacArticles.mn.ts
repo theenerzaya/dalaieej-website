@@ -444,6 +444,10 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       href: "/almanac/forest-and-steppe",
       label: "IV Бүлэг — Тайга ба Тал хээр",
     },
+    next: {
+      href: "/experiences",
+      label: "VI Бүлэг — Мэргэний хууш",
+    },
     sections: [
       {
         id: "sister-lakes",

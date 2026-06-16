@@ -69,7 +69,7 @@ export default function Footer() {
     { key: "stay", href: "/cabins", active: true },
     { key: "dining", href: "/restaurant", active: true },
     { key: "wellness", href: "/wellness", active: false },
-    { key: "adventures", href: "/experiences", active: false },
+    { key: "adventures", href: "/experiences", active: true },
     { key: "stories", href: "/almanac", active: true },
   ];
 

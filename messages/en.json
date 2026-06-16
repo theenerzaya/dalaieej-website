@@ -58,6 +58,12 @@
       "openGraphTitle": "The Journey to Lake Khövsgöl | Dalai Eej Resort",
       "openGraphDescription": "Whether you prefer a quick domestic flight to Murun or a scenic drive across the Mongolian steppe, discover the best ways to reach our shores."
     },
+    "experiences": {
+      "title": "Discover Khatgal & The Mergen Peninsula | Dalai Eej",
+      "description": "Plan your days at Dalai Eej. From sunset kayaking on Lake Khuvsgul to quiet walks on the Mergen Peninsula, discover untamed wilderness and absolute stillness.",
+      "openGraphTitle": "Discover Khatgal & The Mergen Peninsula | Dalai Eej",
+      "openGraphDescription": "Plan your days at Dalai Eej. From sunset kayaking on Lake Khuvsgul to quiet walks on the Mergen Peninsula, discover untamed wilderness and absolute stillness."
+    },
     "almanac": {
       "title": "The Almanac | A Guide to the Northern Frontier | Dalai Eej Resort",
       "description": "Field notes and historical archives on Lake Khövsgöl — from the steppe to the taiga, Mörön to Khatgal, and the ancient divide of the northern frontier.",
@@ -789,6 +795,121 @@
       "title": "The journey is just the prelude.",
       "subtitle": "Discover the accommodations and exclusive spaces waiting at Dalai Eej.",
       "link": "Explore accommodations"
+    }
+  },
+  "experiencesPage": {
+    "hero": {
+      "title": "Discover Khatgal & The Mergen Peninsula",
+      "subtitle": "Beyond the quiet sanctuary of the resort, the Mergen Peninsula and the broader shores of Lake Khuvsgul offer both untamed wilderness and deep cultural heritage. Whether you seek active exploration or absolute stillness, here is how to spend your days with us."
+    },
+    "backToAlmanac": "← The Almanac",
+    "tocTitle": "Quick Navigation",
+    "toc": {
+      "boatExpeditions": "Chartered Boat Expeditions",
+      "horseback": "Guided Horseback Riding",
+      "deepTaiga": "Deep Taiga Expeditions",
+      "khatgalWesternShore": "Khatgal Village & The Western Shore",
+      "peninsulaLeisure": "At Your Own Pace: Peninsula Leisure",
+      "sauna": "The Sauna",
+      "ulaanbaatar": "Notes for the Capital: Ulaanbaatar",
+      "gettingHere": "Travel Guide: Getting Here"
+    },
+    "ariaGuide": "Discover Khatgal and the Mergen Peninsula",
+    "media": {
+      "boatExpeditions": {
+        "label": "On the water",
+        "alt": "Kayaking on the calm waters of Lake Khuvsgul near the Mergen Peninsula."
+      },
+      "peninsulaLeisure": {
+        "label": "On the Mergen Peninsula",
+        "alt": "Forest trails on the Mergen Peninsula overlooking Lake Khuvsgul."
+      },
+      "westernShore": {
+        "label": "Khatgal village and the western shore",
+        "alt": "The western shore of Lake Khuvsgul near Khatgal village."
+      }
+    },
+    "boatExpeditions": {
+      "title": "Chartered Boat Expeditions",
+      "intro": "Explore the far reaches of the lake with our captained excursions. From brief scenic trips to half-day cultural immersions, our boats depart directly from the shore.",
+      "expedition1": {
+        "name": "Khusliin Khad",
+        "meta": "50,000 MNT / person",
+        "desc": "A scenic journey across the water to the revered Wish Rock."
+      },
+      "expedition2": {
+        "name": "Khatgal Port",
+        "meta": "50,000 MNT / boat",
+        "desc": "Travel by water to explore the historic local village."
+      },
+      "expedition3": {
+        "name": "Reindeer Herders' Camp",
+        "meta": "700,000 MNT (12-seater)",
+        "desc": "A deeper water charter to visit the Tsaatan summer camps."
+      },
+      "captainsNoteLabel": "Captain's Note:",
+      "captainsNote": "Due to afternoon winds and lake swells, expeditions to the Reindeer Herders' Camp must depart before 11:00 AM. We highly recommend scheduling this journey from your second day onward to ensure a calm, comfortable crossing."
+    },
+    "horseback": {
+      "title": "Guided Horseback Riding",
+      "body": "Experience the landscape at a traditional pace. Over the course of an hour, our local guides will lead you through the forested trails of the peninsula, bringing you to a sweeping vantage point that overlooks the vast, open waters of the main lake.",
+      "rateLabel": "Rate:",
+      "rate": "45,000 MNT per person (includes guide and one-hour ride)."
+    },
+    "deepTaiga": {
+      "title": "Deep Taiga Expeditions",
+      "body": "For guests interested in a truly immersive, multi-day journey into the deep red or green taiga on horseback to visit the remote Tsaatan reindeer herding communities, we recommend partnering with trusted local experts. You can reach out directly to Eric at 879erdenebateric@gmail.com to arrange these extended overland tours. (Note: Rates begin at $1,650 USD per person, as of June 2026)."
+    },
+    "khatgalWesternShore": {
+      "title": "Khatgal Village & The Western Shore",
+      "khyasaaTitle": "The Khyasaa Mountain Ascent",
+      "khyasaa": "If you are arriving by private vehicle—or seeking a much more demanding trek—we highly recommend crossing over to the lake's western shore to journey up <khyasaa>Khyasaa Mountain</khyasaa>. The ascent is notoriously challenging for cars, but the sweeping, uninterrupted views from the summit are spectacular.",
+      "museumTitle": "Sukhbaatar Ship Museum & The Local Market",
+      "museumBody": "While on the western shore, spend a few hours in Khatgal village to anchor yourself in the region's history. Begin by exploring Khuvsgul's naval past at the Sukhbaatar ship museum, then wander through the local market. Our region is famous for its wild-harvested provisions—we highly recommend picking up fresh smoked or preserved lake fish, along with jars of local bilberry and lingonberry jams. The market is also an excellent place to source premium Mongolian pine nuts, or to bring home traditional dairy you will experience during your time in Mongolia, such as thick clotted cream and aaruul (dried curds).",
+      "mapLinks": {
+        "museum": "Map: Sukhbaatar Ship Museum",
+        "market": "Map: Khatgal Local Market"
+      },
+      "openAirArchive": {
+        "eyebrow": "OPEN-AIR ARCHIVE",
+        "body": "A stark physical record of the northern frontier. Located at the former Khatgal petroleum base, this open-air archive preserves the Sukhbaatar-1 and a sunken fleet of Soviet logistics machinery hauled from depths of 171 meters.",
+        "link": "READ CHAPTER III — BORDERS & INDUSTRY",
+        "imageAlt": "The Sukhbaatar Museum open-air archive at the former Khatgal petroleum base."
+      }
+    },
+    "peninsulaLeisure": {
+      "title": "At Your Own Pace: Peninsula Leisure",
+      "kayakingTitle": "Kayaking",
+      "kayaking": "The lake is at its most beautiful during the still hours of early morning or right at sunset, offering a quiet, private vantage point of the taiga. However, kayaking doesn't have to be purely meditative—taking the boats out with friends after a leisurely meal is a wonderfully relaxed, playful way to experience the water together.",
+      "walksTitle": "Quiet Walks & The Shoreline",
+      "walks": "Step straight from your door onto the gentler trails of our peninsula. For a meditative reset, simply walk the quiet shoreline to clear your thoughts. In the height of summer, the sun lingers until 9:00 PM or later, making an evening stroll along the water a deeply cleansing experience accompanied by long, golden light. It is an effortless way to ground yourself in the landscape without the demands of a steep climb.",
+      "mergenTitle": "Peninsula Hikes & Mergen Mountain",
+      "mergen": "For a more structured route, we offer guided hikes to curated scenic vantage points. If you are looking for true elevation, the climb up Mergen Mountain is highly rewarding and best experienced just before sunset.",
+      "picnicsTitle": "Peninsula Picnics & Rest",
+      "picnics": "Secluded picnic spots are scattered throughout the peninsula. Bring a blanket and some provisions to read to a loved one, play a quiet game of cards, or—after a gentle morning walking the trails—indulge in a delicious afternoon nap in the shade of the trees. It is an invitation to slow down and experience an older, simpler way of life."
+    },
+    "sauna": {
+      "title": "The Sauna",
+      "body": "After a long day of climbing Mergen Mountain, riding through the taiga, or driving up Khyasaa, retreat to the sauna. Deep heat, steam, and silence to restore tired muscles and prepare you for the evening."
+    },
+    "ulaanbaatar": {
+      "title": "Notes for the Capital: Ulaanbaatar",
+      "intro": "Many guests ask us where to experience traditional arts and source local goods. While the Mergen Peninsula is a place of natural silence and outdoor exploration, Ulaanbaatar is the true hub for heritage showcases and fine textiles. We highly recommend saving these experiences for your days in the capital:",
+      "artsLabel": "The Traditional Arts",
+      "arts": "The <tumenEkh>Tumen Ekh Ensemble</tumenEkh> (near the National Amusement Park) and the <tsagaanLavai>Tsagaan Lavai Ensemble</tsagaanLavai> offer world-class, authentic performances of Khoomii (throat singing), contortionism, and vibrant Tsam dances.",
+      "cashmereLabel": "Mongolian Cashmere",
+      "cashmere": "Ulaanbaatar is home to some of the world's finest cashmere. Dedicate an afternoon in the city to explore the flagship boutiques at the <galleria>Galleria Ulaanbaatar</galleria> or the historic <stateDepartmentStore>State Department Store</stateDepartmentStore> before making your way to the countryside."
+    },
+    "gettingHere": {
+      "title": "Travel Guide: Getting Here",
+      "body": "The journey to the lake is an adventure of its own. For a detailed breakdown of flights, driving routes, and private transfers, read our comprehensive guide:",
+      "cta": "How to Travel to Khatgal & The Mergen Peninsula"
+    },
+    "destination": {
+      "eyebrow": "THE DESTINATION",
+      "title": "The peninsula is just the beginning.",
+      "subtitle": "Discover the accommodations and exclusive spaces waiting at Dalai Eej.",
+      "link": "EXPLORE ACCOMMODATIONS"
     }
   },
   "promo": {

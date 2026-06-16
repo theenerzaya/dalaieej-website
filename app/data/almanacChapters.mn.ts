@@ -85,4 +85,16 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     href: "/almanac/khovsgol-and-baikal",
     ctaLabel: "Унших",
   },
+  {
+    id: "chapter-vi",
+    eyebrow: "VI Бүлэг",
+    title: "Мэргэний хуушийн тэмдэглэл",
+    description:
+      "Өглөөний сэлүүр, хуушийн аялал, Хатгалын зах, саун — ресортын цаана зүүн эрэг дээрх зочдын хөтөч.",
+    imageSrc: "/images/gallery/adventures/DBR_4391.webp",
+    imageAlt: "Далай ээж ресортын ойролцоо Мэргэний хуушаас харагдах Хөвсгөл нуур.",
+    imageFit: "contain",
+    href: "/experiences",
+    ctaLabel: "Унших",
+  },
 ];

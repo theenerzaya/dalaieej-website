@@ -82,7 +82,7 @@ const mainNavItems: MainNavItem[] = [
     image: "/images/nav-overlay/adventure.jpg",
     label: { en: "Adventures", mn: "Адал явдал" },
     meta: { en: "Guided expeditions", mn: "Хөтөчтэй аялал" },
-    available: false,
+    available: true,
   },
   {
     id: "about",

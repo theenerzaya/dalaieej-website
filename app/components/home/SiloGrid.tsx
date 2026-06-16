@@ -38,7 +38,8 @@ const silos = [
   },
   {
     id: "adventure",
-    href: "/",
+    href: "/experiences",
+    enOnly: true,
     en: "Experiences",
     mn: "Аялал",
     image: "/images/silogrid/wilderness.webp"
@@ -53,7 +54,14 @@ const storiesSilo = {
   image: "/images/silogrid/stories-placeholder.webp",
 };
 
-type SiloEntry = typeof silos[0];
+type SiloEntry = (typeof silos)[number];
+
+function resolveSiloHref(silo: SiloEntry, locale: string): string {
+  if (silo.enOnly && locale !== "en") {
+    return "#";
+  }
+  return silo.href;
+}
 
 /** Shared tile copy block used on both mobile and desktop. */
 function SiloOverlay({
@@ -225,7 +233,7 @@ export default function SiloGrid() {
         {silos.map((silo, i) => (
           <MobileSilo
             key={silo.id}
-            silo={silo}
+            silo={{ ...silo, href: resolveSiloHref(silo, locale) }}
             isMongolian={isMongolian}
             index={i}
           />
@@ -243,7 +251,10 @@ export default function SiloGrid() {
         className="hidden md:grid grid-cols-2 w-full bg-surface gap-x-px gap-y-px"
         style={{ columnGap: "1px", rowGap: "1px" }}
       >
-        {silos.map((silo, i) => (
+        {silos.map((silo, i) => {
+          const resolvedSilo = { ...silo, href: resolveSiloHref(silo, locale) };
+
+          return (
           <motion.div
             key={silo.id}
             className="relative h-[80vh] w-full bg-gray-900 overflow-hidden group"
@@ -260,32 +271,33 @@ export default function SiloGrid() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            {silo.href === "#" ? (
+            {resolvedSilo.href === "#" ? (
               <a href="#" className="relative block w-full h-full">
                 <img
-                  src={assetUrl(silo.image)}
-                  alt={isMongolian ? silo.mn : silo.en}
+                  src={assetUrl(resolvedSilo.image)}
+                  alt={isMongolian ? resolvedSilo.mn : resolvedSilo.en}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-                <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
+                <SiloOverlay silo={resolvedSilo} isMongolian={isMongolian} size="hero" />
               </a>
             ) : (
               <Link
-                href={withLocalePath(locale, silo.href)}
+                href={withLocalePath(locale, resolvedSilo.href)}
                 className="relative block w-full h-full"
               >
                 <img
-                  src={assetUrl(silo.image)}
-                  alt={isMongolian ? silo.mn : silo.en}
+                  src={assetUrl(resolvedSilo.image)}
+                  alt={isMongolian ? resolvedSilo.mn : resolvedSilo.en}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-                <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
+                <SiloOverlay silo={resolvedSilo} isMongolian={isMongolian} size="hero" />
               </Link>
             )}
           </motion.div>
-        ))}
+          );
+        })}
 
         {/* Stories — full-width row */}
         <motion.div

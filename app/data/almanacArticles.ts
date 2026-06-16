@@ -455,6 +455,10 @@ export const ALMANAC_ARTICLES: AlmanacArticle[] = [
       href: "/almanac/forest-and-steppe",
       label: "Chapter IV — Forest & Steppe",
     },
+    next: {
+      href: "/experiences",
+      label: "Chapter VI — Mergen Peninsula",
+    },
     sections: [
       {
         id: "sister-lakes",
