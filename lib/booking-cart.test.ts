@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  MAX_BOOKING_ADULTS,
+  MAX_BOOKING_CHILDREN,
   applyCartLineGuestDelta,
   cartGuestAssignmentsMatch,
   defaultGuestsForNewUnit,
@@ -102,37 +104,71 @@ describe("booking cart guest assignment", () => {
     ]);
   });
 
-  it("prevents adult increments beyond the party total", () => {
+  it("allows cabin guest edits to grow the party total", () => {
     const cart = [line("a", 3, 2), line("b", 3, 1)];
-    const next = applyCartLineGuestDelta(cart, "a", "adults", 1, 3, 0);
+    const next = applyCartLineGuestDelta(cart, "a", "adults", 1);
 
     expect(assignments(next)).toEqual([
-      [2, 0],
+      [3, 0],
       [1, 0],
     ]);
-    expect(next).toBe(cart);
+    expect(sumCartAdults(next)).toBe(4);
   });
 
-  it("prevents child increments beyond the party total", () => {
+  it("allows child edits to grow the party total", () => {
     const cart = [line("a", 3, 1, 1), line("b", 3, 1, 0)];
-    const next = applyCartLineGuestDelta(cart, "b", "children", 1, 2, 1);
+    const next = applyCartLineGuestDelta(cart, "b", "children", 1);
 
     expect(assignments(next)).toEqual([
       [1, 1],
-      [1, 0],
+      [1, 1],
     ]);
-    expect(next).toBe(cart);
+    expect(sumCartChildren(next)).toBe(2);
   });
 
   it("allows moving one adult between cabins by decrementing then incrementing", () => {
     const cart = [line("a", 3, 2), line("b", 3, 1)];
-    const afterDecrease = applyCartLineGuestDelta(cart, "a", "adults", -1, 3, 0);
-    const afterIncrease = applyCartLineGuestDelta(afterDecrease, "b", "adults", 1, 3, 0);
+    const afterDecrease = applyCartLineGuestDelta(cart, "a", "adults", -1);
+    const afterIncrease = applyCartLineGuestDelta(afterDecrease, "b", "adults", 1);
 
     expect(assignments(afterIncrease)).toEqual([
       [1, 0],
       [2, 0],
     ]);
+  });
+
+  it("supports three adults in one cabin and two adults plus one child in another", () => {
+    let cart = [line("a", 3, 2), line("b", 3, 1)];
+    cart = applyCartLineGuestDelta(cart, "a", "adults", 1);
+    cart = applyCartLineGuestDelta(cart, "b", "adults", 1);
+    cart = applyCartLineGuestDelta(cart, "b", "children", 1);
+
+    expect(assignments(cart)).toEqual([
+      [3, 0],
+      [2, 1],
+    ]);
+    expect(sumCartAdults(cart)).toBe(5);
+    expect(sumCartChildren(cart)).toBe(1);
+  });
+
+  it("still caps edits by cabin capacity and booking maximums", () => {
+    const fullCabin = applyCartLineGuestDelta([line("a", 3, 3)], "a", "children", 1);
+    const adultCap = applyCartLineGuestDelta(
+      [line("a", 25, MAX_BOOKING_ADULTS)],
+      "a",
+      "adults",
+      1
+    );
+    const childCap = applyCartLineGuestDelta(
+      [line("a", 12, 1, MAX_BOOKING_CHILDREN)],
+      "a",
+      "children",
+      1
+    );
+
+    expect(assignments(fullCabin)).toEqual([[3, 0]]);
+    expect(assignments(adultCap)).toEqual([[MAX_BOOKING_ADULTS, 0]]);
+    expect(assignments(childCap)).toEqual([[1, MAX_BOOKING_CHILDREN]]);
   });
 
   it("detects whether cart assignments changed", () => {
@@ -209,13 +245,11 @@ describe("booking cart guest assignment", () => {
                 normalized,
                 item.id,
                 field,
-                delta,
-                adults,
-                children
+                delta
               );
 
-              expect(sumCartAdults(next)).toBeLessThanOrEqual(adults);
-              expect(sumCartChildren(next)).toBeLessThanOrEqual(children);
+              expect(sumCartAdults(next)).toBeLessThanOrEqual(MAX_BOOKING_ADULTS);
+              expect(sumCartChildren(next)).toBeLessThanOrEqual(MAX_BOOKING_CHILDREN);
               for (const lineItem of next) {
                 expect(lineItem.adults).toBeGreaterThanOrEqual(1);
                 expect(lineItem.children).toBeGreaterThanOrEqual(0);

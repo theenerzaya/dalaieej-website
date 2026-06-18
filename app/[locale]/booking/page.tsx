@@ -13,6 +13,8 @@ import { formatIsoDateAsDots } from "@/lib/dateFormat";
 import DateInput from "@/app/components/ui/DateInput";
 import { withLocalePath } from "@/lib/localePath";
 import {
+  MAX_BOOKING_ADULTS,
+  MAX_BOOKING_CHILDREN,
   applyCartLineGuestDelta,
   cartGuestAssignmentsMatch,
   defaultGuestsForNewUnit,
@@ -603,8 +605,14 @@ function BookingContent() {
           const r = list.find((x) => x.roomTypeID === item.roomTypeID && x.rateID === item.rateID);
           if (!r) return [];
           const slug = resolveCabinSlugFromCloudbeds(r.roomTypeID, r.roomTypeName) ?? item.cabinSlug ?? null;
+          const matchesQuotedOccupancy =
+            item.adults === quoteAdults && item.children === quoteChildren;
           const pricePerNight =
-            nights > 0 ? (r.totalRate || 0) / nights : r.totalRate || 0;
+            matchesQuotedOccupancy && nights > 0
+              ? (r.totalRate || 0) / nights
+              : matchesQuotedOccupancy
+                ? r.totalRate || 0
+                : item.pricePerNight;
           return [{
             ...item,
             cabinSlug: slug,
@@ -833,15 +841,15 @@ function BookingContent() {
       cart,
       lineId,
       field,
-      delta,
-      totalAdults,
-      totalChildren
+      delta
     );
     if (cartGuestAssignmentsMatch(cart, nextCart)) return;
 
     const updated = nextCart.find((item) => item.id === lineId);
     if (!updated) return;
 
+    setTotalAdults(sumCartAdults(nextCart));
+    setTotalChildren(sumCartChildren(nextCart));
     setCart(nextCart);
 
     setRepricingLineId(lineId);
@@ -1284,13 +1292,13 @@ function BookingContent() {
                     const isRepricing = repricingLineId === item.id;
                     const otherAdults = assignedAdults - item.adults;
                     const otherChildren = assignedChildren - item.children;
-                    const canDecreaseAdults = item.adults > 0;
+                    const canDecreaseAdults = item.adults > 1;
                     const canIncreaseAdults =
                       item.adults + item.children < item.maxGuests &&
-                      otherAdults + item.adults < totalAdults;
+                      otherAdults + item.adults < MAX_BOOKING_ADULTS;
                     const canIncreaseChildren =
                       item.adults + item.children < item.maxGuests &&
-                      otherChildren + item.children < totalChildren;
+                      otherChildren + item.children < MAX_BOOKING_CHILDREN;
 
                     return (
                     <div key={item.id} className="pb-4 border-b border-main/10 last:border-0 last:pb-0">

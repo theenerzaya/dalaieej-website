@@ -5,6 +5,9 @@ export type BookingCartLine = {
   children: number;
 };
 
+export const MAX_BOOKING_ADULTS = 20;
+export const MAX_BOOKING_CHILDREN = 10;
+
 export function sumCartAdults<T extends Pick<BookingCartLine, "adults">>(lines: T[]): number {
   return lines.reduce((sum, item) => sum + item.adults, 0);
 }
@@ -102,8 +105,8 @@ export function applyCartLineGuestDelta<T extends BookingCartLine>(
   lineId: string,
   field: "adults" | "children",
   delta: number,
-  totalAdults: number,
-  totalChildren: number
+  maxAdults = MAX_BOOKING_ADULTS,
+  maxChildren = MAX_BOOKING_CHILDREN
 ): T[] {
   const line = lines.find((item) => item.id === lineId);
   if (!line) return lines;
@@ -113,8 +116,8 @@ export function applyCartLineGuestDelta<T extends BookingCartLine>(
   const otherLines = lines.filter((item) => item.id !== lineId);
   const otherAdults = sumCartAdults(otherLines);
   const otherChildren = sumCartChildren(otherLines);
-  const maxAdultsForLine = Math.max(0, totalAdults - otherAdults);
-  const maxChildrenForLine = Math.max(0, totalChildren - otherChildren);
+  const maxAdultsForLine = Math.max(0, maxAdults - otherAdults);
+  const maxChildrenForLine = Math.max(0, maxChildren - otherChildren);
 
   if (field === "adults") {
     adults = Math.max(
