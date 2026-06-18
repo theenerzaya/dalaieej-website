@@ -13,6 +13,15 @@ import { formatIsoDateAsDots } from "@/lib/dateFormat";
 import DateInput from "@/app/components/ui/DateInput";
 import { withLocalePath } from "@/lib/localePath";
 import {
+  applyCartLineGuestDelta,
+  cartGuestAssignmentsMatch,
+  defaultGuestsForNewUnit,
+  normalizeCartGuestAssignments,
+  sumCartAdults,
+  sumCartChildren,
+  type BookingCartLine,
+} from "@/lib/booking-cart";
+import {
   getCabinDetailHref,
   getCabinDisplayName,
   getCabinGallery,
@@ -63,7 +72,7 @@ interface RoomTypeGroup {
   rates: Room[];
 }
 
-interface CartItem {
+interface CartItem extends BookingCartLine {
   /** Unique id — one cart row per physical room (quantity is always 1). */
   id: string;
   cabinSlug?: CabinSlug | null;
@@ -82,98 +91,6 @@ interface CartItem {
 
 function newCartLineId(): string {
   return `line-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function sumCartAdults(lines: CartItem[]): number {
-  return lines.reduce((sum, item) => sum + item.adults, 0);
-}
-
-function sumCartChildren(lines: CartItem[]): number {
-  return lines.reduce((sum, item) => sum + item.children, 0);
-}
-
-/** Sensible defaults when adding another cabin (prefer 2 adults when party allows). */
-function defaultGuestsForNewUnit(
-  maxGuests: number,
-  remainingAdults: number,
-  remainingChildren: number
-): { adults: number; children: number } {
-  if (remainingAdults <= 0 && remainingChildren <= 0) {
-    return { adults: 0, children: 0 };
-  }
-  const adults = Math.min(maxGuests, Math.max(0, Math.min(2, remainingAdults)));
-  const children = Math.min(remainingChildren, Math.max(0, maxGuests - adults));
-  return { adults, children };
-}
-
-function normalizeCartGuestAssignments(
-  lines: CartItem[],
-  totalAdults: number,
-  totalChildren: number
-): CartItem[] {
-  const adultTotal = Math.max(1, totalAdults);
-  const childTotal = Math.max(0, totalChildren);
-  const kept = lines.slice(0, adultTotal);
-
-  let remainingAdults = adultTotal - kept.length;
-  let remainingChildren = childTotal;
-  const normalized = kept.map((item) => ({
-    ...item,
-    adults: 1,
-    children: 0,
-  }));
-
-  const distributeAdults = (respectExisting: boolean) => {
-    for (let index = 0; index < normalized.length && remainingAdults > 0; index += 1) {
-      const item = normalized[index];
-      const original = kept[index];
-      const wanted = respectExisting
-        ? Math.max(0, original.adults - item.adults)
-        : remainingAdults;
-      const availableCapacity = Math.max(0, item.maxGuests - item.adults - item.children);
-      const add = Math.min(wanted, availableCapacity, remainingAdults);
-      if (add <= 0) continue;
-      item.adults += add;
-      remainingAdults -= add;
-    }
-  };
-
-  const distributeChildren = (respectExisting: boolean) => {
-    for (let index = 0; index < normalized.length && remainingChildren > 0; index += 1) {
-      const item = normalized[index];
-      const original = kept[index];
-      const wanted = respectExisting
-        ? Math.max(0, original.children - item.children)
-        : remainingChildren;
-      const availableCapacity = Math.max(0, item.maxGuests - item.adults - item.children);
-      const add = Math.min(wanted, availableCapacity, remainingChildren);
-      if (add <= 0) continue;
-      item.children += add;
-      remainingChildren -= add;
-    }
-  };
-
-  distributeAdults(true);
-  distributeAdults(false);
-  distributeChildren(true);
-  distributeChildren(false);
-
-  return normalized;
-}
-
-function cartGuestAssignmentsMatch(a: CartItem[], b: CartItem[]): boolean {
-  return (
-    a.length === b.length &&
-    a.every((item, index) => {
-      const other = b[index];
-      return (
-        other &&
-        item.id === other.id &&
-        item.adults === other.adults &&
-        item.children === other.children
-      );
-    })
-  );
 }
 
 interface AvailabilityData {
@@ -912,32 +829,20 @@ function BookingContent() {
     field: "adults" | "children",
     delta: number
   ) => {
-    const line = cart.find((item) => item.id === lineId);
-    if (!line) return;
+    const nextCart = applyCartLineGuestDelta(
+      cart,
+      lineId,
+      field,
+      delta,
+      totalAdults,
+      totalChildren
+    );
+    if (cartGuestAssignmentsMatch(cart, nextCart)) return;
 
-    let adults = line.adults;
-    let children = line.children;
-    const otherAdults = sumCartAdults(cart.filter((item) => item.id !== lineId));
-    const otherChildren = sumCartChildren(cart.filter((item) => item.id !== lineId));
-    const maxAdultsForLine = Math.max(0, totalAdults - otherAdults);
-    const maxChildrenForLine = Math.max(0, totalChildren - otherChildren);
+    const updated = nextCart.find((item) => item.id === lineId);
+    if (!updated) return;
 
-    if (field === "adults") {
-      adults = Math.max(
-        1,
-        Math.min(line.maxGuests - children, maxAdultsForLine, adults + delta)
-      );
-    } else {
-      children = Math.max(
-        0,
-        Math.min(line.maxGuests - adults, maxChildrenForLine, children + delta)
-      );
-    }
-
-    if (adults === line.adults && children === line.children) return;
-
-    const updated: CartItem = { ...line, adults, children };
-    setCart((prev) => prev.map((item) => (item.id === lineId ? updated : item)));
+    setCart(nextCart);
 
     setRepricingLineId(lineId);
     try {
