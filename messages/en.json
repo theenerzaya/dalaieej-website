@@ -462,8 +462,8 @@
     "promoApplied": "Promo code applied!",
     "multiRoomPromoHint": "A multi-room offer is available for this selection.",
     "usePromoCode": "Use {code}",
-    "securePaymentTitle": "Secure online payment",
-    "securePaymentAssurance": "Secure, encrypted checkout with tamper-resistant payment links.",
+    "securePaymentTitle": "Secure payment",
+    "securePaymentAssurance": "Encrypted checkout processed by Stripe.",
     "multiRoomHint": "Enter the total guests for your party, then assign adults and children to each cabin in your reservation summary. For more than 20 guests or more than 10 rooms, please contact us directly.",
     "onlineGuestLimit": "Online booking is available for up to {count} guests. For larger groups, please contact us directly and we will arrange the stay with you.",
     "onlineRoomLimit": "Online booking is available for up to {count} rooms. For larger groups, please contact us directly and we will arrange the stay with you.",
@@ -649,7 +649,7 @@
     "errorTerms": "Please accept the Terms & Conditions to continue",
     "arrivalNoteBefore": "For domestic flight and airport transfer coordination, see our",
     "arrivalNoteLink": "Arrival Guide",
-    "securePaymentAssurance": "Secure, encrypted checkout with tamper-resistant payment links."
+    "securePaymentAssurance": "Encrypted checkout processed by Stripe."
   },
   "silo": {
     "sanctuary": "CABINS",

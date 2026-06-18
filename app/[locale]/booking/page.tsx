@@ -302,52 +302,42 @@ function sortRatesRefundableFirst(rates: Room[]): Room[] {
 const bookingFaqs = [
   {
     question: {
-      en: "Can we experience Naadam during our stay?",
-      mn: "Амарч байх хугацаандаа Наадам үзэж болох уу?",
+      en: "What is included in our stay?",
+      mn: "Амралтын үнэд юу багтсан бэ?",
     },
     answer: {
-      en: "Yes, and we highly recommend it if your dates align. The Khatgal village Naadam takes place on July 11th and 12th. It is free to attend and held outdoors on the open steppe. A boat transfer from Dalai Eej to Khatgal is 50,000 MNT. You can expect traditional wrestling, archery, and horse racing, alongside small local fairs and festival foods like round khuushuur and airag—a fermented mare's milk often likened to a tart, sparkling Mongolian beer. A rural Naadam offers a much warmer, more intimate glimpse into Mongolian culture than the large city festivals.",
-      mn: "Тийм ээ, хэрэв таны амралтын өдрүүд таарвал үзэхийг санал болгож байна. Хатгал сумын наадам 7-р сарын 11, 12-нд болдог бөгөөд ил задгай зүлгэн дээр үнэ төлбөргүй үздэг. Далай ээжээс Хатгал сум руу завиар очиход 50,000 төгрөгийн үнэтэй. Наадмаар бөх, сур харваа, хурдан морины уралдаан, жижиг худалдаа, волейбол, сагсан бөмбөгийн тэмцээн болдог бөгөөд наадмын хуушуур, айраг зэрэг амтат зоог зооглох боломжтой. Сумын наадам нь хотын наадмыг бодвол илүү халуун дулаан, дотно, уламжлалт уур амьсгалтай байдаг.",
+      en: "Your stay includes daily breakfast. You also receive one complimentary session of kayaking, sauna access, a guided hike, and morning yoga. You don't need to pre-book these—our team will help you plan your activities upon arrival based on the weather.",
+      mn: "Тус үнэд өглөөний цайнаас гадна нэг удаагийн явган аялал, саун, иогийн хичээл, сэлүүрт завины үйлчилгээнүүд тус тус багтана. Эдгээрийг урьдчилан захиалах шаардлагагүй бөгөөд ирсний тань дараа манай баг цаг агаарт тохируулан төлөвлөхөд тусална.",
+    },
+  },
+  {
+    question: {
+      en: "What are the dining options?",
+      mn: "Хоолны ямар сонголтууд байгаа вэ?",
+    },
+    answer: {
+      en: "Our lakefront restaurant serves both an à la carte menu and a fixed-price daily set menu for lunch and dinner. We cater to all dietary requirements—just let us know in advance.",
+      mn: "Манай ресторанд өдрийн болон оройн хоолыг захиалгаар (a la carte) эсвэл өдрийн багц цэснээс сонгох боломжтой. Хоолны тусгай дэглэмтэй бол урьдчилан мэдэгдэнэ үү.",
     },
   },
   {
     question: {
       en: "Do you arrange airport transfers?",
-      mn: "Унаа, шилжүүлэн суулгах үйлчилгээ авах боломжтой юу?",
+      mn: "Нисэх буудлаас тосох үйлчилгээ байгаа юу?",
     },
     answer: {
-      en: "Yes, we do. A private transfer from Mörön airport or town is 250,000 MNT (approx. $85 USD) each way, which includes the short boat crossing to our shores. Once your booking is confirmed, simply email us your flight or bus details, and we will seamlessly coordinate your arrival.",
-      mn: "Тийм ээ. Нисэх буудлаас тосох эсвэл сумаас хүргэх нэг талын үйлчилгээ нь 250,000 төгрөг бөгөөд үүнд сүүлийн зогсоол хүртэлх богино завины тээвэр багтсан болно. Захиалга хийснийхээ дараа нислэг эсвэл автобусны мэдээллээ бидэнд имэйлээр илгээвэл, бид таны ирэх цагтай уялдуулан тосох үйлчилгээг зохион байгуулах болно.",
+      en: "Yes. A private transfer from Mörön airport or town is 250,000 MNT each way, which includes the final boat crossing to our shores. Once booked, simply email us your travel details.",
+      mn: "Тийм. Мөрөнгийн нисэх буудал эсвэл хотоос тосох нэг талын үнэ 250,000 төгрөг бөгөөд үүнд сүүлийн зогсоол хүртэлх завины тээвэр багтсан. Захиалгаа баталгаажуулсны дараа нислэг, автобусны мэдээллээ имэйлээр илгээнэ үү.",
     },
   },
   {
     question: {
-      en: "What is included in our stay?",
-      mn: "Ямар үйлчилгээнүүд үнэд багтсан бэ?",
+      en: "Can we experience Naadam during our stay?",
+      mn: "Амарч байх хугацаандаа Наадам үзэх боломжтой юу?",
     },
     answer: {
-      en: "Your reservation includes daily breakfast, kayaking, sauna access, guided hikes, and morning yoga. There is no need to pre-book these during checkout. Upon arrival, our team will help you curate your days to perfectly suit the weather and the quiet rhythm of the lake.",
-      mn: "Таны амралтын үнэд өглөөний цай, каяк завь, саун, хөтөчтэй алхалт болон иог багтсан болно. Захиалга хийх үедээ эдгээрийг нэмэх шаардлагагүй; таныг ирсний дараа манай баг цаг агаар, нуурын байдал болон таны амралтын хэмнэлд тохируулан цагийг нь төлөвлөхөд туслах болно.",
-    },
-  },
-  {
-    question: {
-      en: "What are the dining options for lunch and dinner?",
-      mn: "Өдрийн болон оройн зоогийн ямар сонголтууд байдаг вэ?",
-    },
-    answer: {
-      en: "Our restaurant offers an à la carte menu, so you can order lunch and dinner exactly as you crave each day. If you prefer not to think about ordering, we also offer a set daily menu at a fixed price, which includes a starter and main course for lunch, and a main course for dinner.",
-      mn: "Өдрийн болон оройн зоогийг манай ресторанд өдөр тутамдаа хүссэнээрээ а ла карт цэснээс захиалах боломжтой. Хэрэв та хоолондоо санаа зовохгүйгээр амар тайван байхыг хүсвэл өдрийн багц цэсийг сонгохыг санал болгож байна (үүнд өдрийн зоогт 1, 2-р хоол, оройн зоогт 2-р хоол багтдаг).",
-    },
-  },
-  {
-    question: {
-      en: "What should we plan before we arrive?",
-      mn: "Ирэхээсээ өмнө юуг урьдчилан төлөвлөх шаардлагатай вэ?",
-    },
-    answer: {
-      en: "We recommend securing your room first. Afterward, please reach out via email to arrange airport transfers, a boat crossing for the Naadam festival, or any special dietary requirements. While dining and daily activities can easily be tailored once you are here, early notice allows us to prepare for your stay perfectly.",
-      mn: "Та эхлээд эндээс байраа захиалах боломжтой. Үүний дараа, хэрэв та нисэх буудлаас тосуулах, Наадмаар Хатгал руу завиар явах, эсвэл нислэг, автобусныхаа цагт тааруулан унаа тохируулах шаардлагатай бол бидэнд имэйл илгээнэ үү. Хоол болон үнэд багтсан үйлчилгээнүүдийг ихэвчлэн таныг ирсний дараа төлөвлөх боломжтой хэдий ч, урьдчилан мэдэгдэх нь бидэнд бүх зүйлийг илүү төгс бэлтгэхэд тусална.",
+      en: "If you're visiting in mid-July, yes. The local Khatgal village Naadam takes place outdoors on July 11th and 12th. We can arrange a boat transfer (50,000 MNT) so you can experience the traditional wrestling, horse racing, and festival foods.",
+      mn: "Боломжтой. Хатгал сумын наадам 7-р сарын 11, 12-нд ил задгай зүлгэн дээр болдог. Бид наадам үзэх зочдод зориулан завь (50,000 төгрөг) гаргадаг бөгөөд та бөх, хурдан морь үзэж, наадмын хуушуур амтлах боломжтой.",
     },
   },
 ] as const;
@@ -378,12 +368,15 @@ function BookingContent() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
+  const [validatedSuggestedPromoCode, setValidatedSuggestedPromoCode] = useState("");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [repricingLineId, setRepricingLineId] = useState<string | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
   const availabilityRequestIdRef = useRef(0);
   const inFlightAvailabilityKeyRef = useRef<string | null>(null);
+  const promoSuggestionRequestIdRef = useRef(0);
+  const promoSuggestionCacheRef = useRef(new Map<string, boolean>());
 
   const totalGuests = totalAdults + totalChildren;
   const cartCapacity = cart.reduce((sum, item) => sum + item.maxGuests, 0);
@@ -396,8 +389,12 @@ function BookingContent() {
     assignedChildren === totalChildren;
   const cartTotal = cart.reduce((sum, item) => sum + item.pricePerNight * numberOfNights, 0);
   const totalRooms = cart.length;
-  const suggestedPromoCode =
+  const candidateSuggestedPromoCode =
     totalRooms >= 3 ? "GERBUL20" : totalRooms >= 2 ? "HAMTDAA15" : "";
+  const suggestedPromoCode =
+    validatedSuggestedPromoCode === candidateSuggestedPromoCode
+      ? validatedSuggestedPromoCode
+      : "";
   const onlineLimitError =
     totalRooms > MAX_BOOKING_ROOMS
       ? t("onlineRoomLimit", { count: MAX_BOOKING_ROOMS })
@@ -519,6 +516,52 @@ function BookingContent() {
       setCapacityError("");
     }
   }, [cart, totalGuests, cartCapacity, currentLocale]);
+
+  useEffect(() => {
+    const candidate = candidateSuggestedPromoCode;
+    const requestId = promoSuggestionRequestIdRef.current + 1;
+    promoSuggestionRequestIdRef.current = requestId;
+    setValidatedSuggestedPromoCode("");
+
+    if (!candidate || appliedPromo === candidate || !checkin || !checkout) return;
+
+    const stayDates = validateStayDates(checkin, checkout);
+    if (!stayDates.ok) return;
+
+    const cacheKey = `${candidate}|${checkin}|${checkout}`;
+    const cached = promoSuggestionCacheRef.current.get(cacheKey);
+    if (cached != null) {
+      if (cached) setValidatedSuggestedPromoCode(candidate);
+      return;
+    }
+
+    const validateSuggestedPromo = async () => {
+      try {
+        const url =
+          `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}` +
+          `&promo=${encodeURIComponent(candidate)}&quoteAdults=${Math.min(2, totalAdults)}` +
+          "&quoteChildren=0";
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) {
+          if (response.status === 400) {
+            promoSuggestionCacheRef.current.set(cacheKey, false);
+          }
+          return;
+        }
+
+        const data = (await response.json()) as AvailabilityData;
+        const isValid = Array.isArray(data.rooms) && data.rooms.length > 0;
+        promoSuggestionCacheRef.current.set(cacheKey, isValid);
+        if (requestId === promoSuggestionRequestIdRef.current && isValid) {
+          setValidatedSuggestedPromoCode(candidate);
+        }
+      } catch {
+        // Transient Cloudbeds/API errors should hide the suggestion for now, not poison the cache.
+      }
+    };
+
+    void validateSuggestedPromo();
+  }, [candidateSuggestedPromoCode, appliedPromo, checkin, checkout, totalAdults]);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -1338,9 +1381,9 @@ function BookingContent() {
               </div>
 
               <div className="mt-5 pt-4 border-t border-main/15">
-                <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
-                  {currentLocale === "mn" ? "Асуулт, хариулт" : "Questions"}
-                </p>
+                  <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
+                    {currentLocale === "mn" ? "Асуулт, хариулт" : "FAQs"}
+                  </p>
                 <div className="divide-y divide-main/10 border border-main/10">
                   {bookingFaqs.map((faq, index) => {
                     const isOpen = openFaqIndex === index;
