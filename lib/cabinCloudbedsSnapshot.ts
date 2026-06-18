@@ -40,7 +40,7 @@ const EQUIPMENT = {
 } satisfies Record<string, Localized>;
 
 const INCLUDED_SERVICES =
-  "Өглөөний цай, саун, каяк ашиглах эрх, өглөөний иог болон Далай Ээжийн хойгт нэвтрэх эрх багтана.";
+  "Өглөөний цай, саун, сэлүүрт завь ашиглах эрх, өглөөний иог болон Далай Ээжийн хойгт нэвтрэх эрх багтана.";
 
 const INCLUDED_SERVICES_EN =
   "Breakfast, sauna and kayak access, morning yoga, and entry to the Dalai Eej peninsula are included.";
@@ -75,7 +75,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Минибар",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -111,7 +111,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Минибар",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -143,7 +143,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Минибар",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -177,7 +177,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Минибар",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -206,7 +206,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Нийтийн шүршүүр ашиглана",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -238,7 +238,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Минибар",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -272,7 +272,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Минибар",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
@@ -301,7 +301,7 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Нийтийн шүршүүр ашиглана",
       "Өглөөний цай багтсан",
       "Саун үнэгүй",
-      "Каяк завь үнэгүй",
+      "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",
     ],
   },
