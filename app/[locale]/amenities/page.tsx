@@ -13,7 +13,7 @@ const policyKeys = ['checkin', 'cancellation', 'quiet', 'pets'];
 const featureImages = {
   dining: "/images/gallery/restaurant/DBR_4975.webp",
   activities: "/images/gallery/adventures/DBR_4303.webp",
-  relaxation: "/images/gallery/wellness/DBR_3098.webp"
+  relaxation: "/images/gallery/wellness/DBR_3139.webp"
 };
 
 export default function AmenitiesPage() {

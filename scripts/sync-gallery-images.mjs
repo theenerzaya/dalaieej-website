@@ -22,6 +22,8 @@ const IMAGES_ROOT = path.resolve(__dirname, "..", "public", "images");
 const OUT_FILE = path.resolve(__dirname, "..", "app", "data", "galleryImages.ts");
 
 const MAX_JPG_BYTES = 900 * 1024;
+const DISPLAY_CATEGORY_ORDER = ["adventures", "resort", "rooms", "dining", "wellness", "lake"];
+const SHUFFLE_SEED = "dalaieej-gallery-2026-06-18";
 
 /**
  * Resort photography under public/images/gallery/ named DBR_… (.webp / .jpg / .jpeg).
@@ -143,6 +145,38 @@ function toPublicSrc(relPosix) {
 }
 
 /**
+ * Deterministic shuffle rank. Keeps the gallery lively without changing order
+ * every build or depending on OS-specific random/locale behavior.
+ * @param {string} value
+ */
+function seededRank(value) {
+  let h = 2166136261;
+  const input = `${SHUFFLE_SEED}:${value}`;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/**
+ * @param {{ rel: string; size: number }} a
+ * @param {{ rel: string; size: number }} b
+ */
+function galleryDisplayOrder(a, b) {
+  const ca = inferCategory(a.rel);
+  const cb = inferCategory(b.rel);
+  const ia = DISPLAY_CATEGORY_ORDER.indexOf(ca);
+  const ib = DISPLAY_CATEGORY_ORDER.indexOf(cb);
+  if (ia !== ib) return ia - ib;
+
+  const ra = seededRank(a.rel);
+  const rb = seededRank(b.rel);
+  if (ra !== rb) return ra - rb;
+  return a.rel < b.rel ? -1 : a.rel > b.rel ? 1 : 0;
+}
+
+/**
  * @param {string} dir
  * @param {string} baseRel
  * @returns {Promise<string[]>}
@@ -228,8 +262,9 @@ async function main() {
   picked.sort((a, b) => (a.rel < b.rel ? -1 : a.rel > b.rel ? 1 : 0));
   const dbrDeduped = preferWebpForDbrDuplicates(picked);
   const unique = await dedupeByContent(dbrDeduped);
+  const displayOrdered = [...unique].sort(galleryDisplayOrder);
 
-  const lines = unique.map(({ rel }) => {
+  const lines = displayOrdered.map(({ rel }) => {
     const src = toPublicSrc(rel);
     const category = inferCategory(rel);
     const alt = altFromRel(rel);
@@ -258,7 +293,7 @@ export const GALLERY_IMAGES: GalleryImageSource[] = [
 
   await writeFile(OUT_FILE, header + "\n" + lines.join("\n") + footer, "utf8");
   console.log(
-    `Wrote ${unique.length} images to ${path.relative(process.cwd(), OUT_FILE)}` +
+    `Wrote ${displayOrdered.length} images to ${path.relative(process.cwd(), OUT_FILE)}` +
       (unique.length < dbrDeduped.length
         ? ` (${dbrDeduped.length - unique.length} byte-duplicates removed)`
         : "")
