@@ -289,52 +289,52 @@ function sortRatesRefundableFirst(rates: Room[]): Room[] {
 const bookingFaqs = [
   {
     question: {
-      en: "Can we see Naadam during our stay?",
-      mn: "Буудаллах үеэрээ наадам үзэж болох уу?",
+      en: "Can we experience Naadam during our stay?",
+      mn: "Амарч байх хугацаандаа Наадам үзэж болох уу?",
     },
     answer: {
-      en: "Yes, and we recommend it if your dates line up. Khatgal town Naadam is held on July 11 and 12, free to watch, outdoors on the grass. A boat transfer from Dalai Eej to Khatgal town is 50,000 MNT. Expect wrestling, archery, horse racing, small fairs, volleyball and basketball, plus festival food like round khuushuur and airag, fermented mare's milk. Local town Naadams can feel warmer, closer and more intimate than the city festival.",
-      mn: "Тийм, огноо тань таарвал заавал үзэхийг санал болгоно. Хатгал сумын наадам 7-р сарын 11, 12-нд болдог бөгөөд үнэ төлбөргүй, зүлгэн дээр гадаа үздэг. Далай Ээжээс Хатгал руу завиар хүргэх үйлчилгээ 50,000 MNT. Бөх, сур, морин уралдаан, жижиг худалдаа, волейбол, сагсан бөмбөг, мөн наадмын хуушуур, айраг зэрэг наадмын амттай хоолнууд бий. Сумын наадам хотын наадмаас илүү ойр, дулаан, нутгийн уур амьсгалтай санагддаг.",
+      en: "Yes, and we highly recommend it if your dates align. The Khatgal village Naadam takes place on July 11th and 12th. It is free to attend and held outdoors on the open steppe. A boat transfer from Dalai Eej to Khatgal is 50,000 MNT. You can expect traditional wrestling, archery, and horse racing, alongside small local fairs and festival foods like round khuushuur and airag—a fermented mare's milk often likened to a tart, sparkling Mongolian beer. A rural Naadam offers a much warmer, more intimate glimpse into Mongolian culture than the large city festivals.",
+      mn: "Тийм ээ, хэрэв таны амралтын өдрүүд таарвал үзэхийг санал болгож байна. Хатгал сумын наадам 7-р сарын 11, 12-нд болдог бөгөөд ил задгай зүлгэн дээр үнэ төлбөргүй үздэг. Далай ээжээс Хатгал сум руу завиар очиход 50,000 төгрөгийн үнэтэй. Наадмаар бөх, сур харваа, хурдан морины уралдаан, жижиг худалдаа, волейбол, сагсан бөмбөгийн тэмцээн болдог бөгөөд наадмын хуушуур, айраг зэрэг амтат зоог зооглох боломжтой. Сумын наадам нь хотын наадмыг бодвол илүү халуун дулаан, дотно, уламжлалт уур амьсгалтай байдаг.",
     },
   },
   {
     question: {
-      en: "Can you arrange transfers?",
-      mn: "Хүргэлт, тосолт зохион байгуулах уу?",
+      en: "Do you arrange airport transfers?",
+      mn: "Унаа, шилжүүлэн суулгах үйлчилгээ авах боломжтой юу?",
     },
     answer: {
-      en: "Yes. Airport pickup or town transfer is 250,000 MNT, or about $85, one way, including the short boat crossing at the end. After booking, email us your flight or bus details and we will help time the pickup around your arrival.",
-      mn: "Тийм. Нисэх буудлаас тосох эсвэл хот, сумаас хүргэх нэг талын үйлчилгээ 250,000 MNT буюу ойролцоогоор $85. Үүнд төгсгөлд хийх богино завины шилжилт багтана. Захиалгын дараа нислэг эсвэл автобусны мэдээллээ имэйлээр илгээвэл бид тосох цагийг тань тохируулж өгнө.",
+      en: "Yes, we do. A private transfer from Mörön airport or town is 250,000 MNT (approx. $85 USD) each way, which includes the short boat crossing to our shores. Once your booking is confirmed, simply email us your flight or bus details, and we will seamlessly coordinate your arrival.",
+      mn: "Тийм ээ. Нисэх буудлаас тосох эсвэл сумаас хүргэх нэг талын үйлчилгээ нь 250,000 төгрөг бөгөөд үүнд сүүлийн зогсоол хүртэлх богино завины тээвэр багтсан болно. Захиалга хийснийхээ дараа нислэг эсвэл автобусны мэдээллээ бидэнд имэйлээр илгээвэл, бид таны ирэх цагтай уялдуулан тосох үйлчилгээг зохион байгуулах болно.",
     },
   },
   {
     question: {
-      en: "Which experiences are included?",
-      mn: "Ямар үйлчилгээнүүд багтсан бэ?",
+      en: "What is included in our stay?",
+      mn: "Ямар үйлчилгээнүүд үнэд багтсан бэ?",
     },
     answer: {
-      en: "Your stay includes breakfast, kayaking, sauna, guided hiking and yoga. You do not need to add these during checkout; once you arrive, our team will help you choose times that fit the weather, the lake and the rhythm of your stay.",
-      mn: "Таны буудаллах үнэд өглөөний цай, каяк, саун, хөтөчтэй алхалт болон иог багтсан. Эдгээрийг төлбөрийн хэсэгт тусад нь нэмэх шаардлагагүй. Ирсний дараа манай баг цаг агаар, нуурын байдал болон таны амралтын хэмнэлд тохируулж цагийг нь санал болгоно.",
+      en: "Your reservation includes daily breakfast, kayaking, sauna access, guided hikes, and morning yoga. There is no need to pre-book these during checkout. Upon arrival, our team will help you curate your days to perfectly suit the weather and the quiet rhythm of the lake.",
+      mn: "Таны амралтын үнэд өглөөний цай, каяк завь, саун, хөтөчтэй алхалт болон иог багтсан болно. Захиалга хийх үедээ эдгээрийг нэмэх шаардлагагүй; таныг ирсний дараа манай баг цаг агаар, нуурын байдал болон таны амралтын хэмнэлд тохируулан цагийг нь төлөвлөхөд туслах болно.",
     },
   },
   {
     question: {
-      en: "What are the lunch and dinner options?",
-      mn: "Өдрийн болон оройн хоолны сонголт юу вэ?",
+      en: "What are the dining options for lunch and dinner?",
+      mn: "Өдрийн болон оройн зоогийн ямар сонголтууд байдаг вэ?",
     },
     answer: {
-      en: "Lunch and dinner are served a la carte, so you can order day by day. If you prefer a simpler plan, ask about the daily savings option: lunch includes I хоол and II хоол, while dinner includes II хоол.",
-      mn: "Өдрийн болон оройн хоолыг а ла карт менюгээр, өдөр өдөртөө сонгон захиалж болно. Илүү энгийн, хэмнэлттэй байдлаар төлөвлөх бол өдөр тутмын багц сонголтыг асуугаарай: өдрийн хоолонд I хоол + II хоол, оройн хоолонд II хоол орно.",
+      en: "Our restaurant offers an à la carte menu, so you can order lunch and dinner exactly as you crave each day. If you prefer not to think about ordering, we also offer a set daily menu at a fixed price, which includes a starter and main course for lunch, and a main course for dinner.",
+      mn: "Өдрийн болон оройн зоогийг манай ресторанд өдөр тутамдаа хүссэнээрээ а ла карт цэснээс захиалах боломжтой. Хэрэв та хоолондоо санаа зовохгүйгээр амар тайван байхыг хүсвэл өдрийн багц цэсийг сонгохыг санал болгож байна (үүнд өдрийн зоогт 1, 2-р хоол, оройн зоогт 2-р хоол багтдаг).",
     },
   },
   {
     question: {
-      en: "What should we arrange before arrival?",
-      mn: "Ирэхээсээ өмнө юуг тохируулах вэ?",
+      en: "What should we plan before we arrive?",
+      mn: "Ирэхээсээ өмнө юуг урьдчилан төлөвлөх шаардлагатай вэ?",
     },
     answer: {
-      en: "Rooms can be booked here first. After that, email us if you would like airport pickup, a Khatgal boat transfer for Naadam, or help matching your arrival time to a flight or bus. Meals and included activities can usually be arranged once you are here, but early notice helps us prepare smoothly.",
-      mn: "Эхлээд байраа эндээс захиалж болно. Дараа нь нисэх буудлаас тосуулах, наадмаар Хатгал руу завиар явах, эсвэл нислэг/автобусны цагтайгаа тааруулж тосуулах бол бидэнд имэйл бичээрэй. Хоол болон багтсан үйлчилгээнүүдийг ихэнхдээ ирсний дараа тохируулж болно, гэхдээ урьдчилж хэлбэл бид илүү тайван бэлдэнэ.",
+      en: "We recommend securing your room first. Afterward, please reach out via email to arrange airport transfers, a boat crossing for the Naadam festival, or any special dietary requirements. While dining and daily activities can easily be tailored once you are here, early notice allows us to prepare for your stay perfectly.",
+      mn: "Та эхлээд эндээс байраа захиалах боломжтой. Үүний дараа, хэрэв та нисэх буудлаас тосуулах, Наадмаар Хатгал руу завиар явах, эсвэл нислэг, автобусныхаа цагт тааруулан унаа тохируулах шаардлагатай бол бидэнд имэйл илгээнэ үү. Хоол болон үнэд багтсан үйлчилгээнүүдийг ихэвчлэн таныг ирсний дараа төлөвлөх боломжтой хэдий ч, урьдчилан мэдэгдэх нь бидэнд бүх зүйлийг илүү төгс бэлтгэхэд тусална.",
     },
   },
 ] as const;
