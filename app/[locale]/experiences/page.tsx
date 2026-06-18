@@ -325,7 +325,7 @@ export default function ExperiencesPage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.boatExpeditions.label")}
-                    imageSrc="/images/gallery/adventures/DBR_3442.webp"
+                    imageSrc="/boat.jpg"
                     imageAlt={t("media.boatExpeditions.alt")}
                     aspectClass="aspect-[4/3] md:aspect-[21/9]"
                     imageClassName="object-cover"
@@ -385,7 +385,7 @@ export default function ExperiencesPage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.westernShore.label")}
-                    imageSrc="/images/almanac/borders-and-industry/sukhbaatar-museum.jpeg"
+                    imageSrc="/khyasaa.png"
                     imageAlt={t("media.westernShore.alt")}
                     aspectClass="aspect-[4/3]"
                   />
@@ -432,7 +432,7 @@ export default function ExperiencesPage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.peninsulaLeisure.label")}
-                    imageSrc="/images/gallery/adventures/DBR_3494.webp"
+                    imageSrc="/wish-mountain.jpg"
                     imageAlt={t("media.peninsulaLeisure.alt")}
                     aspectClass="aspect-[4/3]"
                   />
