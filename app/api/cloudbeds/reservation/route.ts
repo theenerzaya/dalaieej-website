@@ -15,6 +15,12 @@ import {
 } from "@/lib/deposit-policy";
 import { createPaymentSession } from "@/lib/payment-session";
 import { createPendingPaymentNote } from "@/lib/cloudbeds-unpaid-cleanup";
+import {
+  MAX_BOOKING_ADULTS,
+  MAX_BOOKING_CHILDREN,
+  MAX_BOOKING_GUESTS,
+  MAX_BOOKING_ROOMS,
+} from "@/lib/booking-cart";
 
 const CLOUDBEDS_API_BASE = "https://hotels.cloudbeds.com/api/v1.2";
 const IDEMPOTENCY_TTL_MS = 30 * 60 * 1000;
@@ -151,11 +157,12 @@ function sanitizeRooms(rooms: unknown): SanitizedRoomBooking[] | string {
     return "At least one room is required";
   }
 
-  if (rooms.length > 10) {
-    return "Please contact us directly for reservations over 10 rooms";
+  if (rooms.length > MAX_BOOKING_ROOMS) {
+    return `Please contact us directly for reservations over ${MAX_BOOKING_ROOMS} rooms`;
   }
 
   const out: SanitizedRoomBooking[] = [];
+  let totalGuests = 0;
   for (const raw of rooms) {
     const room = raw as Partial<RoomBooking>;
     const roomTypeID = normalizeCloudbedsRoomTypeID(String(room.roomTypeID || ""));
@@ -167,12 +174,12 @@ function sanitizeRooms(rooms: unknown): SanitizedRoomBooking[] | string {
     });
     const adults = parseBoundedInteger(room.adults ?? 1, {
       min: 1,
-      max: 20,
+      max: MAX_BOOKING_ADULTS,
       label: "adults",
     });
     const children = parseBoundedInteger(room.children ?? 0, {
       min: 0,
-      max: 10,
+      max: MAX_BOOKING_CHILDREN,
       label: "children",
     });
 
@@ -181,6 +188,11 @@ function sanitizeRooms(rooms: unknown): SanitizedRoomBooking[] | string {
     if (quantity !== 1) return "Room quantity must be one per cart line";
     if (adults == null || children == null) {
       return "Guest counts must be whole numbers within the allowed range";
+    }
+
+    totalGuests += adults + children;
+    if (totalGuests > MAX_BOOKING_GUESTS) {
+      return `Please contact us directly for reservations over ${MAX_BOOKING_GUESTS} guests`;
     }
 
     out.push({ roomTypeID, roomRateID, quantity: 1, adults, children });

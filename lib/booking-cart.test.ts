@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   MAX_BOOKING_ADULTS,
   MAX_BOOKING_CHILDREN,
+  MAX_BOOKING_GUESTS,
   applyCartLineGuestDelta,
   cartGuestAssignmentsMatch,
   defaultGuestsForNewUnit,
@@ -165,10 +166,17 @@ describe("booking cart guest assignment", () => {
       "children",
       1
     );
+    const totalGuestCap = applyCartLineGuestDelta(
+      [line("a", 25, 10, MAX_BOOKING_GUESTS - 10)],
+      "a",
+      "adults",
+      1
+    );
 
     expect(assignments(fullCabin)).toEqual([[3, 0]]);
     expect(assignments(adultCap)).toEqual([[MAX_BOOKING_ADULTS, 0]]);
     expect(assignments(childCap)).toEqual([[1, MAX_BOOKING_CHILDREN]]);
+    expect(assignments(totalGuestCap)).toEqual([[10, MAX_BOOKING_GUESTS - 10]]);
   });
 
   it("detects whether cart assignments changed", () => {
@@ -250,6 +258,9 @@ describe("booking cart guest assignment", () => {
 
               expect(sumCartAdults(next)).toBeLessThanOrEqual(MAX_BOOKING_ADULTS);
               expect(sumCartChildren(next)).toBeLessThanOrEqual(MAX_BOOKING_CHILDREN);
+              expect(sumCartAdults(next) + sumCartChildren(next)).toBeLessThanOrEqual(
+                MAX_BOOKING_GUESTS
+              );
               for (const lineItem of next) {
                 expect(lineItem.adults).toBeGreaterThanOrEqual(1);
                 expect(lineItem.children).toBeGreaterThanOrEqual(0);

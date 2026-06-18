@@ -15,6 +15,8 @@ import { withLocalePath } from "@/lib/localePath";
 import {
   MAX_BOOKING_ADULTS,
   MAX_BOOKING_CHILDREN,
+  MAX_BOOKING_GUESTS,
+  MAX_BOOKING_ROOMS,
   applyCartLineGuestDelta,
   cartGuestAssignmentsMatch,
   defaultGuestsForNewUnit,
@@ -376,6 +378,8 @@ function BookingContent() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [repricingLineId, setRepricingLineId] = useState<string | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
   const availabilityRequestIdRef = useRef(0);
@@ -392,6 +396,19 @@ function BookingContent() {
     assignedChildren === totalChildren;
   const cartTotal = cart.reduce((sum, item) => sum + item.pricePerNight * numberOfNights, 0);
   const totalRooms = cart.length;
+  const onlineLimitError =
+    totalRooms > MAX_BOOKING_ROOMS
+      ? t("onlineRoomLimit", { count: MAX_BOOKING_ROOMS })
+      : totalGuests > MAX_BOOKING_GUESTS
+        ? t("onlineGuestLimit", { count: MAX_BOOKING_GUESTS })
+        : "";
+  const cartBlockingError = onlineLimitError || capacityError;
+  const canCheckout =
+    cartCapacity >= totalGuests &&
+    guestsFullyAssigned &&
+    !onlineLimitError &&
+    !checkoutLoading &&
+    !repricingLineId;
 
   const depositDueNow = useMemo(
     () =>
@@ -642,6 +659,10 @@ function BookingContent() {
   };
 
   const handleSearch = () => {
+    if (totalGuests > MAX_BOOKING_GUESTS) {
+      setError(t("onlineGuestLimit", { count: MAX_BOOKING_GUESTS }));
+      return;
+    }
     if (!checkin || !checkout) {
       setError(currentLocale === 'mn' ? "Ирэх, гарах огноогоо сонгоно уу" : "Please select both check-in and check-out dates");
       return;
@@ -685,9 +706,6 @@ function BookingContent() {
     }
   };
 
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [repricingLineId, setRepricingLineId] = useState<string | null>(null);
-
   const buildCartLineFromRoom = (room: Room, existingCart: CartItem[]): CartItem => {
     const remainingAdults = totalAdults - sumCartAdults(existingCart);
     const remainingChildren = totalChildren - sumCartChildren(existingCart);
@@ -729,6 +747,7 @@ function BookingContent() {
         )
       );
     } else {
+      if (cart.length >= MAX_BOOKING_ROOMS) return;
       const cartWithoutSameRoomType = cart.filter((item) => item.roomTypeID !== room.roomTypeID);
       const newItem = buildCartLineFromRoom(room, cartWithoutSameRoomType);
       setCart(
@@ -747,6 +766,7 @@ function BookingContent() {
       const currentCount = prev.filter(
         (item) => rateKey(item.roomTypeID, item.rateID) === key
       ).length;
+      if (prev.length >= MAX_BOOKING_ROOMS) return prev;
       if (currentCount >= (room.roomsAvailable || 10)) return prev;
       return normalizeCartGuestAssignments(
         [...prev, buildCartLineFromRoom(room, prev)],
@@ -874,6 +894,10 @@ function BookingContent() {
       setError(currentLocale === 'mn' ? "Өрөө сонгоно уу" : "Please select a room");
       return;
     }
+    if (onlineLimitError) {
+      setError(onlineLimitError);
+      return;
+    }
     if (cartCapacity < totalGuests) return;
     if (!guestsFullyAssigned) {
       setError(t("guestsAssignedMismatch", { total: totalGuests }));
@@ -954,6 +978,8 @@ function BookingContent() {
     const isInCart = rateLineCount > 0;
     const otherRateInCart = !isInCart && cart.some(c => c.roomTypeID === rate.roomTypeID);
     const blocked = isRateBlocked(rate.restrictions);
+    const roomLimitReached = cart.length >= MAX_BOOKING_ROOMS;
+    const cannotAddMoreRooms = roomLimitReached && !isInCart;
     const restrictionMsgs = getRestrictionMessages(rate.restrictions);
 
     return (
@@ -990,6 +1016,11 @@ function BookingContent() {
           {otherRateInCart && !blocked && (
             <p className="text-red-300 text-xs font-body mt-1">
               {currentLocale === 'mn' ? 'Сагсан дахь өрөөтэй хамт захиалах боломжгүй' : 'Not available with items in your cart'}
+            </p>
+          )}
+          {cannotAddMoreRooms && !blocked && !otherRateInCart && (
+            <p className="text-orange-200/85 text-xs font-body mt-1">
+              {t("onlineRoomLimit", { count: MAX_BOOKING_ROOMS })}
             </p>
           )}
           {restrictionMsgs.length > 0 && (
@@ -1033,7 +1064,7 @@ function BookingContent() {
                 <span className="w-6 text-center font-body text-main text-sm">{rateLineCount}</span>
                 <button
                   onClick={() => updateRoomQuantity(rate, 1)}
-                  disabled={rateLineCount >= rate.roomsAvailable}
+                  disabled={rateLineCount >= rate.roomsAvailable || roomLimitReached}
                   className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors disabled:opacity-30"
                   aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
                 >
@@ -1048,7 +1079,7 @@ function BookingContent() {
                 {currentLocale === 'mn' ? 'Нэмсэн' : 'Added'}
               </button>
             </div>
-          ) : (otherRateInCart || blocked) ? (
+          ) : (otherRateInCart || blocked || cannotAddMoreRooms) ? (
             <button
               disabled
               className="px-6 py-2.5 bg-main/10 text-main/40 font-cta uppercase text-[11px] tracking-[0.26em] cursor-not-allowed"
@@ -1176,9 +1207,18 @@ function BookingContent() {
                       </button>
                       <span className="text-main font-body text-sm" aria-live="polite">{totalAdults}</span>
                       <button
-                        onClick={() => setTotalAdults(Math.min(20, totalAdults + 1))}
+                        onClick={() =>
+                          setTotalAdults(
+                            Math.min(
+                              MAX_BOOKING_ADULTS,
+                              MAX_BOOKING_GUESTS - totalChildren,
+                              totalAdults + 1
+                            )
+                          )
+                        }
+                        disabled={totalGuests >= MAX_BOOKING_GUESTS}
                         aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
-                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors disabled:opacity-30"
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
@@ -1198,9 +1238,18 @@ function BookingContent() {
                       </button>
                       <span className="text-main font-body text-sm" aria-live="polite">{totalChildren}</span>
                       <button
-                        onClick={() => setTotalChildren(Math.min(10, totalChildren + 1))}
+                        onClick={() =>
+                          setTotalChildren(
+                            Math.min(
+                              MAX_BOOKING_CHILDREN,
+                              MAX_BOOKING_GUESTS - totalAdults,
+                              totalChildren + 1
+                            )
+                          )
+                        }
+                        disabled={totalGuests >= MAX_BOOKING_GUESTS}
                         aria-label={currentLocale === 'mn' ? 'Нэмэх' : 'Increase'}
-                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors"
+                        className="w-7 h-7 flex items-center justify-center text-main/70 hover:text-main transition-colors disabled:opacity-30"
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
@@ -1295,10 +1344,14 @@ function BookingContent() {
                     const canDecreaseAdults = item.adults > 1;
                     const canIncreaseAdults =
                       item.adults + item.children < item.maxGuests &&
-                      otherAdults + item.adults < MAX_BOOKING_ADULTS;
+                      otherAdults + item.adults < MAX_BOOKING_ADULTS &&
+                      totalGuests < MAX_BOOKING_GUESTS &&
+                      assignedGuests < MAX_BOOKING_GUESTS;
                     const canIncreaseChildren =
                       item.adults + item.children < item.maxGuests &&
-                      otherChildren + item.children < MAX_BOOKING_CHILDREN;
+                      otherChildren + item.children < MAX_BOOKING_CHILDREN &&
+                      totalGuests < MAX_BOOKING_GUESTS &&
+                      assignedGuests < MAX_BOOKING_GUESTS;
 
                     return (
                     <div key={item.id} className="pb-4 border-b border-main/10 last:border-0 last:pb-0">
@@ -1496,19 +1549,19 @@ function BookingContent() {
                   </div>
                 </div>
 
-                {capacityError && (
+                {cartBlockingError && (
                   <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/30 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-orange-200/80 text-xs font-body">{capacityError}</p>
+                    <p className="text-orange-200/80 text-xs font-body">{cartBlockingError}</p>
                   </div>
                 )}
 
                 <button
                   type="button"
                   onClick={() => void proceedToCheckout()}
-                  disabled={cartCapacity < totalGuests || !guestsFullyAssigned || checkoutLoading || !!repricingLineId}
+                  disabled={!canCheckout}
                   className={`hidden lg:block w-full mt-5 py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors ${
-                    cartCapacity >= totalGuests && guestsFullyAssigned && !checkoutLoading && !repricingLineId
+                    canCheckout
                       ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                       : 'bg-main/10 text-main/40 cursor-not-allowed'
                   }`}
@@ -1754,10 +1807,10 @@ function BookingContent() {
       {cart.length > 0 && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-ink border-t border-main/15 shadow-2xl z-40">
           <div className="max-w-6xl mx-auto px-4 py-4">
-            {capacityError && (
+            {cartBlockingError && (
               <div className="mb-3 p-3 bg-orange-500/10 border border-orange-500/30 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                <p className="text-orange-200/80 text-sm font-body">{capacityError}</p>
+                <p className="text-orange-200/80 text-sm font-body">{cartBlockingError}</p>
               </div>
             )}
             <div className="flex items-center justify-between gap-4">
@@ -1769,9 +1822,9 @@ function BookingContent() {
               <button
                 type="button"
                 onClick={() => void proceedToCheckout()}
-                disabled={cartCapacity < totalGuests || !guestsFullyAssigned || checkoutLoading || !!repricingLineId}
+                disabled={!canCheckout}
                 className={`px-6 py-3 font-cta uppercase tracking-[0.28em] text-[11px] transition-colors whitespace-nowrap ${
-                  cartCapacity >= totalGuests && guestsFullyAssigned && !checkoutLoading && !repricingLineId
+                  canCheckout
                     ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                     : 'bg-main/10 text-main/40 cursor-not-allowed'
                 }`}
