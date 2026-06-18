@@ -827,9 +827,21 @@
         "label": "On the water",
         "alt": "Kayaking on the calm waters of Lake Khuvsgul near the Mergen Peninsula."
       },
+      "horseback": {
+        "label": "On horseback",
+        "alt": "Horseback riding through open grassland near Lake Khuvsgul."
+      },
+      "deepTaiga": {
+        "label": "Forest trails",
+        "alt": "Guests walking through the deep green taiga forest near the Mergen Peninsula."
+      },
       "peninsulaLeisure": {
-        "label": "On the Mergen Peninsula",
-        "alt": "Forest trails on the Mergen Peninsula overlooking Lake Khuvsgul."
+        "label": "On the lake",
+        "alt": "Kayaking across Lake Khuvsgul from the Mergen Peninsula."
+      },
+      "sauna": {
+        "label": "Morning movement",
+        "alt": "Children practicing yoga on the grass beside Lake Khuvsgul."
       },
       "westernShore": {
         "label": "Khatgal village and the western shore",

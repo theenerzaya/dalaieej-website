@@ -360,6 +360,15 @@ export default function ExperiencesPage() {
               </SectionBlock>
 
               <SectionBlock id="horseback" title={t("horseback.title")}>
+                <FadeInBlock delay={0.05}>
+                  <MediaPlaceholder
+                    variant="photo"
+                    label={t("media.horseback.label")}
+                    imageSrc="/images/experiences/horse.jpg"
+                    imageAlt={t("media.horseback.alt")}
+                    aspectClass="aspect-[3/2]"
+                  />
+                </FadeInBlock>
                 <FadeInBlock delay={0.1}>
                   <Prose>{t("horseback.body")}</Prose>
                   <Prose>
@@ -372,6 +381,15 @@ export default function ExperiencesPage() {
               </SectionBlock>
 
               <SectionBlock id="deep-taiga" title={t("deepTaiga.title")}>
+                <FadeInBlock delay={0.05}>
+                  <MediaPlaceholder
+                    variant="photo"
+                    label={t("media.deepTaiga.label")}
+                    imageSrc="/images/experiences/hiking.jpg"
+                    imageAlt={t("media.deepTaiga.alt")}
+                    aspectClass="aspect-[3/2]"
+                  />
+                </FadeInBlock>
                 <FadeInBlock delay={0.1}>
                   <Prose>{t("deepTaiga.body")}</Prose>
                 </FadeInBlock>
@@ -433,9 +451,9 @@ export default function ExperiencesPage() {
                   <MediaPlaceholder
                     variant="photo"
                     label={t("media.peninsulaLeisure.label")}
-                    imageSrc="/images/experiences/wish-mountain.jpg"
+                    imageSrc="/images/experiences/kayaking.jpg"
                     imageAlt={t("media.peninsulaLeisure.alt")}
-                    aspectClass="aspect-[4/3]"
+                    aspectClass="aspect-[3/2]"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
@@ -451,6 +469,15 @@ export default function ExperiencesPage() {
               </SectionBlock>
 
               <SectionBlock id="sauna" title={t("sauna.title")}>
+                <FadeInBlock delay={0.05}>
+                  <MediaPlaceholder
+                    variant="photo"
+                    label={t("media.sauna.label")}
+                    imageSrc="/images/experiences/kids-yoga.jpg"
+                    imageAlt={t("media.sauna.alt")}
+                    aspectClass="aspect-[3/2]"
+                  />
+                </FadeInBlock>
                 <FadeInBlock delay={0.1}>
                   <Prose>{t("sauna.body")}</Prose>
                 </FadeInBlock>
