@@ -23,7 +23,7 @@ export default function LodgePage() {
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="/images/gallery/the-resort/DBR_7025.webp"
+            src="/images/gallery/the-resort/DBR_7361.webp"
             alt="Main Lodge"
             className="w-full h-full object-cover"
           />
@@ -92,7 +92,7 @@ export default function LodgePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <img
-              src="/images/gallery/accommodations/DBR_4872.webp"
+              src="/images/gallery/accommodations/00.webp"
               alt="Lodge living room"
               className="w-full h-64 object-cover rounded-lg md:col-span-2"
             />

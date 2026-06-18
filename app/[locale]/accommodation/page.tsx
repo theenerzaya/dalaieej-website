@@ -27,7 +27,7 @@ export default function AccommodationPage() {
       description: locale === 'mn' 
         ? "Огноо болон зочдын тоогоо сонгоод бодит боломжит өрөө, үнийг шалгана уу."
         : "Choose your dates and guest count to see real availability and rates for your stay.",
-      image: "/images/gallery/accommodations/DBR_4872.webp",
+      image: "/images/gallery/accommodations/00.webp",
       capacity: locale === 'mn' ? "Шууд үнэ" : "Live rates"
     }
   ];

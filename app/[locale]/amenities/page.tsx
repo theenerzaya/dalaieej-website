@@ -75,7 +75,7 @@ export default function AmenitiesPage() {
             </div>
             <div className="relative h-[400px] rounded-xl overflow-hidden shadow-xl">
               <img
-                src="/images/gallery/accommodations/DBR_4885.webp"
+                src="/images/gallery/accommodations/01.webp"
                 alt="Resort amenities"
                 className="w-full h-full object-cover"
               />

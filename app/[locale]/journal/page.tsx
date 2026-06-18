@@ -27,7 +27,7 @@ export default function StoriesPage() {
       title: locale === 'mn' ? "Орон нутгийн хоол" : "Farm to Table: Local Flavours",
       excerpt: locale === 'mn' ? "Манай тогооч орон нутгийн бүтээгдэхүүнээр хоол хийх тухай" : "How our chef transforms local ingredients into culinary masterpieces.",
       date: "December 10, 2025",
-      image: "/images/gallery/restaurant/DBR_4944.webp",
+      image: "/images/gallery/restaurant/DBR_4946.webp",
       category: locale === 'mn' ? "Хоол" : "Cuisine"
     },
     {
@@ -48,7 +48,7 @@ export default function StoriesPage() {
       title: locale === 'mn' ? "Одны тэнгэр" : "Stargazing Nights",
       excerpt: locale === 'mn' ? "Хөвсгөлийн цэлмэг тэнгэр дэх одод" : "Experience some of the darkest skies in the world at Dalai Eej.",
       date: "October 28, 2025",
-      image: "/images/gallery/the-resort/DBR_9069.webp",
+      image: "/images/gallery/the-resort/DBR_8599.webp",
       category: locale === 'mn' ? "Туршлага" : "Experience"
     },
   ];

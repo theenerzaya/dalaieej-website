@@ -23,7 +23,7 @@ export default function TheJournal({ locale = 'en' }: TheJournalProps) {
       alt: "The Matriarch looking at the lake"
     },
     {
-      image: "/images/gallery/the-resort/DBR_1914.webp",
+      image: "/images/gallery/the-resort/DBR_3648.webp",
       title: isMn ? "Нийгмийн менежер" : "The Social Director",
       quote: isMn 
         ? "Далай ээж дэх төгс зуны өдөр." 

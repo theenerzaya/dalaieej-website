@@ -168,7 +168,7 @@ export default function RouteFinderPage() {
           <img src="/images/gallery/adventures/DBR_1996.webp" alt="Mongolia Road Trip" className="w-full aspect-[4/3] object-cover" />
           <img src="/images/gallery/adventures/DBR_3442.webp" alt="Gobi Desert to Khövsgöl" className="w-full aspect-[4/3] object-cover" />
           <img src="/images/gallery/adventures/DBR_5227.webp" alt="Luxury Picnic" className="w-full aspect-[4/3] object-cover" />
-          <img src="/images/gallery/the-resort/DBR_6649.webp" alt="Ulaanbaatar City Tour" className="w-full aspect-[4/3] object-cover" />
+          <img src="/images/gallery/the-resort/DBR_6694.webp" alt="Ulaanbaatar City Tour" className="w-full aspect-[4/3] object-cover" />
         </div>
       </section>
 
