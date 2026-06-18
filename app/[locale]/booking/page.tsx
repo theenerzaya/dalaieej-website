@@ -99,11 +99,81 @@ function defaultGuestsForNewUnit(
   remainingChildren: number
 ): { adults: number; children: number } {
   if (remainingAdults <= 0 && remainingChildren <= 0) {
-    return { adults: 1, children: 0 };
+    return { adults: 0, children: 0 };
   }
-  const adults = Math.min(maxGuests, Math.max(1, Math.min(2, remainingAdults || 1)));
+  const adults = Math.min(maxGuests, Math.max(0, Math.min(2, remainingAdults)));
   const children = Math.min(remainingChildren, Math.max(0, maxGuests - adults));
   return { adults, children };
+}
+
+function normalizeCartGuestAssignments(
+  lines: CartItem[],
+  totalAdults: number,
+  totalChildren: number
+): CartItem[] {
+  const adultTotal = Math.max(1, totalAdults);
+  const childTotal = Math.max(0, totalChildren);
+  const kept = lines.slice(0, adultTotal);
+
+  let remainingAdults = adultTotal - kept.length;
+  let remainingChildren = childTotal;
+  const normalized = kept.map((item) => ({
+    ...item,
+    adults: 1,
+    children: 0,
+  }));
+
+  const distributeAdults = (respectExisting: boolean) => {
+    for (let index = 0; index < normalized.length && remainingAdults > 0; index += 1) {
+      const item = normalized[index];
+      const original = kept[index];
+      const wanted = respectExisting
+        ? Math.max(0, original.adults - item.adults)
+        : remainingAdults;
+      const availableCapacity = Math.max(0, item.maxGuests - item.adults - item.children);
+      const add = Math.min(wanted, availableCapacity, remainingAdults);
+      if (add <= 0) continue;
+      item.adults += add;
+      remainingAdults -= add;
+    }
+  };
+
+  const distributeChildren = (respectExisting: boolean) => {
+    for (let index = 0; index < normalized.length && remainingChildren > 0; index += 1) {
+      const item = normalized[index];
+      const original = kept[index];
+      const wanted = respectExisting
+        ? Math.max(0, original.children - item.children)
+        : remainingChildren;
+      const availableCapacity = Math.max(0, item.maxGuests - item.adults - item.children);
+      const add = Math.min(wanted, availableCapacity, remainingChildren);
+      if (add <= 0) continue;
+      item.children += add;
+      remainingChildren -= add;
+    }
+  };
+
+  distributeAdults(true);
+  distributeAdults(false);
+  distributeChildren(true);
+  distributeChildren(false);
+
+  return normalized;
+}
+
+function cartGuestAssignmentsMatch(a: CartItem[], b: CartItem[]): boolean {
+  return (
+    a.length === b.length &&
+    a.every((item, index) => {
+      const other = b[index];
+      return (
+        other &&
+        item.id === other.id &&
+        item.adults === other.adults &&
+        item.children === other.children
+      );
+    })
+  );
 }
 
 interface AvailabilityData {
@@ -493,6 +563,13 @@ function BookingContent() {
   }, [rooms, currentLocale]);
 
   useEffect(() => {
+    setCart((prev) => {
+      const normalized = normalizeCartGuestAssignments(prev, totalAdults, totalChildren);
+      return cartGuestAssignmentsMatch(prev, normalized) ? prev : normalized;
+    });
+  }, [totalAdults, totalChildren]);
+
+  useEffect(() => {
     if (cart.length > 0 && cartCapacity < totalGuests) {
       const remaining = totalGuests - cartCapacity;
       setCapacityError(
@@ -719,11 +796,23 @@ function BookingContent() {
     const key = rateKey(room.roomTypeID, room.rateID);
     const exists = cart.some((item) => rateKey(item.roomTypeID, item.rateID) === key);
     if (exists) {
-      setCart(cart.filter((item) => rateKey(item.roomTypeID, item.rateID) !== key));
+      setCart(
+        normalizeCartGuestAssignments(
+          cart.filter((item) => rateKey(item.roomTypeID, item.rateID) !== key),
+          totalAdults,
+          totalChildren
+        )
+      );
     } else {
-      const newItem = buildCartLineFromRoom(room, cart);
       const cartWithoutSameRoomType = cart.filter((item) => item.roomTypeID !== room.roomTypeID);
-      setCart([...cartWithoutSameRoomType, newItem]);
+      const newItem = buildCartLineFromRoom(room, cartWithoutSameRoomType);
+      setCart(
+        normalizeCartGuestAssignments(
+          [...cartWithoutSameRoomType, newItem],
+          totalAdults,
+          totalChildren
+        )
+      );
     }
   };
 
@@ -734,12 +823,22 @@ function BookingContent() {
         (item) => rateKey(item.roomTypeID, item.rateID) === key
       ).length;
       if (currentCount >= (room.roomsAvailable || 10)) return prev;
-      return [...prev, buildCartLineFromRoom(room, prev)];
+      return normalizeCartGuestAssignments(
+        [...prev, buildCartLineFromRoom(room, prev)],
+        totalAdults,
+        totalChildren
+      );
     });
   };
 
   const removeCartLine = (lineId: string) => {
-    setCart(cart.filter((item) => item.id !== lineId));
+    setCart((prev) =>
+      normalizeCartGuestAssignments(
+        prev.filter((item) => item.id !== lineId),
+        totalAdults,
+        totalChildren
+      )
+    );
   };
 
   const updateRoomQuantity = (room: Room, delta: number) => {
@@ -818,17 +917,24 @@ function BookingContent() {
 
     let adults = line.adults;
     let children = line.children;
+    const otherAdults = sumCartAdults(cart.filter((item) => item.id !== lineId));
+    const otherChildren = sumCartChildren(cart.filter((item) => item.id !== lineId));
+    const maxAdultsForLine = Math.max(0, totalAdults - otherAdults);
+    const maxChildrenForLine = Math.max(0, totalChildren - otherChildren);
+
     if (field === "adults") {
       adults = Math.max(
         1,
-        Math.min(line.maxGuests - children, adults + delta)
+        Math.min(line.maxGuests - children, maxAdultsForLine, adults + delta)
       );
     } else {
       children = Math.max(
         0,
-        Math.min(line.maxGuests - adults, children + delta)
+        Math.min(line.maxGuests - adults, maxChildrenForLine, children + delta)
       );
     }
+
+    if (adults === line.adults && children === line.children) return;
 
     const updated: CartItem = { ...line, adults, children };
     setCart((prev) => prev.map((item) => (item.id === lineId ? updated : item)));
@@ -1271,6 +1377,15 @@ function BookingContent() {
                     );
                     const cabinIndex = siblings.findIndex((c) => c.id === item.id) + 1;
                     const isRepricing = repricingLineId === item.id;
+                    const otherAdults = assignedAdults - item.adults;
+                    const otherChildren = assignedChildren - item.children;
+                    const canDecreaseAdults = item.adults > 0;
+                    const canIncreaseAdults =
+                      item.adults + item.children < item.maxGuests &&
+                      otherAdults + item.adults < totalAdults;
+                    const canIncreaseChildren =
+                      item.adults + item.children < item.maxGuests &&
+                      otherChildren + item.children < totalChildren;
 
                     return (
                     <div key={item.id} className="pb-4 border-b border-main/10 last:border-0 last:pb-0">
@@ -1300,7 +1415,7 @@ function BookingContent() {
                             <button
                               type="button"
                               onClick={() => void updateCartLineGuests(item.id, "adults", -1)}
-                              disabled={isRepricing || item.adults <= 1}
+                              disabled={isRepricing || !canDecreaseAdults}
                               className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
                               aria-label={currentLocale === "mn" ? "Хасах" : "Decrease adults"}
                             >
@@ -1310,7 +1425,7 @@ function BookingContent() {
                             <button
                               type="button"
                               onClick={() => void updateCartLineGuests(item.id, "adults", 1)}
-                              disabled={isRepricing || item.adults + item.children >= item.maxGuests}
+                              disabled={isRepricing || !canIncreaseAdults}
                               className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
                               aria-label={currentLocale === "mn" ? "Нэмэх" : "Increase adults"}
                             >
@@ -1334,7 +1449,7 @@ function BookingContent() {
                             <button
                               type="button"
                               onClick={() => void updateCartLineGuests(item.id, "children", 1)}
-                              disabled={isRepricing || item.adults + item.children >= item.maxGuests}
+                              disabled={isRepricing || !canIncreaseChildren}
                               className="w-6 h-6 flex items-center justify-center text-main/70 hover:text-main disabled:opacity-30"
                               aria-label={currentLocale === "mn" ? "Нэмэх" : "Increase children"}
                             >
