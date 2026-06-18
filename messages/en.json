@@ -461,7 +461,7 @@
     "apply": "Apply",
     "promoApplied": "Promo code applied!",
     "multiRoomPromoHint": "A multi-room offer is available for this selection.",
-    "usePromoCode": "Use {code}",
+    "usePromoCode": "Use promo code {code}",
     "securePaymentTitle": "Secure payment",
     "securePaymentAssurance": "Encrypted checkout processed by Stripe.",
     "multiRoomHint": "Enter the total guests for your party, then assign adults and children to each cabin in your reservation summary. For more than 20 guests or more than 10 rooms, please contact us directly.",
