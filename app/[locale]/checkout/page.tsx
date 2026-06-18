@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Suspense } from "react";
-import { User, Mail, Phone, Globe, MessageSquare, Plus, Minus, Loader2, AlertCircle, Check, ChevronDown, ChevronUp, Bed } from "lucide-react";
+import { User, Mail, Phone, Globe, MessageSquare, Plus, Minus, Loader2, AlertCircle, Check, ChevronDown, ChevronUp, Bed, ShieldCheck } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -740,6 +740,11 @@ function CheckoutContent() {
                   {loading && <Loader2 className="w-5 h-5 animate-spin" />}
                   {loading ? t('processing') : t('proceedToPayment')}
                 </button>
+
+                <div className="flex items-center justify-center gap-1.5 mt-4 text-xs text-main/40 font-body text-center">
+                  <ShieldCheck className="w-4 h-4 shrink-0" />
+                  <span>{t('securePaymentAssurance')}</span>
+                </div>
               </div>
             </motion.div>
           </div>

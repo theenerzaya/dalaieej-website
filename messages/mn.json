@@ -484,7 +484,8 @@
     "errorEmailInvalid": "Зөв форматтай имэйл хаяг оруулна уу.",
     "errorTerms": "Үйлчилгээний нөхцөлийг зөвшөөрнө үү.",
     "arrivalNoteBefore": "Дотоодын нислэг болон буудлын шилжүүлгийг зохион байгуулахын тулд манай",
-    "arrivalNoteLink": "аяллын гарын авлагыг"
+    "arrivalNoteLink": "аяллын гарын авлагыг",
+    "securePaymentAssurance": "Secure, encrypted checkout with tamper-resistant payment links."
   },
   "almanacPage": {
     "eyebrow": "Товчоон",

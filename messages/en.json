@@ -642,7 +642,8 @@
     "errorEmailInvalid": "Please enter a valid email address",
     "errorTerms": "Please accept the Terms & Conditions to continue",
     "arrivalNoteBefore": "For domestic flight and airport transfer coordination, see our",
-    "arrivalNoteLink": "Arrival Guide"
+    "arrivalNoteLink": "Arrival Guide",
+    "securePaymentAssurance": "Secure, encrypted checkout with tamper-resistant payment links."
   },
   "silo": {
     "sanctuary": "CABINS",
