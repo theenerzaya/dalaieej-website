@@ -5,9 +5,9 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
 import { CTAButton } from "./ui/Typography";
-import DateInput from "./ui/DateInput";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 import { withLocalePath } from "@/lib/localePath";
+import { formatIsoDateAsDots } from "@/lib/dateFormat";
 
 function useNavOpen() {
   const [navOpen, setNavOpen] = useState(false);
@@ -30,6 +30,37 @@ function useNavOpen() {
 
 function getDateString(date: Date): string {
   return date.toISOString().split("T")[0];
+}
+
+function HomeDateField({
+  label,
+  value,
+  onChange,
+  min,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  min?: string;
+}) {
+  return (
+    <label className="relative min-w-0 flex flex-col cursor-pointer">
+      <span className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
+        {label}
+      </span>
+      <span className="block min-h-10 border-b border-main/25 py-2 pr-2 font-body text-main text-sm md:text-base leading-6">
+        {value ? formatIsoDateAsDots(value) : "DD.MM.YYYY"}
+      </span>
+      <input
+        type="date"
+        value={value}
+        min={min}
+        onChange={(e) => onChange(e.target.value)}
+        className="absolute inset-x-0 bottom-0 h-10 cursor-pointer opacity-0 [color-scheme:dark]"
+        aria-label={label}
+      />
+    </label>
+  );
 }
 
 export default function AvailabilityBar() {
@@ -66,9 +97,6 @@ export default function AvailabilityBar() {
     }
   };
 
-  const inputClasses =
-    "box-border w-full max-w-full min-w-0 px-3 md:px-4 py-2.5 bg-white/10 border border-white/20 text-main text-base md:text-base !rounded-none focus:outline-none focus-visible:border-bark focus-visible:ring-2 focus-visible:ring-bark/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-colors cursor-pointer [color-scheme:dark] appearance-none [&::-webkit-date-and-time-value]:text-left [&::-webkit-calendar-picker-indicator]:opacity-60 [&::-webkit-calendar-picker-indicator]:cursor-pointer";
-
   return (
     <div
       className={`fixed bottom-0 left-0 right-0 z-50 bg-ink pt-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] px-4 sm:px-6 md:pt-2.5 md:pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:px-12 transition-all duration-500 ease-out ${
@@ -84,29 +112,19 @@ export default function AvailabilityBar() {
         </p>
 
         <div className="w-full min-w-0 max-w-full md:w-auto md:max-w-none grid gap-2 md:gap-4 [grid-template-columns:repeat(2,minmax(0,1fr))]">
-          <div className="min-w-0 flex flex-col">
-            <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
-              {t('checkIn')}
-            </label>
-            <DateInput
-              value={checkIn}
-              onChange={setCheckIn}
-              min={minDate}
-              className={inputClasses}
-            />
-          </div>
+          <HomeDateField
+            label={t('checkIn')}
+            value={checkIn}
+            onChange={setCheckIn}
+            min={minDate}
+          />
 
-          <div className="min-w-0 flex flex-col">
-            <label className="font-cta text-main/60 text-[10px] md:text-xs font-medium uppercase tracking-[0.18em] mb-1 whitespace-nowrap">
-              {t('checkOut')}
-            </label>
-            <DateInput
-              value={checkOut}
-              onChange={setCheckOut}
-              min={checkIn || minDate}
-              className={inputClasses}
-            />
-          </div>
+          <HomeDateField
+            label={t('checkOut')}
+            value={checkOut}
+            onChange={setCheckOut}
+            min={checkIn || minDate}
+          />
         </div>
 
         <CTAButton

@@ -396,6 +396,8 @@ function BookingContent() {
     assignedChildren === totalChildren;
   const cartTotal = cart.reduce((sum, item) => sum + item.pricePerNight * numberOfNights, 0);
   const totalRooms = cart.length;
+  const suggestedPromoCode =
+    totalRooms >= 3 ? "GERBUL20" : totalRooms >= 2 ? "HAMTDAA15" : "";
   const onlineLimitError =
     totalRooms > MAX_BOOKING_ROOMS
       ? t("onlineRoomLimit", { count: MAX_BOOKING_ROOMS })
@@ -680,8 +682,8 @@ function BookingContent() {
     });
   };
 
-  const handleApplyPromo = async () => {
-    const normalizedPromo = promoCode.trim().toUpperCase();
+  const handleApplyPromo = async (code = promoCode) => {
+    const normalizedPromo = code.trim().toUpperCase();
     if (!normalizedPromo) return;
     setPromoLoading(true);
     setPromoCode(normalizedPromo);
@@ -1275,7 +1277,7 @@ function BookingContent() {
                       className="flex-1 min-w-0 bg-transparent border-0 border-b border-main/30 focus:border-main text-main font-body py-2 focus:outline-none placeholder:text-main/30 uppercase tracking-wider text-sm"
                     />
                     <button
-                      onClick={handleApplyPromo}
+                      onClick={() => void handleApplyPromo()}
                       disabled={promoLoading || !promoCode.trim()}
                       className="px-3 py-2 border border-main/30 text-main text-[10px] font-cta uppercase tracking-[0.22em] hover:border-main transition-colors disabled:opacity-40 flex items-center gap-1.5"
                     >
@@ -1291,6 +1293,28 @@ function BookingContent() {
                       </span>
                     </div>
                   )}
+                  {suggestedPromoCode && appliedPromo !== suggestedPromoCode && (
+                    <div className="mt-3 border border-main/15 bg-white/[0.03] px-3 py-2">
+                      <p className="font-body text-main/60 text-xs leading-relaxed">
+                        {t("multiRoomPromoHint")}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => void handleApplyPromo(suggestedPromoCode)}
+                        disabled={promoLoading}
+                        className="mt-2 inline-flex items-center gap-1.5 text-bark hover:text-main transition-colors disabled:opacity-40"
+                      >
+                        {promoLoading ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Check className="w-3.5 h-3.5" />
+                        )}
+                        <span className="font-cta uppercase tracking-[0.22em] text-[10px]">
+                          {t("usePromoCode", { code: suggestedPromoCode })}
+                        </span>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <button
@@ -1301,6 +1325,56 @@ function BookingContent() {
                   {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {loading ? t('loading') : (currentLocale === 'mn' ? 'Хайх' : 'Search')}
                 </button>
+              </div>
+            </section>
+
+            <section className="bg-white/[0.04] border border-main/10 p-6">
+              <div className="flex items-start gap-2 text-main/60 font-body">
+                <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-bark" />
+                <div>
+                  <p className="text-sm text-main">{t("securePaymentTitle")}</p>
+                  <p className="mt-1 text-xs leading-relaxed">{t("securePaymentAssurance")}</p>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-main/15">
+                <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
+                  {currentLocale === "mn" ? "Асуулт, хариулт" : "Questions"}
+                </p>
+                <div className="divide-y divide-main/10 border border-main/10">
+                  {bookingFaqs.map((faq, index) => {
+                    const isOpen = openFaqIndex === index;
+                    return (
+                      <div key={faq.question.en}>
+                        <button
+                          type="button"
+                          onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                          aria-expanded={isOpen}
+                          aria-controls={`booking-faq-panel-${index}`}
+                          className="w-full px-3 py-3 flex items-start justify-between gap-3 text-left hover:bg-white/[0.03] transition-colors"
+                        >
+                          <span className="text-sm font-body text-main">
+                            {faq.question[currentLocale]}
+                          </span>
+                          <ChevronDown
+                            className={`w-4 h-4 mt-0.5 shrink-0 text-main/50 transition-transform ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                            strokeWidth={1.5}
+                          />
+                        </button>
+                        {isOpen && (
+                          <div
+                            id={`booking-faq-panel-${index}`}
+                            className="px-3 pb-3 -mt-1 text-xs text-main/60 font-body leading-relaxed"
+                          >
+                            {faq.answer[currentLocale]}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </section>
 
@@ -1509,46 +1583,6 @@ function BookingContent() {
                   );
                 })()}
 
-                <div className="mt-5 pt-4 border-t border-main/15">
-                  <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
-                    {currentLocale === "mn" ? "Асуулт, хариулт" : "Questions"}
-                  </p>
-                  <div className="divide-y divide-main/10 border border-main/10">
-                    {bookingFaqs.map((faq, index) => {
-                      const isOpen = openFaqIndex === index;
-                      return (
-                        <div key={faq.question.en}>
-                          <button
-                            type="button"
-                            onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                            aria-expanded={isOpen}
-                            aria-controls={`booking-faq-panel-${index}`}
-                            className="w-full px-3 py-3 flex items-start justify-between gap-3 text-left hover:bg-white/[0.03] transition-colors"
-                          >
-                            <span className="text-sm font-body text-main">
-                              {faq.question[currentLocale]}
-                            </span>
-                            <ChevronDown
-                              className={`w-4 h-4 mt-0.5 shrink-0 text-main/50 transition-transform ${
-                                isOpen ? "rotate-180" : ""
-                              }`}
-                              strokeWidth={1.5}
-                            />
-                          </button>
-                          {isOpen && (
-                            <div
-                              id={`booking-faq-panel-${index}`}
-                              className="px-3 pb-3 -mt-1 text-xs text-main/60 font-body leading-relaxed"
-                            >
-                              {faq.answer[currentLocale]}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
                 {cartBlockingError && (
                   <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/30 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5" />
@@ -1576,10 +1610,6 @@ function BookingContent() {
                   )}
                 </button>
 
-                <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-main/40 font-body">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>{currentLocale === 'mn' ? 'Аюулгүй онлайн төлбөр' : 'Secure Online Payment'}</span>
-                </div>
               </section>
             )}
           </div>
