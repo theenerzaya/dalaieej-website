@@ -20,7 +20,6 @@ import TransferOptions, {
 import AccessRoadMap from "@/app/components/getting-here/AccessRoadMap";
 import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
 import SiteImage from "@/app/components/SiteImage";
-import accessRoadTrace from "@/app/data/accessRoadTrace.json";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { ALMANAC_CHAPTERS as EN_CHAPTERS } from "@/app/data/almanacChapters";

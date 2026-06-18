@@ -1,11 +1,45 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+const TALLY_WIDGET_SRC = "https://tally.so/widgets/embed.js";
 
 export default function RouteFinderPage() {
   const [openRoute, setOpenRoute] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadEmbeds = () => {
+      const tally = (window as { Tally?: { loadEmbeds?: () => void } }).Tally;
+      if (tally?.loadEmbeds) {
+        tally.loadEmbeds();
+        return;
+      }
+
+      document
+        .querySelectorAll<HTMLIFrameElement>("iframe[data-tally-src]:not([src])")
+        .forEach((iframe) => {
+          const src = iframe.dataset.tallySrc;
+          if (src) iframe.src = src;
+        });
+    };
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${TALLY_WIDGET_SRC}"]`
+    );
+    if (existingScript) {
+      loadEmbeds();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = TALLY_WIDGET_SRC;
+    script.async = true;
+    script.onload = loadEmbeds;
+    script.onerror = loadEmbeds;
+    document.body.appendChild(script);
+  }, []);
 
   const routes = [
     {
@@ -100,9 +134,6 @@ export default function RouteFinderPage() {
           title="What Is Your Mongolia Vibe?"
           className="w-full"
         />
-        <script dangerouslySetInnerHTML={{ __html: `
-          var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
-        `}} />
         <p className="text-center italic text-stone-500 mt-8">Don&apos;t want to take the quiz? Scroll down to browse our 3 recommended routes.</p>
       </section>
 

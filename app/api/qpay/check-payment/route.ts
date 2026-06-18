@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import {
+  cloudbedsErrorMessage,
+  confirmCloudbedsReservation,
+} from "@/lib/cloudbeds-reservations";
+import {
+  PaymentSessionError,
+  verifyPaymentSession,
+  verifyQPayInvoiceSession,
+} from "@/lib/payment-session";
 
 const QPAY_AUTH_URL = "https://merchant.qpay.mn/v2/auth/token";
 const QPAY_CHECK_URL = "https://merchant.qpay.mn/v2/payment/check";
@@ -10,6 +19,8 @@ let tokenExpiry: number = 0;
 type QPayCheckRow = {
   payment_status?: string;
   payment_amount?: string | number;
+  sender_invoice_no?: string;
+  invoice_id?: string;
 };
 
 type QPayCheckResponse = {
@@ -52,11 +63,16 @@ async function getQPayToken(): Promise<string> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { invoiceId, expectedAmount } = body;
+    const session = verifyPaymentSession(body.session);
+    const invoiceSession = verifyQPayInvoiceSession(body.invoiceToken);
 
-    if (!invoiceId) {
+    if (
+      invoiceSession.paymentSessionId !== session.sessionId ||
+      invoiceSession.reservationId !== session.reservationId ||
+      invoiceSession.amountMnt !== session.amountMnt
+    ) {
       return NextResponse.json(
-        { error: "Invoice ID is required" },
+        { error: "Invoice does not match this payment session" },
         { status: 400 }
       );
     }
@@ -67,7 +83,7 @@ export async function POST(request: NextRequest) {
       QPAY_CHECK_URL,
       {
         object_type: "INVOICE",
-        object_id: invoiceId,
+        object_id: invoiceSession.invoiceId,
         offset: {
           page_number: 1,
           page_limit: 100,
@@ -84,19 +100,49 @@ export async function POST(request: NextRequest) {
     const data = response.data as QPayCheckResponse;
     const paidRow = data.rows?.find((row) => row.payment_status === "PAID");
     let isPaid = !!paidRow;
+    const paidAmount = Number(paidRow?.payment_amount ?? data.paid_amount ?? 0);
 
-    if (isPaid && expectedAmount && paidRow) {
-      const paidAmt = Number(paidRow.payment_amount ?? 0);
-      if (paidAmt < expectedAmount) {
+    if (isPaid && paidRow) {
+      if (
+        paidRow.sender_invoice_no &&
+        paidRow.sender_invoice_no !== session.sessionId
+      ) {
+        return NextResponse.json(
+          { error: "Payment invoice does not match this payment session" },
+          { status: 400 }
+        );
+      }
+      if (paidAmount < session.amountMnt) {
         isPaid = false;
+      }
+    }
+
+    let reservationConfirmed = false;
+    if (isPaid) {
+      try {
+        await confirmCloudbedsReservation(session.reservationId);
+        reservationConfirmed = true;
+      } catch (confirmError) {
+        return NextResponse.json(
+          {
+            error: cloudbedsErrorMessage(
+              confirmError,
+              "Payment received but reservation confirmation failed"
+            ),
+            paid: true,
+            reservationConfirmed: false,
+          },
+          { status: 502 }
+        );
       }
     }
 
     return NextResponse.json({
       success: true,
       paid: isPaid,
-      paidAmount: data.paid_amount || 0,
+      paidAmount,
       count: data.count || 0,
+      reservationConfirmed,
     });
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -105,6 +151,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.error("QPay payment check error:", error instanceof Error ? error.message : error);
+
+    if (error instanceof PaymentSessionError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
 
     return NextResponse.json(
       { error: "Failed to check payment status" },

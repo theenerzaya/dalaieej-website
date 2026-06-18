@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
-import qs from "qs";
-
-const CLOUDBEDS_API_BASE = "https://hotels.cloudbeds.com/api/v1.2";
+import {
+  cloudbedsErrorMessage,
+  confirmCloudbedsReservation,
+} from "@/lib/cloudbeds-reservations";
 
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.CLOUDBEDS_API_KEY;
-    const propertyId = process.env.CLOUDBEDS_PROPERTY_ID;
+    const confirmSecret = process.env.CLOUDBEDS_CONFIRM_SECRET;
+    const suppliedSecret = request.headers.get("x-cloudbeds-confirm-secret");
 
-    if (!apiKey || !propertyId) {
-      throw new Error("Cloudbeds API credentials not configured");
+    if (!confirmSecret || suppliedSecret !== confirmSecret) {
+      return NextResponse.json(
+        { error: "Reservation confirmation is restricted to verified payment flows" },
+        { status: 403 }
+      );
     }
 
     const body = await request.json();
@@ -23,47 +26,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const payload = qs.stringify({
-      propertyID: propertyId,
-      reservationID: reservationId,
-      status: "confirmed",
-    });
-
-    const response = await axios.put(
-      `${CLOUDBEDS_API_BASE}/putReservation`,
-      payload,
-      {
-        headers: {
-          "x-api-key": apiKey,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    if (!response.data?.success) {
-      throw new Error(response.data?.message || "Failed to confirm reservation");
-    }
-
-    console.log(`Reservation ${reservationId} confirmed in Cloudbeds`);
-
-    return NextResponse.json({
-      success: true,
-      reservationId,
-      status: "confirmed",
-    });
+    return NextResponse.json(await confirmCloudbedsReservation(reservationId));
   } catch (error) {
     console.error("Cloudbeds confirm reservation error:", error instanceof Error ? error.message : error);
 
-    if (axios.isAxiosError(error)) {
-      const message = error.response?.data?.message || error.message;
-      return NextResponse.json(
-        { error: `Failed to confirm reservation: ${message}` },
-        { status: error.response?.status || 500 }
-      );
-    }
-
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to confirm reservation" },
+      { error: cloudbedsErrorMessage(error, "Failed to confirm reservation") },
       { status: 500 }
     );
   }

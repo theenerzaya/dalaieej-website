@@ -5,8 +5,12 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import SiteImage from "@/app/components/SiteImage";
 import { BodyText, CTAButton, Eyebrow, Headline } from "@/app/components/ui/Typography";
+import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
+import { CABIN_CATALOG } from "@/lib/cabinCatalog";
+import { withLocalePath } from "@/lib/localePath";
 import {
   araboto,
   cormorantGaramondItalic,
@@ -17,6 +21,19 @@ import {
 const STORAGE_KEY = "dalaieej-wellness-promo-dismissed-at";
 const DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
 const SHOW_DELAY_MS = 1300;
+const ROOM_JOURNEY_PATHS = CABIN_CATALOG.flatMap((entry) => [
+  entry.href,
+  `/${entry.slug}`,
+  ...entry.legacyRouteSlugs.map((slug) => `/${slug}`),
+]);
+const JOURNEY_PATHS = [
+  "/cabins",
+  ...ROOM_JOURNEY_PATHS,
+  "/booking",
+  "/checkout",
+  "/payment",
+  "/gallery",
+];
 
 function isDismissedRecently(): boolean {
   if (typeof window === "undefined") return true;
@@ -39,6 +56,22 @@ function persistDismiss() {
   }
 }
 
+function pathWithoutLocale(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments[0] === "en" || segments[0] === "mn") {
+    const stripped = `/${segments.slice(1).join("/")}`;
+    return stripped === "/" ? "/" : stripped.replace(/\/$/, "");
+  }
+  return pathname.replace(/\/$/, "") || "/";
+}
+
+function shouldSuppressPromo(pathname: string): boolean {
+  const normalized = pathWithoutLocale(pathname);
+  return JOURNEY_PATHS.some(
+    (path) => normalized === path || normalized.startsWith(`${path}/`),
+  );
+}
+
 /** Portals to `document.body` sit outside `[locale]/layout` — re-apply font variables so editorial titles load. */
 const portalFontVariables = [
   araboto.variable,
@@ -50,15 +83,19 @@ const portalFontVariables = [
 export default function WellnessPromoModal() {
   const t = useTranslations("promo.wellness");
   const locale = useLocale();
+  const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  const [portalMounted] = useState(() => typeof window !== "undefined");
+  const [portalMounted, setPortalMounted] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const localePrefix = locale === "mn" ? "/mn" : "";
-  const bookingHref = `${localePrefix}/booking`;
+  const bookingHref = withLocalePath(locale, "/booking");
+  const isHome = pathWithoutLocale(pathname) === "/";
+  const suppressPromo = shouldSuppressPromo(pathname);
+  const heroPast = useHeroPastForNav(isHome, pathname);
+  const canShowPromo = portalMounted && !suppressPromo && (!isHome || heroPast);
 
   const dismiss = useCallback(() => {
     persistDismiss();
@@ -66,11 +103,22 @@ export default function WellnessPromoModal() {
   }, []);
 
   useEffect(() => {
-    if (isDismissedRecently()) return;
+    const timer = window.setTimeout(() => setPortalMounted(true), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!canShowPromo || isDismissedRecently()) return;
 
     const timer = window.setTimeout(() => setOpen(true), SHOW_DELAY_MS);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [canShowPromo]);
+
+  useEffect(() => {
+    if (canShowPromo) return;
+    const timer = window.setTimeout(() => setOpen(false), 0);
+    return () => window.clearTimeout(timer);
+  }, [canShowPromo]);
 
   useEffect(() => {
     if (!open) return;
@@ -98,7 +146,7 @@ export default function WellnessPromoModal() {
     dismiss();
   };
 
-  if (!portalMounted) return null;
+  if (!portalMounted || suppressPromo) return null;
 
   const editorialHeadlineClass =
     locale === "mn" ? "font-editorial-mn" : "font-editorial-en";

@@ -56,10 +56,11 @@ export default function Preloader() {
         src="/branding/logos/logo-white.png"
         alt=""
         width={240}
-        height={120}
+        height={79}
         priority
         sizes="(max-width: 640px) 160px, 240px"
         className="h-auto w-[160px] sm:w-[200px] md:w-[240px] opacity-90"
+        style={{ height: "auto" }}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet, normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
 import { parseCloudbedsMoney } from "@/lib/cloudbeds-money";
+import { toPlainProviderText } from "@/lib/providerText";
 
 type CloudbedsAddonItem = {
   itemID?: string;
@@ -39,9 +40,13 @@ export async function GET(request: NextRequest) {
 
     const itemsData = await cloudbedsGet<CloudbedsItemsResponse>("/getItems", params);
 
-    console.log("Cloudbeds items response:", JSON.stringify(itemsData, null, 2));
-
     if (!itemsData?.success || !itemsData?.data) {
+      console.log("Cloudbeds add-ons fetched:", {
+        checkin,
+        checkout,
+        roomTypeId: roomTypeId ? normalizeCloudbedsRoomTypeID(roomTypeId) : null,
+        count: 0,
+      });
       return NextResponse.json({
         success: true,
         addons: [],
@@ -51,16 +56,23 @@ export async function GET(request: NextRequest) {
     const items = Array.isArray(itemsData.data)
       ? (itemsData.data as CloudbedsAddonItem[])
       : [];
+
+    console.log("Cloudbeds add-ons fetched:", {
+      checkin,
+      checkout,
+      roomTypeId: roomTypeId ? normalizeCloudbedsRoomTypeID(roomTypeId) : null,
+      count: items.length,
+    });
     
     const addons = items
       .map((item) => ({
         id: item.itemID || item.id,
-        name: item.itemName || item.name,
-        description: item.itemDescription || item.description || "",
+        name: toPlainProviderText(item.itemName || item.name),
+        description: toPlainProviderText(item.itemDescription || item.description),
         price: parseCloudbedsMoney(item.itemPrice ?? item.price),
         currency: item.currency || "MNT",
         priceType: item.priceType || "per_stay",
-        category: item.itemCategory || item.category || "other",
+        category: toPlainProviderText(item.itemCategory || item.category) || "other",
         image: item.itemImage ?? item.image ?? null,
         maxQuantity: parseInt(String(item.maxQuantity ?? 10), 10),
       }));

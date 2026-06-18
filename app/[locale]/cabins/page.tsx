@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 /**
@@ -11,10 +10,9 @@
  * Araboto for body) to match the booking page, /superior-cabin and the
  * navigation overlay.
  *
- * Each room card links to either a live detail page (/superior-cabin, /lodge)
- * or to /cabins as a placeholder for future detail pages. The mini
- * booking bar links to /booking?... so the main booking flow remains the
- * single source of truth for availability, rates and checkout.
+ * Each room card links to a canonical detail page. The mini booking bar
+ * links to /booking?... so the main booking flow remains the single source
+ * of truth for availability, rates and checkout.
  */
 
 import { useMemo, useRef, useState } from "react";
@@ -22,7 +20,7 @@ import dynamic from "next/dynamic";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, BedDouble, Minus, Plus, Ruler, Users } from "lucide-react";
+import { ArrowRight, Flame, Minus, Plus, Ruler, ShowerHead, Users } from "lucide-react";
 import {
   AnimatedText,
   HeroFadeOut,
@@ -34,7 +32,8 @@ import {
 } from "@/app/components/cabins/animations";
 import SiteImage from "@/app/components/SiteImage";
 import { assetUrl } from "@/lib/assetUrl";
-import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
+import { getCabinCloudbedsFact } from "@/lib/cabinCloudbedsSnapshot";
+import { getCabinDetailHref, type CabinSlug } from "@/lib/cabinCatalog";
 import DateInput from "@/app/components/ui/DateInput";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
@@ -56,127 +55,50 @@ function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
 type Bilingual = { en: string; mn: string };
 
 type Room = {
-  slug: string;
+  slug: CabinSlug;
   href: string;
   name: Bilingual;
-  area: Bilingual;
+  heating: Bilingual;
+  roomSize?: Bilingual;
   guests: Bilingual;
-  quantity: Bilingual;
+  facilities: Bilingual;
   intro: Bilingual;
   image: string;
 };
 
-function getRequiredCabinCatalogEntry(slug: string) {
-  const entry = getCabinCatalogEntry(slug);
-  if (!entry) throw new Error(`Missing cabin catalog entry for slug: ${slug}`);
-  return entry;
+function getRequiredCabinFact(slug: CabinSlug) {
+  const fact = getCabinCloudbedsFact(slug);
+  if (!fact) throw new Error(`Missing Cloudbeds cabin fact for slug: ${slug}`);
+  return fact;
+}
+
+function makeCloudbedsRoom(slug: CabinSlug, image: string): Room {
+  const fact = getRequiredCabinFact(slug);
+  return {
+    slug,
+    href: getCabinDetailHref(slug),
+    name: { en: fact.name, mn: fact.name },
+    heating: fact.heatingLabel,
+    roomSize: fact.roomSizeLabel,
+    guests: fact.guestLabel,
+    facilities: {
+      en: `${fact.bathroomLabel.en} · ${fact.showerLabel.en}`,
+      mn: `${fact.bathroomLabel.mn} · ${fact.showerLabel.mn}`,
+    },
+    intro: fact.shortDescription,
+    image,
+  };
 }
 
 const ROOMS: Room[] = [
-  {
-    slug: "superior-cabin",
-    href: "/superior-cabin",
-    name: getRequiredCabinCatalogEntry("superior-cabin").name,
-    area: { en: "50 m²", mn: "50 m²" },
-    guests: { en: "3 adults · 4 child", mn: "3 том хүн · 4 хүүхэд" },
-    quantity: { en: "1 cabin", mn: "1 байшин" },
-    intro: {
-      en: "Wood-fired warmth, handwoven textiles and a private forest view — our entry-level cabin, sized for couples and small families.",
-      mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдацтай — хос болон жижиг гэр бүлд зориулсан анхны шатны модон байшин.",
-    },
-    image: assetUrl("/images/cabins/room-superior.webp"),
-  },
-  {
-    slug: "triple-traditional-cabin",
-    href: "/triple-traditional-cabin",
-    name: getRequiredCabinCatalogEntry("triple-traditional-cabin").name,
-    area: { en: "30 m²", mn: "30 m²" },
-    guests: { en: "3 adults · 2 child", mn: "3 том хүн · 2 хүүхэд" },
-    quantity: { en: "5 cabins", mn: "5 байшин" },
-    intro: {
-      en: "A classic timber cabin layout with three full sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
-      mn: "Гурван бүрэн унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
-    },
-    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
-  },
-  {
-    slug: "lakeside-cabin",
-    href: "/lakeside-cabin",
-    name: getRequiredCabinCatalogEntry("lakeside-cabin").name,
-    area: { en: "40 m²", mn: "40 m²" },
-    guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
-    quantity: { en: "2 cabins", mn: "2 байшин" },
-    intro: {
-      en: "A wider footprint at the shoreline — two sleeping spaces, a reading nook and a deck that steps straight toward Lake Khövsgöl.",
-      mn: "Нуурын эрэгт илүү өргөн талбайтай — хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
-    },
-    image: assetUrl("/images/cabins/room-lakeside.webp"),
-  },
-  {
-    slug: "triple-electric-cabin",
-    href: "/triple-electric-cabin",
-    name: getRequiredCabinCatalogEntry("triple-electric-cabin").name,
-    area: { en: "30 m²", mn: "30 m²" },
-    guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    quantity: { en: "1 cabin", mn: "1 байшин" },
-    intro: {
-      en: "Designed for longer family stays, with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
-      mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой дулааны цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
-    },
-    image: assetUrl("/images/cabins/room-triple-electric.webp"),
-  },
-  {
-    slug: "signature-cabin",
-    href: "/signature-cabin",
-    name: getRequiredCabinCatalogEntry("signature-cabin").name,
-    area: { en: "30 m²", mn: "30 m²" },
-    guests: { en: "2 adults", mn: "2 том хүн" },
-    quantity: { en: "5 cabins", mn: "5 байшин" },
-    intro: {
-      en: "Our most requested room — a separate living area, deep-soak tub, and a private terrace that opens onto the larch line.",
-      mn: "Хамгийн их эрэлттэй өрөө — тусдаа зочны хэсэг, гүн угаалгын ванн, шинэсэн ой руу нээгдэх хувийн террастай.",
-    },
-    image: assetUrl("/images/cabins/room-signature.webp"),
-  },
-  {
-    slug: "quad-electric-cabin",
-    href: "/quad-electric-cabin",
-    name: getRequiredCabinCatalogEntry("quad-electric-cabin").name,
-    area: { en: "25 m²", mn: "25 m²" },
-    guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
-    quantity: { en: "1 cabin", mn: "1 байшин" },
-    intro: {
-      en: "Our flexible mid-tier option for groups — four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
-      mn: "Баг болон найзын аялалд тохирох дунд ангиллын сонголт — дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тух, эрэг рүү харсан том зочны хэсэгтэй.",
-    },
-    image: assetUrl("/images/cabins/room-quad-electric.webp"),
-  },
-  {
-    slug: "grand-peninsula-suite",
-    href: "/grand-peninsula-suite",
-    name: getRequiredCabinCatalogEntry("grand-peninsula-suite").name,
-    area: { en: "35 m²", mn: "35 m²" },
-    guests: { en: "4 adults · 3 children", mn: "4 том хүн · 3 хүүхэд" },
-    quantity: { en: "1 suite", mn: "1 тусгай хаус" },
-    intro: {
-      en: "A standalone suite on its own peninsula — two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
-      mn: "Өөрийн хойг дээрх тусдаа хаус — хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван тал нуурын тасралтгүй харагдацтай.",
-    },
-    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
-  },
-  {
-    slug: "camping",
-    href: "/booking",
-    name: getRequiredCabinCatalogEntry("camping").name,
-    area: { en: "Outdoor setup", mn: "Гадаа байрлал" },
-    guests: { en: "2 adults · 2 children", mn: "2 том хүн · 2 хүүхэд" },
-    quantity: { en: "Limited spots", mn: "Хязгаартай талбай" },
-    intro: {
-      en: "A nature-first stay under the open sky with essential camp comforts and direct access to the lakeside grounds.",
-      mn: "Нээлттэй тэнгэрийн дор, нуурын эрэг рүү шууд гарах боломжтой, үндсэн тухтай шийдэл бүхий байгаль төвтэй амралт.",
-    },
-    image: assetUrl("/images/rooms/camping.webp"),
-  },
+  makeCloudbedsRoom("superior-cabin", assetUrl("/images/cabins/room-superior.webp")),
+  makeCloudbedsRoom("triple-traditional-cabin", assetUrl("/images/cabins/room-triple-traditional.webp")),
+  makeCloudbedsRoom("lakeside-cabin", assetUrl("/images/cabins/room-lakeside.webp")),
+  makeCloudbedsRoom("triple-electric-cabin", assetUrl("/images/cabins/room-triple-electric.webp")),
+  makeCloudbedsRoom("signature-cabin", assetUrl("/images/cabins/room-signature.webp")),
+  makeCloudbedsRoom("quad-electric-cabin", assetUrl("/images/cabins/room-quad-electric.webp")),
+  makeCloudbedsRoom("grand-peninsula-suite", assetUrl("/images/cabins/room-grand-peninsula.webp")),
+  makeCloudbedsRoom("camping", assetUrl("/images/rooms/camping.webp")),
 ];
 
 const HERO_IMAGE = assetUrl("/images/cabins/hero-our-rooms.webp");
@@ -205,9 +127,10 @@ type CopyKey =
   | "sectionEyebrow"
   | "sectionHeading"
   | "sectionIntro"
-  | "quantityLabel"
+  | "facilitiesLabel"
   | "guestsLabel"
-  | "areaLabel"
+  | "heatingLabel"
+  | "sizeLabel"
   | "moreInfo"
   | "tagline1"
   | "tagline2"
@@ -235,10 +158,11 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     sectionEyebrow: "Accommodations",
     sectionHeading: "Slow days. Deep waters.",
     sectionIntro:
-      "Traditional wooden cabins on Lake Khövsgöl's eastern shore.",
-    quantityLabel: "Quantity",
+      "Current room names, capacity, heating and facilities are aligned with Cloudbeds.",
+    facilitiesLabel: "Bathroom / shower",
     guestsLabel: "Guests",
-    areaLabel: "Average area",
+    heatingLabel: "Heating",
+    sizeLabel: "Room size",
     moreInfo: "Get More Information",
     tagline1: "The best people to take care of",
     tagline2: "our most valuable asset: you.",
@@ -267,10 +191,11 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     sectionEyebrow: "Байрлах сонголтууд",
     sectionHeading: "Удаан өдрүүд. Гүн ус.",
     sectionIntro:
-      "Хөвсгөл нуурын зүүн эрэг дээрх уламжлалт модон байшин.",
-    quantityLabel: "Тоо ширхэг",
+      "Өрөөний нэр, багтаамж, халаалт, байгууламжийн мэдээллийг Cloudbeds-тэй тааруулав.",
+    facilitiesLabel: "00 / шүршүүр",
     guestsLabel: "Зочид",
-    areaLabel: "Дундаж талбай",
+    heatingLabel: "Халаалт",
+    sizeLabel: "Талбай",
     moreInfo: "Дэлгэрэнгүй",
     tagline1: "Таны хамгийн үнэт зүйлд —",
     tagline2: "өөрт тань, бид анхаарна.",
@@ -693,7 +618,7 @@ export default function CabinsPage() {
               imageBefore={SPA_IMAGE_BEFORE}
               imageAfter={SPA_IMAGE_AFTER}
               title={t.spaTitle}
-              href={`${localePrefix}/book-now`}
+              href={`${localePrefix}/booking`}
               headlineFont={headlineFont}
             />
           </StaggerItem>
@@ -734,7 +659,33 @@ function RoomRow({
   t: Record<CopyKey, string>;
 }) {
   const lang = isMn ? "mn" : "en";
-  const detailHref = `${localePrefix}/bookings`;
+  const detailHref = `${localePrefix}${room.href}`;
+  const roomFacts = [
+    ...(room.roomSize
+      ? [
+          {
+            icon: <Ruler className="w-4 h-4 text-bark" strokeWidth={1.4} />,
+            label: t.sizeLabel,
+            value: room.roomSize[lang],
+          },
+        ]
+      : []),
+    {
+      icon: <Users className="w-4 h-4 text-bark" strokeWidth={1.4} />,
+      label: t.guestsLabel,
+      value: room.guests[lang],
+    },
+    {
+      icon: <Flame className="w-4 h-4 text-bark" strokeWidth={1.4} />,
+      label: t.heatingLabel,
+      value: room.heating[lang],
+    },
+    {
+      icon: <ShowerHead className="w-4 h-4 text-bark" strokeWidth={1.4} />,
+      label: t.facilitiesLabel,
+      value: room.facilities[lang],
+    },
+  ];
 
   return (
     <article
@@ -742,15 +693,15 @@ function RoomRow({
         reverse ? "md:[&>*:first-child]:order-2" : ""
       }`}
     >
-      <ImageReveal
-        className="md:col-span-7 block aspect-[4/3] overflow-hidden bg-white/5"
-        duration={1.3}
-        from={1.1}
-        direction={reverse ? "right" : "left"}
+      <Link
+        href={detailHref}
+        className="group relative block aspect-[4/3] overflow-hidden bg-white/5 md:col-span-7"
       >
-        <Link
-          href={detailHref}
-          className="relative block h-full w-full group"
+        <ImageReveal
+          className="relative h-full w-full"
+          duration={1.3}
+          from={1.1}
+          direction={reverse ? "right" : "left"}
         >
           <SiteImage
             src={room.image}
@@ -759,8 +710,8 @@ function RoomRow({
             sizes="(max-width: 768px) 100vw, 58vw"
             className="object-cover transition-transform duration-[900ms] group-hover:scale-[1.04]"
           />
-        </Link>
-      </ImageReveal>
+        </ImageReveal>
+      </Link>
 
       <ScrollParallax className="md:col-span-5" y={-90}>
         <AnimatedText
@@ -777,27 +728,11 @@ function RoomRow({
           stagger={0.06}
           offsetY={14}
         >
-          <StaggerItem as="div">
-            <Fact
-              icon={<Ruler className="w-4 h-4 text-bark" strokeWidth={1.4} />}
-              label={t.areaLabel}
-              value={room.area[lang]}
-            />
-          </StaggerItem>
-          <StaggerItem as="div">
-            <Fact
-              icon={<Users className="w-4 h-4 text-bark" strokeWidth={1.4} />}
-              label={t.guestsLabel}
-              value={room.guests[lang]}
-            />
-          </StaggerItem>
-          <StaggerItem as="div">
-            <Fact
-              icon={<BedDouble className="w-4 h-4 text-bark" strokeWidth={1.4} />}
-              label={t.quantityLabel}
-              value={room.quantity[lang]}
-            />
-          </StaggerItem>
+          {roomFacts.map((fact) => (
+            <StaggerItem as="div" key={fact.label}>
+              <Fact icon={fact.icon} label={fact.label} value={fact.value} />
+            </StaggerItem>
+          ))}
         </StaggerGroup>
 
         <Reveal

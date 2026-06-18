@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cloudbedsGet } from "@/lib/cloudbeds";
-import { parseCloudbedsMoney } from "@/lib/cloudbeds-money";
+import { parseBoundedInteger, validateStayDates } from "@/lib/booking-guards";
+import { stayTotalForRoom } from "@/lib/cloudbeds-pricing";
 import {
   extractRateCancellationFromPlan,
   mergeCancellation,
   type RateCancellation,
 } from "@/lib/cloudbeds-rate-cancellation";
+import { toPlainProviderText, toPlainProviderTextList } from "@/lib/providerText";
 
 interface RateRestriction {
   closedToArrival: boolean;
@@ -82,58 +84,6 @@ function normDetailDate(value: unknown): string {
   return s.length >= 10 ? s.slice(0, 10) : s;
 }
 
-/** Cloudbeds returns adultsExtraCharge / childrenExtraCharge as an array of single-key objects. */
-function flattenExtraChargeMap(extra: unknown): Record<string, number> {
-  const out: Record<string, number> = {};
-  if (extra == null) return out;
-  const rows = Array.isArray(extra) ? extra : [extra];
-  for (const row of rows) {
-    if (row && typeof row === "object" && !Array.isArray(row)) {
-      for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
-        const n = parseCloudbedsMoney(v);
-        if (!Number.isNaN(n)) out[k] = n;
-      }
-    }
-  }
-  return out;
-}
-
-function extraChargeForGuestCount(map: Record<string, number>, count: number): number {
-  if (count <= 0) return 0;
-  const direct = map[String(count)];
-  if (direct != null) return direct;
-  const numericKeys = Object.keys(map)
-    .map((k) => parseInt(k, 10))
-    .filter((n) => !Number.isNaN(n))
-    .sort((a, b) => a - b);
-  let best = 0;
-  for (const k of numericKeys) {
-    if (k <= count) best = map[String(k)] ?? best;
-  }
-  return best;
-}
-
-/**
- * Stay total for quoted occupancy. `roomRate` comes from inventory discovery (minimal adults);
- * extra-guest charges for the quoted party are added on top.
- */
-function stayTotalForRoom(
-  room: Record<string, unknown>,
-  quoteAdults: number,
-  quoteChildren: number
-): number {
-  const base = parseCloudbedsMoney(room.roomRate);
-  const adultExtra = extraChargeForGuestCount(
-    flattenExtraChargeMap(room.adultsExtraCharge),
-    quoteAdults
-  );
-  const childExtra = extraChargeForGuestCount(
-    flattenExtraChargeMap(room.childrenExtraCharge),
-    quoteChildren
-  );
-  return base + adultExtra + childExtra;
-}
-
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -147,24 +97,50 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(checkin) || !dateRegex.test(checkout)) {
+    const stayDates = validateStayDates(checkin, checkout);
+    if (!stayDates.ok) {
       return NextResponse.json(
-        { error: "Dates must be in YYYY-MM-DD format" },
+        { error: stayDates.error },
         { status: 400 }
       );
     }
 
     const promo = searchParams.get("promo");
-    const rooms = searchParams.get("rooms") || "1";
+    const roomsNum = parseBoundedInteger(searchParams.get("rooms") || "1", {
+      min: 1,
+      max: 10,
+      label: "rooms",
+    });
+    if (roomsNum == null) {
+      return NextResponse.json(
+        { error: "Rooms must be a whole number from 1 to 10" },
+        { status: 400 }
+      );
+    }
+    const rooms = String(roomsNum);
 
     /** Occupancy for checkout repricing (per cart line). Listing uses minimal occupancy so all room types return. */
     const quoteAdultsRaw = searchParams.get("quoteAdults") ?? searchParams.get("adults");
     const quoteChildrenRaw = searchParams.get("quoteChildren") ?? searchParams.get("children");
-    const quoteAdultsNum = Math.max(1, parseInt(quoteAdultsRaw || "1", 10) || 1);
-    const quoteChildrenNum = Math.max(0, parseInt(quoteChildrenRaw || "0", 10) || 0);
+    const quoteAdultsNum = parseBoundedInteger(quoteAdultsRaw || "1", {
+      min: 1,
+      max: 20,
+      label: "adults",
+    });
+    const quoteChildrenNum = parseBoundedInteger(quoteChildrenRaw || "0", {
+      min: 0,
+      max: 10,
+      label: "children",
+    });
 
-  /** Always query minimal occupancy so every room type is returned; quote party size via extras. */
+    if (quoteAdultsNum == null || quoteChildrenNum == null) {
+      return NextResponse.json(
+        { error: "Guest counts must be whole numbers within the allowed range" },
+        { status: 400 }
+      );
+    }
+
+    /** Always query minimal occupancy so every room type is returned; quote party size via extras. */
     const params: Record<string, string> = {
       startDate: checkin,
       endDate: checkout,
@@ -190,8 +166,12 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    console.log("Cloudbeds availability response:", JSON.stringify(availabilityData, null, 2));
-    console.log("Cloudbeds ratePlans response:", JSON.stringify(ratePlansData, null, 2));
+    console.log("Cloudbeds availability fetched:", {
+      checkin,
+      checkout,
+      properties: availabilityData?.data?.length ?? 0,
+      ratePlans: ratePlansData?.data?.length ?? 0,
+    });
 
     const restrictionByRateID = new Map<string, RateRestriction>();
     const cancellationByRateID = new Map<string, RateCancellation>();
@@ -244,7 +224,7 @@ export async function GET(request: NextRequest) {
 
     const propertyTermsAndConditions =
       typeof hotelDetailsData?.data?.propertyPolicy?.propertyTermsAndConditions === "string"
-        ? hotelDetailsData.data.propertyPolicy.propertyTermsAndConditions.trim() || null
+        ? toPlainProviderText(hotelDetailsData.data.propertyPolicy.propertyTermsAndConditions) || null
         : null;
 
     const propertyData = availabilityData?.data?.[0];
@@ -297,6 +277,13 @@ export async function GET(request: NextRequest) {
 
       const restrictionsForRate = restrictionByRateID.get(String(room.roomRateID)) ?? null;
       const mergedCancellation = mergeCancellationForRoom(String(room.roomRateID), String(room.roomTypeID));
+      const cancellationPolicyText = toPlainProviderText(mergedCancellation?.policyText);
+      const cancellation = mergedCancellation
+        ? {
+            ...mergedCancellation,
+            policyText: cancellationPolicyText || undefined,
+          }
+        : null;
 
       const maxGuestsValue =
         typeof room.maxGuests === "number"
@@ -305,19 +292,19 @@ export async function GET(request: NextRequest) {
 
       return {
         roomTypeID: room.roomTypeID,
-        roomTypeName: room.roomTypeName,
+        roomTypeName: toPlainProviderText(room.roomTypeName),
         roomsAvailable: room.roomsAvailable || 0,
         rateID: room.roomRateID,
-        rateName: room.ratePlanNamePublic || "Standard",
+        rateName: toPlainProviderText(room.ratePlanNamePublic) || "Standard",
         totalRate: fullStayTotal,
         originalRate,
         currency: currency,
-        description: room.roomTypeDescription || "",
+        description: toPlainProviderText(room.roomTypeDescription),
         maxGuests: Number.isFinite(maxGuestsValue) && maxGuestsValue > 0 ? maxGuestsValue : 2,
         photos: photos,
-        features: room.roomTypeFeatures || [],
+        features: toPlainProviderTextList(room.roomTypeFeatures),
         restrictions: restrictionsForRate,
-        cancellation: mergedCancellation,
+        cancellation,
       };
     });
 

@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import {
+  createQPayInvoiceSession,
+  PaymentSessionError,
+  verifyPaymentSession,
+} from "@/lib/payment-session";
 
 const QPAY_AUTH_URL = "https://merchant.qpay.mn/v2/auth/token";
 const QPAY_INVOICE_URL = "https://merchant.qpay.mn/v2/invoice";
 
 interface InvoiceRequest {
-  amount: number;
+  amount?: number;
   description?: string;
   callbackUrl?: string;
   /** Browser `window.location.origin` — used when reverse proxies omit x-forwarded-proto. */
   siteOrigin?: string;
+  session?: string;
 }
 
 function normalizeBaseUrl(base: string): string {
@@ -168,6 +174,30 @@ interface QPayInvoiceResponse {
   }>;
 }
 
+type QPayInvoicePayload = {
+  success: true;
+  invoiceId: string;
+  invoiceToken: string;
+  qrCode: string;
+  qrText: string;
+  shortUrl: string;
+  bankUrls: QPayInvoiceResponse["urls"];
+  idempotentReplay?: boolean;
+};
+
+const QPAY_INVOICE_CACHE_TTL_MS = 30 * 60 * 1000;
+const qpayInvoiceCache = new Map<
+  string,
+  { expiresAt: number; response: QPayInvoicePayload }
+>();
+
+function cleanQPayInvoiceCache() {
+  const now = Date.now();
+  for (const [key, entry] of qpayInvoiceCache.entries()) {
+    if (entry.expiresAt <= now) qpayInvoiceCache.delete(key);
+  }
+}
+
 async function getQPayToken(): Promise<string> {
   const username = process.env.QPAY_USERNAME;
   const password = process.env.QPAY_PASSWORD;
@@ -204,15 +234,16 @@ async function createInvoice(
   token: string,
   amount: number,
   description: string,
-  callbackUrl: string
+  callbackUrl: string,
+  senderInvoiceNo?: string
 ): Promise<QPayInvoiceResponse> {
   const invoiceCode = process.env.QPAY_INVOICE_CODE || "DALAI_EEJ_INVOICE";
-  const senderCode = uuidv4();
+  const senderCode = senderInvoiceNo || uuidv4();
 
-  console.log("Creating QPay invoice with:", {
+  console.log("Creating QPay invoice:", {
     invoice_code: invoiceCode,
     amount: amount,
-    callback_url: callbackUrl,
+    hasCallbackUrl: Boolean(callbackUrl),
   });
 
   try {
@@ -248,11 +279,13 @@ export async function POST(request: NextRequest) {
   try {
     const body: InvoiceRequest = await request.json();
     const {
-      amount,
-      description = "Dalai Eej Resort Payment",
+      description,
       callbackUrl,
       siteOrigin,
+      session: sessionToken,
     } = body;
+    const session = verifyPaymentSession(sessionToken);
+    const amount = session.amountMnt;
 
     if (!amount || amount <= 0) {
       return NextResponse.json(
@@ -271,32 +304,58 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validated.message }, { status: 400 });
     }
 
+    cleanQPayInvoiceCache();
+    const cached = qpayInvoiceCache.get(session.sessionId);
+    if (cached) {
+      return NextResponse.json({ ...cached.response, idempotentReplay: true });
+    }
+
     const token = await getQPayToken();
     const invoice = await createInvoice(
       token,
       amount,
-      description,
-      validated.url
+      description?.trim() || `Dalai Eej Resort - Booking ${session.reservationId}`,
+      validated.url,
+      session.sessionId
     );
 
-    return NextResponse.json({
+    const responsePayload: QPayInvoicePayload = {
       success: true,
       invoiceId: invoice.invoice_id,
+      invoiceToken: createQPayInvoiceSession({
+        invoiceId: invoice.invoice_id,
+        paymentSessionId: session.sessionId,
+        reservationId: session.reservationId,
+        amountMnt: session.amountMnt,
+      }),
       qrCode: invoice.qr_image,
       qrText: invoice.qr_text,
       shortUrl: invoice.qPay_shortUrl,
       bankUrls: invoice.urls,
+    };
+    qpayInvoiceCache.set(session.sessionId, {
+      expiresAt: Date.now() + QPAY_INVOICE_CACHE_TTL_MS,
+      response: responsePayload,
     });
+
+    return NextResponse.json(responsePayload);
   } catch (error) {
     console.error("QPay invoice creation error:", error);
+
+    if (error instanceof PaymentSessionError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
 
     if (axios.isAxiosError(error)) {
       const qpayError = error.response?.data;
       const statusCode = error.response?.status || 500;
       
-      console.error("QPay API Response:", {
+      console.error("QPay API response:", {
         status: statusCode,
-        data: JSON.stringify(qpayError),
+        message:
+          typeof qpayError === "object" && qpayError != null && "message" in qpayError
+            ? String((qpayError as { message?: unknown }).message)
+            : String(qpayError || error.message),
         url: error.config?.url,
       });
 

@@ -20,15 +20,10 @@ function findHeroSentinel(): HTMLElement | null {
  * `#site-hero` if the sentinel is missing. When disabled, always true.
  */
 export function useHeroPastForNav(enabled: boolean, pathname: string): boolean {
-  const [past, setPast] = useState(() => !enabled);
+  const [past, setPast] = useState(false);
 
   useEffect(() => {
-    if (!enabled) {
-      setPast(true);
-      return;
-    }
-
-    setPast(false);
+    if (!enabled) return;
 
     let observer: IntersectionObserver | null = null;
     let retryTimer: ReturnType<typeof setInterval> | null = null;
@@ -82,5 +77,5 @@ export function useHeroPastForNav(enabled: boolean, pathname: string): boolean {
     };
   }, [enabled, pathname]);
 
-  return past;
+  return enabled ? past : true;
 }

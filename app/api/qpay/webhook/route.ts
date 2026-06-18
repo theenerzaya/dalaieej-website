@@ -15,14 +15,14 @@ export async function POST(request: NextRequest) {
   try {
     const payload: QPayWebhookPayload = await request.json();
 
-    console.log("QPay Webhook received:", JSON.stringify(payload, null, 2));
-
-    if (payload.payment_status === "PAID") {
-      console.log(`Payment successful for invoice: ${payload.invoice_id}`);
-      console.log(`Amount: ${payload.payment_amount} ${payload.payment_currency}`);
-      console.log(`Payment ID: ${payload.payment_id}`);
-      console.log(`Sender Invoice No: ${payload.sender_invoice_no}`);
-    }
+    console.log("QPay webhook received:", {
+      invoiceId: payload.invoice_id,
+      status: payload.payment_status,
+      amount: payload.payment_amount,
+      currency: payload.payment_currency,
+      hasPaymentId: Boolean(payload.payment_id),
+      hasSenderInvoiceNo: Boolean(payload.sender_invoice_no),
+    });
 
     return NextResponse.json({ success: true, received: true });
   } catch (error) {

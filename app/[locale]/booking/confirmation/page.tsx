@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { CheckCircle, MapPin, Calendar, Moon, Users, Mail, Plane } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { withLocalePath } from "@/lib/localePath";
 
 function ConfirmationContent() {
   const t = useTranslations("confirmation");
@@ -14,7 +15,7 @@ function ConfirmationContent() {
   const pathname = usePathname();
 
   const currentLocale = pathname.startsWith("/mn") ? "mn" : "en";
-  const localePrefix = currentLocale === "mn" ? "/mn" : "";
+  const localePrefix = withLocalePath(currentLocale, "/");
   const editorialFont = currentLocale === "mn" ? "font-editorial-mn" : "font-editorial-en";
 
   const bookingId = searchParams.get("bookingId") || searchParams.get("reservation_id") || "";
@@ -25,22 +26,94 @@ function ConfirmationContent() {
   const checkin = searchParams.get("checkin") || "";
   const checkout = searchParams.get("checkout") || "";
   const source = searchParams.get("source") || "";
+  const paymentIntentId =
+    searchParams.get("paymentIntentId") || searchParams.get("payment_intent") || "";
+  const verified = searchParams.get("verified") === "1";
 
   const hasConfirmed = useRef(false);
+  const [verificationMessage, setVerificationMessage] = useState("");
+  const [verificationTone, setVerificationTone] = useState<"info" | "warning">("info");
 
   useEffect(() => {
+    const timers: number[] = [];
+    const setVerification = (tone: "info" | "warning", message: string) => {
+      timers.push(
+        window.setTimeout(() => {
+          setVerificationTone(tone);
+          setVerificationMessage(message);
+        }, 0)
+      );
+    };
+
     if (hasConfirmed.current) return;
     if (!bookingId || bookingId.startsWith("booking-")) return;
-    if (source !== "stripe") return;
+
+    if (source === "qpay" && !verified) {
+      setVerification(
+        "warning",
+        currentLocale === "mn"
+          ? "Төлбөрийн баталгаажуулалт дуусаагүй байна. Манай баг захиалгыг гараар шалгана."
+          : "Payment verification was not completed. Our team will review this booking manually."
+      );
+      return;
+    }
+
+    if (source !== "stripe" || verified) return;
+
+    if (!paymentIntentId) {
+      setVerification(
+        "warning",
+        currentLocale === "mn"
+          ? "Картын төлбөрийг автоматаар баталгаажуулах мэдээлэл дутуу байна. Манай баг захиалгыг гараар шалгана."
+          : "Card payment verification data is missing. Our team will review this booking manually."
+      );
+      return;
+    }
 
     hasConfirmed.current = true;
-    fetch("/api/cloudbeds/confirm-reservation", {
+    setVerification(
+      "info",
+      currentLocale === "mn"
+        ? "Төлбөрийг баталгаажуулж байна..."
+        : "Verifying payment..."
+    );
+
+    fetch("/api/stripe/confirm-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reservationId: bookingId }),
+      body: JSON.stringify({
+        paymentIntentId,
+        bookingId,
+        expectedAmount: amount ? parseInt(amount, 10) : undefined,
+      }),
     })
-      .catch(() => {});
-  }, [bookingId, source]);
+      .then(async (response) => {
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || "Payment verification failed");
+        }
+        setVerification(
+          "info",
+          currentLocale === "mn"
+            ? "Төлбөр баталгаажлаа."
+            : "Payment verified."
+        );
+      })
+      .catch((error) => {
+        setVerification(
+          "warning",
+          error instanceof Error
+            ? error.message
+            : currentLocale === "mn"
+              ? "Төлбөр баталгаажуулахад алдаа гарлаа. Манай баг захиалгыг гараар шалгана."
+              : "Payment verification failed. Our team will review this booking manually."
+        );
+      });
+
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+    };
+  }, [amount, bookingId, currentLocale, paymentIntentId, source, verified]);
 
   const paidNum = amount ? parseInt(amount, 10) : 0;
   const bookingTotalNum = totalAmount ? parseInt(totalAmount, 10) : 0;
@@ -168,6 +241,21 @@ function ConfirmationContent() {
             </div>
           </motion.div>
 
+          {verificationMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+              className={`mt-4 rounded-2xl border px-6 py-4 text-center font-body text-sm ${
+                verificationTone === "warning"
+                  ? "border-orange-400/30 bg-orange-500/10 text-orange-100"
+                  : "border-main/15 bg-white/5 text-main/70"
+              }`}
+            >
+              {verificationMessage}
+            </motion.div>
+          )}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -224,7 +312,7 @@ function ConfirmationContent() {
             className="mt-10 text-center"
           >
             <a
-              href={localePrefix || "/"}
+              href={localePrefix}
               className="inline-block px-10 py-4 bg-main text-ink font-cta uppercase tracking-[0.28em] text-xs hover:bg-main/90 transition-colors"
             >
               {t("backToHome")}

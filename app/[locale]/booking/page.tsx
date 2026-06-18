@@ -1,15 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect, useMemo, type MouseEvent } from "react";
+import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
+import { parseBoundedInteger, validateStayDates } from "@/lib/booking-guards";
 import { formatIsoDateAsDots } from "@/lib/dateFormat";
 import DateInput from "@/app/components/ui/DateInput";
+import { withLocalePath } from "@/lib/localePath";
+import {
+  getCabinDetailHref,
+  getCabinDisplayName,
+  getCabinGallery,
+  resolveCabinSlugFromCloudbeds,
+  type CabinSlug,
+} from "@/lib/cabinCatalog";
+import { toPlainProviderText, toPlainProviderTextList } from "@/lib/providerText";
 
 interface RoomRestrictions {
   closedToArrival: boolean;
@@ -41,6 +51,7 @@ interface Room {
 }
 
 interface RoomTypeGroup {
+  slug: CabinSlug | null;
   roomTypeName: string;
   roomsAvailable: number;
   description: string;
@@ -54,6 +65,8 @@ interface RoomTypeGroup {
 interface CartItem {
   /** Unique id — one cart row per physical room (quantity is always 1). */
   id: string;
+  cabinSlug?: CabinSlug | null;
+  providerRoomTypeName?: string;
   roomTypeID: string;
   roomTypeName: string;
   rateID: string;
@@ -100,133 +113,11 @@ interface AvailabilityData {
   propertyTermsAndConditions?: string | null;
 }
 
-type RoomSlug =
-  | "superior-cabin"
-  | "triple-traditional-cabin"
-  | "lakeside-cabin"
-  | "triple-electric-cabin"
-  | "signature-cabin"
-  | "quad-electric-cabin"
-  | "grand-peninsula-suite"
-  | "camping";
-
-const ROOM_GALLERIES: Record<RoomSlug, string[]> = {
-  "superior-cabin": [
-    "/images/rooms/superior-cabin/00.webp",
-    "/images/rooms/superior-cabin/01.webp",
-    "/images/rooms/superior-cabin/02.webp",
-    "/images/rooms/superior-cabin/03.webp",
-    "/images/rooms/superior-cabin/04.webp",
-  ],
-  "triple-traditional-cabin": [
-    "/images/rooms/triple-traditional-cabin/00.webp",
-    "/images/rooms/triple-traditional-cabin/01.webp",
-    "/images/rooms/triple-traditional-cabin/02.webp",
-    "/images/rooms/triple-traditional-cabin/03.webp",
-    "/images/rooms/triple-traditional-cabin/04.webp",
-  ],
-  "lakeside-cabin": [
-    "/images/rooms/lakeside-cabin/00.webp",
-    "/images/rooms/lakeside-cabin/01.webp",
-    "/images/rooms/lakeside-cabin/02.webp",
-    "/images/rooms/lakeside-cabin/03.webp",
-    "/images/rooms/lakeside-cabin/04.webp",
-  ],
-  "triple-electric-cabin": [
-    "/images/rooms/triple-electric-cabin/00.webp",
-    "/images/rooms/triple-electric-cabin/01.webp",
-    "/images/rooms/triple-electric-cabin/02.webp",
-    "/images/rooms/triple-electric-cabin/03.webp",
-    "/images/rooms/triple-electric-cabin/04.webp",
-  ],
-  "signature-cabin": [
-    "/images/rooms/signature-cabin/00.webp",
-    "/images/rooms/signature-cabin/01.webp",
-    "/images/rooms/signature-cabin/02.webp",
-    "/images/rooms/signature-cabin/03.webp",
-    "/images/rooms/signature-cabin/04.webp",
-  ],
-  "quad-electric-cabin": [
-    "/images/rooms/quad-electric-cabin/00.webp",
-    "/images/rooms/quad-electric-cabin/01.webp",
-    "/images/rooms/quad-electric-cabin/02.webp",
-    "/images/rooms/quad-electric-cabin/03.webp",
-    "/images/rooms/quad-electric-cabin/04.webp",
-  ],
-  "grand-peninsula-suite": [
-    "/images/rooms/grand-peninsula-suite/00.webp",
-    "/images/rooms/grand-peninsula-suite/01.webp",
-    "/images/rooms/grand-peninsula-suite/02.webp",
-    "/images/rooms/grand-peninsula-suite/03.webp",
-    "/images/rooms/grand-peninsula-suite/04.webp",
-  ],
-  camping: ["/images/rooms/camping.webp"],
+type AvailabilityFetchOptions = {
+  force?: boolean;
+  quoteAdults?: number;
+  quoteChildren?: number;
 };
-
-// Update this map whenever Cloudbeds roomTypeID/accommodation codes change.
-// Supports both numeric IDs and provider abbreviations when those are returned.
-const ROOM_TYPE_ID_TO_SLUG: Record<string, RoomSlug> = {
-  EST: "triple-traditional-cabin",
-  LDG: "signature-cabin",
-  SCW: "lakeside-cabin",
-  ESH: "grand-peninsula-suite",
-  C: "camping",
-  "196467430240449": "triple-traditional-cabin",
-  "197943412437120": "signature-cabin",
-  "198020352975040": "lakeside-cabin",
-  "198036698427584": "triple-electric-cabin",
-  "198038298677377": "grand-peninsula-suite",
-  "198039847624896": "superior-cabin",
-  "198042256253056": "camping",
-  "198046100787328": "quad-electric-cabin",
-};
-
-const ROOM_NAME_ALIASES: Array<{ matches: string[]; slug: RoomSlug }> = [
-  { matches: ["superior", "их өргөө"], slug: "superior-cabin" },
-  { matches: ["их оргоо"], slug: "superior-cabin" },
-  { matches: ["triple", "traditional"], slug: "triple-traditional-cabin" },
-  { matches: ["тухтай", "галлагаатай"], slug: "triple-traditional-cabin" },
-  { matches: ["lakeside", "эрэг"], slug: "lakeside-cabin" },
-  { matches: ["эрэг", "хаус"], slug: "lakeside-cabin" },
-  { matches: ["triple", "electric"], slug: "triple-electric-cabin" },
-  { matches: ["тухтай", "цахилгаан", "халаалт"], slug: "triple-electric-cabin" },
-  { matches: ["signature"], slug: "signature-cabin" },
-  { matches: ["энгийн", "байр"], slug: "signature-cabin" },
-  { matches: ["quad", "electric"], slug: "quad-electric-cabin" },
-  { matches: ["гэр", "булийн", "цахилгаан", "халаалт"], slug: "quad-electric-cabin" },
-  { matches: ["grand", "peninsula"], slug: "grand-peninsula-suite" },
-  { matches: ["гэр", "булийн", "галлагаатай"], slug: "grand-peninsula-suite" },
-  { matches: ["camp"], slug: "camping" },
-  { matches: ["аялагчийн", "отог"], slug: "camping" },
-];
-
-function normalizeRoomName(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function normalizeRoomTypeId(value: string): string {
-  const raw = String(value || "").trim();
-  if (!raw) return "";
-  return raw.replace(/-\d+$/, "");
-}
-
-function resolveRoomSlug(roomTypeID: string, roomTypeName: string): RoomSlug | null {
-  const normalizedId = normalizeRoomTypeId(roomTypeID);
-  const byId = ROOM_TYPE_ID_TO_SLUG[normalizedId] || ROOM_TYPE_ID_TO_SLUG[normalizedId.toUpperCase()];
-  if (byId) return byId;
-
-  const normalized = normalizeRoomName(roomTypeName || "");
-  for (const alias of ROOM_NAME_ALIASES) {
-    if (alias.matches.every((token) => normalized.includes(token))) return alias.slug;
-  }
-  return null;
-}
 
 function BookingCardSlideshow({ images, alt }: { images: string[]; alt: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -291,7 +182,7 @@ function BookingCardSlideshow({ images, alt }: { images: string[]; alt: string }
 }
 
 function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return toPlainProviderText(html);
 }
 
 function formatDate(dateStr: string): string {
@@ -299,12 +190,8 @@ function formatDate(dateStr: string): string {
 }
 
 function calculateNights(checkinDate: string, checkoutDate: string): number {
-  if (!checkinDate || !checkoutDate) return 1;
-  const start = new Date(checkinDate + "T00:00:00");
-  const end = new Date(checkoutDate + "T00:00:00");
-  const diffTime = end.getTime() - start.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays > 0 ? diffDays : 1;
+  const stayDates = validateStayDates(checkinDate, checkoutDate);
+  return stayDates.ok ? stayDates.nights : 1;
 }
 
 /** Jul 1–5 for the upcoming summer window (next year after Jul 5 has passed). */
@@ -404,19 +291,11 @@ function BookingContent() {
   const pathname = usePathname();
 
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
-  const localePrefix = currentLocale === 'mn' ? '/mn' : '';
+  const localePrefix = withLocalePath(currentLocale, "/");
   const editorialFont = currentLocale === 'mn' ? 'font-editorial-mn' : 'font-editorial-en';
 
-  const getRoomDetailPath = (roomTypeName: string) => {
-    const name = (roomTypeName || '').toLowerCase();
-    if (name.includes('superior')) {
-      return `${localePrefix}/superior-cabin`;
-    }
-    if (name.includes('cabin') || name.includes('байшин') || name.includes('шинэс') || name.includes('larch')) {
-      return `${localePrefix}/cabins`;
-    }
-    return `${localePrefix}/cabins`;
-  };
+  const getRoomDetailPath = (slug: CabinSlug | null) =>
+    withLocalePath(currentLocale, getCabinDetailHref(slug));
 
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
@@ -433,6 +312,8 @@ function BookingContent() {
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
+  const availabilityRequestIdRef = useRef(0);
+  const inFlightAvailabilityKeyRef = useRef<string | null>(null);
 
   const totalGuests = totalAdults + totalChildren;
   const cartCapacity = cart.reduce((sum, item) => sum + item.maxGuests, 0);
@@ -503,20 +384,25 @@ function BookingContent() {
   const groupedRooms = useMemo<RoomTypeGroup[]>(() => {
     const groups = new Map<string, RoomTypeGroup>();
     for (const room of rooms) {
-      const key = room.roomTypeName;
+      const slug = resolveCabinSlugFromCloudbeds(room.roomTypeID, room.roomTypeName);
+      const fallbackKey = room.roomTypeID || room.roomTypeName || `unknown-room-${groups.size}`;
+      const key = slug ?? fallbackKey;
       if (!groups.has(key)) {
         groups.set(key, {
-          roomTypeName: room.roomTypeName,
+          slug,
+          roomTypeName: toPlainProviderText(room.roomTypeName),
           roomsAvailable: room.roomsAvailable,
-          description: room.description,
+          description: toPlainProviderText(room.description),
           maxGuests: room.maxGuests,
           photos: room.photos,
-          features: room.features,
+          features: toPlainProviderTextList(room.features),
           currency: room.currency,
           rates: [],
         });
       }
-      groups.get(key)!.rates.push(room);
+      const group = groups.get(key)!;
+      group.roomsAvailable = Math.max(group.roomsAvailable, room.roomsAvailable);
+      group.rates.push(room);
     }
     for (const g of groups.values()) {
       g.rates = dedupeRoomRates(g.rates, currentLocale);
@@ -547,8 +433,11 @@ function BookingContent() {
     const urlChildren = searchParams.get("children");
 
     const defaults = getDefaultJulyStayDates();
-    const effectiveCheckin = urlCheckin || defaults.checkin;
-    const effectiveCheckout = urlCheckout || defaults.checkout;
+    const candidateCheckin = urlCheckin || defaults.checkin;
+    const candidateCheckout = urlCheckout || defaults.checkout;
+    const initialStayDates = validateStayDates(candidateCheckin, candidateCheckout);
+    const effectiveCheckin = initialStayDates.ok ? candidateCheckin : defaults.checkin;
+    const effectiveCheckout = initialStayDates.ok ? candidateCheckout : defaults.checkout;
 
     setCheckin(effectiveCheckin);
     setCheckout(effectiveCheckout);
@@ -557,31 +446,57 @@ function BookingContent() {
       setAppliedPromo(urlPromo);
     }
 
-    const parsedAdults = urlAdults ? parseInt(urlAdults) : 2;
-    const parsedChildren = urlChildren ? parseInt(urlChildren) : 0;
+    const parsedAdults =
+      parseBoundedInteger(urlAdults || "2", { min: 1, max: 20, label: "adults" }) ?? 2;
+    const parsedChildren =
+      parseBoundedInteger(urlChildren || "0", { min: 0, max: 10, label: "children" }) ?? 0;
 
     if (urlAdults) setTotalAdults(parsedAdults);
     if (urlChildren) setTotalChildren(parsedChildren);
 
     setNumberOfNights(calculateNights(effectiveCheckin, effectiveCheckout));
-    fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "");
+    fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "", {
+      quoteAdults: parsedAdults,
+      quoteChildren: 0,
+    });
   }, [searchParams]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
   useEffect(() => {
     if (!searched || !checkin || !checkout) return;
-    fetchAvailability(checkin, checkout, appliedPromo);
+    fetchAvailability(checkin, checkout, appliedPromo, {
+      quoteAdults: totalAdults,
+      quoteChildren: 0,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch when party size changes
   }, [totalAdults, totalChildren]);
 
-  const fetchAvailability = async (checkInDate: string, checkOutDate: string, promo: string = "") => {
+  const fetchAvailability = async (
+    checkInDate: string,
+    checkOutDate: string,
+    promo: string = "",
+    options: AvailabilityFetchOptions = {}
+  ) => {
+    const quoteAdults = Math.max(1, Math.min(2, options.quoteAdults ?? totalAdults));
+    const quoteChildren = Math.max(0, options.quoteChildren ?? 0);
+    const requestKey = `${checkInDate}|${checkOutDate}|${promo}|${quoteAdults}|${quoteChildren}`;
+
+    if (!options.force && inFlightAvailabilityKeyRef.current === requestKey) {
+      return;
+    }
+
+    const requestId = availabilityRequestIdRef.current + 1;
+    availabilityRequestIdRef.current = requestId;
+    inFlightAvailabilityKeyRef.current = requestKey;
+
     setLoading(true);
     setError("");
     setRooms([]);
     setPropertyTermsAndConditions(null);
 
     try {
-      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=${Math.max(1, Math.min(2, totalAdults))}&quoteChildren=0`;
+      const isLatestRequest = () => requestId === availabilityRequestIdRef.current;
+      let url = `/api/cloudbeds/availability?checkin=${checkInDate}&checkout=${checkOutDate}&quoteAdults=${quoteAdults}&quoteChildren=${quoteChildren}`;
 
       if (promo) {
         url += `&promo=${encodeURIComponent(promo)}`;
@@ -599,6 +514,8 @@ function BookingContent() {
         );
       }
 
+      if (!isLatestRequest()) return;
+
       const list = data.rooms || [];
       setRooms(list);
       setPropertyTermsAndConditions(data.propertyTermsAndConditions ?? null);
@@ -607,16 +524,32 @@ function BookingContent() {
         prev.flatMap((item) => {
           const r = list.find((x) => x.roomTypeID === item.roomTypeID && x.rateID === item.rateID);
           if (!r) return [];
+          const slug = resolveCabinSlugFromCloudbeds(r.roomTypeID, r.roomTypeName) ?? item.cabinSlug ?? null;
           const pricePerNight =
             nights > 0 ? (r.totalRate || 0) / nights : r.totalRate || 0;
-          return [{ ...item, pricePerNight }];
+          return [{
+            ...item,
+            cabinSlug: slug,
+            providerRoomTypeName: toPlainProviderText(r.roomTypeName || item.providerRoomTypeName),
+            roomTypeName:
+              toPlainProviderText(
+                getCabinDisplayName(slug, currentLocale, r.roomTypeName || item.roomTypeName)
+              ) || item.roomTypeName,
+            pricePerNight,
+          }];
         })
       );
       setSearched(true);
     } catch (err) {
+      if (requestId !== availabilityRequestIdRef.current) return;
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setLoading(false);
+      if (inFlightAvailabilityKeyRef.current === requestKey) {
+        inFlightAvailabilityKeyRef.current = null;
+      }
+      if (requestId === availabilityRequestIdRef.current) {
+        setLoading(false);
+      }
     }
   };
 
@@ -625,8 +558,17 @@ function BookingContent() {
       setError(currentLocale === 'mn' ? "Ирэх, гарах огноогоо сонгоно уу" : "Please select both check-in and check-out dates");
       return;
     }
+    const stayDates = validateStayDates(checkin, checkout);
+    if (!stayDates.ok) {
+      setError(stayDates.error);
+      return;
+    }
     setNumberOfNights(calculateNights(checkin, checkout));
-    fetchAvailability(checkin, checkout, appliedPromo);
+    fetchAvailability(checkin, checkout, appliedPromo, {
+      force: true,
+      quoteAdults: totalAdults,
+      quoteChildren: 0,
+    });
   };
 
   const handleApplyPromo = async () => {
@@ -634,7 +576,11 @@ function BookingContent() {
     setPromoLoading(true);
     setAppliedPromo(promoCode.trim());
     if (checkin && checkout) {
-      await fetchAvailability(checkin, checkout, promoCode.trim());
+      await fetchAvailability(checkin, checkout, promoCode.trim(), {
+        force: true,
+        quoteAdults: totalAdults,
+        quoteChildren: 0,
+      });
     }
     setPromoLoading(false);
   };
@@ -646,6 +592,7 @@ function BookingContent() {
     const remainingAdults = totalAdults - sumCartAdults(existingCart);
     const remainingChildren = totalChildren - sumCartChildren(existingCart);
     const maxGuests = room.maxGuests || 2;
+    const slug = resolveCabinSlugFromCloudbeds(room.roomTypeID, room.roomTypeName);
     const { adults, children } = defaultGuestsForNewUnit(
       maxGuests,
       remainingAdults,
@@ -653,10 +600,13 @@ function BookingContent() {
     );
     return {
       id: newCartLineId(),
+      cabinSlug: slug,
+      providerRoomTypeName: toPlainProviderText(room.roomTypeName) || undefined,
       roomTypeID: room.roomTypeID,
-      roomTypeName: room.roomTypeName,
+      roomTypeName:
+        toPlainProviderText(getCabinDisplayName(slug, currentLocale, room.roomTypeName)) || "Room",
       rateID: room.rateID,
-      rateName: room.rateName,
+      rateName: toPlainProviderText(room.rateName),
       maxGuests,
       pricePerNight:
         numberOfNights > 0 ? (room.totalRate || 0) / numberOfNights : room.totalRate || 0,
@@ -734,8 +684,19 @@ function BookingContent() {
               : `${item.roomTypeName} (${item.rateName}) is not available at this guest count or rate`
           );
         }
+        const slug = resolveCabinSlugFromCloudbeds(match.roomTypeID, match.roomTypeName) ?? item.cabinSlug ?? null;
         return {
           ...item,
+          cabinSlug: slug,
+          providerRoomTypeName: toPlainProviderText(match.roomTypeName || item.providerRoomTypeName),
+          roomTypeName:
+            toPlainProviderText(
+              getCabinDisplayName(
+                slug,
+                currentLocale,
+                match.roomTypeName || item.providerRoomTypeName || item.roomTypeName
+              )
+            ) || item.roomTypeName,
           pricePerNight:
             nights > 0 ? match.totalRate / nights : match.totalRate,
         };
@@ -1468,9 +1429,14 @@ function BookingContent() {
               {groupedRooms
                 .map((group, index) => {
                   const photos = group.photos || [];
-                  const primaryRoom = group.rates[0];
-                  const mappedSlug = resolveRoomSlug(primaryRoom?.roomTypeID || "", group.roomTypeName || "");
-                  const localGallery = mappedSlug ? ROOM_GALLERIES[mappedSlug] : [];
+                  const mappedSlug = group.slug;
+                  const displayName =
+                    toPlainProviderText(
+                      getCabinDisplayName(mappedSlug, currentLocale, group.roomTypeName)
+                    ) || "Room";
+                  const detailHref = getRoomDetailPath(mappedSlug);
+                  const localGallery = getCabinGallery(mappedSlug);
+                  const featureText = toPlainProviderTextList(group.features).join(', ');
                   const slideshowImages = localGallery.length > 0
                     ? localGallery
                     : (photos.length > 0 ? photos : [placeholderImages[index % placeholderImages.length]]);
@@ -1492,18 +1458,18 @@ function BookingContent() {
 
                   return (
                     <article
-                      key={group.roomTypeName || index}
+                      key={mappedSlug || group.roomTypeName || index}
                       className={`bg-white/[0.03] border transition-colors ${hasCartItem ? 'border-main/50' : 'border-main/10'}`}
                     >
                       {/* Image */}
                       <Link
-                        href={getRoomDetailPath(group.roomTypeName)}
+                        href={detailHref}
                         className="relative block aspect-[21/10] md:aspect-[21/9] bg-black/40 overflow-hidden group"
                       >
                         <BookingCardSlideshow
                           key={slideshowImages.join("|")}
                           images={slideshowImages}
-                          alt={group.roomTypeName || "Room"}
+                          alt={displayName}
                         />
                         {group.roomsAvailable && group.roomsAvailable <= 3 && (
                           <div className="absolute top-4 right-4 bg-ink/80 text-main text-[10px] font-cta uppercase tracking-[0.22em] px-2.5 py-1 border border-main/20">
@@ -1515,10 +1481,10 @@ function BookingContent() {
                       <div className="p-6 md:p-8">
                         <h2 className={`${editorialFont} italic text-3xl md:text-[2.25rem] leading-tight text-main mb-2`}>
                           <Link
-                            href={getRoomDetailPath(group.roomTypeName)}
+                            href={detailHref}
                             className="hover:text-main/80 transition-colors"
                           >
-                            {group.roomTypeName || 'Room'}
+                            {displayName}
                           </Link>
                         </h2>
 
@@ -1540,14 +1506,14 @@ function BookingContent() {
                               {currentLocale === 'mn' ? `${maxGuests} хүн хүртэл` : `Up to ${maxGuests}`}
                             </span>
                           </li>
-                          {group.features && group.features.length > 0 && (
+                          {featureText && (
                             <li className="flex items-start gap-2">
                               <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
                               <span>
                                 <span className="text-main/50">
                                   {currentLocale === 'mn' ? 'Тохижилт:' : 'Amenities:'}
                                 </span>{' '}
-                                {group.features.join(', ')}
+                                {featureText}
                               </span>
                             </li>
                           )}
@@ -1588,7 +1554,7 @@ function BookingContent() {
                         )}
 
                         <Link
-                          href={getRoomDetailPath(group.roomTypeName)}
+                          href={detailHref}
                           className="inline-flex items-center gap-1.5 mt-3 font-cta uppercase text-[10px] tracking-[0.28em] text-bark hover:text-main transition-colors"
                         >
                           {currentLocale === 'mn' ? 'Дэлгэрэнгүй харах' : 'View Details'}
@@ -1611,7 +1577,7 @@ function BookingContent() {
 
       <div className="py-12 text-center">
         <a
-          href={localePrefix || '/'}
+          href={localePrefix}
           className="font-cta uppercase tracking-[0.28em] text-xs text-main/50 hover:text-main transition-colors"
         >
           &larr; {t('backToHome')}

@@ -4,14 +4,14 @@ import { Cormorant_Garamond, Montserrat, Playfair_Display } from "next/font/goog
 /** Site body copy — local Araboto; `--font-body` on `<body>` and `font-body` in Tailwind. */
 export const araboto = localFont({
   src: [
-    { path: "../public/fonts/Araboto Thin 400.ttf", weight: "100", style: "normal" },
-    { path: "../public/fonts/Araboto Light 400.ttf", weight: "300", style: "normal" },
-    { path: "../public/fonts/Araboto Normal 400.ttf", weight: "400", style: "normal" },
-    { path: "../public/fonts/Araboto Medium 400.ttf", weight: "500", style: "normal" },
-    { path: "../public/fonts/Araboto Bold 400.ttf", weight: "700", style: "normal" },
+    { path: "../public/fonts/Araboto Light 400.woff2", weight: "300", style: "normal" },
+    { path: "../public/fonts/Araboto Normal 400.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/Araboto Medium 400.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/Araboto Bold 400.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-body",
   display: "swap",
+  preload: false,
 });
 
 /** CTA / UI / label font — Montserrat. `--font-cta` token, `font-cta` utility. */
@@ -20,6 +20,7 @@ export const montserrat = Montserrat({
   weight: ["400", "500", "600"],
   variable: "--font-cta",
   display: "swap",
+  preload: false,
 });
 
 /** MN editorial headlines (H1/H2/H3) — Cormorant Garamond (normal + italic). */
@@ -29,6 +30,7 @@ export const cormorantGaramondItalic = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
   variable: "--font-cormorant-garamond-italic",
   display: "swap",
+  preload: false,
 });
 
 /** EN editorial headlines (H1/H2/H3) — Playfair Display, both italic + regular.
@@ -41,4 +43,5 @@ export const playfairDisplayItalic = Playfair_Display({
   weight: ["400", "500", "600", "700"],
   variable: "--font-playfair-display-italic",
   display: "swap",
+  preload: false,
 });

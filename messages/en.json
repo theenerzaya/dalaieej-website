@@ -30,15 +30,15 @@
     },
     "accommodation": {
       "title": "Heritage Stays & Cabins | Dalai Eej Resort",
-      "description": "Choose from wood-fired cabins, ensuite suites, and the Grand Peninsula Suite at Dalai Eej Resort on Lake Khövsgöl."
+      "description": "Choose from current Cloudbeds-aligned cabins and camping options at Dalai Eej Resort on Lake Khövsgöl."
     },
     "superiorCabin": {
-      "title": "Superior Cabin | Dalai Eej Resort",
-      "description": "A wood-fired Superior Cabin on the shores of Lake Khövsgöl — designed for natural living."
+      "title": "Их Өргөө | Dalai Eej Resort",
+      "description": "A large wood-fired family stay at Dalai Eej, aligned with current Cloudbeds room details."
     },
     "cabins": {
       "title": "Our Rooms | Dalai Eej Resort",
-      "description": "Traditional wooden cabins on Lake Khövsgöl's eastern shore."
+      "description": "Current room names, capacities, heating and facilities aligned with Cloudbeds."
     },
     "restaurant": {
       "title": "Food & Beverage | Dalai Eej Resort",
@@ -222,16 +222,16 @@
     },
     "featured_rooms": {
       "title": "Heritage Accommodations",
-      "subtitle": "Discover our carefully curated selection of lakeside stays",
-      "room1_name": "Lakeside Cabin",
-      "room1_desc": "Traditional wood-fired experience with authentic furnishings",
-      "room1_price": "From $300",
-      "room2_name": "Ensuite Suite",
-      "room2_desc": "Added comfort with stunning lake views",
-      "room2_price": "From $450",
-      "room3_name": "Grand Peninsula Suite",
-      "room3_desc": "Commanding lake views with a private terrace",
-      "room3_price": "From $600"
+      "subtitle": "Current room names and capacities are aligned with Cloudbeds",
+      "room1_name": "Эрэг дээрх Хаус",
+      "room1_desc": "Wood-fired lakeside stay for up to 2 guests with shared facilities",
+      "room1_price": "Live rates",
+      "room2_name": "Тухтай Хаус (Галлагаатай)",
+      "room2_desc": "Wood-fired comfort house for up to 3 guests with toilet and washbasin inside",
+      "room2_price": "Live rates",
+      "room3_name": "Гэр Бүлийн Хаус (Галлагаатай)",
+      "room3_desc": "Family house for up to 5 guests with two double beds and toilet/washbasin inside",
+      "room3_price": "Live rates"
     }
   },
   "footer": {
@@ -302,20 +302,20 @@
       "desc": "The main lodge featuring our lakefront dining hall and lounge bar."
     },
     "annex": {
-      "title": "The Lodge Annex",
-      "desc": "Separate building housing the Lodge Rooms, adjacent to the restaurant."
+      "title": "Энгийн Байр",
+      "desc": "Simple warm stays close to the lake, using the shared modern bathroom and shower facilities."
     },
     "ensuite": {
-      "title": "Ensuite Cabins (Quiet Zone)",
-      "desc": "Private cabins featuring indoor facilities, set back from the shoreline for privacy."
+      "title": "Тухтай Хаус / Гэр Бүлийн Хаус",
+      "desc": "Comfort and family houses with toilet and washbasin inside; showers are in the shared modern facilities."
     },
     "heritage": {
-      "title": "Heritage Cabins (Lakeside Zone)",
-      "desc": "Classic, wood-fired cabins positioned centrally along the water's edge."
+      "title": "Эрэг дээрх Хаус",
+      "desc": "Wood-fired lakefront houses closest to the water, using shared bathroom and shower facilities."
     },
     "grand": {
-      "title": "Grand Peninsula Suite",
-      "desc": "Premier residence commanding the tip of the peninsula."
+      "title": "Гэр Бүлийн Хаус (Галлагаатай)",
+      "desc": "Wood-fired family houses for up to 5 guests with two double beds and toilet/washbasin inside."
     },
     "bathhouse": {
       "title": "The Bathhouse",
@@ -473,78 +473,77 @@
     "restrictionMaxLos": "{nights, plural, one {This rate allows at most # night for these dates.} other {This rate allows at most # nights for these dates.}}"
   },
   "rooms": {
-    "title": "Our Heritage Stays",
-    "subtitle": "Choose from our selection of wood-fired cabins and suites",
+    "title": "Current Cloudbeds Stays",
+    "subtitle": "Room names, capacities and facilities follow the booking engine",
     "grandSuite": {
-      "title": "Grand Peninsula Suite",
-      "subtitle": "The resort's premier residence",
+      "title": "Их Өргөө",
+      "subtitle": "Large wood-fired family stay",
       "capacity": "Sleeps up to 5",
-      "bedding": "2 Double Beds + 1 Single Bed",
-      "description": "Designed for those seeking a shared sanctuary, this suite offers our most commanding vantage point. Panoramic windows frame the lake, ensuring the heritage of the Blue Pearl is always in view.",
+      "bedding": "Family layout",
+      "description": "A one-of-a-kind large family stay with a wood-burning stove, toilet and washbasin inside, and shared shower access.",
       "features": [
-        "Panoramic Lake Views",
-        "Private in-room toilet & washbasin",
-        "Heated by traditional wood-burning stove",
-        "Flat-screen TV",
+        "Lake view",
+        "Toilet and washbasin inside",
+        "Wood-burning stove",
         "Access to shared hot showers nearby"
       ]
     },
     "familyCabin": {
-      "title": "Family Ensuite Cabin",
-      "subtitle": "Generous space for groups",
-      "capacity": "Sleeps up to 4",
+      "title": "Гэр Бүлийн Хаус",
+      "subtitle": "Family house options",
+      "capacity": "Sleeps up to 5",
       "bedding": "2 Double Beds",
-      "description": "A generous cabin designed for groups. Offers the convenience of private facilities with a secluded veranda overlooking the larch forests.",
+      "description": "Family houses with two double beds and toilet/washbasin inside. Heating is wood-fired or electric depending on the selected room type.",
       "features": [
-        "Private in-room toilet & washbasin",
-        "Choice of wood stove or electric heating",
-        "Private veranda with seating",
+        "Toilet and washbasin inside",
+        "Wood stove or electric heating",
+        "Lake view",
         "Access to shared hot showers nearby"
       ]
     },
     "comfortCabin": {
-      "title": "Comfort Ensuite Cabin",
-      "subtitle": "Rustic charm with modern privacy",
+      "title": "Тухтай Хаус",
+      "subtitle": "Comfort house options",
       "capacity": "Sleeps up to 3",
       "bedding": "1 Double Bed + 1 Single Bed",
-      "description": "A secluded retreat balancing rustic charm with essential privacy. Perfect for couples or small families who value their own space.",
+      "description": "Comfort houses for couples and small families, with toilet/washbasin inside on the wood-fired option and shared shower access.",
       "features": [
-        "Private in-room toilet & washbasin",
-        "Choice of wood stove or electric heating",
-        "Private veranda with seating",
+        "Toilet and washbasin inside on selected types",
+        "Wood stove or electric heating",
+        "Lake view",
         "Access to shared hot showers nearby"
       ]
     },
     "standardCabin": {
-      "title": "Standard Lakeside Cabin",
-      "subtitle": "Our heritage experience",
+      "title": "Эрэг дээрх Хаус",
+      "subtitle": "Closest to the lake",
       "capacity": "Max 2 Adults",
-      "bedding": "2 Double Beds",
-      "description": "Ideally positioned in the heart of the resort, these authentic wood-fired cabins offer a classic Khövsgöl stay. Located on level ground just steps from the dining lodge.",
+      "bedding": "Couple layout",
+      "description": "Wood-fired lakefront houses closest to the water, using the shared modern bathroom and shower facilities.",
       "features": [
-        "Authentic wood-burning stove (staff-tended)",
-        "Central location near dining lodge",
+        "Wood-burning stove",
+        "Closest to the lake",
         "Access to shared toilets and hot showers"
       ]
     },
     "lodgeRoom": {
-      "title": "The Lodge Room",
-      "subtitle": "Accessible and carefree",
+      "title": "Энгийн Байр",
+      "subtitle": "Simple warm stay",
       "capacity": "Max 2 Adults",
-      "bedding": "Double or Twin Configuration",
-      "description": "Situated within the main lodge, these rooms offer a temperate, maintenance-free refuge without the need for a wood stove. Ideal for those prioritising convenience.",
+      "bedding": "Couple / solo layout",
+      "description": "A simple classic stay for couples or solo travellers who want to be close to the lake and nature.",
       "features": [
-        "Central heating (No wood stove required)",
-        "Located on 2nd floor of lodge",
+        "Electric heating",
+        "Near the lake",
         "Access to shared toilets and hot showers"
       ]
     },
     "camping": {
-      "title": "Peninsula Camping",
+      "title": "Аялагчийн Отог",
       "subtitle": "Secure private grounds",
-      "capacity": "Verified upon arrival",
-      "bedding": "Dedicated sites for Tents or Vehicles",
-      "description": "Pitch your tent or park your vehicle on our manicured shoreline grounds. Enjoy the resort lifestyle while sleeping under the stars.",
+      "capacity": "Sleeps up to 12",
+      "bedding": "Tent or vehicle camping",
+      "description": "A secure private camping area for travellers arriving with tents or vehicles.",
       "features": [
         "Secure, private peninsula grounds",
         "Unlimited access to hot showers & fresh water",

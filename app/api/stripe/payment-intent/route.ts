@@ -1,23 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { getMntToEurRate, mntToEurCents } from "@/lib/payment-amounts";
+import {
+  paymentSessionFingerprint,
+  PaymentSessionError,
+  verifyPaymentSession,
+} from "@/lib/payment-session";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+let stripeClient: Stripe | null = null;
 
-const MNT_TO_EUR_RATE = 3700;
+function getStripe() {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error("Stripe secret key is not configured");
+  }
+  stripeClient ??= new Stripe(process.env.STRIPE_SECRET_KEY);
+  return stripeClient;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, bookingId, guestName } = body;
+    const sessionToken = String(body.session || "");
+    const session = verifyPaymentSession(sessionToken);
+    const amount = session.amountMnt;
 
-    if (!amount || amount <= 0) {
-      return NextResponse.json(
-        { error: "Invalid amount" },
-        { status: 400 }
-      );
-    }
-
-    const amountInEur = Math.round(amount / MNT_TO_EUR_RATE * 100);
+    const mntToEurRate = getMntToEurRate();
+    const amountInEur = mntToEurCents(amount, mntToEurRate);
 
     if (amountInEur < 50) {
       return NextResponse.json(
@@ -26,18 +34,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount: amountInEur,
       currency: "eur",
       automatic_payment_methods: {
         enabled: true,
       },
       metadata: {
-        bookingId: bookingId || "",
-        guestName: guestName || "",
+        bookingId: session.reservationId,
+        guestName: session.guestName,
         originalAmountMNT: amount.toString(),
+        mntToEurRate: String(mntToEurRate),
+        paymentSessionId: session.sessionId,
+        paymentSessionFingerprint: paymentSessionFingerprint(sessionToken),
       },
-      description: `Dalai Eej Resort - Booking ${bookingId || "N/A"}`,
+      description: `Dalai Eej Resort - Booking ${session.reservationId}`,
+    }, {
+      idempotencyKey: `payment-session-${session.sessionId}`,
     });
 
     const amountEurDisplay = (amountInEur / 100).toFixed(2);
@@ -46,9 +59,14 @@ export async function POST(request: NextRequest) {
       clientSecret: paymentIntent.client_secret,
       amountEur: amountEurDisplay,
       amountMnt: amount,
+      bookingId: session.reservationId,
     });
   } catch (error) {
     console.error("Stripe payment intent error:", error);
+
+    if (error instanceof PaymentSessionError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
 
     if (error instanceof Stripe.errors.StripeError) {
       return NextResponse.json(

@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useLocale } from "next-intl";
 import Link from "next/link";
@@ -16,6 +17,7 @@ import { AnimatedText, ImageReveal, Reveal } from "@/app/components/cabins/anima
 import DateInput from "@/app/components/ui/DateInput";
 import {
   ArrowRight,
+  Bath,
   BedDouble,
   ChevronLeft,
   ChevronRight,
@@ -24,16 +26,26 @@ import {
   Plus,
   Ruler,
   ShowerHead,
-  Tv,
-  Wifi,
 } from "lucide-react";
 import { assetUrl } from "@/lib/assetUrl";
-import { getCabinCatalogEntry } from "@/lib/cabinCatalog";
+import { getCabinCloudbedsFact } from "@/lib/cabinCloudbedsSnapshot";
+import {
+  CABIN_CATALOG,
+  getCabinCatalogEntry,
+  getCabinCatalogEntryByRouteSlug,
+  type CabinSlug,
+} from "@/lib/cabinCatalog";
+import { withLocalePath } from "@/lib/localePath";
 
-const SHARED_SPA_IMAGE_BEFORE = assetUrl("/images/rooms/superior-cabin/spa-mirage-before.webp");
-const SHARED_WELLNESS_IMAGE_BEFORE = assetUrl(
-  "/images/rooms/superior-cabin/wellness-mirage-before.webp",
+const MirageImage = dynamic(
+  () => import("@/app/components/cabins/MirageImage"),
+  { ssr: false },
 );
+
+const SHARED_SPA_IMAGE_BEFORE = assetUrl("/images/cabins/spa-mirage-before.webp");
+const SHARED_SPA_IMAGE_AFTER = assetUrl("/images/cabins/spa-mirage-after.webp");
+const SHARED_WELLNESS_IMAGE_BEFORE = assetUrl("/images/cabins/wellness-mirage-before.webp");
+const SHARED_WELLNESS_IMAGE_AFTER = assetUrl("/images/cabins/wellness-mirage-after.webp");
 
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
   const now = new Date();
@@ -45,131 +57,53 @@ function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
 
 type Bilingual = { en: string; mn: string };
 type RoomConfig = {
-  slug: string;
+  slug: CabinSlug;
+  href: string;
   title: Bilingual;
   eyebrow: Bilingual;
-  area: Bilingual;
+  heating: Bilingual;
+  roomSize?: Bilingual;
   guests: Bilingual;
   intro: Bilingual;
   image: string;
-  size: Bilingual;
+  gallery: string[];
+  bathroom: Bilingual;
+  shower: Bilingual;
   bed: Bilingual;
   view: Bilingual;
 };
 
-function getRequiredCabinTitle(slug: string): Bilingual {
-  const entry = getCabinCatalogEntry(slug);
-  if (!entry) throw new Error(`Missing cabin catalog entry for slug: ${slug}`);
-  return entry.name;
+function getRequiredCabinFact(slug: CabinSlug) {
+  const fact = getCabinCloudbedsFact(slug);
+  if (!fact) throw new Error(`Missing Cloudbeds cabin fact for slug: ${slug}`);
+  return fact;
 }
 
-const ROOM_CONFIGS: RoomConfig[] = [
-  {
-    slug: "superior-cabin",
-    title: getRequiredCabinTitle("superior-cabin"),
-    eyebrow: { en: "Designed for natural living", mn: "Байгальд ойр амьдралд зориулав" },
-    area: { en: "30 m²", mn: "30 м²" },
-    guests: { en: "2 adults · 1 child", mn: "2 том хүн · 1 хүүхэд" },
-    intro: {
-      en: "Wood-fired warmth, handwoven textiles and a private forest view define the Superior Cabin. It is a quiet base for couples and small families who want to stay close to the lake and larch line.",
-      mn: "Галын зуухны дулаан, гар нэхмэл эдлэл, ойн хувийн харагдац Superior модон байшинг тодорхойлно. Нуур, шинэсэн ойд ойр амрахыг хүссэн хос болон жижиг гэр бүлд тохиромжтой.",
-    },
-    image: assetUrl("/images/cabins/room-superior.webp"),
-    size: { en: "30 m²", mn: "30 м²" },
-    bed: { en: "1 Queen Bed", mn: "1 том ор" },
-    view: { en: "Forest View", mn: "Ойн харагдац" },
-  },
-  {
-    slug: "triple-traditional-cabin",
-    title: getRequiredCabinTitle("triple-traditional-cabin"),
-    eyebrow: { en: "Traditional comfort, refined", mn: "Уламжлалт тав тух, шинэ өнгө аяс" },
-    area: { en: "58 m²", mn: "58 м²" },
-    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
-    intro: {
-      en: "A classic timber layout with three sleeping spaces, a warm hearth corner, and a sheltered deck for cool evenings by the trees.",
-      mn: "Гурван унтлагын орчинтой уламжлалт модон төлөвлөлт, дулаан зуухны булан, ойн сэрүүхэн оройд тохирох хамгаалалттай террастай.",
-    },
-    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
-    size: { en: "58 m²", mn: "58 м²" },
-    bed: { en: "3 Sleeping Spaces", mn: "3 унтлагын хэсэг" },
-    view: { en: "Forest Deck View", mn: "Ойн террасын харагдац" },
-  },
-  {
-    slug: "lakeside-cabin",
-    title: getRequiredCabinTitle("lakeside-cabin"),
-    eyebrow: { en: "Closer to the waterline", mn: "Усны эрэгт илүү ойр" },
-    area: { en: "55 m²", mn: "55 м²" },
-    guests: { en: "3 adults · 1 child", mn: "3 том хүн · 1 хүүхэд" },
-    intro: {
-      en: "A wider shoreline footprint with two sleeping spaces, a reading nook, and a deck that steps directly toward Lake Khövsgöl.",
-      mn: "Нуурын эрэгт илүү өргөн талбайтай, хоёр унтлагын орчин, уншлагын булан, Хөвсгөл нуур руу шууд гарах тавцантай.",
-    },
-    image: assetUrl("/images/cabins/room-lakeside.webp"),
-    size: { en: "55 m²", mn: "55 м²" },
-    bed: { en: "2 Sleeping Spaces", mn: "2 унтлагын хэсэг" },
-    view: { en: "Lake View", mn: "Нуурын харагдац" },
-  },
-  {
-    slug: "triple-electric-cabin",
-    title: getRequiredCabinTitle("triple-electric-cabin"),
-    eyebrow: { en: "Family-ready for longer stays", mn: "Урт амралтад зориулсан шийдэл" },
-    area: { en: "60 m²", mn: "60 м²" },
-    guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    intro: {
-      en: "Designed for longer family stays with three sleeping zones, electric heating for stable comfort, and a brighter open-plan living area.",
-      mn: "Гэр бүлийн урт амралтад зориулсан гурван унтлагын бүс, тогтвортой тав тух өгөх цахилгаан халаалт, илүү саруул нээлттэй зочны хэсэгтэй.",
-    },
-    image: assetUrl("/images/cabins/room-triple-electric.webp"),
-    size: { en: "60 m²", mn: "60 м²" },
-    bed: { en: "3 Sleeping Zones", mn: "3 унтлагын бүс" },
-    view: { en: "Shoreline View", mn: "Эргийн харагдац" },
-  },
-  {
-    slug: "signature-cabin",
-    title: getRequiredCabinTitle("signature-cabin"),
-    eyebrow: { en: "Our most requested stay", mn: "Хамгийн эрэлттэй сонголт" },
-    area: { en: "70 m²", mn: "70 м²" },
-    guests: { en: "3 adults · 2 children", mn: "3 том хүн · 2 хүүхэд" },
-    intro: {
-      en: "A separate living area, deep-soak tub, and private terrace opening onto the larch line make this the most requested room type.",
-      mn: "Тусдаа зочны хэсэг, гүн ванн, шинэсэн ой руу нээгдэх хувийн террас нь энэ өрөөг хамгийн эрэлттэй сонголт болгодог.",
-    },
-    image: assetUrl("/images/cabins/room-signature.webp"),
-    size: { en: "70 m²", mn: "70 м²" },
-    bed: { en: "2 Bedrooms", mn: "2 унтлагын өрөө" },
-    view: { en: "Larch Line View", mn: "Шинэсэн ойн харагдац" },
-  },
-  {
-    slug: "quad-electric-cabin",
-    title: getRequiredCabinTitle("quad-electric-cabin"),
-    eyebrow: { en: "Flexible for group travel", mn: "Багаар аялахад тохиромжтой" },
-    area: { en: "66 m²", mn: "66 м²" },
-    guests: { en: "4 adults · 1 child", mn: "4 том хүн · 1 хүүхэд" },
-    intro: {
-      en: "A flexible mid-tier option with four sleeping positions, full electric comfort systems, and a larger lounge facing the shoreline.",
-      mn: "Дөрвөн унтлагын байрлал, бүрэн цахилгаан тав тухын систем, эрэг рүү харсан том зочны хэсэг бүхий уян хатан дунд ангиллын сонголт.",
-    },
-    image: assetUrl("/images/cabins/room-quad-electric.webp"),
-    size: { en: "66 m²", mn: "66 м²" },
-    bed: { en: "4 Sleeping Positions", mn: "4 унтлагын байрлал" },
-    view: { en: "Shoreline View", mn: "Эргийн харагдац" },
-  },
-  {
-    slug: "grand-peninsula-suite",
-    title: getRequiredCabinTitle("grand-peninsula-suite"),
-    eyebrow: { en: "Our largest private stay", mn: "Хамгийн том хувийн байр" },
-    area: { en: "120 m²", mn: "120 м²" },
-    guests: { en: "4 adults · 2 children", mn: "4 том хүн · 2 хүүхэд" },
-    intro: {
-      en: "A standalone suite on its own peninsula with two bedrooms, a wood-panelled living room, and uninterrupted lake views on three sides.",
-      mn: "Өөрийн хойг дээр байрлах тусдаа хаус бөгөөд хоёр унтлагын өрөө, модон хавтастай зочны танхим, гурван талаараа тасралтгүй нуурын харагдацтай.",
-    },
-    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
-    size: { en: "120 m²", mn: "120 м²" },
-    bed: { en: "2 Bedrooms", mn: "2 унтлагын өрөө" },
-    view: { en: "Panoramic Lake View", mn: "Панорам нуурын харагдац" },
-  },
-];
+function makeRoomConfig(slug: CabinSlug, image: string): RoomConfig {
+  const fact = getRequiredCabinFact(slug);
+  const entry = getCabinCatalogEntry(slug);
+  if (!entry) throw new Error(`Missing cabin catalog entry for slug: ${slug}`);
+  return {
+    slug,
+    href: entry.href,
+    title: { en: fact.name, mn: fact.name },
+    eyebrow: { en: "Current Cloudbeds room details", mn: "Cloudbeds-ийн өрөөний мэдээлэл" },
+    heating: fact.heatingLabel,
+    roomSize: fact.roomSizeLabel,
+    guests: fact.guestLabel,
+    intro: fact.description,
+    image,
+    gallery: entry.gallery.map(assetUrl),
+    bathroom: fact.bathroomLabel,
+    shower: fact.showerLabel,
+    bed: fact.bedLabel,
+    view: fact.viewLabel,
+  };
+}
+
+const ROOM_CONFIGS: RoomConfig[] = CABIN_CATALOG.map((entry) =>
+  makeRoomConfig(entry.slug, assetUrl(entry.cardImage)),
+);
 
 const ROOM_IMAGE_POOL = ROOM_CONFIGS.map((config) => config.image);
 
@@ -185,12 +119,9 @@ const staggerParent: Variants = {
 
 const COPY = {
   en: {
-    avgArea: "Average area",
+    avgArea: "Heating",
     guests: "Guests",
-    detailsHeading: "At a glance",
-    shower: "Rain Shower",
-    tv: "TV + VOD",
-    wifi: "WiFi",
+    detailsHeading: "Cloudbeds details",
     bookHeading: "Book Your Stay",
     bookSubtitle: "Required fields are followed by *",
     checkIn: "Check-in Date",
@@ -202,17 +133,23 @@ const COPY = {
     tagline1: "The best people to take care of",
     tagline2: "our most valuable asset: you.",
     aboutCta: "More About Us",
+    experiencesEyebrow: "Stay Well",
+    experiencesHeading: "Paired with the forest",
+    spaTitle: "Relax Spa",
+    spaDesc:
+      "A quiet treatment room of warm stone and birch steam — drawn from local herbs and the shoreline breeze.",
+    wellnessTitle: "Wellness",
+    wellnessDesc:
+      "Morning movement on the deck, sauna at dusk, and a slow ritual of tea on the return from the lake.",
+    learnMore: "Learn More",
     otherRoomsEyebrow: "Other Stays",
     otherRoomsHeading: "Find your cabin",
     viewAllRooms: "View all accommodations",
   },
   mn: {
-    avgArea: "Дундаж талбай",
+    avgArea: "Халаалт",
     guests: "Зочид",
-    detailsHeading: "Товч танилцуулга",
-    shower: "Бороон шүршүүр",
-    tv: "TV + VOD",
-    wifi: "WiFi",
+    detailsHeading: "Cloudbeds-ийн мэдээлэл",
     bookHeading: "Амралтаа захиалах",
     bookSubtitle: "Заавал бөглөх талбарыг * тэмдэглэв",
     checkIn: "Ирэх огноо",
@@ -224,6 +161,15 @@ const COPY = {
     tagline1: "Таны хамгийн үнэт зүйлд —",
     tagline2: "өөрт тань, бид анхаарна.",
     aboutCta: "Бидний тухай",
+    experiencesEyebrow: "Сайхан амар",
+    experiencesHeading: "Ойтой уялдсан туршлага",
+    spaTitle: "Relax Spa",
+    spaDesc:
+      "Дулаан чулуу, хусны уураар хийгдсэн чимээгүй эмчилгээний өрөө — нутгийн ургамал, нуурын салхийг хослуулав.",
+    wellnessTitle: "Сайн сайхан",
+    wellnessDesc:
+      "Өглөөний дасгал тавцан дээр, үдшийн саун, нууранд очоод буцах замын цайны зан үйл.",
+    learnMore: "Дэлгэрэнгүй",
     otherRoomsEyebrow: "Бусад өрөө",
     otherRoomsHeading: "Өөрийн байшингаа сонго",
     viewAllRooms: "Бүх байрлах сонголт үзэх",
@@ -236,17 +182,15 @@ export default function RoomDetailPage() {
   const isMn = locale === "mn";
   const lang = isMn ? "mn" : "en";
   const t = COPY[lang];
-  const localePrefix = isMn ? "/mn" : "";
+  const localePrefix = withLocalePath(locale, "/");
   const reduce = useReducedMotion();
 
-  const room = ROOM_CONFIGS.find((r) => r.slug === params.room);
+  const routeEntry = getCabinCatalogEntryByRouteSlug(params.room);
+  const room = routeEntry ? ROOM_CONFIGS.find((r) => r.slug === routeEntry.slug) : undefined;
   const roomSlug = room?.slug ?? "";
   const roomImage = room?.image ?? ROOM_IMAGE_POOL[0];
   const roomIndex = ROOM_CONFIGS.findIndex((r) => r.slug === roomSlug);
   const safeRoomIndex = Math.max(roomIndex, 0);
-
-  const roomImageBasePath = roomSlug ? `/images/rooms/${roomSlug}` : "";
-  const heroImage = roomImageBasePath ? assetUrl(`${roomImageBasePath}/00.webp`) : "";
 
   const galleryFallbackImages = (() => {
     const alternates = ROOM_IMAGE_POOL.filter((image) => image !== roomImage);
@@ -257,11 +201,11 @@ export default function RoomDetailPage() {
       (image) => image ?? roomImage,
     );
   })();
-  const localGalleryImages = useMemo(
-    () =>
-      ["01", "02", "03", "04"].map((index) => assetUrl(`${roomImageBasePath}/${index}.webp`)),
-    [roomImageBasePath],
-  );
+  const heroImage = room?.gallery[0] ?? roomImage;
+  const localGalleryImages = (() => {
+    const gallery = room?.gallery.length ? room.gallery : [roomImage];
+    return [1, 2, 3, 4].map((index) => gallery[index] ?? gallery[0] ?? roomImage);
+  })();
 
   const otherRooms = ROOM_CONFIGS.filter((r) => r.slug !== roomSlug);
   const otherRoomsTrack = useMemo(
@@ -291,12 +235,11 @@ export default function RoomDetailPage() {
 
   const facts = room
     ? [
-        { icon: Ruler, label: room.size[lang] },
+        ...(room.roomSize ? [{ icon: Ruler, label: room.roomSize[lang] }] : []),
         { icon: BedDouble, label: room.bed[lang] },
+        { icon: Bath, label: room.bathroom[lang] },
+        { icon: ShowerHead, label: room.shower[lang] },
         { icon: Mountain, label: room.view[lang] },
-        { icon: ShowerHead, label: t.shower },
-        { icon: Tv, label: t.tv },
-        { icon: Wifi, label: t.wifi },
       ]
     : [];
 
@@ -332,7 +275,45 @@ export default function RoomDetailPage() {
     el.scrollBy({ left: delta, behavior: "smooth" });
   };
 
-  if (!room) return null;
+  if (!room) {
+    return (
+      <main
+        id="main-content"
+        ref={heroRef}
+        className="min-h-screen bg-ink text-main flex items-center justify-center px-6 py-28"
+      >
+        <section className="w-full max-w-2xl text-center">
+          <p className="font-cta uppercase tracking-[0.32em] text-[11px] text-main/55">
+            {isMn ? "Өрөө олдсонгүй" : "Room not found"}
+          </p>
+          <h1
+            className={`${headlineFont} italic font-normal text-main text-4xl sm:text-5xl md:text-6xl leading-tight mt-5`}
+          >
+            {isMn ? "Энэ байр олдсонгүй" : "We could not find this stay"}
+          </h1>
+          <p className="font-body text-main/70 text-base md:text-lg leading-relaxed mt-6">
+            {isMn
+              ? "Холбоос өөрчлөгдсөн эсвэл энэ өрөө одоогоор нийтлэгдээгүй байна. Бүх байраа үзэх эсвэл огноогоор боломжтой өрөөг шалгана уу."
+              : "This link may have changed, or the room is not currently published. Browse all stays or check availability for your dates."}
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href={`${localePrefix}/cabins`}
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-main/25 px-6 font-cta text-[11px] uppercase tracking-[0.24em] text-main transition-colors hover:border-main hover:bg-main hover:text-ink"
+            >
+              {isMn ? "Бүх байр үзэх" : "View cabins"}
+            </Link>
+            <Link
+              href={`${localePrefix}/booking`}
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-main px-6 font-cta text-[11px] uppercase tracking-[0.24em] text-ink transition-colors hover:bg-bark hover:text-main"
+            >
+              {isMn ? "Боломж шалгах" : "Check availability"}
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main id="main-content" className="min-h-screen bg-ink text-main overflow-hidden">
@@ -365,7 +346,7 @@ export default function RoomDetailPage() {
           <ul className="space-y-4 md:border-r md:border-main/10 md:pr-16 shrink-0">
             <li>
               <p className="font-cta uppercase tracking-[0.28em] text-[10px] text-main/50 mb-1">{t.avgArea}</p>
-              <p className={`${headlineFont} italic text-2xl md:text-3xl text-main`}>{room.area[lang]}</p>
+              <p className={`${headlineFont} italic text-2xl md:text-3xl text-main`}>{room.heating[lang]}</p>
             </li>
             <li>
               <p className="font-cta uppercase tracking-[0.28em] text-[10px] text-main/50 mb-1">{t.guests}</p>
@@ -555,6 +536,37 @@ export default function RoomDetailPage() {
         </div>
       </section>
 
+      <section className="border-b border-main/10">
+        <div className="mx-auto max-w-6xl px-6 pt-20 md:pt-28 pb-14">
+          <div className="text-center">
+            <p className="font-cta uppercase tracking-[0.32em] text-[10px] text-bark mb-4">
+              {t.experiencesEyebrow}
+            </p>
+            <h2 className={`${headlineFont} italic text-3xl md:text-5xl text-main`}>
+              {t.experiencesHeading}
+            </h2>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <ExperienceCard
+            imageBefore={SHARED_SPA_IMAGE_BEFORE}
+            imageAfter={SHARED_SPA_IMAGE_AFTER}
+            title={t.spaTitle}
+            href={`${localePrefix}/wellness`}
+            headlineFont={headlineFont}
+          />
+          <ExperienceCard
+            imageBefore={SHARED_WELLNESS_IMAGE_BEFORE}
+            imageAfter={SHARED_WELLNESS_IMAGE_AFTER}
+            title={t.wellnessTitle}
+            body={t.wellnessDesc}
+            learnMore={t.learnMore}
+            href={`${localePrefix}/wellness`}
+            headlineFont={headlineFont}
+          />
+        </div>
+      </section>
+
       <section>
         <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
           <div className="text-center mb-14">
@@ -591,12 +603,12 @@ export default function RoomDetailPage() {
                   data-room-card
                   className="snap-start shrink-0 w-[84%] sm:w-[56%] lg:w-[32%]"
                 >
-                <Link href={`${localePrefix}/${other.slug}`} className="group block">
+                <Link href={`${localePrefix}${other.href}`} className="group block">
                   <div className="aspect-[4/5] overflow-hidden bg-white/5 mb-5">
                     <img src={other.image} alt={other.title[lang]} className="h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
                   </div>
                   <h3 className={`${headlineFont} italic text-2xl md:text-3xl text-main group-hover:text-bark transition-colors`}>{other.title[lang]}</h3>
-                  <p className="font-body text-main/60 text-sm mt-2">{`${other.area[lang]} / ${other.guests[lang]}`}</p>
+                  <p className="font-body text-main/60 text-sm mt-2">{`${other.heating[lang]} / ${other.guests[lang]}`}</p>
                 </Link>
               </div>
             ))}
@@ -611,6 +623,87 @@ export default function RoomDetailPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function ExperienceCard({
+  imageBefore,
+  imageAfter,
+  title,
+  body,
+  learnMore,
+  href,
+  headlineFont,
+}: {
+  imageBefore: string;
+  imageAfter: string;
+  title: string;
+  body?: string;
+  learnMore?: string;
+  href: string;
+  headlineFont: string;
+}) {
+  const navigate = () => {
+    if (typeof window !== "undefined") window.location.href = href;
+  };
+
+  return (
+    <motion.article
+      variants={fadeUp}
+      role="link"
+      tabIndex={0}
+      aria-label={title}
+      onClick={navigate}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          navigate();
+        }
+      }}
+      className="group relative aspect-[3/4] h-auto min-h-0 w-full overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-main/40 md:aspect-auto md:h-[78vh] md:min-h-[520px]"
+    >
+      <motion.div className="absolute inset-0 h-full w-full z-0">
+        <MirageImage
+          before={imageBefore}
+          after={imageAfter}
+          alt={title}
+          className="h-full w-full"
+        />
+      </motion.div>
+
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-br from-ink/40 via-ink/0 to-ink/0" />
+      {body ? (
+        <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-ink/55 via-ink/0 to-ink/0" />
+      ) : null}
+
+      <div className="pointer-events-none absolute top-10 md:top-16 left-8 md:left-14 z-[3]">
+        <h3
+          className={`${headlineFont} italic text-main text-5xl md:text-6xl lg:text-7xl leading-[1.02] text-overlay-glow`}
+        >
+          {title}
+        </h3>
+      </div>
+
+      {body ? (
+        <div className="pointer-events-none absolute right-8 md:right-14 bottom-16 md:bottom-24 z-[3] max-w-md text-right">
+          <p className="font-body text-main/90 text-sm md:text-base leading-relaxed mb-5">
+            {body}
+          </p>
+          {learnMore ? (
+            <Link
+              href={href}
+              onClick={(e) => e.stopPropagation()}
+              className="pointer-events-auto inline-flex items-center gap-2 font-cta uppercase tracking-[0.32em] text-[11px] text-main"
+            >
+              <span className="border-b border-main/60 group-hover:border-main pb-0.5">
+                {learnMore}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
+    </motion.article>
   );
 }
 

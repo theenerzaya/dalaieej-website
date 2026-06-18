@@ -41,6 +41,7 @@ import {
   useRef,
   useSyncExternalStore,
 } from "react";
+import { twMerge } from "tailwind-merge";
 
 /* -------------------------------------------------------------------------- */
 /*  Shared easing — matches Hoteller's smooth "power3.out" feel.              */
@@ -354,14 +355,14 @@ export function ScrollParallax({
 
   if (!clientReady || reduce) {
     return (
-      <div ref={ref} className={className}>
+      <div ref={ref} className={twMerge("relative", className)}>
         {children}
       </div>
     );
   }
 
   return (
-    <motion.div ref={ref} className={className} style={{ y: travel }}>
+    <motion.div ref={ref} className={twMerge("relative", className)} style={{ y: travel }}>
       {children}
     </motion.div>
   );
@@ -397,14 +398,14 @@ export function HeroFadeOut({
 
   if (!clientReady || reduce) {
     return (
-      <div ref={ref} className={className}>
+      <div ref={ref} className={twMerge("relative", className)}>
         {children}
       </div>
     );
   }
 
   return (
-    <motion.div ref={ref} className={className} style={{ y, opacity }}>
+    <motion.div ref={ref} className={twMerge("relative", className)} style={{ y, opacity }}>
       {children}
     </motion.div>
   );

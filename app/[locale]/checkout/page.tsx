@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { User, Mail, Phone, Globe, MessageSquare, Plus, Minus, Loader2, AlertCircle, Check, ChevronDown, ChevronUp, Bed } from "lucide-react";
@@ -10,10 +10,20 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { sumDepositDueForRoomLines, depositPortionForAddonTotal } from "@/lib/deposit-policy";
 import { normalizeCloudbedsRoomTypeID } from "@/lib/cloudbeds";
+import { validateStayDates } from "@/lib/booking-guards";
 import { formatIsoDateAsDots } from "@/lib/dateFormat";
+import { withLocalePath } from "@/lib/localePath";
+import {
+  getCabinDisplayName,
+  resolveCabinSlugFromCloudbeds,
+  type CabinSlug,
+} from "@/lib/cabinCatalog";
+import { toPlainProviderText } from "@/lib/providerText";
 
 interface CartRoom {
   id?: string;
+  cabinSlug?: CabinSlug | null;
+  providerRoomTypeName?: string;
   roomTypeID: string;
   roomTypeName: string;
   rateID: string;
@@ -42,6 +52,39 @@ interface SelectedAddon extends Addon {
   quantity: number;
 }
 
+function getOrCreateCheckoutAttemptId(): string {
+  const key = "dalai-eej-checkout-attempt";
+  if (typeof window === "undefined") return `attempt-${Date.now()}`;
+
+  const existing = window.sessionStorage.getItem(key);
+  if (existing) return existing;
+
+  const id =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `attempt-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  window.sessionStorage.setItem(key, id);
+  return id;
+}
+
+function cleanCartRoomText(room: CartRoom): CartRoom {
+  return {
+    ...room,
+    providerRoomTypeName: toPlainProviderText(room.providerRoomTypeName) || undefined,
+    roomTypeName: toPlainProviderText(room.roomTypeName) || "Room",
+    rateName: toPlainProviderText(room.rateName) || undefined,
+  };
+}
+
+function cleanAddonText(addon: Addon): Addon {
+  return {
+    ...addon,
+    name: toPlainProviderText(addon.name) || addon.name,
+    description: toPlainProviderText(addon.description),
+    category: toPlainProviderText(addon.category) || "other",
+  };
+}
+
 function CheckoutContent() {
   const t = useTranslations('checkout');
   const tCommon = useTranslations('common');
@@ -50,13 +93,14 @@ function CheckoutContent() {
   const router = useRouter();
 
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
-  const localePrefix = currentLocale === 'mn' ? '/mn' : '';
+  const localePrefix = withLocalePath(currentLocale, "/");
   const editorialFont = currentLocale === 'mn' ? 'font-editorial-mn' : 'font-editorial-en';
 
   const [cartRooms, setCartRooms] = useState<CartRoom[]>([]);
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [nights, setNights] = useState(1);
+  const [promo, setPromo] = useState("");
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -74,6 +118,7 @@ function CheckoutContent() {
   const [loading, setLoading] = useState(false);
   const [repricingCart, setRepricingCart] = useState(false);
   const [error, setError] = useState("");
+  const checkoutAttemptId = useMemo(getOrCreateCheckoutAttemptId, []);
 
   const repriceCartLines = async (
     checkIn: string,
@@ -98,7 +143,7 @@ function CheckoutContent() {
         const match = data.rooms.find(
           (r: { roomTypeID: string; rateID: string }) =>
             r.roomTypeID === item.roomTypeID && String(r.rateID) === String(item.rateID)
-        ) as { totalRate: number } | undefined;
+        ) as { roomTypeID: string; roomTypeName?: string; totalRate: number } | undefined;
         if (!match || !(match.totalRate > 0)) {
           throw new Error(
             currentLocale === "mn"
@@ -106,8 +151,22 @@ function CheckoutContent() {
               : `${item.roomTypeName} is not available at this guest count or rate`
           );
         }
+        const slug =
+          resolveCabinSlugFromCloudbeds(match.roomTypeID, match.roomTypeName) ??
+          item.cabinSlug ??
+          null;
         return {
           ...item,
+          cabinSlug: slug,
+          providerRoomTypeName: toPlainProviderText(match.roomTypeName || item.providerRoomTypeName),
+          roomTypeName:
+            toPlainProviderText(
+              getCabinDisplayName(
+                slug,
+                currentLocale,
+                match.roomTypeName || item.providerRoomTypeName || item.roomTypeName
+              )
+            ) || item.roomTypeName,
           pricePerNight:
             nightCount > 0 ? match.totalRate / nightCount : match.totalRate,
         };
@@ -124,13 +183,20 @@ function CheckoutContent() {
 
     if (urlCheckin) setCheckin(urlCheckin);
     if (urlCheckout) setCheckout(urlCheckout);
-    const nightCount = urlNights ? parseInt(urlNights, 10) : 1;
-    if (urlNights) setNights(nightCount);
+    setPromo(urlPromo || "");
+    const stayDates = validateStayDates(urlCheckin, urlCheckout);
+    const parsedUrlNights = urlNights ? parseInt(urlNights, 10) : 1;
+    const nightCount = stayDates.ok
+      ? stayDates.nights
+      : Number.isFinite(parsedUrlNights) && parsedUrlNights > 0
+        ? parsedUrlNights
+        : 1;
+    setNights(nightCount);
 
     if (urlCart) {
       try {
         const decodedCart = decodeURIComponent(urlCart);
-        const parsedCart = JSON.parse(decodedCart) as CartRoom[];
+        const parsedCart = (JSON.parse(decodedCart) as CartRoom[]).map(cleanCartRoomText);
         setCartRooms(parsedCart);
 
         if (urlCheckin && urlCheckout && parsedCart.length > 0) {
@@ -163,7 +229,7 @@ function CheckoutContent() {
       const response = await fetch(`/api/cloudbeds/addons?checkin=${checkIn}&checkout=${checkOut}&roomTypeId=${roomType}`);
       const data = await response.json();
       if (data.success && data.addons) {
-        setAddons(data.addons);
+        setAddons((data.addons as Addon[]).map(cleanAddonText));
       }
     } catch (err) {
       console.error("Failed to fetch add-ons:", err);
@@ -218,6 +284,10 @@ function CheckoutContent() {
   const balanceOnArrival = Math.max(0, totalPrice - depositDueNow);
 
   const validateForm = () => {
+    if (repricingCart) return currentLocale === "mn" ? "Үнийг шалгаж байна" : "Still checking the latest price";
+    if (cartRooms.length === 0) return currentLocale === "mn" ? "Өрөө сонгоно уу" : "Please select at least one room";
+    if (!validateStayDates(checkin, checkout).ok) return currentLocale === "mn" ? "Огноогоо дахин шалгана уу" : "Please check your stay dates";
+    if (!(totalPrice > 0)) return currentLocale === "mn" ? "Захиалгын дүн буруу байна" : "Booking total is invalid";
     if (!firstName.trim()) return t('errorFirstName');
     if (!lastName.trim()) return t('errorLastName');
     if (!email.trim()) return t('errorEmail');
@@ -260,6 +330,8 @@ function CheckoutContent() {
           specialRequests,
           addons: selectedAddons.map(a => ({ id: a.id, quantity: a.quantity })),
           totalAmount: totalPrice,
+          promo,
+          idempotencyKey: checkoutAttemptId,
         }),
       });
 
@@ -269,12 +341,12 @@ function CheckoutContent() {
         throw new Error(data.error || "Failed to create reservation");
       }
 
+      if (!data.paymentSession || typeof data.paymentSession !== "string") {
+        throw new Error("Reservation created, but payment session was not returned");
+      }
+
       const paymentParams = new URLSearchParams({
-        bookingId: data.reservationId || `booking-${Date.now()}`,
-        amount: String(depositDueNow),
-        totalAmount: String(totalPrice),
-        nights: String(nights),
-        guestName: `${firstName} ${lastName}`,
+        session: data.paymentSession,
       });
 
       router.push(`${localePrefix}/payment?${paymentParams.toString()}`);
@@ -658,9 +730,9 @@ function CheckoutContent() {
                 <button
                   type="button"
                   onClick={handleProceedToPayment}
-                  disabled={loading || repricingCart || !termsAccepted}
+                  disabled={loading || repricingCart || cartRooms.length === 0 || totalPrice <= 0 || !termsAccepted}
                   className={`w-full py-3.5 font-cta uppercase tracking-[0.28em] text-xs transition-colors flex items-center justify-center gap-2 ${
-                    termsAccepted && !loading
+                    termsAccepted && !loading && !repricingCart && cartRooms.length > 0 && totalPrice > 0
                       ? 'bg-main text-ink hover:bg-main/90 cursor-pointer'
                       : 'bg-main/10 text-main/40 cursor-not-allowed'
                   }`}

@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * Regenerates app/data/galleryImages.ts from files on disk:
- *   - Every .webp under public/images
- *   - Every .jpg / .jpeg strictly under 900 KiB (900 * 1024 bytes), except
- *     public/images/gallery/DBR_* shots: any .jpg / .jpeg / .webp (no size cap)
+ * Regenerates app/data/galleryImages.ts from curated gallery files on disk:
+ *   - Every .webp under public/images/gallery
+ *   - Every .jpg / .jpeg under public/images/gallery strictly under 900 KiB
+ *     (900 * 1024 bytes), except DBR_* shots: any .jpg / .jpeg / .webp
  *   - For the same DBR stem (e.g. DBR_7366.jpg vs DBR_7366.webp), keeps .webp only
  *   - Byte-identical files are deduped (first path by sort order is kept)
- *   - Skips about-us/, almanac/getting-here/, almanac/og/, footer/, and archive/ (not gallery)
  *
  * Usage: node scripts/sync-gallery-images.mjs
  */
@@ -90,7 +89,6 @@ function betterDbrVariant(a, b) {
  */
 function inferCategory(relPosix) {
   const p = relPosix.toLowerCase();
-  const base = path.basename(p, path.extname(p));
 
   if (p.startsWith("gallery/")) {
     const rest = p.slice("gallery/".length);
@@ -102,66 +100,13 @@ function inferCategory(relPosix) {
     if (seg === "the-lake" || seg === "lake") return "lake";
     if (seg === "the-resort" || seg === "resort") return "resort";
     if (seg === "wine-and-dine" || seg === "dining") return "dining";
+    if (seg === "accommodations" || seg === "rooms" || seg === "cabins") return "rooms";
+    if (seg === "restaurant") return "dining";
     if (seg === "adventures") return "adventures";
     if (seg === "wellness") return "wellness";
-    /** @type {Set<string>} */
-    const delegate = new Set([
-      "cabins",
-      "rooms",
-      "restaurant",
-      "map",
-      "nav-overlay",
-      "personas",
-      "silogrid",
-      "specialoffers",
-    ]);
-    if (delegate.has(seg)) {
-      return inferCategory(rest);
-    }
     return "resort";
   }
 
-  if (p.startsWith("wine-and-dine/")) return "dining";
-  if (p.startsWith("adventures/")) return "adventures";
-
-  if (p.startsWith("restaurant/")) {
-    if (p.includes("spa-mirage") || p.includes("wellness-mirage")) return "wellness";
-    return "dining";
-  }
-  if (p.startsWith("rooms/")) {
-    if (p.includes("spa-mirage") || p.includes("wellness-mirage")) return "wellness";
-    return "rooms";
-  }
-  if (p.startsWith("cabins/")) {
-    if (p.includes("spa-mirage") || p.includes("wellness-mirage")) return "wellness";
-    return "rooms";
-  }
-  if (p.startsWith("specialoffers/")) return "resort";
-  if (p.startsWith("silogrid/")) {
-    if (p.includes("wellness")) return "wellness";
-    if (p.includes("wilderness")) return "adventures";
-    if (p.includes("hearth") || p.includes("sanctuary")) return "rooms";
-    return "resort";
-  }
-  if (p.startsWith("map/")) {
-    if (base === "pier") return "lake";
-    if (base === "courts" || base === "overland") return "adventures";
-    if (base === "bathhouse" || base === "sauna") return "wellness";
-    if (["grand", "heritage", "ensuite", "annex"].includes(base)) return "rooms";
-    return "resort";
-  }
-  if (p.startsWith("nav-overlay/")) {
-    if (p.includes("adventure")) return "adventures";
-    if (p.includes("dining")) return "dining";
-    if (p.includes("wellness")) return "wellness";
-    if (p.includes("stay")) return "rooms";
-    return "resort";
-  }
-  if (p.startsWith("personas/")) {
-    if (p.includes("frontier")) return "adventures";
-    if (p.includes("disconnect")) return "wellness";
-    return "rooms";
-  }
   return "resort";
 }
 
@@ -262,15 +207,7 @@ async function main() {
   const picked = [];
 
   for (const rel of allRels) {
-    if (
-      rel.startsWith("about-us/") ||
-      rel.startsWith("almanac/getting-here/") ||
-      rel.startsWith("almanac/og/") ||
-      rel.startsWith("footer/") ||
-      rel.startsWith("archive/")
-    ) {
-      continue;
-    }
+    if (!rel.startsWith("gallery/")) continue;
 
     const ext = path.extname(rel).toLowerCase();
     const full = path.join(IMAGES_ROOT, ...rel.split("/"));
@@ -301,8 +238,8 @@ async function main() {
   });
 
   const header = `/**
- * Raster images under public/images: every .webp; .jpg/.jpeg under 900 KiB (except
- * gallery/DBR_* — any size, jpg or webp). Excludes about-us/, almanac/getting-here/, almanac/og/, footer/, archive/. Byte-identical files omitted.
+ * Curated raster images under public/images/gallery: every .webp; .jpg/.jpeg
+ * under 900 KiB (except DBR_* — any size, jpg or webp). Byte-identical files omitted.
  * Regenerate: npm run sync-gallery-images
  */
 export type GalleryImageSource = {

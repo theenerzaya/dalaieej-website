@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
+import SiteImage from "@/app/components/SiteImage";
 import { Eyebrow } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
 import { FOOTER_PARTNERS } from "@/lib/footerPartners";
@@ -46,6 +47,8 @@ function FooterPartnerLogo({
     <img
       src={assetUrl(src)}
       alt={alt}
+      loading="lazy"
+      decoding="async"
       draggable={false}
       className={[
         PARTNER_LOGO_CLASS,
@@ -107,18 +110,28 @@ export default function Footer() {
                   src={assetUrl("/images/about-us/decorations/accent-5.png")}
                   alt=""
                   aria-hidden
+                  loading="lazy"
+                  decoding="async"
                   draggable={false}
                   className="col-start-1 row-start-1 w-[18rem] h-auto select-none pointer-events-none opacity-50"
                 />
               ) : null}
-              <img
-                src={isAboutUs ? assetUrl("/branding/logos/logo-white-text.png") : assetUrl("/branding/logos/logo-white.png")}
+              <SiteImage
+                src={
+                  isAboutUs
+                    ? "/branding/logos/logo-white-text.png"
+                    : "/branding/logos/logo-white.png"
+                }
                 alt="Dalai Eej Resort"
+                width={180}
+                height={isAboutUs ? 51 : 59}
+                sizes="(max-width: 768px) 160px, 180px"
                 className={
                   isAboutUs
                     ? "col-start-1 row-start-1 h-8 md:h-9 w-auto"
                     : "col-start-1 row-start-1 h-10 md:h-12 w-auto"
                 }
+                style={{ width: "auto" }}
               />
             </Link>
             <p

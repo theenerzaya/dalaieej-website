@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react';
 import { CTAButton } from "./ui/Typography";
 import DateInput from "./ui/DateInput";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
+import { withLocalePath } from "@/lib/localePath";
 
 function useNavOpen() {
   const [navOpen, setNavOpen] = useState(false);
@@ -39,7 +40,7 @@ export default function AvailabilityBar() {
   const scrolledPast = useScrolledPast();
   
   const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
-  const localePrefix = currentLocale === 'mn' ? '/mn' : '';
+  const bookingPath = withLocalePath(currentLocale, "/booking");
   
   // Initialize booking dates without setting state in `useEffect` (ESLint rule).
   // Note: values are derived from the client/server's current time.
@@ -59,9 +60,9 @@ export default function AvailabilityBar() {
 
   const handleCheckAvailability = () => {
     if (checkIn && checkOut) {
-      router.push(`${localePrefix}/booking?checkin=${checkIn}&checkout=${checkOut}`);
+      router.push(`${bookingPath}?checkin=${checkIn}&checkout=${checkOut}`);
     } else {
-      router.push(`${localePrefix}/booking`);
+      router.push(bookingPath);
     }
   };
 

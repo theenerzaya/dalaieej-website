@@ -6,9 +6,8 @@ import { Facebook, Images, Instagram, Mail } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
-import { Link as I18nLink } from "@/i18n/navigation";
 import { withLocalePath } from "@/lib/localePath";
-import { getLowestCabinPriceFrom } from "@/lib/cabinCatalog";
+import { formatLowestCabinPriceFrom } from "@/lib/cabinCatalog";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
 import { absoluteSiteUrl } from "@/lib/site-urls";
@@ -55,8 +54,8 @@ const mainNavItems: MainNavItem[] = [
     image: "/images/nav-overlay/stay.jpg",
     label: { en: "Our Rooms", mn: "Өргөө" },
     meta: {
-      en: `Cabins & Suites · From $${getLowestCabinPriceFrom()}/night`,
-      mn: `Модон өрөө · 1 шөнө $${getLowestCabinPriceFrom()}-аас`,
+      en: `Cabins & Suites · ${formatLowestCabinPriceFrom("en")}`,
+      mn: `Модон өрөө · ${formatLowestCabinPriceFrom("mn")}`,
     },
     available: true,
   },
@@ -307,8 +306,9 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     src="/branding/logos/logo-white.png"
                     alt="Dalai Eej Resort"
                     width={180}
-                    height={50}
+                    height={59}
                     className="h-8 w-auto max-w-[7.5rem] sm:h-10 sm:max-w-none md:h-12"
+                    style={{ width: "auto" }}
                     priority
                   />
                 </Link>

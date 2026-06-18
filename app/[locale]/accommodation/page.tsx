@@ -12,23 +12,23 @@ export default function AccommodationPage() {
   const accommodations = [
     {
       href: `${localePrefix}/cabins`,
-      title: locale === 'mn' ? "Ойн байшингууд" : "Forest Cabins",
-      subtitle: locale === 'mn' ? "Байгаль дунд" : "Nestled in Nature",
+      title: locale === 'mn' ? "Cloudbeds өрөөний жагсаалт" : "Current Room List",
+      subtitle: locale === 'mn' ? "Шууд тааруулсан" : "Aligned with Cloudbeds",
       description: locale === 'mn' 
-        ? "Шинэсэн ойн дунд байрлах 6 тусдаа модон байшин. Галын зуухтай, хувийн террастай."
-        : "Six private log cabins tucked into the larch forest. Each with a wood-burning stove and private terrace.",
+        ? "Өрөөний нэр, багтаамж, халаалт, ариун цэврийн байгууламжийн мэдээллийг захиалгын системийн мэдээлэлтэй тааруулсан."
+        : "Browse current room names, capacities, heating, and facilities aligned with the live booking system.",
       image: "/images/cabins/room-triple-traditional.webp",
-      capacity: locale === 'mn' ? "2-4 зочин" : "2-4 Guests"
+      capacity: locale === 'mn' ? "8 төрөл" : "8 room types"
     },
     {
-      href: `${localePrefix}/lodge`,
-      title: locale === 'mn' ? "Гол байшин" : "The Lodge",
-      subtitle: locale === 'mn' ? "Нуурын эрэг дээр" : "On the Lakeshore",
+      href: `${localePrefix}/booking`,
+      title: locale === 'mn' ? "Сул өрөө шалгах" : "Live Availability",
+      subtitle: locale === 'mn' ? "Огноогоор шалгах" : "Search by date",
       description: locale === 'mn' 
-        ? "Хөвсгөл нуурын эрэг дээрх түүхэн гол байшин. Нуурын харагдац бүхий өрөөнүүд."
-        : "Our historic main lodge overlooking the lake. Rooms with panoramic views of Lake Khövsgöl.",
-      image: "/images/gallery/the-resort/DBR_8136.webp",
-      capacity: locale === 'mn' ? "2-3 зочин" : "2-3 Guests"
+        ? "Огноо болон зочдын тоогоо сонгоод Cloudbeds дээрх бодит боломжит өрөө, үнийг шалгана уу."
+        : "Choose your dates and guest count to see real availability and rates from Cloudbeds.",
+      image: "/images/gallery/accommodations/DBR_4872.webp",
+      capacity: locale === 'mn' ? "Шууд үнэ" : "Live rates"
     }
   ];
 

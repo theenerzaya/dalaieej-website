@@ -2,15 +2,15 @@
 
 /**
  * Batch image optimizer using sharp.
- * Converts JPG/PNG originals to compressed WebP and keeps optimized fallbacks.
+ * Re-encodes JPG/PNG/WebP originals in-place when sharp can make them smaller.
  *
  * Usage:  node scripts/optimize-images.mjs          (dry-run by default)
  *         node scripts/optimize-images.mjs --run     (actually optimize)
  *
  * What it does:
- *   1. Scans public/ for JPG and PNG files
+ *   1. Scans public/ for JPG, PNG, and WebP files
  *   2. Resizes any image wider than MAX_WIDTH (default 2048px)
- *   3. Re-encodes JPGs at quality 80, PNGs with compression level 9
+ *   3. Re-encodes JPGs/WebPs at quality 80, PNGs with compression level 9
  *   4. Skips files that are already small (< 50 KB)
  *   5. Only overwrites if the new file is actually smaller
  */
@@ -23,10 +23,11 @@ const PUBLIC_DIR = path.resolve(process.cwd(), "public");
 const MAX_WIDTH = 2048;
 const SKIP_UNDER_KB = 50;
 const JPG_QUALITY = 80;
+const WEBP_QUALITY = 80;
 const PNG_COMPRESSION = 9;
 const DRY_RUN = !process.argv.includes("--run");
 
-const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png"]);
+const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -68,6 +69,8 @@ async function optimizeFile(filePath) {
 
   if (ext === ".png") {
     pipeline = pipeline.png({ compressionLevel: PNG_COMPRESSION, adaptiveFiltering: true });
+  } else if (ext === ".webp") {
+    pipeline = pipeline.webp({ quality: WEBP_QUALITY, effort: 4 });
   } else {
     pipeline = pipeline.jpeg({ quality: JPG_QUALITY, mozjpeg: true });
   }

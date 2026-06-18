@@ -115,6 +115,14 @@ export default function GalleryGrid() {
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  const availableFilters = useMemo(
+    () =>
+      FILTER_ORDER.filter(
+        (id) => id === "all" || IMAGES.some((img) => img.category === id)
+      ),
+    []
+  );
+
   const filteredImages = useMemo(
     () =>
       activeFilter === "all"
@@ -201,7 +209,7 @@ export default function GalleryGrid() {
             className="mt-12 md:mt-16"
           >
             <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-x-10">
-              {FILTER_ORDER.map((id) => {
+              {availableFilters.map((id) => {
                 const isActive = activeFilter === id;
                 return (
                   <li key={id}>

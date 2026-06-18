@@ -220,10 +220,36 @@ export default function MirageImage({
   const hoveringRef = useRef(false);
   const progressRef = useRef(0);
   const rafRef = useRef<number | null>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setShouldLoad(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "700px 0px" },
+    );
+
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoad) return;
+
     const host = hostRef.current;
     const canvas = canvasRef.current;
     if (!host || !canvas) return;
@@ -388,7 +414,7 @@ export default function MirageImage({
         if (program) gl.deleteProgram(program);
       }
     };
-  }, [beforeUrl, afterUrl, intensity, speedIn, speedOut]);
+  }, [afterUrl, beforeUrl, intensity, shouldLoad, speedIn, speedOut]);
 
   const onEnter = () => {
     hoveringRef.current = true;
@@ -407,20 +433,26 @@ export default function MirageImage({
       className={`group relative overflow-hidden ${className}`}
       aria-label={alt}
     >
-      {/* Fallback / SEO image — always present, hidden once WebGL takes over. */}
-      <img
-        src={beforeUrl}
-        alt={alt}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-          ready && !failed ? "opacity-0" : "opacity-100"
-        }`}
-      />
+      {/* Fallback image — loaded near the viewport, hidden once WebGL takes over. */}
+      {shouldLoad ? (
+        <img
+          src={beforeUrl}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            ready && !failed ? "opacity-0" : "opacity-100"
+          }`}
+        />
+      ) : null}
       {/* CSS crossfade layer — used only when WebGL fails. */}
-      {failed ? (
+      {shouldLoad && failed ? (
         <img
           src={afterUrl}
           alt=""
           aria-hidden="true"
+          loading="lazy"
+          decoding="async"
           className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1200ms] ease-out group-hover:opacity-100"
         />
       ) : null}

@@ -30,7 +30,7 @@ function isAboutUsPathname(pathname: string) {
 export default function Navbar() {
   const locale = useLocale();
   const tNav = useTranslations("nav");
-  const localePrefix = locale === 'mn' ? '/mn' : '';
+  const bookingPath = withLocalePath(locale, "/booking");
   const siteHost = new URL(siteOriginForLocale(locale)).hostname;
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -115,11 +115,11 @@ export default function Navbar() {
               src="/branding/logos/logo-white.png"
               alt="Dalai Eej Resort"
               width={180}
-              height={50}
+              height={59}
               className={`h-7 w-auto max-w-[6.5rem] sm:h-10 sm:max-w-none md:h-12 ${
                 paperNav ? "brightness-0" : ""
               }`}
-              priority
+              style={{ width: "auto" }}
             />
             <span
               role="tooltip"
@@ -145,7 +145,7 @@ export default function Navbar() {
 
             {paperNav ? (
               <Link
-                href={`${localePrefix}/booking`}
+                href={bookingPath}
                 className="group relative inline-flex items-center justify-center px-5 py-2.5 sm:px-10 sm:py-5"
                 aria-label={locale === 'mn' ? 'Захиалах' : 'Book'}
               >
@@ -171,7 +171,7 @@ export default function Navbar() {
               </Link>
             ) : (
               <CTAButton
-                href={`${localePrefix}/booking`}
+                href={bookingPath}
                 variant="secondary"
                 size="sm"
                 className="!px-3.5 sm:!px-6 !py-2.5 sm:!py-[calc(0.75rem*1.6)] !text-[10px] sm:!text-xs !tracking-[0.16em] sm:!tracking-[0.18em]"

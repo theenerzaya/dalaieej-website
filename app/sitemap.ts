@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { getCanonicalCabinHrefs } from '@/lib/cabinCatalog';
 import { SITE_URL_EN, SITE_URL_MN, hreflangLanguages } from '@/lib/site-urls';
 
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
   '/fam-tour-application',
   '/groups',
   '/journal',
+  ...getCanonicalCabinHrefs(),
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -47,6 +47,7 @@ const MirageImage = dynamic(
 );
 import {
   ArrowRight,
+  Bath,
   BedDouble,
   ChevronLeft,
   ChevronRight,
@@ -55,11 +56,12 @@ import {
   Plus,
   Ruler,
   ShowerHead,
-  Tv,
-  Wifi,
 } from "lucide-react";
 import { assetUrl } from "@/lib/assetUrl";
 import DateInput from "@/app/components/ui/DateInput";
+import { withLocalePath } from "@/lib/localePath";
+import { getCabinCloudbedsFact } from "@/lib/cabinCloudbedsSnapshot";
+import { getCabinDetailHref, type CabinSlug } from "@/lib/cabinCatalog";
 
 /** Jul 1–5 for the upcoming summer window (matches the booking page's default). */
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
@@ -70,6 +72,15 @@ function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
   return { checkin: `${year}-07-01`, checkout: `${year}-07-05` };
 }
 
+function getRequiredCabinFact(slug: CabinSlug) {
+  const fact = getCabinCloudbedsFact(slug);
+  if (!fact) throw new Error(`Missing Cloudbeds cabin fact for slug: ${slug}`);
+  return fact;
+}
+
+const SUPERIOR_FACT = getRequiredCabinFact("superior-cabin");
+const SUPERIOR_ROOM_SIZE = SUPERIOR_FACT.roomSizeLabel ?? { en: "50 m²", mn: "50 м²" };
+
 type CopyKey =
   | "eyebrow"
   | "title"
@@ -79,12 +90,11 @@ type CopyKey =
   | "guestsValue"
   | "intro"
   | "detailsHeading"
-  | "size"
+  | "roomSize"
+  | "bathroom"
   | "bed"
   | "view"
   | "shower"
-  | "tv"
-  | "wifi"
   | "bookHeading"
   | "bookSubtitle"
   | "checkIn"
@@ -110,21 +120,19 @@ type CopyKey =
 
 const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   en: {
-    eyebrow: "Designed for natural living",
-    title: "Superior Cabin",
-    avgArea: "Average area",
-    areaValue: "30 m²",
+    eyebrow: "Current Cloudbeds room details",
+    title: SUPERIOR_FACT.name,
+    avgArea: "Heating",
+    areaValue: SUPERIOR_FACT.heatingLabel.en,
     guests: "Guests",
-    guestsValue: "2 adults · 1 child",
-    intro:
-      "Wood-fired warmth, handwoven textiles and a private view of the larch line — our Superior Cabin pairs the quiet materiality of the Khövsgöl forest with a restrained, crafted interior. Every detail is placeholder copy, ready to be replaced with the final room story.",
-    detailsHeading: "At a glance",
-    size: "30 m²",
-    bed: "1 Queen Bed",
-    view: "Forest View",
-    shower: "Rain Shower",
-    tv: "TV + VOD",
-    wifi: "WiFi",
+    guestsValue: SUPERIOR_FACT.guestLabel.en,
+    intro: SUPERIOR_FACT.description.en,
+    detailsHeading: "Cloudbeds details",
+    roomSize: SUPERIOR_ROOM_SIZE.en,
+    bathroom: SUPERIOR_FACT.bathroomLabel.en,
+    bed: SUPERIOR_FACT.bedLabel.en,
+    view: SUPERIOR_FACT.viewLabel.en,
+    shower: SUPERIOR_FACT.showerLabel.en,
     bookHeading: "Book Your Stay",
     bookSubtitle: "Required fields are followed by *",
     checkIn: "Check-in Date",
@@ -151,21 +159,19 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     backToRooms: "Back to accommodations",
   },
   mn: {
-    eyebrow: "Байгальд ойр амьдралд зориулав",
-    title: "Superior модон байшин",
-    avgArea: "Дундаж талбай",
-    areaValue: "30 м²",
+    eyebrow: "Cloudbeds-ийн өрөөний мэдээлэл",
+    title: SUPERIOR_FACT.name,
+    avgArea: "Халаалт",
+    areaValue: SUPERIOR_FACT.heatingLabel.mn,
     guests: "Зочид",
-    guestsValue: "2 том хүн · 1 хүүхэд",
-    intro:
-      "Галын зуухны дулаан, гар нэхмэл эдлэл, шинэсэн ойн хувийн харагдацтай — манай Superior модон байшин нь Хөвсгөлийн ойн анир чимээ болон даруухан, гар урлалаар бүтээсэн дотоод засал хоёрыг нэгтгэдэг. Бүх текст түр орлуулсан бөгөөд дараа нь эцсийн агуулгаар солигдоно.",
-    detailsHeading: "Товч танилцуулга",
-    size: "30 м²",
-    bed: "1 том ор",
-    view: "Ойн харагдац",
-    shower: "Бороон шүршүүр",
-    tv: "TV + VOD",
-    wifi: "WiFi",
+    guestsValue: SUPERIOR_FACT.guestLabel.mn,
+    intro: SUPERIOR_FACT.description.mn,
+    detailsHeading: "Cloudbeds-ийн мэдээлэл",
+    roomSize: SUPERIOR_ROOM_SIZE.mn,
+    bathroom: SUPERIOR_FACT.bathroomLabel.mn,
+    bed: SUPERIOR_FACT.bedLabel.mn,
+    view: SUPERIOR_FACT.viewLabel.mn,
+    shower: SUPERIOR_FACT.showerLabel.mn,
     bookHeading: "Амралтаа захиалах",
     bookSubtitle: "Заавал бөглөх талбарыг * тэмдэглэв",
     checkIn: "Ирэх огноо",
@@ -210,49 +216,24 @@ const WELLNESS_IMAGE_BEFORE = assetUrl("/images/cabins/wellness-mirage-before.we
 const WELLNESS_IMAGE_AFTER = assetUrl("/images/cabins/wellness-mirage-after.webp");
 const TAGLINE_BG_MAIN = assetUrl("/images/rooms/superior-cabin/00.webp");
 
+function makeOtherRoom(slug: CabinSlug, image: string) {
+  const fact = getRequiredCabinFact(slug);
+  return {
+    name: { en: fact.name, mn: fact.name },
+    summary: fact.guestLabel,
+    image,
+    href: getCabinDetailHref(slug),
+  };
+}
+
 const OTHER_ROOMS = [
-  {
-    name: { en: "Triple Traditional Cabin", mn: "Гурвалсан уламжлалт модон байшин" },
-    size: { en: "58 m² / 4 guests", mn: "58 м² / 4 зочин" },
-    image: assetUrl("/images/cabins/room-triple-traditional.webp"),
-    href: "/triple-traditional-cabin",
-  },
-  {
-    name: { en: "Lakeside Cabin", mn: "Нуурын модон байшин" },
-    size: { en: "55 m² / 3 guests", mn: "55 м² / 3 зочин" },
-    image: assetUrl("/images/cabins/room-lakeside.webp"),
-    href: "/lakeside-cabin",
-  },
-  {
-    name: { en: "Triple Electric Cabin", mn: "Гурвалсан цахилгаан тохижилттой модон байшин" },
-    size: { en: "60 m² / 5 guests", mn: "60 м² / 5 зочин" },
-    image: assetUrl("/images/cabins/room-triple-electric.webp"),
-    href: "/triple-electric-cabin",
-  },
-  {
-    name: { en: "Signature Cabin", mn: "Онцгой модон байшин" },
-    size: { en: "70 m² / 5 guests", mn: "70 м² / 5 зочин" },
-    image: assetUrl("/images/cabins/room-signature.webp"),
-    href: "/signature-cabin",
-  },
-  {
-    name: { en: "Quad Electric Cabin", mn: "Дөрвөлсөн цахилгаан тохижилттой модон байшин" },
-    size: { en: "66 m² / 5 guests", mn: "66 м² / 5 зочин" },
-    image: assetUrl("/images/cabins/room-quad-electric.webp"),
-    href: "/quad-electric-cabin",
-  },
-  {
-    name: { en: "Grand Peninsula Suite", mn: "Хойг дээрх тусгай хаус" },
-    size: { en: "120 m² / 4 guests", mn: "120 м² / 4 зочин" },
-    image: assetUrl("/images/cabins/room-grand-peninsula.webp"),
-    href: "/grand-peninsula-suite",
-  },
-  {
-    name: { en: "Camping", mn: "Кемпинг" },
-    size: { en: "Outdoor setup / 4 guests", mn: "Гадаа байрлал / 4 зочин" },
-    image: assetUrl("/images/rooms/camping.webp"),
-    href: "/booking",
-  },
+  makeOtherRoom("triple-traditional-cabin", assetUrl("/images/cabins/room-triple-traditional.webp")),
+  makeOtherRoom("lakeside-cabin", assetUrl("/images/cabins/room-lakeside.webp")),
+  makeOtherRoom("triple-electric-cabin", assetUrl("/images/cabins/room-triple-electric.webp")),
+  makeOtherRoom("signature-cabin", assetUrl("/images/cabins/room-signature.webp")),
+  makeOtherRoom("quad-electric-cabin", assetUrl("/images/cabins/room-quad-electric.webp")),
+  makeOtherRoom("grand-peninsula-suite", assetUrl("/images/cabins/room-grand-peninsula.webp")),
+  makeOtherRoom("camping", assetUrl("/images/rooms/camping.webp")),
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -286,7 +267,7 @@ export default function SuperiorCabinPage() {
   const locale = useLocale();
   const isMn = locale === "mn";
   const t = COPY[isMn ? "mn" : "en"];
-  const localePrefix = isMn ? "/mn" : "";
+  const localePrefix = withLocalePath(locale, "/");
   const reduce = useReducedMotion();
 
   const defaults = useMemo(() => getDefaultJulyStayDates(), []);
@@ -360,12 +341,11 @@ export default function SuperiorCabinPage() {
   const imageScale = useTransform(heroProgress, [0, 1], [1, 1.08]);
 
   const facts: { icon: typeof Ruler; label: string }[] = [
-    { icon: Ruler, label: t.size },
+    { icon: Ruler, label: t.roomSize },
     { icon: BedDouble, label: t.bed },
-    { icon: Mountain, label: t.view },
+    { icon: Bath, label: t.bathroom },
     { icon: ShowerHead, label: t.shower },
-    { icon: Tv, label: t.tv },
-    { icon: Wifi, label: t.wifi },
+    { icon: Mountain, label: t.view },
   ];
 
   return (
@@ -842,7 +822,7 @@ export default function SuperiorCabinPage() {
                       {room.name[isMn ? "mn" : "en"]}
                     </h3>
                     <p className="font-body text-main/60 text-sm mt-2">
-                      {room.size[isMn ? "mn" : "en"]}
+                      {room.summary[isMn ? "mn" : "en"]}
                     </p>
                   </Link>
                 </motion.div>
