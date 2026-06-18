@@ -73,9 +73,7 @@ export const CABIN_CATALOG: CabinCatalogEntry[] = [
     href: "/tuhtai-house-wood-fired",
     cardImage: "/images/cabins/room-triple-traditional.webp",
     gallery: [
-      "/images/rooms/triple-traditional-cabin/00.webp",
       "/images/rooms/triple-traditional-cabin/01.webp",
-      "/images/rooms/triple-traditional-cabin/02.webp",
       "/images/rooms/triple-traditional-cabin/03.webp",
       "/images/rooms/triple-traditional-cabin/04.webp",
     ],
@@ -115,7 +113,6 @@ export const CABIN_CATALOG: CabinCatalogEntry[] = [
     href: "/tuhtai-house-electric",
     cardImage: "/images/cabins/room-triple-electric.webp",
     gallery: [
-      "/images/rooms/triple-electric-cabin/00.webp",
       "/images/rooms/triple-electric-cabin/01.webp",
       "/images/rooms/triple-electric-cabin/02.webp",
       "/images/rooms/triple-electric-cabin/03.webp",
@@ -180,7 +177,6 @@ export const CABIN_CATALOG: CabinCatalogEntry[] = [
     cardImage: "/images/cabins/room-grand-peninsula.webp",
     gallery: [
       "/images/rooms/grand-peninsula-suite/00.webp",
-      "/images/rooms/grand-peninsula-suite/01.webp",
       "/images/rooms/grand-peninsula-suite/02.webp",
       "/images/rooms/grand-peninsula-suite/03.webp",
       "/images/rooms/grand-peninsula-suite/04.webp",

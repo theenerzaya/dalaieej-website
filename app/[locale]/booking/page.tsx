@@ -121,16 +121,37 @@ type AvailabilityFetchOptions = {
 };
 
 function BookingCardSlideshow({ images, alt }: { images: string[]; alt: string }) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
-    if (images.length <= 1 || isPaused) return;
+    setCurrentIndex(0);
+  }, [images]);
+
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (images.length <= 1 || isPaused || !isInView) return;
     const id = window.setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
     }, 3200);
     return () => clearInterval(id);
-  }, [images, isPaused]);
+  }, [images, isPaused, isInView]);
 
   const src = images[currentIndex] || images[0] || "";
   const canSlide = images.length > 1;
@@ -149,14 +170,15 @@ function BookingCardSlideshow({ images, alt }: { images: string[]; alt: string }
 
   return (
     <div
-      className="relative w-full h-full"
+      ref={rootRef}
+      className="relative w-full h-full bg-black/35"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.02]"
+        className="w-full h-full object-contain"
       />
       {canSlide && (
         <>

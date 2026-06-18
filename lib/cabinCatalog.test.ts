@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { existsSync } from "fs";
+import path from "path";
 import {
+  CABIN_CATALOG,
   getCanonicalCabinHrefFromRouteSlug,
   getCabinCatalogEntry,
   getCabinDisplayName,
@@ -55,6 +58,15 @@ describe("cabin catalog Cloudbeds mapping", () => {
     expect(getCabinGallery("quad-electric-cabin")[0]).toBe(
       "/images/rooms/quad-electric-cabin/00.webp"
     );
+  });
+
+  it("only references public image assets that exist", () => {
+    for (const cabin of CABIN_CATALOG) {
+      for (const src of [cabin.cardImage, ...cabin.gallery]) {
+        if (!src.startsWith("/")) continue;
+        expect(existsSync(path.join(process.cwd(), "public", src))).toBe(true);
+      }
+    }
   });
 
   it("uses cleaned canonical room URLs", () => {
