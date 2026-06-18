@@ -21,6 +21,7 @@ import {
   BedDouble,
   ChevronLeft,
   ChevronRight,
+  CircleCheck,
   Minus,
   Mountain,
   Plus,
@@ -71,6 +72,7 @@ type RoomConfig = {
   shower: Bilingual;
   bed: Bilingual;
   view: Bilingual;
+  equipment: Bilingual[];
 };
 
 function getRequiredCabinFact(slug: CabinSlug) {
@@ -98,6 +100,7 @@ function makeRoomConfig(slug: CabinSlug, image: string): RoomConfig {
     shower: fact.showerLabel,
     bed: fact.bedLabel,
     view: fact.viewLabel,
+    equipment: fact.equipmentLabels,
   };
 }
 
@@ -240,6 +243,7 @@ export default function RoomDetailPage() {
         { icon: Bath, label: room.bathroom[lang] },
         { icon: ShowerHead, label: room.shower[lang] },
         { icon: Mountain, label: room.view[lang] },
+        ...room.equipment.map((item) => ({ icon: CircleCheck, label: item[lang] })),
       ]
     : [];
 

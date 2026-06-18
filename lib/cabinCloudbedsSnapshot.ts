@@ -14,16 +14,36 @@ export type CabinCloudbedsFact = {
   showerLabel: Localized;
   heatingLabel: Localized;
   viewLabel: Localized;
+  equipmentLabels: Localized[];
   shortDescription: Localized;
   description: Localized;
   features: string[];
 };
 
+const EQUIPMENT = {
+  lakeView: { en: "Lake view", mn: "Нуурын харагдац" },
+  selectLakeViewCabins: {
+    en: "Select units with lake view",
+    mn: "Зарим байшин нуурын харагдацтай",
+  },
+  selectLakeViewRooms: {
+    en: "Select rooms with lake view",
+    mn: "Зарим өрөө нуурын харагдацтай",
+  },
+  tv: { en: "TV", mn: "Зурагт" },
+  selectTv: {
+    en: "Select units with TV",
+    mn: "Зарим байшин зурагттай",
+  },
+  electricHeater: { en: "Electric heater", mn: "Тень" },
+  toiletInside: { en: "Toilet inside", mn: "Дотроо 00-той" },
+} satisfies Record<string, Localized>;
+
 const INCLUDED_SERVICES =
-  "Өглөөний цай | Саун болон Каяк завиар хязгааргүй үйлчлүүлэх эрх | Иогийн хичээл | \"Далай ээж\" хойгт нэвтрэх эрх";
+  "Өглөөний цай, саун, каяк ашиглах эрх, өглөөний иог болон Далай Ээжийн хойгт нэвтрэх эрх багтана.";
 
 const INCLUDED_SERVICES_EN =
-  "Breakfast, unlimited sauna and kayak access, morning yoga, and Dalai Eej peninsula access are included.";
+  "Breakfast, sauna and kayak access, morning yoga, and entry to the Dalai Eej peninsula are included.";
 
 export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
   "superior-cabin": {
@@ -33,18 +53,19 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     maxGuests: 5,
     roomSizeLabel: { en: "50 m²", mn: "50 м²" },
     guestLabel: { en: "Up to 5 guests", mn: "5 хүн хүртэл" },
-    bedLabel: { en: "Family layout", mn: "Гэр бүлийн зохион байгуулалт" },
+    bedLabel: { en: "2 double beds + 1 single bed", mn: "2 өргөн ор + 1 нарийн ор" },
     bathroomLabel: { en: "Toilet and washbasin inside", mn: "Дотроо 00, угаалтууртай" },
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Wood-burning stove", mn: "Галлагаатай зуух" },
     viewLabel: { en: "Lake view", mn: "Нуурын харагдац" },
+    equipmentLabels: [EQUIPMENT.lakeView, EQUIPMENT.tv, EQUIPMENT.toiletInside],
     shortDescription: {
-      en: "A one-of-a-kind large family stay for guests who want extra space, with toilet and washbasin inside.",
-      mn: "Тав тух, орон зайг эрхэмлэдэг том гэр бүлд зориулсан, дотроо 00 болон угаалтууртай цор ганц загвар.",
+      en: "Our largest family stay, with two double beds, one single bed, and a quiet lake view.",
+      mn: "Хоёр өргөн ор, нэг нарийн ортой, нуурын нам гүм харагдацтай манай хамгийн том байр.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} This is the largest one-off stay in the current Cloudbeds room list, prepared for larger families and groups who value space and comfort. It sleeps up to 5 guests and has a toilet and washbasin inside.`,
-      mn: `${INCLUDED_SERVICES}. Олуулаа яваа гэр бүлд тохиромжтой. Цор ганц загвар. Тав тух, орон зайг эрхэмлэдэг том гэр бүлд зориулан тусгайлан бэлтгэсэн манай хамгийн том байр. 5 хүн чөлөөтэй багтах зайтай, дотроо бие засах суултуур, угаалтууртай.`,
+      en: `Our largest family stay, made for guests who want more room around them. Их Өргөө sleeps up to 5 guests, with two double beds, one single bed, a wood-burning stove, lake views, and a toilet and washbasin inside. Shared showers are nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Илүү уужим зай хүссэн гэр бүл, олуулаа аялагчдад зориулсан манай хамгийн том байр. Их Өргөө нь хоёр өргөн ор, нэг нарийн ортой, 5 хүн хүртэл байрлах боломжтой, галлагаатай зуухтай, нуурын харагдацтай, дотроо 00 болон угаалтууртай. Шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Галлагаатай зуух",
@@ -70,13 +91,18 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Wood-burning stove", mn: "Галлагаатай зуух" },
     viewLabel: { en: "Lake view", mn: "Нуурын харагдац" },
+    equipmentLabels: [
+      EQUIPMENT.toiletInside,
+      EQUIPMENT.selectLakeViewCabins,
+      EQUIPMENT.selectTv,
+    ],
     shortDescription: {
-      en: "A wood-fired comfort house for couples or small families, with one double bed, one single bed, and toilet/washbasin inside.",
-      mn: "Тав тухыг эрхэмлэгч хосууд болон цөөн ам бүлтэй гэр бүлд тохиромжтой, нэг өргөн ба нэг нарийн ортой галлагаатай хаус.",
+      en: "A warm wood-fired cabin with one double bed, one single bed, and lake views.",
+      mn: "Нэг өргөн ор, нэг нарийн ортой, нуурын харагдацтай дулаан галлагаатай байшин.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} A comfort-focused wood-fired house for couples and small families. It sleeps up to 3 guests with one double bed and one single bed, and has a toilet and washbasin inside.`,
-      mn: `${INCLUDED_SERVICES}. Тав тухыг эрхэмлэгч хосууд болон цөөн ам бүлтэй гэр бүлүүдэд тохиромжтой. Тав тух, хувийн орон зайг бүрэн мэдрэх сонголт. Энэхүү байр нь дотроо ариун цэврийн өрөө тул танд гэртээ байгаа мэт тав тухыг мэдрүүлнэ. Нэг өргөн ор болон нэг нарийн ортой.`,
+      en: `A warm wood-fired cabin for couples or small families who like the feeling of a real fire at night. It sleeps up to 3 guests, with one double bed, one single bed, and a toilet and washbasin inside. Shared showers are nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Шөнөдөө галын дулаан мэдрэх дуртай хосууд, цөөн ам бүлтэй гэр бүлд тохиромжтой тухтай байшин. Нэг өргөн ор, нэг нарийн ортой, 3 хүн хүртэл байрлах боломжтой, дотроо 00 болон угаалтууртай. Шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Галлагаатай зуух",
@@ -101,13 +127,14 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Wood-burning stove", mn: "Галлагаатай зуух" },
     viewLabel: { en: "Closest to the lake", mn: "Нуурын эрэгт хамгийн ойр" },
+    equipmentLabels: [EQUIPMENT.lakeView],
     shortDescription: {
-      en: "A lakefront wood-fired house for up to 2 guests, closest to the water, using shared bathroom and shower facilities.",
-      mn: "Нуурын эрэгт хамгийн ойр байрлах, 2 хүн хүртэлх багтаамжтай, нийтийн ариун цэврийн байгууламж ашигладаг галлагаатай хаус.",
+      en: "Closest to the water, a wood-fired lakeside cabin for two quiet guests.",
+      mn: "Нуурын усанд хамгийн ойр, хоёр зочинд зориулсан нам гүм галлагаатай байшин.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} A wood-fired lakeside house for couples and nature lovers. It is among the closest stays to the water and uses the shared modern bathroom and shower facilities.`,
-      mn: `${INCLUDED_SERVICES}. Хосууд, байгальд дурлагсдад тохиромжтой. Нуурын эрэгт хамгийн ойр байрлалтай эдгээр модон хаусууд нь цонхоороо байгалийн сайхныг тольдох хамгийн төгс харагдацтай. Ажилтан галлаж өгдөг уламжлалт модон зуухтай. Энэхүү байр нь дотроо ариун цэврийн өрөөгүй бөгөөд нийтийн боловсон ариун цэврийн байгууламж ашиглана.`,
+      en: `Closest to the water, this wood-fired lakeside cabin is for slow mornings and long looks across the lake. It sleeps up to 2 guests and uses the shared bathroom and shower facilities nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Нуурын усанд хамгийн ойр байрлах энэ галлагаатай байшин нь удаан өглөө, цонхоор харах нам гүмд дуртай хоёр зочинд тохиромжтой. 2 хүн хүртэл байрлах боломжтой бөгөөд ариун цэврийн өрөө, шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Галлагаатай зуух",
@@ -124,21 +151,22 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     slug: "triple-electric-cabin",
     roomTypeID: "198036698427584",
     name: "Тухтай Хаус (Цахилгаан халаалт)",
-    maxGuests: 5,
+    maxGuests: 3,
     roomSizeLabel: { en: "20 m²", mn: "20 м²" },
-    guestLabel: { en: "Up to 5 guests", mn: "5 хүн хүртэл" },
-    bedLabel: { en: "Family layout", mn: "Гэр бүлийн зохион байгуулалт" },
+    guestLabel: { en: "Up to 3 guests", mn: "3 хүн хүртэл" },
+    bedLabel: { en: "1 double + 1 single bed", mn: "1 өргөн ор + 1 нарийн ор" },
     bathroomLabel: { en: "Toilet and washbasin inside", mn: "Дотроо 00, угаалтууртай" },
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Electric heating", mn: "Цахилгаан халаалт" },
     viewLabel: { en: "Lake view", mn: "Нуурын харагдац" },
+    equipmentLabels: [EQUIPMENT.electricHeater, EQUIPMENT.toiletInside],
     shortDescription: {
-      en: "An electric-heated comfort house for up to 5 guests, with toilet and washbasin inside and shared showers nearby.",
-      mn: "5 хүн хүртэлх багтаамжтай, дотроо 00 болон угаалтууртай, цахилгаан халаалттай тухтай хаус.",
+      en: "A steady, warm electric cabin with one double bed, one single bed, and lake views.",
+      mn: "Нэг өргөн ор, нэг нарийн ортой, нуурын харагдацтай тогтмол дулаан цахилгаан халаалттай байшин.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} An electric-heated comfort house for couples and small families who want stable warmth and private toilet/washbasin facilities inside. Showers are in the shared modern facilities.`,
-      mn: `${INCLUDED_SERVICES}. Тав тухыг эрхэмлэгч хосууд, цөөн ам бүлтэй гэр бүлд тохиромжтой. Энэхүү байр нь дотроо бие засах суултуур болон угаалтууртай тул шөнө орой гадагшаа гарах шаардлагагүй. Шүршүүрт нийтийн боловсон ариун цэврийн байгууламжид орно.`,
+      en: `A steady, warm cabin for couples or small families who prefer electric heating. It sleeps up to 3 guests, with one double bed, one single bed, lake views, and a toilet and washbasin inside. Shared showers are nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Цахилгаан халаалттай, тогтмол дулаан тухтай байшин. Хосууд эсвэл цөөн ам бүлтэй гэр бүлд тохиромжтой. Нэг өргөн ор, нэг нарийн ортой, 3 хүн хүртэл байрлах боломжтой, нуурын харагдацтай, дотроо 00 болон угаалтууртай. Шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Цахилгаан халаалт",
@@ -164,13 +192,14 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Electric heating", mn: "Цахилгаан халаалт" },
     viewLabel: { en: "Near the lake", mn: "Нуурын эрэгтэй ойр" },
+    equipmentLabels: [EQUIPMENT.selectLakeViewRooms],
     shortDescription: {
-      en: "A simple warm stay for couples or solo travellers, close to the lake, using shared bathroom and shower facilities.",
-      mn: "Хосууд болон ганцаарчилсан аялагчдад тохиромжтой, нуурын эрэгтэй ойр, нийтийн ариун цэврийн байгууламж ашигладаг дулаахан байр.",
+      en: "A simple, warm stay near the lake for solo travellers or two guests.",
+      mn: "Ганцаараа аялагч эсвэл хоёр зочинд тохиромжтой, нууртай ойрхон энгийн дулаахан байр.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} A simple classic stay for couples or solo travellers who want to be close to the lake and nature. It sleeps up to 2 adults and uses the shared modern bathroom and shower facilities.`,
-      mn: `${INCLUDED_SERVICES}. Хосууд болон ганцаарчилсан аялагчид тохиромжтой. Хөвсгөл далайн байгалийн сайхныг мэдрэх хамгийн сонгодог сонголт. Модон хийцтэй, дулаахан энэхүү байр нь нуурын эрэгтэй ойр байрлалтай тул байгальтай ойр байхыг хүссэн аялагчдад тохиромжтой. Орчин үеийн шийдэл бүхий нийтийн боловсон ариун цэврийн байгууламжтай.`,
+      en: `A simple, warm stay near the lake for solo travellers or 2 adults. It keeps things easy and close to nature, with electric heating and shared bathroom and shower facilities nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Ганцаараа аялагч эсвэл хоёр том хүнд тохиромжтой, нууртай ойрхон энгийн дулаахан байр. Цахилгаан халаалттай, байгальд ойр, хэрэгтэй зүйлс нь цэгцтэй. Ариун цэврийн өрөө, шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Цахилгаан халаалт",
@@ -193,13 +222,14 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Electric heating", mn: "Цахилгаан халаалт" },
     viewLabel: { en: "Lake view", mn: "Нуурын харагдац" },
+    equipmentLabels: [EQUIPMENT.lakeView, EQUIPMENT.electricHeater, EQUIPMENT.toiletInside],
     shortDescription: {
-      en: "A smaller but warm electric-heated family house with two double beds and toilet/washbasin inside.",
-      mn: "Бага насны хүүхэдтэй гэр бүлд тохиромжтой, 2 дабл ортой, цахилгаан халаалттай, дотроо 00-тэй дулаахан хаус.",
+      en: "A compact electric family cabin with two double beds and steady warmth through the night.",
+      mn: "Хоёр дабл ортой, шөнөжин тогтмол дулаан цахилгаан халаалттай гэр бүлийн байшин.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} A smaller but consistently warm family house for guests travelling with young children. It has electric heating, two double beds, and a toilet and washbasin inside.`,
-      mn: `${INCLUDED_SERVICES}. Бага насны хүүхэдтэй гэр бүлд тохиромжтой. Энэхүү байр нь талбайн хувьд бага боловч цахилгаан халаалттай тул шөнө гал түлэх шаардлагагүй, тогтмол дулаахан байна. Ор: 2 дабл хэмжээтэй ор. Дотроо 00-тэй.`,
+      en: `A compact family cabin with reliable electric warmth through the night. It sleeps up to 5 guests, with two double beds, lake views, and a toilet and washbasin inside. Shared showers are nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Шөнөжин тогтмол дулаан байх цахилгаан халаалттай гэр бүлийн байшин. Хоёр дабл ортой, 5 хүн хүртэл байрлах боломжтой, нуурын харагдацтай, дотроо 00 болон угаалтууртай. Шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Цахилгаан халаалт",
@@ -224,13 +254,14 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Wood-burning stove", mn: "Галлагаатай зуух" },
     viewLabel: { en: "Lake view", mn: "Нуурын харагдац" },
+    equipmentLabels: [EQUIPMENT.lakeView, EQUIPMENT.tv, EQUIPMENT.toiletInside],
     shortDescription: {
-      en: "A wood-fired family house for up to 5 guests, with two double beds and toilet/washbasin inside.",
-      mn: "Хоёр өргөн ортой, 5 хүн хүртэлх багтаамжтай, дотроо 00 болон угаалтууртай галлагаатай гэр бүлийн хаус.",
+      en: "A wood-fired family cabin with two double beds, lake views, and room to stay together.",
+      mn: "Хоёр өргөн ортой, нуурын харагдацтай, гэр бүлээрээ хамт амрах галлагаатай байшин.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} A wood-fired family house for guests who want to stay together in a warm shared space. It has two double beds plus a toilet and washbasin inside. Showers are in the shared modern facilities.`,
-      mn: `${INCLUDED_SERVICES}. 4 ам бүлтэй гэр бүлд тохиромжтой. Гэр бүлээрээ нэг дор, халуун дулаан уур амьсгалд амарна. Хоёр том хос ортой. Дотроо бие засах суултуур, угаалтууртай тул хүүхэд багачуудтай явахад нэн тохиромжтой. Шүршүүрт нийтийн боловсон ариун цэврийн байгууламжид орно.`,
+      en: `A wood-fired family cabin for staying together in one warm, shared space. It sleeps up to 5 guests, with two double beds, lake views, and a toilet and washbasin inside. Shared showers are nearby. ${INCLUDED_SERVICES_EN}`,
+      mn: `Гэр бүлээрээ нэг дор, галын дулаантай амрахад тохиромжтой галлагаатай байшин. Хоёр өргөн ортой, 5 хүн хүртэл байрлах боломжтой, нуурын харагдацтай, дотроо 00 болон угаалтууртай. Шүршүүрийг нийтийн байгууламжаас ашиглана. ${INCLUDED_SERVICES}`,
     },
     features: [
       "Галлагаатай зуух",
@@ -256,13 +287,14 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
     heatingLabel: { en: "Outdoor setup", mn: "Гадаа байрлал" },
     viewLabel: { en: "Secure camping grounds", mn: "Хамгаалалттай кемпийн бүс" },
+    equipmentLabels: [],
     shortDescription: {
-      en: "A secure private camping area for tents or vehicles, with access to hot showers, fresh water, and resort services.",
-      mn: "Майхан болон машинтай аялагчдад зориулсан, халуун шүршүүр, цэвэр ус болон амралтын үйлчилгээ ашиглах боломжтой хамгаалалттай отоглох хэсэг.",
+      en: "A private camping area for travellers arriving with tents or vehicles.",
+      mn: "Майхан эсвэл машинтай аялагчдад зориулсан хувийн отоглох хэсэг.",
     },
     description: {
-      en: `${INCLUDED_SERVICES_EN} A secure private camping area for travellers arriving with tents or vehicles. Hot showers, fresh water, and camping support services are available. Contact the resort for bookings above 3 guests.`,
-      mn: `${INCLUDED_SERVICES}. Майхан болон машинтай аялагчид тохиромжтой. Та манай хувийн эзэмшлийн, харуул хамгаалалттай бүсэд аюулгүй хоноглох боломжтой. Бид танд халуун шүршүүр, цэвэр ус болон кемпийн бусад үйлчилгээг санал болгож байна. 3-с дээш хүний захиалга өгөхөөр бол холбогдоно уу.`,
+      en: `A private camping area for travellers arriving with tents or vehicles. It gives you a secure place to stay, with access to fresh water, hot showers, and the wider resort services. ${INCLUDED_SERVICES_EN}`,
+      mn: `Майхан эсвэл машинтай аялагчдад зориулсан хувийн отоглох хэсэг. Аюулгүй хоноглох орчинтой бөгөөд цэвэр ус, халуун шүршүүр болон амралтын газрын бусад үйлчилгээг ашиглах боломжтой. ${INCLUDED_SERVICES}`,
     },
     features: [
       "\"Далай Ээж\" хойгт нэвтрэх эрх",

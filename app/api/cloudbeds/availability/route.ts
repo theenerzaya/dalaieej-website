@@ -61,6 +61,7 @@ type CloudbedsPropertyRoom = {
 
 type CloudbedsAvailabilityResponse = {
   success?: boolean;
+  message?: string;
   data?: Array<{
     propertyCurrency?: CloudbedsAvailabilityPropertyCurrency;
     propertyRooms?: CloudbedsPropertyRoom[];
@@ -226,6 +227,16 @@ export async function GET(request: NextRequest) {
       typeof hotelDetailsData?.data?.propertyPolicy?.propertyTermsAndConditions === "string"
         ? toPlainProviderText(hotelDetailsData.data.propertyPolicy.propertyTermsAndConditions) || null
         : null;
+
+    if (availabilityData?.success === false) {
+      const message =
+        typeof availabilityData.message === "string" && availabilityData.message.trim()
+          ? availabilityData.message.trim()
+          : promo
+            ? "Promo code could not be applied"
+            : "Cloudbeds availability request failed";
+      return NextResponse.json({ error: message }, { status: promo ? 400 : 502 });
+    }
 
     const propertyData = availabilityData?.data?.[0];
     if (!propertyData || !propertyData.propertyRooms) {

@@ -19,6 +19,7 @@ import {
   resolveCabinSlugFromCloudbeds,
   type CabinSlug,
 } from "@/lib/cabinCatalog";
+import { getCabinCloudbedsFact } from "@/lib/cabinCloudbedsSnapshot";
 import { toPlainProviderText, toPlainProviderTextList } from "@/lib/providerText";
 
 interface RoomRestrictions {
@@ -385,6 +386,8 @@ function BookingContent() {
     const groups = new Map<string, RoomTypeGroup>();
     for (const room of rooms) {
       const slug = resolveCabinSlugFromCloudbeds(room.roomTypeID, room.roomTypeName);
+      const localFact = slug ? getCabinCloudbedsFact(slug) : null;
+      const localEquipment = localFact?.equipmentLabels.map((label) => label[currentLocale]) ?? [];
       const fallbackKey = room.roomTypeID || room.roomTypeName || `unknown-room-${groups.size}`;
       const key = slug ?? fallbackKey;
       if (!groups.has(key)) {
@@ -392,10 +395,12 @@ function BookingContent() {
           slug,
           roomTypeName: toPlainProviderText(room.roomTypeName),
           roomsAvailable: room.roomsAvailable,
-          description: toPlainProviderText(room.description),
+          description: toPlainProviderText(
+            localFact?.shortDescription[currentLocale] ?? room.description
+          ),
           maxGuests: room.maxGuests,
           photos: room.photos,
-          features: toPlainProviderTextList(room.features),
+          features: localEquipment.length ? localEquipment : toPlainProviderTextList(room.features),
           currency: room.currency,
           rates: [],
         });
@@ -428,7 +433,7 @@ function BookingContent() {
   useEffect(() => {
     const urlCheckin = searchParams.get("checkin");
     const urlCheckout = searchParams.get("checkout");
-    const urlPromo = searchParams.get("promo");
+    const urlPromo = searchParams.get("promo")?.trim().toUpperCase() || "";
     const urlAdults = searchParams.get("adults");
     const urlChildren = searchParams.get("children");
 
@@ -443,7 +448,6 @@ function BookingContent() {
     setCheckout(effectiveCheckout);
     if (urlPromo) {
       setPromoCode(urlPromo);
-      setAppliedPromo(urlPromo);
     }
 
     const parsedAdults =
@@ -455,9 +459,13 @@ function BookingContent() {
     if (urlChildren) setTotalChildren(parsedChildren);
 
     setNumberOfNights(calculateNights(effectiveCheckin, effectiveCheckout));
-    fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo || "", {
+    void fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo, {
       quoteAdults: parsedAdults,
       quoteChildren: 0,
+    }).then((applied) => {
+      if (urlPromo) {
+        setAppliedPromo(applied ? urlPromo : "");
+      }
     });
   }, [searchParams]);
   /* eslint-enable react-hooks/exhaustive-deps */
@@ -476,13 +484,13 @@ function BookingContent() {
     checkOutDate: string,
     promo: string = "",
     options: AvailabilityFetchOptions = {}
-  ) => {
+  ): Promise<boolean> => {
     const quoteAdults = Math.max(1, Math.min(2, options.quoteAdults ?? totalAdults));
     const quoteChildren = Math.max(0, options.quoteChildren ?? 0);
     const requestKey = `${checkInDate}|${checkOutDate}|${promo}|${quoteAdults}|${quoteChildren}`;
 
     if (!options.force && inFlightAvailabilityKeyRef.current === requestKey) {
-      return;
+      return false;
     }
 
     const requestId = availabilityRequestIdRef.current + 1;
@@ -514,7 +522,7 @@ function BookingContent() {
         );
       }
 
-      if (!isLatestRequest()) return;
+      if (!isLatestRequest()) return false;
 
       const list = data.rooms || [];
       setRooms(list);
@@ -540,9 +548,11 @@ function BookingContent() {
         })
       );
       setSearched(true);
+      return true;
     } catch (err) {
-      if (requestId !== availabilityRequestIdRef.current) return;
+      if (requestId !== availabilityRequestIdRef.current) return false;
       setError(err instanceof Error ? err.message : "An error occurred");
+      return false;
     } finally {
       if (inFlightAvailabilityKeyRef.current === requestKey) {
         inFlightAvailabilityKeyRef.current = null;
@@ -572,17 +582,29 @@ function BookingContent() {
   };
 
   const handleApplyPromo = async () => {
-    if (!promoCode.trim()) return;
+    const normalizedPromo = promoCode.trim().toUpperCase();
+    if (!normalizedPromo) return;
     setPromoLoading(true);
-    setAppliedPromo(promoCode.trim());
-    if (checkin && checkout) {
-      await fetchAvailability(checkin, checkout, promoCode.trim(), {
+    setPromoCode(normalizedPromo);
+    try {
+      if (!checkin || !checkout) {
+        setAppliedPromo(normalizedPromo);
+        return;
+      }
+
+      const applied = await fetchAvailability(checkin, checkout, normalizedPromo, {
         force: true,
         quoteAdults: totalAdults,
         quoteChildren: 0,
       });
+      if (applied) {
+        setAppliedPromo(normalizedPromo);
+      } else {
+        setAppliedPromo("");
+      }
+    } finally {
+      setPromoLoading(false);
     }
-    setPromoLoading(false);
   };
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -1511,7 +1533,7 @@ function BookingContent() {
                               <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
                               <span>
                                 <span className="text-main/50">
-                                  {currentLocale === 'mn' ? 'Тохижилт:' : 'Amenities:'}
+                                  {currentLocale === 'mn' ? 'Тоноглол:' : 'Equipment:'}
                                 </span>{' '}
                                 {featureText}
                               </span>

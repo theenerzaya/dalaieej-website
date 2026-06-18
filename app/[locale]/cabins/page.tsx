@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Flame, Minus, Plus, Ruler, ShowerHead, Users } from "lucide-react";
+import { ArrowRight, CircleCheck, Flame, Minus, Plus, Ruler, ShowerHead, Users } from "lucide-react";
 import {
   AnimatedText,
   HeroFadeOut,
@@ -62,6 +62,7 @@ type Room = {
   roomSize?: Bilingual;
   guests: Bilingual;
   facilities: Bilingual;
+  equipment: Bilingual[];
   intro: Bilingual;
   image: string;
 };
@@ -85,6 +86,7 @@ function makeCloudbedsRoom(slug: CabinSlug, image: string): Room {
       en: `${fact.bathroomLabel.en} · ${fact.showerLabel.en}`,
       mn: `${fact.bathroomLabel.mn} · ${fact.showerLabel.mn}`,
     },
+    equipment: fact.equipmentLabels,
     intro: fact.shortDescription,
     image,
   };
@@ -131,6 +133,7 @@ type CopyKey =
   | "guestsLabel"
   | "heatingLabel"
   | "sizeLabel"
+  | "equipmentLabel"
   | "moreInfo"
   | "tagline1"
   | "tagline2"
@@ -163,6 +166,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     guestsLabel: "Guests",
     heatingLabel: "Heating",
     sizeLabel: "Room size",
+    equipmentLabel: "Equipment",
     moreInfo: "Get More Information",
     tagline1: "The best people to take care of",
     tagline2: "our most valuable asset: you.",
@@ -196,6 +200,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     guestsLabel: "Зочид",
     heatingLabel: "Халаалт",
     sizeLabel: "Талбай",
+    equipmentLabel: "Тоноглол",
     moreInfo: "Дэлгэрэнгүй",
     tagline1: "Таны хамгийн үнэт зүйлд —",
     tagline2: "өөрт тань, бид анхаарна.",
@@ -660,6 +665,7 @@ function RoomRow({
 }) {
   const lang = isMn ? "mn" : "en";
   const detailHref = `${localePrefix}${room.href}`;
+  const equipmentValue = room.equipment.map((item) => item[lang]).join(" · ");
   const roomFacts = [
     ...(room.roomSize
       ? [
@@ -685,6 +691,15 @@ function RoomRow({
       label: t.facilitiesLabel,
       value: room.facilities[lang],
     },
+    ...(equipmentValue
+      ? [
+          {
+            icon: <CircleCheck className="w-4 h-4 text-bark" strokeWidth={1.4} />,
+            label: t.equipmentLabel,
+            value: equipmentValue,
+          },
+        ]
+      : []),
   ];
 
   return (

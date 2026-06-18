@@ -469,6 +469,7 @@ export async function POST(request: NextRequest) {
       if (country) {
         payloadObj.guestCountry = country.length === 2 ? country : "MN";
       }
+      if (promoCode) payloadObj.promoCode = promoCode;
       payloadObj.customNotes = createPendingPaymentNote(notes, pendingPaymentExpiresAt);
 
       const formattedBody = qs.stringify(payloadObj, { arrayFormat: "indices" });
