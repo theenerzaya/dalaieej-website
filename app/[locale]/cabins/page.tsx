@@ -161,7 +161,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     sectionEyebrow: "Accommodations",
     sectionHeading: "Slow days. Deep waters.",
     sectionIntro:
-      "Current room names, capacity, heating and facilities are aligned with Cloudbeds.",
+      "Explore our shoreline accommodations—each designed to offer a quiet refuge by the water, from simple stays to grand wood-fired houses.",
     facilitiesLabel: "Bathroom / shower",
     guestsLabel: "Guests",
     heatingLabel: "Heating",
@@ -195,7 +195,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     sectionEyebrow: "Байрлах сонголтууд",
     sectionHeading: "Удаан өдрүүд. Гүн ус.",
     sectionIntro:
-      "Өрөөний нэр, багтаамж, халаалт, байгууламжийн мэдээллийг Cloudbeds-тэй тааруулав.",
+      "Нуурын эрэг дагуух энгийн байраас эхлээд галлагаатай гэр бүлийн хаус хүртэлх бидний байрлах сонголтуудтай танилцана уу.",
     facilitiesLabel: "00 / шүршүүр",
     guestsLabel: "Зочид",
     heatingLabel: "Халаалт",

@@ -89,7 +89,7 @@ function makeRoomConfig(slug: CabinSlug, image: string): RoomConfig {
     slug,
     href: entry.href,
     title: { en: fact.name, mn: fact.name },
-    eyebrow: { en: "Current Cloudbeds room details", mn: "Cloudbeds-ийн өрөөний мэдээлэл" },
+    eyebrow: { en: "Cabin Specifications", mn: "Өрөөний мэдээлэл" },
     heating: fact.heatingLabel,
     roomSize: fact.roomSizeLabel,
     guests: fact.guestLabel,
@@ -124,7 +124,7 @@ const COPY = {
   en: {
     avgArea: "Heating",
     guests: "Guests",
-    detailsHeading: "Cloudbeds details",
+    detailsHeading: "The Specifics",
     bookHeading: "Book Your Stay",
     bookSubtitle: "Required fields are followed by *",
     checkIn: "Check-in Date",
@@ -152,7 +152,7 @@ const COPY = {
   mn: {
     avgArea: "Халаалт",
     guests: "Зочид",
-    detailsHeading: "Cloudbeds-ийн мэдээлэл",
+    detailsHeading: "Дэлгэрэнгүй",
     bookHeading: "Амралтаа захиалах",
     bookSubtitle: "Заавал бөглөх талбарыг * тэмдэглэв",
     checkIn: "Ирэх огноо",

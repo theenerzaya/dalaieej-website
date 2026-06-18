@@ -104,7 +104,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             '@type': 'Resort',
             name: 'Dalai Eej Resort',
             description:
-              "A quiet refuge on Lake Khövsgöl's eastern shore. Wooden cabins, deep waters, slow days. Northern Mongolia.",
+              "A quiet refuge on Lake Khövsgöl's eastern shore. Secluded cabins, deep waters, slow days. Northern Mongolia.",
             image: `${resortImageBase}/images/og-heritage.jpg`,
             telephone: '+97677809010',
             email: 'hello@dalaieej.com',

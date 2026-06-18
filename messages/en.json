@@ -9,7 +9,7 @@
       "description": "Three generations of family stewardship at Dalai Eej — from pioneer camp to a lakeside refuge on Lake Khövsgöl."
     },
     "planner": {
-      "title": "Mongolia Itinerary Planner | Gobi to Khövsgöl Heritage Trail",
+      "title": "Mongolia Itinerary Planner | Gobi to Khövsgöl Trail",
       "description": "Plan your journey across the Great Steppe. A curated guide for travellers seeking the intersection of Mongolian history and nature."
     },
     "booking": {
@@ -22,23 +22,23 @@
     },
     "gallery": {
       "title": "Visual Journey | Dalai Eej Resort Photo Gallery",
-      "description": "Explore the beauty of Lake Khövsgöl, our heritage cabins, and the wilderness. A visual guide to Dalai Eej Resort."
+      "description": "Explore the beauty of Lake Khövsgöl, our lakeside cabins, and the wilderness. A visual guide to Dalai Eej Resort."
     },
     "offers": {
-      "title": "Special Offers & Heritage Packages | Dalai Eej Resort",
-      "description": "Summer 2026 exclusive offers and heritage packages at Dalai Eej Resort. Romantic escapes, family stays, and early bird deals on Lake Khövsgöl."
+    "title": "Special Offers & Nature Escapes | Dalai Eej Resort",
+    "description": "Summer 2026 exclusive offers and escapes at Dalai Eej Resort. Romantic retreats, family stays, and early bird deals on Lake Khövsgöl."
     },
     "accommodation": {
-      "title": "Heritage Stays & Cabins | Dalai Eej Resort",
-      "description": "Choose from current Cloudbeds-aligned cabins and camping options at Dalai Eej Resort on Lake Khövsgöl."
+    "title": "Stays & Cabins | Dalai Eej Resort",
+    "description": "Choose from our peaceful lakefront cabins and shoreline camping options at Dalai Eej Resort on Lake Khövsgöl."
     },
     "superiorCabin": {
       "title": "Их Өргөө | Dalai Eej Resort",
-      "description": "A large wood-fired family stay at Dalai Eej, aligned with current Cloudbeds room details."
+      "description": "A large wood-fired family stay at Dalai Eej, designed for slow mornings and quiet lake views."
     },
     "cabins": {
       "title": "Our Rooms | Dalai Eej Resort",
-      "description": "Current room names, capacities, heating and facilities aligned with Cloudbeds."
+      "description": "Discover our shoreline accommodations, from simple stays to spacious lakefront retreats."
     },
     "restaurant": {
       "title": "Food & Beverage | Dalai Eej Resort",
@@ -124,7 +124,7 @@
     "keyAmenities": {
       "title": "Key Amenities",
       "items": {
-        "yurts": "Heritage Cabins & Yurts with Lake Views",
+        "yurts": "Secluded Cabins & Yurts with Lake Views",
         "shoreline": "Private Shoreline Access",
         "restaurant": "On-site Restaurant with Panoramic Deck",
         "sauna": "Traditional Sauna & Wellness Facilities",
@@ -211,7 +211,7 @@
     "services": {
       "title": "Resort Services",
       "subtitle": "Everything you need for your stay",
-      "service1_title": "Heritage Hospitality",
+      "service1_title": "Local Hospitality",
       "service1_desc": "Authentic local service",
       "service2_title": "Prime Location",
       "service2_desc": "Heart of the National Park",
@@ -221,8 +221,8 @@
       "service4_desc": "Easy reservations"
     },
     "featured_rooms": {
-      "title": "Heritage Accommodations",
-      "subtitle": "Current room names and capacities are aligned with Cloudbeds",
+    "title": "Shoreline Accommodations",
+    "subtitle": "Stays designed for quiet refuge and natural beauty",
       "room1_name": "Эрэг дээрх Хаус",
       "room1_desc": "Wood-fired lakeside stay for up to 2 guests with shared facilities",
       "room1_price": "Live rates",
@@ -235,7 +235,7 @@
     }
   },
   "footer": {
-    "bio": "A quiet refuge on Lake Khövsgöl's eastern shore.\nWooden cabins, deep waters, slow days.\nNorthern Mongolia.",
+    "bio": "A quiet refuge on Lake Khövsgöl's eastern shore.\nSecluded cabins, deep waters, slow days.\nNorthern Mongolia.",
     "weather": "Weather Conditions",
     "weatherAttribution": "Weather data provided by OpenWeatherMap.",
     "experience": "Experience",
@@ -355,7 +355,7 @@
     "experiences": "Experiences"
   },
   "offers": {
-    "title": "Heritage Packages",
+    "title": "Curated Packages",
     "subtitle": "Summer 2026 exclusive experiences on the Khövsgöl shoreline",
     "viewOffer": "View Offer",
     "bookNow": "Book Now",
@@ -378,7 +378,7 @@
     },
     "early": {
       "title": "Summer 2026 Early Bird",
-      "desc": "Secure your favourite heritage cabin before the seasonal rush.",
+      "desc": "Secure your favourite lakeside cabin before the seasonal rush.",
       "offer": "Prepay & Save 15%"
     },
     "longstay": {
@@ -427,7 +427,7 @@
       "requestedDates": "Requested Dates",
       "datesPlaceholder": "e.g., June 15-18, 2026",
       "clientele": "Tell us about your clientele",
-      "clientelePlaceholder": "Describe your typical guests and how you might promote our heritage stay...",
+      "clientelePlaceholder": "Describe your typical guests and how you might promote our resort...",
       "submit": "Apply for Promo Code",
       "submitted": "Thank you for your application! Our team will contact you within 5 business days.",
       "disclaimer": "By submitting this form, you confirm that you represent a legitimate travel agency."
@@ -444,7 +444,7 @@
     "selectDates": "Select your dates to view available accommodations",
     "noRooms": "No stays available for the selected dates.",
     "tryDifferent": "Please try different dates.",
-    "selectDatesPrompt": "Select your dates above to see available heritage cabins",
+    "selectDatesPrompt": "Select your dates above to see available cabins",
     "loading": "Loading available stays...",
     "perNight": "Per Night",
     "totalFor": "Total for",
@@ -466,15 +466,16 @@
     "cabinLabel": "Cabin {number}",
     "adultsShort": "Adults",
     "childrenShort": "Children",
-    "restrictionsNotice": "Some prices may be greyed out for your dates. That usually means this rate has a minimum or maximum length of stay, or check-in / check-out is not allowed on the days you picked. Try changing your dates or select another rate.",
+    "restrictionsNotice": "Certain rates may be unavailable for your selected dates due to length-of-stay requirements or check-in restrictions. We invite you to adjust your dates or select an alternative stay.",
     "restrictionClosedToArrival": "Check-in is not allowed on {date} for this rate.",
     "restrictionClosedToDeparture": "Check-out is not allowed on {date} for this rate.",
     "restrictionMinLos": "{nights, plural, one {At least # night is required for this rate.} other {At least # nights are required for this rate.}}",
-    "restrictionMaxLos": "{nights, plural, one {This rate allows at most # night for these dates.} other {This rate allows at most # nights for these dates.}}"
+    "restrictionMaxLos": "{nights, plural, one {This rate allows at most # night for these dates.} other {This rate allows at most # nights for these dates.}}",
+    "restrictionsNotice": "Certain rates may be unavailable for your selected dates due to length-of-stay requirements or check-in restrictions. We invite you to adjust your dates or select an alternative stay."
   },
   "rooms": {
-    "title": "Current Cloudbeds Stays",
-    "subtitle": "Room names, capacities and facilities follow the booking engine",
+    "title": "Shoreline Accommodations",
+    "subtitle": "A sanctuary on the shore, designed for deep rest",
     "grandSuite": {
       "title": "Их Өргөө",
       "subtitle": "Large wood-fired family stay",

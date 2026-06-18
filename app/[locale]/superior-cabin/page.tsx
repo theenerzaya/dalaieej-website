@@ -120,14 +120,14 @@ type CopyKey =
 
 const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   en: {
-    eyebrow: "Current Cloudbeds room details",
+    eyebrow: "Cabin Specifications",
     title: SUPERIOR_FACT.name,
     avgArea: "Heating",
     areaValue: SUPERIOR_FACT.heatingLabel.en,
     guests: "Guests",
     guestsValue: SUPERIOR_FACT.guestLabel.en,
     intro: SUPERIOR_FACT.description.en,
-    detailsHeading: "Cloudbeds details",
+    detailsHeading: "The Specifics",
     roomSize: SUPERIOR_ROOM_SIZE.en,
     bathroom: SUPERIOR_FACT.bathroomLabel.en,
     bed: SUPERIOR_FACT.bedLabel.en,
@@ -159,14 +159,14 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
     backToRooms: "Back to accommodations",
   },
   mn: {
-    eyebrow: "Cloudbeds-ийн өрөөний мэдээлэл",
+    eyebrow: "Өрөөний мэдээлэл",
     title: SUPERIOR_FACT.name,
     avgArea: "Халаалт",
     areaValue: SUPERIOR_FACT.heatingLabel.mn,
     guests: "Зочид",
     guestsValue: SUPERIOR_FACT.guestLabel.mn,
     intro: SUPERIOR_FACT.description.mn,
-    detailsHeading: "Cloudbeds-ийн мэдээлэл",
+    detailsHeading: "Дэлгэрэнгүй",
     roomSize: SUPERIOR_ROOM_SIZE.mn,
     bathroom: SUPERIOR_FACT.bathroomLabel.mn,
     bed: SUPERIOR_FACT.bedLabel.mn,

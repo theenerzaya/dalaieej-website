@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
+import { Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, ChevronDown, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 import { parseBoundedInteger, validateStayDates } from "@/lib/booking-guards";
@@ -207,19 +207,19 @@ function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
 function translateRateName(name: string, locale: string): string {
   if (locale !== 'mn') return name;
   const map: Record<string, string> = {
-    'non-refundable': 'Буцаан олголтгүй үнэ',
-    'non-refundable rate': 'Буцаан олголтгүй үнэ',
+    'non-refundable': 'Цуцлах боломжгүй үнэ',
+    'non-refundable rate': 'Цуцлах боломжгүй үнэ',
     'dalai eej base': 'Үндсэн үнэ',
     'standard rate': 'Үндсэн үнэ',
     'base rate': 'Үндсэн үнэ',
     'default': 'Үндсэн үнэ',
-    'early bird / shoulder': 'Засврын улирлын үнэ',
-    'early bird / shoulder rate': 'Засврын улирлын үнэ',
-    'early bird/shoulder': 'Засврын улирлын үнэ',
-    'early bird/shoulder rate': 'Засврын улирлын үнэ',
-    'early bird': 'Засврын улирлын үнэ',
-    'shoulder': 'Засврын улирлын үнэ',
-    'shoulder season': 'Засврын улирлын үнэ',
+    'early bird / shoulder': 'Улирлын урамшуулалт үнэ',
+    'early bird / shoulder rate': 'Улирлын урамшуулалт үнэ',
+    'early bird/shoulder': 'Улирлын урамшуулалт үнэ',
+    'early bird/shoulder rate': 'Улирлын урамшуулалт үнэ',
+    'early bird': 'Улирлын урамшуулалт үнэ',
+    'shoulder': 'Улирлын урамшуулалт үнэ',
+    'shoulder season': 'Улирлын урамшуулалт үнэ',
   };
   const lowerName = name.toLowerCase().trim();
   return map[lowerName] || name;
@@ -286,6 +286,59 @@ function sortRatesRefundableFirst(rates: Room[]): Room[] {
   return [...refundable, ...nonRefundable];
 }
 
+const bookingFaqs = [
+  {
+    question: {
+      en: "Can we see Naadam during our stay?",
+      mn: "Буудаллах үеэрээ наадам үзэж болох уу?",
+    },
+    answer: {
+      en: "Yes, and we recommend it if your dates line up. Khatgal town Naadam is held on July 11 and 12, free to watch, outdoors on the grass. A boat transfer from Dalai Eej to Khatgal town is 50,000 MNT. Expect wrestling, archery, horse racing, small fairs, volleyball and basketball, plus festival food like round khuushuur and airag, fermented mare's milk. Local town Naadams can feel warmer, closer and more intimate than the city festival.",
+      mn: "Тийм, огноо тань таарвал заавал үзэхийг санал болгоно. Хатгал сумын наадам 7-р сарын 11, 12-нд болдог бөгөөд үнэ төлбөргүй, зүлгэн дээр гадаа үздэг. Далай Ээжээс Хатгал руу завиар хүргэх үйлчилгээ 50,000 MNT. Бөх, сур, морин уралдаан, жижиг худалдаа, волейбол, сагсан бөмбөг, мөн наадмын хуушуур, айраг зэрэг наадмын амттай хоолнууд бий. Сумын наадам хотын наадмаас илүү ойр, дулаан, нутгийн уур амьсгалтай санагддаг.",
+    },
+  },
+  {
+    question: {
+      en: "Can you arrange transfers?",
+      mn: "Хүргэлт, тосолт зохион байгуулах уу?",
+    },
+    answer: {
+      en: "Yes. Airport pickup or town transfer is 250,000 MNT, or about $85, one way, including the short boat crossing at the end. After booking, email us your flight or bus details and we will help time the pickup around your arrival.",
+      mn: "Тийм. Нисэх буудлаас тосох эсвэл хот, сумаас хүргэх нэг талын үйлчилгээ 250,000 MNT буюу ойролцоогоор $85. Үүнд төгсгөлд хийх богино завины шилжилт багтана. Захиалгын дараа нислэг эсвэл автобусны мэдээллээ имэйлээр илгээвэл бид тосох цагийг тань тохируулж өгнө.",
+    },
+  },
+  {
+    question: {
+      en: "Which experiences are included?",
+      mn: "Ямар үйлчилгээнүүд багтсан бэ?",
+    },
+    answer: {
+      en: "Your stay includes breakfast, kayaking, sauna, guided hiking and yoga. You do not need to add these during checkout; once you arrive, our team will help you choose times that fit the weather, the lake and the rhythm of your stay.",
+      mn: "Таны буудаллах үнэд өглөөний цай, каяк, саун, хөтөчтэй алхалт болон иог багтсан. Эдгээрийг төлбөрийн хэсэгт тусад нь нэмэх шаардлагагүй. Ирсний дараа манай баг цаг агаар, нуурын байдал болон таны амралтын хэмнэлд тохируулж цагийг нь санал болгоно.",
+    },
+  },
+  {
+    question: {
+      en: "What are the lunch and dinner options?",
+      mn: "Өдрийн болон оройн хоолны сонголт юу вэ?",
+    },
+    answer: {
+      en: "Lunch and dinner are served a la carte, so you can order day by day. If you prefer a simpler plan, ask about the daily savings option: lunch includes I хоол and II хоол, while dinner includes II хоол.",
+      mn: "Өдрийн болон оройн хоолыг а ла карт менюгээр, өдөр өдөртөө сонгон захиалж болно. Илүү энгийн, хэмнэлттэй байдлаар төлөвлөх бол өдөр тутмын багц сонголтыг асуугаарай: өдрийн хоолонд I хоол + II хоол, оройн хоолонд II хоол орно.",
+    },
+  },
+  {
+    question: {
+      en: "What should we arrange before arrival?",
+      mn: "Ирэхээсээ өмнө юуг тохируулах вэ?",
+    },
+    answer: {
+      en: "Rooms can be booked here first. After that, email us if you would like airport pickup, a Khatgal boat transfer for Naadam, or help matching your arrival time to a flight or bus. Meals and included activities can usually be arranged once you are here, but early notice helps us prepare smoothly.",
+      mn: "Эхлээд байраа эндээс захиалж болно. Дараа нь нисэх буудлаас тосуулах, наадмаар Хатгал руу завиар явах, эсвэл нислэг/автобусны цагтайгаа тааруулж тосуулах бол бидэнд имэйл бичээрэй. Хоол болон багтсан үйлчилгээнүүдийг ихэнхдээ ирсний дараа тохируулж болно, гэхдээ урьдчилж хэлбэл бид илүү тайван бэлдэнэ.",
+    },
+  },
+] as const;
+
 function BookingContent() {
   const t = useTranslations('booking');
   const searchParams = useSearchParams();
@@ -312,6 +365,7 @@ function BookingContent() {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
   const availabilityRequestIdRef = useRef(0);
   const inFlightAvailabilityKeyRef = useRef<string | null>(null);
@@ -355,7 +409,7 @@ function BookingContent() {
           label,
           text:
             currentLocale === "mn"
-              ? "Энэ үнэ буцаан олголтгүй."
+              ? "Энэхүү захиалгыг цуцлах боломжгүй."
               : "This rate is non-refundable.",
         });
         continue;
@@ -874,7 +928,7 @@ function BookingContent() {
           </p>
           {isNonRefundableRate(rate.rateName) ? (
             <p className="mt-1.5 text-xs font-body text-orange-200/85">
-              {currentLocale === "mn" ? "Буцаан олголтгүй үнэ." : "Non-refundable rate."}
+              {currentLocale === "mn" ? "Цуцлах боломжгүй үнэ." : "Non-refundable rate."}
             </p>
           ) : (
             <p className="mt-1.5 flex items-start gap-1.5 text-xs font-body text-emerald-200/85">
@@ -887,7 +941,7 @@ function BookingContent() {
                   : rate.cancellation?.policyText?.trim()
                     ? stripHtml(rate.cancellation.policyText.trim())
                     : currentLocale === "mn"
-                      ? "Уян хатан, буцаан олголттой үнэ."
+                      ? "Уян хатан, цуцлах боломжтой үнэ."
                       : "Refundable / flexible rate."}
               </span>
             </p>
@@ -1352,6 +1406,46 @@ function BookingContent() {
                   );
                 })()}
 
+                <div className="mt-5 pt-4 border-t border-main/15">
+                  <p className="font-cta uppercase text-[10px] tracking-[0.22em] text-main/50 mb-2">
+                    {currentLocale === "mn" ? "Асуулт, хариулт" : "Questions"}
+                  </p>
+                  <div className="divide-y divide-main/10 border border-main/10">
+                    {bookingFaqs.map((faq, index) => {
+                      const isOpen = openFaqIndex === index;
+                      return (
+                        <div key={faq.question.en}>
+                          <button
+                            type="button"
+                            onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                            aria-expanded={isOpen}
+                            aria-controls={`booking-faq-panel-${index}`}
+                            className="w-full px-3 py-3 flex items-start justify-between gap-3 text-left hover:bg-white/[0.03] transition-colors"
+                          >
+                            <span className="text-sm font-body text-main">
+                              {faq.question[currentLocale]}
+                            </span>
+                            <ChevronDown
+                              className={`w-4 h-4 mt-0.5 shrink-0 text-main/50 transition-transform ${
+                                isOpen ? "rotate-180" : ""
+                              }`}
+                              strokeWidth={1.5}
+                            />
+                          </button>
+                          {isOpen && (
+                            <div
+                              id={`booking-faq-panel-${index}`}
+                              className="px-3 pb-3 -mt-1 text-xs text-main/60 font-body leading-relaxed"
+                            >
+                              {faq.answer[currentLocale]}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {capacityError && (
                   <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/30 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5" />
@@ -1568,7 +1662,7 @@ function BookingContent() {
                             {hasBothRefundKinds && (
                               <p className="text-main/50 text-xs font-body leading-relaxed">
                                 {currentLocale === "mn"
-                                  ? "Эхэнд буцаан олголттой үнэ, доор нь буцаан олголтгүй хямд үнэ жагсаагдана."
+                                  ? "Эхэнд цуцлах боломжтой үнэ, доор нь цуцлах боломжгүй хямд үнэ жагсаагдана."
                                   : "Refundable options are listed first; lower non-refundable rates may appear below."}
                               </p>
                             )}

@@ -12,11 +12,11 @@ export default function AccommodationPage() {
   const accommodations = [
     {
       href: `${localePrefix}/cabins`,
-      title: locale === 'mn' ? "Cloudbeds өрөөний жагсаалт" : "Current Room List",
-      subtitle: locale === 'mn' ? "Шууд тааруулсан" : "Aligned with Cloudbeds",
+      title: locale === 'mn' ? "Байрлах сонголтууд" : "Shoreline Accommodations",
+      subtitle: locale === 'mn' ? "Бүх төрлүүд" : "Explore our stays",
       description: locale === 'mn' 
-        ? "Өрөөний нэр, багтаамж, халаалт, ариун цэврийн байгууламжийн мэдээллийг захиалгын системийн мэдээлэлтэй тааруулсан."
-        : "Browse current room names, capacities, heating, and facilities aligned with the live booking system.",
+        ? "Нуурын эрэг дагуух энгийн байраас эхлээд галлагаатай гэр бүлийн хаус хүртэлх бидний байрлах сонголтуудтай танилцана уу."
+        : "Discover our shoreline accommodations, from simple stays to grand wood-fired houses.",
       image: "/images/cabins/room-triple-traditional.webp",
       capacity: locale === 'mn' ? "8 төрөл" : "8 room types"
     },
@@ -25,8 +25,8 @@ export default function AccommodationPage() {
       title: locale === 'mn' ? "Сул өрөө шалгах" : "Live Availability",
       subtitle: locale === 'mn' ? "Огноогоор шалгах" : "Search by date",
       description: locale === 'mn' 
-        ? "Огноо болон зочдын тоогоо сонгоод Cloudbeds дээрх бодит боломжит өрөө, үнийг шалгана уу."
-        : "Choose your dates and guest count to see real availability and rates from Cloudbeds.",
+        ? "Огноо болон зочдын тоогоо сонгоод бодит боломжит өрөө, үнийг шалгана уу."
+        : "Choose your dates and guest count to see real availability and rates for your stay.",
       image: "/images/gallery/accommodations/DBR_4872.webp",
       capacity: locale === 'mn' ? "Шууд үнэ" : "Live rates"
     }
