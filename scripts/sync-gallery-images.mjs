@@ -160,6 +160,62 @@ function seededRank(value) {
 }
 
 /**
+ * Natural file order for numbered manually curated folders, e.g.
+ * 00.webp, 00 2.webp, 01.webp, 01 2.webp.
+ * @param {string} a
+ * @param {string} b
+ */
+function naturalPathOrder(a, b) {
+  const dirCompare = naturalStringOrder(path.dirname(a), path.dirname(b));
+  if (dirCompare !== 0) return dirCompare;
+
+  const stemCompare = naturalStringOrder(
+    path.basename(a, path.extname(a)),
+    path.basename(b, path.extname(b))
+  );
+  if (stemCompare !== 0) return stemCompare;
+
+  return naturalStringOrder(path.extname(a), path.extname(b));
+}
+
+/**
+ * @param {string} a
+ * @param {string} b
+ */
+function naturalStringOrder(a, b) {
+  const ta = naturalTokens(a);
+  const tb = naturalTokens(b);
+  const len = Math.min(ta.length, tb.length);
+
+  for (let i = 0; i < len; i++) {
+    const aa = ta[i];
+    const bb = tb[i];
+    if (aa.type !== bb.type) return aa.type === "number" ? -1 : 1;
+    if (aa.value === bb.value) continue;
+    return aa.value < bb.value ? -1 : 1;
+  }
+
+  if (ta.length !== tb.length) return ta.length - tb.length;
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
+/**
+ * @param {string} value
+ * @returns {{ type: "number" | "text"; value: number | string }[]}
+ */
+function naturalTokens(value) {
+  return value
+    .toLowerCase()
+    .split(/(\d+)/)
+    .filter(Boolean)
+    .map((part) =>
+      /^\d+$/.test(part)
+        ? { type: "number", value: Number(part) }
+        : { type: "text", value: part }
+    );
+}
+
+/**
  * @param {{ rel: string; size: number }} a
  * @param {{ rel: string; size: number }} b
  */
@@ -169,6 +225,8 @@ function galleryDisplayOrder(a, b) {
   const ia = DISPLAY_CATEGORY_ORDER.indexOf(ca);
   const ib = DISPLAY_CATEGORY_ORDER.indexOf(cb);
   if (ia !== ib) return ia - ib;
+
+  if (ca === "rooms") return naturalPathOrder(a.rel, b.rel);
 
   const ra = seededRank(a.rel);
   const rb = seededRank(b.rel);
