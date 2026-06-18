@@ -387,7 +387,8 @@ export default function ExperiencesPage() {
                     label={t("media.westernShore.label")}
                     imageSrc="/images/experiences/khyasaa.png"
                     imageAlt={t("media.westernShore.alt")}
-                    aspectClass="aspect-[4/3]"
+                    aspectClass="aspect-[1330/766]"
+                    imageClassName="object-contain"
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
