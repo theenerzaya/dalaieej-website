@@ -42,14 +42,14 @@ Stable slug: `superior-cabin`
 
 Cloudbeds:
 - ID: `198039847624896`
-- Current name: `Их Өргөө`
+- Current name: `Ерөнхийлөгчийн Хаус`
 - maxGuests: `5`
 - Description: ТАНЫ ЗАХИАЛГАД БАГТСАН ҮЙЛЧИЛГЭЭНҮҮД: Өглөөний цай | Саун болон Каяк завиар хязгааргүй үйлчлүүлэх эрх | Иогийн хичээл | "Далай ээж" хойгт нэвтрэх эрх. Олуулаа яваа гэр бүлд тохиромжтой. Цор ганц загвар. Тав тух, орон зайг эрхэмлэдэг том гэр бүлд зориулан тусгайлан бэлтгэсэн манай хамгийн том байр. 5 хүн чөлөөтэй багтах зайтай, дотроо бие засах суултуур, угаалтууртай. Давуу тал: хамгийн том зай талбайтай + дотроо "00"-тэй.
 - Features: Галлагаатай зуух; Дотроо 00, угаалтууртай; Каяк завь үнэгүй; Нийтийн шүршүүр ашиглана; Нуурын харууцтай; Саун үнэгүй; Өглөөний иог; Минибар; Өглөөний цай багтсан
 
 Local catalog:
-- EN fallback name: `Superior Cabin`
-- MN fallback name: `Их Өргөө`
+- EN fallback name: `Ерөнхийлөгчийн Хаус`
+- MN fallback name: `Ерөнхийлөгчийн Хаус`
 - priceFrom: `300`
 
 `/cabins` card:
@@ -403,7 +403,7 @@ MN:
 # Biggest Contradictions To Resolve First
 
 1. `signature-cabin` is the biggest mismatch: Cloudbeds says `Энгийн Байр`, max 2, shared bathroom/shower; website says Signature Cabin, deep-soak tub, private terrace, 70 m², 5 guests.
-2. `superior-cabin` is also inverted: Cloudbeds says `Их Өргөө`, max 5, biggest space; website says entry-level/small family and 30-50 m².
+2. `superior-cabin` is also inverted: Cloudbeds says `Ерөнхийлөгчийн Хаус`, max 5, biggest space; website says entry-level/small family and 30-50 m².
 3. `grand-peninsula-suite` may be misnamed against Cloudbeds: current Cloudbeds name is `Гэр Бүлийн Хаус (Галлагаатай)`.
 4. Area data is inconsistent for almost every cabin.
 5. Capacity data is inconsistent for almost every cabin.

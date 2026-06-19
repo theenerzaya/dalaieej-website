@@ -33,7 +33,7 @@
     "description": "Choose from our peaceful lakefront cabins and shoreline camping options at Dalai Eej Resort on Lake Khövsgöl."
     },
     "superiorCabin": {
-      "title": "Их Өргөө | Dalai Eej Resort",
+      "title": "Ерөнхийлөгчийн Хаус | Dalai Eej Resort",
       "description": "A large wood-fired family stay at Dalai Eej, designed for slow mornings and quiet lake views."
     },
     "cabins": {
@@ -483,7 +483,7 @@
     "title": "Shoreline Accommodations",
     "subtitle": "A sanctuary on the shore, designed for deep rest",
     "grandSuite": {
-      "title": "Их Өргөө",
+      "title": "Ерөнхийлөгчийн Хаус",
       "subtitle": "Large wood-fired family stay",
       "capacity": "Sleeps up to 5",
       "bedding": "Family layout",

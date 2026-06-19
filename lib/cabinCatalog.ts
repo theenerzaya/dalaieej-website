@@ -47,7 +47,7 @@ export const CABIN_CATALOG: CabinCatalogEntry[] = [
     slug: "superior-cabin",
     routeSlug: "superior-cabin",
     legacyRouteSlugs: ["ikh-urguu"],
-    name: { en: "Их Өргөө", mn: "Их Өргөө" },
+    name: { en: "Ерөнхийлөгчийн Хаус", mn: "Ерөнхийлөгчийн Хаус" },
     href: "/superior-cabin",
     cardImage: "/images/cabins/room-superior.webp",
     gallery: [
@@ -60,6 +60,7 @@ export const CABIN_CATALOG: CabinCatalogEntry[] = [
     cloudbedsIds: ["198039847624896"],
     aliases: [
       ["superior"],
+      ["ерөнхийлөгчийн", "хаус"],
       ["их өргөө"],
       ["их оргоо"],
     ],

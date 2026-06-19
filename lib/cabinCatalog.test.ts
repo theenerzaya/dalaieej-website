@@ -43,6 +43,9 @@ describe("cabin catalog Cloudbeds mapping", () => {
   });
 
   it("falls back to aliases when an id is unknown", () => {
+    expect(resolveCabinSlugFromCloudbeds("unknown", "Ерөнхийлөгчийн Хаус")).toBe(
+      "superior-cabin"
+    );
     expect(resolveCabinSlugFromCloudbeds("unknown", "Grand Peninsula Suite")).toBe(
       "grand-peninsula-suite"
     );
