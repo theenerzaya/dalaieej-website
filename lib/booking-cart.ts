@@ -1,6 +1,7 @@
 export type BookingCartLine = {
   id: string;
   maxGuests: number;
+  maxAdults?: number;
   adults: number;
   children: number;
 };
@@ -57,7 +58,9 @@ export function normalizeCartGuestAssignments<T extends BookingCartLine>(
         ? Math.max(0, original.adults - item.adults)
         : remainingAdults;
       const availableCapacity = Math.max(0, item.maxGuests - item.adults - item.children);
-      const add = Math.min(wanted, availableCapacity, remainingAdults);
+      const lineMaxAdults = item.maxAdults ?? item.maxGuests;
+      const availableAdultCapacity = Math.max(0, lineMaxAdults - item.adults);
+      const add = Math.min(wanted, availableCapacity, availableAdultCapacity, remainingAdults);
       if (add <= 0) continue;
       item.adults += add;
       remainingAdults -= add;
@@ -125,10 +128,12 @@ export function applyCartLineGuestDelta<T extends BookingCartLine>(
 
   if (field === "adults") {
     const maxGuestsForAdults = Math.max(0, maxGuests - otherGuests - children);
+    const lineMaxAdults = line.maxAdults ?? line.maxGuests;
     adults = Math.max(
       1,
       Math.min(
         line.maxGuests - children,
+        lineMaxAdults,
         maxAdultsForLine,
         maxGuestsForAdults,
         adults + delta

@@ -27,13 +27,13 @@ const BOOK_CTA_COPY: Record<
   en: {
     eyebrow: "Plan your stay",
     title: "Enter the Sanctuary",
-    body: "Access to the shoreline hot pool, private sauna, and dedicated wellness services is reserved exclusively for our guests. Secure your dates at the resort to begin your recovery.",
+    body: "Access to the shoreline hot pool, private sauna, yoga, and hiking trails is reserved exclusively for our guests. Secure your dates at the resort to begin your recovery.",
     cta: "Book your stay",
   },
   mn: {
     eyebrow: "Амралтаа төлөвлөх",
     title: "Амар амгалангийн орон зай",
-    body: "Далайн хөвөөнд байрлах халуун усан сан, хувийн саун болон алжаал тайлах тусгай үйлчилгээг зөвхөн манай зочид хүртэх боломжтой. Бие, сэтгэлээ сэргээх аяллаа эхлүүлэхийн тулд амрах өдрөө урьдчилан захиалаарай.",
+    body: "Далайн хөвөөнд байрлах халуун усан сан, хувийн саун, иог болон явган аяллын жим нь зөвхөн манай зочдод зориулагдсан. Бие, сэтгэлээ сэргээх аяллаа эхлүүлэхийн тулд амрах өдрөө урьдчилан захиалаарай.",
     cta: "Амралтаа захиалах",
   },
 };

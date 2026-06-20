@@ -108,8 +108,8 @@ type CopyKey =
 
 const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   en: {
-    eyebrow: "Your smile, our happiness",
-    title: "Our Restaurant",
+    eyebrow: "Fire, water, and wild herbs",
+    title: "Dining",
 
     editorialBefore: "The lodge sits within a ",
     editorialEm1: "Protected Natural Area",
@@ -121,7 +121,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
       "A tonic of wilderness on Lake Khövsgöl's eastern shore.",
 
     visitBody:
-      "Open to passing travellers as well as house guests. Walk in for lunch on the deck, or reserve ahead for the lake-facing dinner.",
+      "Open to passing travellers as well as house guests. Walk in for lunch on the deck, or reserve ahead for a lake-facing dinner of fire-roasted meat and wild herbs.",
     visitLabel: "Visit Us",
 
     bookHeadingLine1: "Spend your",
@@ -130,15 +130,15 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
       "Mergen's Ridge, Haichin Am — eastern shore of Lake Khövsgöl, 13 km from Khatgal.",
     bookCta: "Book your stay",
 
-    spaTitle: "Relax Spa",
-    wellnessTitle: "Wellness",
+    spaTitle: "Sauna & Jacuzzi",
+    wellnessTitle: "Yoga & Hiking",
     wellnessBody:
-      "Birch-steam sauna, a quiet massage room of warm stone, and a slow ritual of mountain tea on the return from the lake.",
+      "Lots of oxygen, wild trails, and morning movement. Reconnect with nature, water, and fire.",
     learnMore: "Learn More",
   },
   mn: {
-    eyebrow: "Таны инээмсэглэл, бидний аз жаргал",
-    title: "Манай зоогийн газар",
+    eyebrow: "Байгалийн амт, галын илч",
+    title: "Зоогийн газар",
 
     editorialBefore: "Бууц нь ",
     editorialEm1: "Тусгай хамгаалалттай байгалийн бүс",
@@ -150,7 +150,7 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
       "Хөвсгөл нуурын зүүн эрэг дээрх онгон байгалийн амт.",
 
     visitBody:
-      "Зочдоос гадна замын зорчигчдод нээлттэй. Үдийн зоог модон тавцан дээр, эсвэл нуур харсан оройн зоогийг урьдчилан захиалаарай.",
+      "Аян замын гийчид болон амралтын зочдод үргэлж нээлттэй. Нуурын мандал тольдох модон тавцан дээр үдийн зоог барьж, эсвэл ил гал дээр шарсан мах, зэрлэг ургамлаар амталсан оройн зоогийг урьдчилан захиалах боломжтой.",
     visitLabel: "Манайд морил",
 
     bookHeadingLine1: "Үдшийн цагаа",
@@ -159,10 +159,10 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
       "Мэргэний шил, Хайчийн ам — Хөвсгөл нуурын зүүн эрэг, Хатгал сумаас 13 км.",
     bookCta: "Захиалга өгөх",
 
-    spaTitle: "Relax Spa",
-    wellnessTitle: "Сайн сайхан",
+    spaTitle: "Саун & Халуун усан сан",
+    wellnessTitle: "Иог & Алхалт",
     wellnessBody:
-      "Хусан саун, дулаан чулуун массажийн нам гүм өрөө, нуураас буцах замын ууланд бэлтгэсэн цайны зан үйл.",
+      "Цэнгэг агаар, онгон байгалийн жим, өглөөний дасгал хөдөлгөөн. Байгаль дэлхий, ус, галтайгаа эргэн холбогдох шидэт хором.",
     learnMore: "Дэлгэрэнгүй",
   },
 };

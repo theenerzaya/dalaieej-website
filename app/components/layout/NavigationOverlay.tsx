@@ -52,10 +52,10 @@ const mainNavItems: MainNavItem[] = [
     id: "stay",
     href: "/cabins",
     image: "/images/nav-overlay/stay.jpg",
-    label: { en: "Our Rooms", mn: "Өргөө" },
+    label: { en: "Cabins & Camps", mn: "Амрах байрууд" },
     meta: {
       en: `Cabins & Suites · ${formatLowestCabinPriceFrom("en")}`,
-      mn: `Модон өрөө · ${formatLowestCabinPriceFrom("mn")}`,
+      mn: `Модон хаус · ${formatLowestCabinPriceFrom("mn")}`,
     },
     available: true,
   },
@@ -88,7 +88,7 @@ const mainNavItems: MainNavItem[] = [
     href: "/about-us",
     image: "/images/nav-overlay/our-story.jpg",
     label: { en: "Our Story", mn: "Бидний тухай" },
-    meta: { en: "The family behind Dalai Eej", mn: "Дэлайн эжийн өгүүлэмж" },
+    meta: { en: "The family behind Dalai Eej", mn: "Далай Ээжийн түүх" },
     available: true,
   },
   {

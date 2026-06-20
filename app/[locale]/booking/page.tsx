@@ -70,8 +70,11 @@ interface RoomTypeGroup {
   roomsAvailable: number;
   description: string;
   maxGuests: number;
+  maxAdults?: number;
   photos: string[];
   features: string[];
+  bathroomLabel?: { en: string; mn: string };
+  showerLabel?: { en: string; mn: string };
   currency: string;
   rates: Room[];
 }
@@ -86,6 +89,7 @@ interface CartItem extends BookingCartLine {
   rateID: string;
   rateName: string;
   maxGuests: number;
+  maxAdults?: number;
   pricePerNight: number;
   currency: string;
   adults: number;
@@ -480,8 +484,11 @@ function BookingContent() {
             localFact?.shortDescription[currentLocale] ?? room.description
           ),
           maxGuests: room.maxGuests,
+          maxAdults: localFact?.maxAdults,
           photos: room.photos,
           features: localEquipment.length ? localEquipment : toPlainProviderTextList(room.features),
+          bathroomLabel: localFact?.bathroomLabel,
+          showerLabel: localFact?.showerLabel,
           currency: room.currency,
           rates: [],
         });
@@ -756,6 +763,7 @@ function BookingContent() {
     const remainingChildren = totalChildren - sumCartChildren(existingCart);
     const maxGuests = room.maxGuests || 2;
     const slug = resolveCabinSlugFromCloudbeds(room.roomTypeID, room.roomTypeName);
+    const localFact = slug ? CABIN_CLOUDBEDS_FACTS[slug] : undefined;
     const { adults, children } = defaultGuestsForNewUnit(
       maxGuests,
       remainingAdults,
@@ -771,6 +779,7 @@ function BookingContent() {
       rateID: room.rateID,
       rateName: toPlainProviderText(room.rateName),
       maxGuests,
+      maxAdults: localFact?.maxAdults,
       pricePerNight:
         numberOfNights > 0 ? (room.totalRate || 0) / numberOfNights : room.totalRate || 0,
       currency: room.currency || "MNT",
@@ -1459,8 +1468,10 @@ function BookingContent() {
                     const otherAdults = assignedAdults - item.adults;
                     const otherChildren = assignedChildren - item.children;
                     const canDecreaseAdults = item.adults > 1;
+                    const lineMaxAdults = item.maxAdults ?? item.maxGuests;
                     const canIncreaseAdults =
                       item.adults + item.children < item.maxGuests &&
+                      item.adults < lineMaxAdults &&
                       otherAdults + item.adults < MAX_BOOKING_ADULTS &&
                       totalGuests < MAX_BOOKING_GUESTS &&
                       assignedGuests < MAX_BOOKING_GUESTS;
@@ -1542,8 +1553,8 @@ function BookingContent() {
                         </div>
                         <p className="text-[10px] text-main/40 font-body">
                           {currentLocale === "mn"
-                            ? `Хамгийн ихдээ ${item.maxGuests} зочин`
-                            : `Up to ${item.maxGuests} guests`}
+                            ? `Хамгийн ихдээ ${item.maxGuests} зочин${item.maxAdults ? ` (${item.maxAdults} хүртэлх том хүн)` : ''}`
+                            : `Up to ${item.maxGuests} guests${item.maxAdults ? ` (max ${item.maxAdults} adults)` : ''}`}
                         </p>
                       </div>
 
@@ -1795,9 +1806,20 @@ function BookingContent() {
                               <span className="text-main/50">
                                 {currentLocale === 'mn' ? 'Багтаамж:' : 'Guests:'}
                               </span>{' '}
-                              {currentLocale === 'mn' ? `${maxGuests} хүн хүртэл` : `Up to ${maxGuests}`}
+                              {currentLocale === 'mn' ? `${maxGuests} хүн хүртэл${group.maxAdults ? ` (${group.maxAdults} хүртэлх том хүн)` : ''}` : `Up to ${maxGuests}${group.maxAdults ? ` (max ${group.maxAdults} adults)` : ''}`}
                             </span>
                           </li>
+                          {group.bathroomLabel && group.showerLabel && (
+                            <li className="flex items-start gap-2">
+                              <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
+                              <span>
+                                <span className="text-main/50">
+                                  {currentLocale === 'mn' ? 'Ариун цэврийн өрөө:' : 'Bathroom:'}
+                                </span>{' '}
+                                {group.bathroomLabel[currentLocale]} / {group.showerLabel[currentLocale]}
+                              </span>
+                            </li>
+                          )}
                           {featureText && (
                             <li className="flex items-start gap-2">
                               <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
@@ -1809,6 +1831,17 @@ function BookingContent() {
                               </span>
                             </li>
                           )}
+                          <li className="flex items-start gap-2">
+                            <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
+                            <span>
+                              <span className="text-main/50">
+                                {currentLocale === 'mn' ? 'Багтсан:' : 'Included:'}
+                              </span>{' '}
+                              {currentLocale === 'mn'
+                                ? 'Өглөөний цай, саун, иог, алхалт, завь'
+                                : 'Breakfast, sauna, yoga, hiking, kayaking'}
+                            </span>
+                          </li>
                           <li className="flex items-start gap-2">
                             <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
                             <span>

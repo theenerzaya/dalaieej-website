@@ -7,6 +7,7 @@ export type CabinCloudbedsFact = {
   roomTypeID: string;
   name: string;
   maxGuests: number;
+  maxAdults?: number;
   roomSizeLabel?: Localized;
   guestLabel: Localized;
   bedLabel: Localized;
@@ -215,8 +216,9 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     roomTypeID: "198046100787328",
     name: "Гэр Бүлийн Хаус (Цахилгаан халаалт)",
     maxGuests: 5,
+    maxAdults: 4,
     roomSizeLabel: { en: "25 m²", mn: "25 м²" },
-    guestLabel: { en: "Up to 5 guests", mn: "5 хүн хүртэл" },
+    guestLabel: { en: "Up to 5 guests (max 4 adults)", mn: "5 хүн хүртэл (4 хүртэлх том хүн)" },
     bedLabel: { en: "2 double beds", mn: "2 дабл хэмжээтэй ор" },
     bathroomLabel: { en: "Toilet and washbasin inside", mn: "Дотроо 00, угаалтууртай" },
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
@@ -247,8 +249,9 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     roomTypeID: "198038298677377",
     name: "Гэр Бүлийн Хаус (Галлагаатай)",
     maxGuests: 5,
+    maxAdults: 4,
     roomSizeLabel: { en: "35 m²", mn: "35 м²" },
-    guestLabel: { en: "Up to 5 guests", mn: "5 хүн хүртэл" },
+    guestLabel: { en: "Up to 5 guests (max 4 adults)", mn: "5 хүн хүртэл (4 хүртэлх том хүн)" },
     bedLabel: { en: "2 double beds", mn: "2 өргөн ор" },
     bathroomLabel: { en: "Toilet and washbasin inside", mn: "Дотроо 00, угаалтууртай" },
     showerLabel: { en: "Shared shower", mn: "Нийтийн шүршүүр ашиглана" },
