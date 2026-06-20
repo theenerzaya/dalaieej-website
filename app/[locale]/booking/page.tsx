@@ -763,7 +763,7 @@ function BookingContent() {
     const remainingChildren = totalChildren - sumCartChildren(existingCart);
     const maxGuests = room.maxGuests || 2;
     const slug = resolveCabinSlugFromCloudbeds(room.roomTypeID, room.roomTypeName);
-    const localFact = slug ? CABIN_CLOUDBEDS_FACTS[slug] : undefined;
+    const localFact = slug ? getCabinCloudbedsFact(slug) : undefined;
     const { adults, children } = defaultGuestsForNewUnit(
       maxGuests,
       remainingAdults,
