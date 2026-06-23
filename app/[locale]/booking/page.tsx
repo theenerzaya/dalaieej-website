@@ -374,10 +374,11 @@ function BookingContent() {
   const [promoLoading, setPromoLoading] = useState(false);
   const [validatedSuggestedPromoCode, setValidatedSuggestedPromoCode] = useState("");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [repricingLineId, setRepricingLineId] = useState<string | null>(null);
+  const [repricingCart, setRepricingCart] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [propertyTermsAndConditions, setPropertyTermsAndConditions] = useState<string | null>(null);
   const availabilityRequestIdRef = useRef(0);
+  const cartRepriceRequestIdRef = useRef(0);
   const inFlightAvailabilityKeyRef = useRef<string | null>(null);
   const promoSuggestionRequestIdRef = useRef(0);
   const promoSuggestionCacheRef = useRef(new Map<string, boolean>());
@@ -411,7 +412,7 @@ function BookingContent() {
     guestsFullyAssigned &&
     !onlineLimitError &&
     !checkoutLoading &&
-    !repricingLineId;
+    !repricingCart;
 
   const depositDueNow = useMemo(
     () =>
@@ -505,11 +506,17 @@ function BookingContent() {
   }, [rooms, currentLocale]);
 
   useEffect(() => {
-    setCart((prev) => {
-      const normalized = normalizeCartGuestAssignments(prev, totalAdults, totalChildren);
-      return cartGuestAssignmentsMatch(prev, normalized) ? prev : normalized;
-    });
+    const normalized = normalizeCartGuestAssignments(cart, totalAdults, totalChildren);
+    if (cartGuestAssignmentsMatch(cart, normalized)) return;
+    setCartAndReprice(normalized);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run when party totals change; cart changes reprice at their source
   }, [totalAdults, totalChildren]);
+
+  useEffect(() => {
+    if (!searched || loading || cart.length === 0 || !checkin || !checkout) return;
+    repriceCartLinesInBackground(cart);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- date/promo/search changes need repricing; price-only cart updates should not loop
+  }, [searched, loading, checkin, checkout, appliedPromo, numberOfNights]);
 
   useEffect(() => {
     if (cart.length > 0 && cartCapacity < totalGuests) {
@@ -546,8 +553,9 @@ function BookingContent() {
       try {
         const url =
           `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}` +
-          `&promo=${encodeURIComponent(candidate)}&quoteAdults=${Math.min(2, totalAdults)}` +
-          "&quoteChildren=0";
+          `&promo=${encodeURIComponent(candidate)}` +
+          `&quoteAdults=${Math.max(1, Math.min(MAX_BOOKING_ADULTS, totalAdults))}` +
+          `&quoteChildren=${Math.max(0, Math.min(MAX_BOOKING_CHILDREN, totalChildren))}`;
         const response = await fetch(url, { cache: "no-store" });
         if (!response.ok) {
           if (response.status === 400) {
@@ -568,7 +576,7 @@ function BookingContent() {
     };
 
     void validateSuggestedPromo();
-  }, [candidateSuggestedPromoCode, appliedPromo, checkin, checkout, totalAdults]);
+  }, [candidateSuggestedPromoCode, appliedPromo, checkin, checkout, totalAdults, totalChildren]);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -602,7 +610,7 @@ function BookingContent() {
     setNumberOfNights(calculateNights(effectiveCheckin, effectiveCheckout));
     void fetchAvailability(effectiveCheckin, effectiveCheckout, urlPromo, {
       quoteAdults: parsedAdults,
-      quoteChildren: 0,
+      quoteChildren: parsedChildren,
     }).then((applied) => {
       if (urlPromo) {
         setAppliedPromo(applied ? urlPromo : "");
@@ -615,7 +623,7 @@ function BookingContent() {
     if (!searched || !checkin || !checkout) return;
     fetchAvailability(checkin, checkout, appliedPromo, {
       quoteAdults: totalAdults,
-      quoteChildren: 0,
+      quoteChildren: totalChildren,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch when party size changes
   }, [totalAdults, totalChildren]);
@@ -626,8 +634,14 @@ function BookingContent() {
     promo: string = "",
     options: AvailabilityFetchOptions = {}
   ): Promise<boolean> => {
-    const quoteAdults = Math.max(1, Math.min(2, options.quoteAdults ?? totalAdults));
-    const quoteChildren = Math.max(0, options.quoteChildren ?? 0);
+    const quoteAdults = Math.max(
+      1,
+      Math.min(MAX_BOOKING_ADULTS, options.quoteAdults ?? totalAdults)
+    );
+    const quoteChildren = Math.max(
+      0,
+      Math.min(MAX_BOOKING_CHILDREN, options.quoteChildren ?? totalChildren)
+    );
     const requestKey = `${checkInDate}|${checkOutDate}|${promo}|${quoteAdults}|${quoteChildren}`;
 
     if (!options.force && inFlightAvailabilityKeyRef.current === requestKey) {
@@ -728,7 +742,7 @@ function BookingContent() {
     fetchAvailability(checkin, checkout, appliedPromo, {
       force: true,
       quoteAdults: totalAdults,
-      quoteChildren: 0,
+      quoteChildren: totalChildren,
     });
   };
 
@@ -746,7 +760,7 @@ function BookingContent() {
       const applied = await fetchAvailability(checkin, checkout, normalizedPromo, {
         force: true,
         quoteAdults: totalAdults,
-        quoteChildren: 0,
+        quoteChildren: totalChildren,
       });
       if (applied) {
         setAppliedPromo(normalizedPromo);
@@ -789,11 +803,64 @@ function BookingContent() {
     };
   };
 
+  function setCartAndReprice(nextCart: CartItem[]) {
+    setCart(nextCart);
+    repriceCartLinesInBackground(nextCart);
+  }
+
+  function repriceCartLinesInBackground(lines: CartItem[]) {
+    const requestId = cartRepriceRequestIdRef.current + 1;
+    cartRepriceRequestIdRef.current = requestId;
+
+    if (!checkin || !checkout || lines.length === 0) {
+      setRepricingCart(false);
+      return;
+    }
+
+    setRepricingCart(true);
+    void quoteCartLineRates(lines)
+      .then((repriced) => {
+        if (requestId !== cartRepriceRequestIdRef.current) return;
+
+        const repricedById = new Map(repriced.map((item) => [item.id, item]));
+        setCart((prev) =>
+          prev.map((item) => {
+            const next = repricedById.get(item.id);
+            if (!next) return item;
+            if (
+              next.roomTypeID !== item.roomTypeID ||
+              next.rateID !== item.rateID ||
+              next.adults !== item.adults ||
+              next.children !== item.children
+            ) {
+              return item;
+            }
+            return next;
+          })
+        );
+      })
+      .catch((err) => {
+        if (requestId !== cartRepriceRequestIdRef.current) return;
+        setError(
+          err instanceof Error
+            ? err.message
+            : currentLocale === "mn"
+              ? "Үнийг шинэчлэхэд алдаа гарлаа"
+              : "Could not refresh pricing"
+        );
+      })
+      .finally(() => {
+        if (requestId === cartRepriceRequestIdRef.current) {
+          setRepricingCart(false);
+        }
+      });
+  }
+
   const toggleRoomSelection = (room: Room) => {
     const key = rateKey(room.roomTypeID, room.rateID);
     const exists = cart.some((item) => rateKey(item.roomTypeID, item.rateID) === key);
     if (exists) {
-      setCart(
+      setCartAndReprice(
         normalizeCartGuestAssignments(
           cart.filter((item) => rateKey(item.roomTypeID, item.rateID) !== key),
           totalAdults,
@@ -804,7 +871,7 @@ function BookingContent() {
       if (cart.length >= MAX_BOOKING_ROOMS) return;
       const cartWithoutSameRoomType = cart.filter((item) => item.roomTypeID !== room.roomTypeID);
       const newItem = buildCartLineFromRoom(room, cartWithoutSameRoomType);
-      setCart(
+      setCartAndReprice(
         normalizeCartGuestAssignments(
           [...cartWithoutSameRoomType, newItem],
           totalAdults,
@@ -815,25 +882,25 @@ function BookingContent() {
   };
 
   const addCartLineForRate = (room: Room) => {
-    setCart((prev) => {
-      const key = rateKey(room.roomTypeID, room.rateID);
-      const currentCount = prev.filter(
-        (item) => rateKey(item.roomTypeID, item.rateID) === key
-      ).length;
-      if (prev.length >= MAX_BOOKING_ROOMS) return prev;
-      if (currentCount >= (room.roomsAvailable || 10)) return prev;
-      return normalizeCartGuestAssignments(
-        [...prev, buildCartLineFromRoom(room, prev)],
+    const key = rateKey(room.roomTypeID, room.rateID);
+    const currentCount = cart.filter(
+      (item) => rateKey(item.roomTypeID, item.rateID) === key
+    ).length;
+    if (cart.length >= MAX_BOOKING_ROOMS) return;
+    if (currentCount >= (room.roomsAvailable || 10)) return;
+    setCartAndReprice(
+      normalizeCartGuestAssignments(
+        [...cart, buildCartLineFromRoom(room, cart)],
         totalAdults,
         totalChildren
-      );
-    });
+      )
+    );
   };
 
   const removeCartLine = (lineId: string) => {
-    setCart((prev) =>
+    setCartAndReprice(
       normalizeCartGuestAssignments(
-        prev.filter((item) => item.id !== lineId),
+        cart.filter((item) => item.id !== lineId),
         totalAdults,
         totalChildren
       )
@@ -855,13 +922,13 @@ function BookingContent() {
     }
   };
 
-  const quoteCartLineRates = async (lines: CartItem[]) => {
+  async function quoteCartLineRates(lines: CartItem[]) {
     const nights = numberOfNights;
     const repriced = await Promise.all(
       lines.map(async (item) => {
         let url = `/api/cloudbeds/availability?checkin=${checkin}&checkout=${checkout}&quoteAdults=${item.adults}&quoteChildren=${item.children}&repricing=true`;
         if (appliedPromo) url += `&promo=${encodeURIComponent(appliedPromo)}`;
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: "no-store" });
         const data: AvailabilityData = await response.json();
         if (!response.ok || !data.rooms) {
           throw new Error(
@@ -899,14 +966,9 @@ function BookingContent() {
       })
     );
     return repriced;
-  };
+  }
 
-  const repriceCartLine = async (line: CartItem): Promise<CartItem> => {
-    const [repriced] = await quoteCartLineRates([line]);
-    return repriced;
-  };
-
-  const updateCartLineGuests = async (
+  const updateCartLineGuests = (
     lineId: string,
     field: "adults" | "children",
     delta: number
@@ -924,23 +986,7 @@ function BookingContent() {
 
     setTotalAdults(sumCartAdults(nextCart));
     setTotalChildren(sumCartChildren(nextCart));
-    setCart(nextCart);
-
-    setRepricingLineId(lineId);
-    try {
-      const repriced = await repriceCartLine(updated);
-      setCart((prev) => prev.map((item) => (item.id === lineId ? repriced : item)));
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : currentLocale === "mn"
-            ? "Үнийг шинэчлэхэд алдаа гарлаа"
-            : "Could not refresh pricing"
-      );
-    } finally {
-      setRepricingLineId(null);
-    }
+    setCartAndReprice(nextCart);
   };
 
   const proceedToCheckout = async () => {
@@ -1464,7 +1510,7 @@ function BookingContent() {
                       (c) => rateKey(c.roomTypeID, c.rateID) === siblingKey
                     );
                     const cabinIndex = siblings.findIndex((c) => c.id === item.id) + 1;
-                    const isRepricing = repricingLineId === item.id;
+                    const isRepricing = repricingCart;
                     const otherAdults = assignedAdults - item.adults;
                     const otherChildren = assignedChildren - item.children;
                     const canDecreaseAdults = item.adults > 1;
