@@ -46,6 +46,12 @@ const INCLUDED_SERVICES =
 const INCLUDED_SERVICES_EN =
   "Breakfast, sauna and kayak access, morning yoga, and entry to the Dalai Eej peninsula are included.";
 
+const CAMPING_INCLUDED_SERVICES =
+  "Саун, сэлүүрт завь ашиглах эрх, өглөөний иог болон Далай Ээжийн хойгт нэвтрэх эрх багтана.";
+
+const CAMPING_INCLUDED_SERVICES_EN =
+  "Sauna and kayak access, morning yoga, and entry to the Dalai Eej peninsula are included.";
+
 export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
   "superior-cabin": {
     slug: "superior-cabin",
@@ -296,13 +302,12 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       mn: "Майхан эсвэл машинтай аялагчдад зориулсан хувийн отоглох хэсэг.",
     },
     description: {
-      en: `A private camping area for travellers arriving with tents or vehicles. It gives you a secure place to stay, with access to fresh water, hot showers, and the wider resort services. ${INCLUDED_SERVICES_EN}`,
-      mn: `Майхан эсвэл машинтай аялагчдад зориулсан хувийн отоглох хэсэг. Аюулгүй хоноглох орчинтой бөгөөд цэвэр ус, халуун шүршүүр болон амралтын газрын бусад үйлчилгээг ашиглах боломжтой. ${INCLUDED_SERVICES}`,
+      en: `A private camping area for travellers arriving with tents or vehicles. It gives you a secure place to stay, with access to fresh water, hot showers, and the wider resort services. ${CAMPING_INCLUDED_SERVICES_EN}`,
+      mn: `Майхан эсвэл машинтай аялагчдад зориулсан хувийн отоглох хэсэг. Аюулгүй хоноглох орчинтой бөгөөд цэвэр ус, халуун шүршүүр болон амралтын газрын бусад үйлчилгээг ашиглах боломжтой. ${CAMPING_INCLUDED_SERVICES}`,
     },
     features: [
       "\"Далай Ээж\" хойгт нэвтрэх эрх",
       "Нийтийн шүршүүр ашиглана",
-      "Өглөөний цай багтсан",
       "Саун үнэгүй",
       "Сэлүүрт завь үнэгүй",
       "Өглөөний иог",

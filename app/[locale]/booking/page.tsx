@@ -310,8 +310,8 @@ const bookingFaqs = [
       mn: "Амралтын үнэд юу багтсан бэ?",
     },
     answer: {
-      en: "Your stay includes daily breakfast. You also receive one complimentary session of kayaking, sauna access, a guided hike, and morning yoga. You don't need to pre-book these—our team will help you plan your activities upon arrival based on the weather.",
-      mn: "Тус үнэд өглөөний цайнаас гадна нэг удаагийн явган аялал, саун, иогийн хичээл, сэлүүрт завины үйлчилгээнүүд тус тус багтана. Эдгээрийг урьдчилан захиалах шаардлагагүй бөгөөд ирсний тань дараа манай баг цаг агаарт тохируулан төлөвлөхөд тусална.",
+      en: "Cabin stays include daily breakfast. All stays, including Ayalagchiin Otog, receive one complimentary session of kayaking, sauna access, a guided hike, and morning yoga. You don't need to pre-book these—our team will help you plan your activities upon arrival based on the weather.",
+      mn: "Хаус, байрны үнэд өглөөний цай багтана. Аялагчийн Отог зэрэг бүх байрлалд нэг удаагийн явган аялал, саун, иогийн хичээл, сэлүүрт завины үйлчилгээнүүд багтана. Эдгээрийг урьдчилан захиалах шаардлагагүй бөгөөд ирсний тань дараа манай баг цаг агаарт тохируулан төлөвлөхөд тусална.",
     },
   },
   {
@@ -1791,6 +1791,14 @@ function BookingContent() {
                     : (photos.length > 0 ? photos : [placeholderImages[index % placeholderImages.length]]);
                   const maxGuests = group.maxGuests || 2;
                   const hasCartItem = group.rates.some((r) => countCartLinesForRate(r.roomTypeID, r.rateID) > 0);
+                  const includedText =
+                    mappedSlug === "camping"
+                      ? currentLocale === "mn"
+                        ? "Саун, иог, алхалт, завь"
+                        : "Sauna, yoga, hiking, kayaking"
+                      : currentLocale === "mn"
+                        ? "Өглөөний цай, саун, иог, алхалт, завь"
+                        : "Breakfast, sauna, yoga, hiking, kayaking";
 
                   const perNightValues = group.rates
                     .filter((r) => r.totalRate > 0)
@@ -1883,9 +1891,7 @@ function BookingContent() {
                               <span className="text-main/50">
                                 {currentLocale === 'mn' ? 'Багтсан:' : 'Included:'}
                               </span>{' '}
-                              {currentLocale === 'mn'
-                                ? 'Өглөөний цай, саун, иог, алхалт, завь'
-                                : 'Breakfast, sauna, yoga, hiking, kayaking'}
+                              {includedText}
                             </span>
                           </li>
                           <li className="flex items-start gap-2">

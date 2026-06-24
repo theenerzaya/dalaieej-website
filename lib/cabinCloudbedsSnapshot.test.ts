@@ -66,4 +66,12 @@ describe("cabin Cloudbeds snapshot copy", () => {
       expect(fact.description.mn).not.toMatch(rawProviderPattern);
     }
   });
+
+  it("does not list breakfast as included for Ayalagchiin Otog", () => {
+    const camping = CABIN_CLOUDBEDS_FACTS.camping;
+
+    expect(camping.description.en.toLowerCase()).not.toContain("breakfast");
+    expect(camping.description.mn).not.toContain("Өглөөний цай");
+    expect(camping.features.join(" ")).not.toContain("Өглөөний цай");
+  });
 });
