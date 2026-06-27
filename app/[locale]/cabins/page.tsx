@@ -217,7 +217,10 @@ const COPY: Record<"en" | "mn", Record<CopyKey, string>> = {
   },
 };
 
+import { notFound } from "next/navigation";
+
 export default function CabinsPage() {
+  notFound();
   const locale = useLocale();
   const isMn = locale === "mn";
   const t = COPY[isMn ? "mn" : "en"];

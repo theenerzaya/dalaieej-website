@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
+import { notFound } from "next/navigation";
+
 export default function AccommodationPage() {
+  notFound();
+
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
 
