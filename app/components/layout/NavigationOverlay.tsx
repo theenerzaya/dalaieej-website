@@ -49,7 +49,7 @@ type MainNavItem = {
 const mainNavItems: MainNavItem[] = [
   {
     id: "stay",
-    href: "/cabins",
+    href: "/booking",
     image: "/images/cabins/room-lakeside.webp",
     imagePosition: "50% 50%",
     label: { en: "Cabins & Camps", mn: "Амрах байрууд" },
@@ -57,11 +57,11 @@ const mainNavItems: MainNavItem[] = [
       en: `Cabins & Suites · ${formatLowestCabinPriceFrom("en")}`,
       mn: `Модон хаус · ${formatLowestCabinPriceFrom("mn")}`,
     },
-    available: false,
+    available: true,
   },
   {
     id: "dining",
-    href: "/restaurant",
+    href: "/gallery?filter=dining",
     image: "/images/gallery/restaurant/DBR_6767.jpg",
     label: { en: "Dining", mn: "Зоог" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дэх амтат зоог" },

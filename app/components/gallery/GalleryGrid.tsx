@@ -19,9 +19,10 @@
  * under 900 KiB — see app/data/galleryImages.ts. Regenerate: npm run sync-gallery-images
  */
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
 import { GALLERY_IMAGES } from "@/app/data/galleryImages";
@@ -106,13 +107,24 @@ const IMAGE_DIMENSIONS: Record<
 /*  Component                                                                 */
 /* -------------------------------------------------------------------------- */
 
-export default function GalleryGrid() {
+function GalleryContent() {
   const locale = useLocale();
   const isMn = locale === "mn";
   const labels = isMn ? FILTERS_MN : FILTERS_EN;
   const headlineFont = isMn ? "font-editorial-mn" : "font-editorial-en";
 
+  const searchParams = useSearchParams();
+  const filterParam = searchParams.get("filter") as FilterId | null;
+
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
+  
+  // Set initial filter from URL parameter
+  useEffect(() => {
+    if (filterParam && FILTER_ORDER.includes(filterParam)) {
+      setActiveFilter(filterParam);
+    }
+  }, [filterParam]);
+
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const availableFilters = useMemo(
@@ -376,5 +388,13 @@ export default function GalleryGrid() {
         )}
       </AnimatePresence>
     </main>
+  );
+}
+
+export default function GalleryGrid() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface-alt" />}>
+      <GalleryContent />
+    </Suspense>
   );
 }

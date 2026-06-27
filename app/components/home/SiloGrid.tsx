@@ -17,7 +17,7 @@ import { assetUrl } from "@/lib/assetUrl";
 const silos = [
   {
     id: "stay",
-    href: "/cabins",
+    href: "/booking",
     en: "Cabins",
     mn: "Амрах байр",
     image: "/images/silogrid/sanctuary.webp"

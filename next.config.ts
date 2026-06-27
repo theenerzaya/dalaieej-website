@@ -53,9 +53,11 @@ const nextConfig: NextConfig = {
       { source: '/faqs-kr', destination: '/', permanent: true },
       { source: '/virtual-tour', destination: '/', permanent: true },
       { source: '/aerial-360', destination: '/', permanent: true },
-      // Accommodations index → all-rooms listing (same content, new canonical path)
-      { source: '/en/accommodation', destination: '/en/cabins', permanent: true },
-      { source: '/mn/accommodation', destination: '/mn/cabins', permanent: true },
+      // Accommodations → booking (cabins index not live yet)
+      { source: '/en/accommodation', destination: '/en/booking', permanent: false },
+      { source: '/mn/accommodation', destination: '/mn/booking', permanent: false },
+      { source: '/en/cabins', destination: '/en/booking', permanent: false },
+      { source: '/mn/cabins', destination: '/mn/booking', permanent: false },
       { source: '/mongolia-itinerary-planner', destination: '/', permanent: true },
       { source: '/mongolia-itinerary-planner-gobi-khuvsgul', destination: '/', permanent: true },
     ];

@@ -32,14 +32,14 @@ const personas = [
       description:
         "Refined comfort in the wild. A peaceful escape from the capital, with zero compromises.",
       image: assetUrl("/images/personas/sanctuary-en.jpg"),
-      href: "/cabins",
+      href: "/booking",
     },
     mn: {
       title: "ТӨГС АМРАЛТ",
       description:
         "Онгон байгаль дахь төгс тав тух. Хотын шуугианаас холдож, юугаар ч үл дутах амар амгаланг мэдрэхүй.",
       image: assetUrl("/images/personas/sanctuary-mn.jpg"),
-      href: "/cabins",
+      href: "/booking",
     },
   },
   {
@@ -68,14 +68,14 @@ const personas = [
       description:
         "Silence the noise. No Zoom calls, just crackling fires, lake sounds, and deep focus.",
       image: assetUrl("/images/personas/disconnect-en.jpg"),
-      href: "/cabins",
+      href: "/booking",
     },
     mn: {
       title: "ӨӨРТӨӨ ТӨВЛӨРӨХҮЙ",
       description:
         "Чимээ шуугианаас ангижрах орон зай. Цахим ертөнцөөс хөндийрч, галын чимээ, нуурын долгио чагнаж өөртөө төвлөрөх цаг.",
       image: assetUrl("/images/personas/disconnect-mn.jpg"),
-      href: "/cabins",
+      href: "/booking",
     },
   },
   {

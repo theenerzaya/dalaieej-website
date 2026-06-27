@@ -5,17 +5,13 @@ import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
-import { notFound } from "next/navigation";
-
 export default function AccommodationPage() {
-  notFound();
-
   const locale = useLocale();
   const localePrefix = locale === 'mn' ? '/mn' : '';
 
   const accommodations = [
     {
-      href: `${localePrefix}/cabins`,
+      href: `${localePrefix}/booking`,
       title: locale === 'mn' ? "Байрлах сонголтууд" : "Shoreline Accommodations",
       subtitle: locale === 'mn' ? "Бүх төрлүүд" : "Explore our stays",
       description: locale === 'mn' 
