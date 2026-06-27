@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { Facebook, Images, Instagram, Mail } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
+import WeatherWidget from "@/app/components/WeatherWidget";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import { withLocalePath } from "@/lib/localePath";
@@ -20,15 +21,14 @@ import { absoluteSiteUrl } from "@/lib/site-urls";
  *   │  ✕  EN | MN                LOGO              BOOK YOUR STAY  │
  *   │ ──────────────────────────────────────────────────────────── │
  *   │                                                              │
- *   │  Our Rooms            ┌──────┐ ┌──────┐ ┌──────┐ ┌────      │
- *   │  Dining               │ IMG  │ │ IMG  │ │ IMG  │ │ IMG      │
- *   │  Wellness             │      │ │      │ │      │ │          │
- *   │  Adventures           └──────┘ └──────┘ └──────┘ └────      │
- *   │  Our Story            Title    Title    Title    Title      │
- *   │  Contact              meta     meta     meta     meta       │
+ *   │  Our Rooms                                                   │
+ *   │  Dining                                                      │
+ *   │  Adventures                                                  │
+ *   │  Our Story                                                   │
  *   │                                                              │
  *   │  Call us: +976 …                                             │
  *   │  [f] [ig] [@]                                                │
+ *   │  Weather Conditions                                          │
  *   └──────────────────────────────────────────────────────────────┘
  *
  * Typography mirrors the rest of the site:
@@ -40,18 +40,18 @@ type MainNavItem = {
   id: string;
   href: string;
   image: string;
+  imagePosition?: string;
   label: { en: string; mn: string };
   meta: { en: string; mn: string };
   available: boolean;
 };
 
-// NOTE: only selected sections are live; unavailable sections render a
-// "Coming Soon" tag to preserve the overlay's visual rhythm.
 const mainNavItems: MainNavItem[] = [
   {
     id: "stay",
     href: "/cabins",
-    image: "/images/nav-overlay/stay.jpg",
+    image: "/images/cabins/room-lakeside.webp",
+    imagePosition: "50% 50%",
     label: { en: "Cabins & Camps", mn: "Амрах байрууд" },
     meta: {
       en: `Cabins & Suites · ${formatLowestCabinPriceFrom("en")}`,
@@ -62,18 +62,10 @@ const mainNavItems: MainNavItem[] = [
   {
     id: "dining",
     href: "/restaurant",
-    image: "/images/nav-overlay/dining.jpg",
+    image: "/images/gallery/restaurant/DBR_6767.jpg",
     label: { en: "Dining", mn: "Ресторан" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дээрх гал тогоо" },
     available: true,
-  },
-  {
-    id: "wellness",
-    href: "/wellness",
-    image: "/images/nav-overlay/wellness.jpg",
-    label: { en: "Wellness", mn: "Амрахуй" },
-    meta: { en: "Sauna · Lake soak · Rituals", mn: "Саун · Нуурын усанд орох" },
-    available: false,
   },
   {
     id: "adventure",
@@ -94,7 +86,8 @@ const mainNavItems: MainNavItem[] = [
   {
     id: "getting-here",
     href: "/getting-here",
-    image: "/images/gallery/adventures/DBR_3442.webp",
+    image: "/images/almanac/getting-here/murun-airport-terminal-interior.jpg",
+    imagePosition: "43% 50%",
     label: { en: "Getting Here", mn: "Хүрэх зам" },
     meta: {
       en: "Flights, coaches & the final leg",
@@ -102,18 +95,11 @@ const mainNavItems: MainNavItem[] = [
     },
     available: true,
   },
-  {
-    id: "contact",
-    href: "#contact",
-    image: "/images/address.webp",
-    label: { en: "Contact", mn: "Холбоо барих" },
-    meta: { en: "Plan your stay with us", mn: "Бидэнтэй төлөвлөөрэй" },
-    available: true,
-  },
 ];
 
 const PHONE_DISPLAY = "+976 77 809010";
 const PHONE_HREF = "tel:+97677809010";
+const DESKTOP_FEATURE_IMAGE = "/images/gallery/the-resort/DBR_7075.webp";
 
 const socialLinks: Array<{
   href: string;
@@ -153,8 +139,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
   const pathWithoutLocale = getPathWithoutLocale(pathname);
   const reduceMotion = useReducedMotion();
 
-  const stripRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -165,15 +149,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
-
-  const scrollCardIntoView = (id: string) => {
-    const el = stripRef.current?.querySelector<HTMLElement>(`[data-card="${id}"]`);
-    if (!el || !stripRef.current) return;
-    stripRef.current.scrollTo({
-      left: el.offsetLeft - 24,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
-  };
 
   const handleNavClick = (href: string) => (event: React.MouseEvent) => {
     if (!href.startsWith("#")) {
@@ -242,20 +217,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
 
   return (
     <>
-      {/* Preload nav-strip images so the overlay opens fully populated */}
-      <div className="hidden" aria-hidden="true">
-        {mainNavItems.map((item) => (
-          <SiteImage
-            key={item.id}
-            src={item.image}
-            alt=""
-            width={1}
-            height={1}
-            sizes="(min-width: 768px) 33vw, 0px"
-          />
-        ))}
-      </div>
-
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -274,8 +235,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
             }}
           >
             {/* ───────── Header row ─────────
-                Close stays viewport-aligned (matches navbar hamburger). EN/MN sits in
-                the same max-w-7xl inset + left column width as the nav labels below. */}
+                Close stays viewport-aligned and the wordmark stays centered. */}
             <div className="shrink-0 border-b border-main/10">
               <div className="relative flex min-h-[calc(5rem*1.10)] w-full items-stretch pt-[calc(5rem*0.10)]">
                 <button
@@ -314,11 +274,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                 </Link>
 
                 <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 md:px-12 pointer-events-none">
-                  {/* Left column: matches body nav column — EN/MN aligns with "Өргөө" etc. */}
-                  <div className="pointer-events-auto hidden min-w-0 flex-1 items-center md:flex md:w-[35%] md:max-w-[35%] md:flex-none">
-                    {languageToggle}
-                  </div>
-
                   <div className="pointer-events-auto ml-auto flex shrink-0 items-center">
                     <CTAButton
                       href={withLocalePath(locale, "/booking")}
@@ -332,21 +287,15 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                   </div>
                 </div>
               </div>
-
-              <div className="px-5 pb-4 md:hidden">
-                {languageToggle}
-              </div>
             </div>
 
             {/* ───────── Main body ───────── */}
-            <div className="flex-1 overflow-y-auto">
-              <div className="mx-auto flex h-full w-full max-w-7xl flex-col gap-8 px-5 py-8 md:flex-row md:gap-8 md:px-12 md:py-14 lg:gap-10">
-
-                {/* LEFT COLUMN — nav links + contact */}
-                <div className="flex w-full shrink-0 flex-col md:w-[35%]">
+            <div className="min-h-0 flex-1 overflow-hidden">
+              <div className="mx-auto grid min-h-full w-full max-w-7xl grid-cols-1 gap-5 px-5 py-6 md:grid-cols-[minmax(0,1fr)_minmax(17rem,22rem)] md:items-end md:gap-12 md:px-12 md:py-10 lg:gap-16 xl:py-14">
+                <div className="flex min-w-0 flex-col md:self-center">
                   <nav
                     aria-label="Primary"
-                    className="flex flex-col gap-2.5 md:gap-4"
+                    className="flex flex-col gap-2 md:gap-3.5"
                   >
                     {mainNavItems.map((item, i) => {
                       const label = isMn ? item.label.mn : item.label.en;
@@ -354,8 +303,8 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         "group inline-flex items-center gap-3",
                         "leading-[1.05]",
                         isMn
-                          ? "font-editorial-mn italic text-[2.35rem] md:text-5xl lg:text-[3.25rem]"
-                          : "font-editorial-en italic text-[2.35rem] md:text-5xl lg:text-[3.25rem]",
+                          ? "font-editorial-mn italic text-[2.35rem] md:text-[clamp(3.1rem,5vw,4.8rem)]"
+                          : "font-editorial-en italic text-[2.35rem] md:text-[clamp(3.1rem,5vw,4.8rem)]",
                         item.available
                           ? "text-main/90 hover:text-main transition-colors"
                           : "cursor-default text-main/50",
@@ -370,8 +319,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                             duration: reduceMotion ? 0 : 0.5,
                             delay: reduceMotion ? 0 : 0.08 * i + 0.1,
                           }}
-                          onMouseEnter={() => scrollCardIntoView(item.id)}
-                          onFocus={() => scrollCardIntoView(item.id)}
                         >
                           {item.available ? (
                             <Link
@@ -394,20 +341,46 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     })}
                   </nav>
 
-                  {/* Separator */}
+                  <motion.div
+                    initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.4, delay: 0.5 }}
+                    className="mt-5 md:mt-7"
+                  >
+                    {languageToggle}
+                  </motion.div>
+                </div>
+
+                <div className="flex min-w-0 flex-col md:self-center">
+                  <motion.div
+                    initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.5, delay: 0.28 }}
+                    className="relative mb-4 block h-[clamp(4.25rem,11vh,6rem)] w-full overflow-hidden bg-main/5 md:mb-6 md:h-[clamp(7rem,20vh,10rem)] lg:mb-7 lg:h-[clamp(15rem,40vh,25rem)]"
+                  >
+                    <SiteImage
+                      src={DESKTOP_FEATURE_IMAGE}
+                      alt={isMn ? "Далай Ээжийн оройн түүдэг гал" : "Evening campfire at Dalai Eej"}
+                      fill
+                      sizes="(min-width: 1024px) 22rem, 100vw"
+                      className="object-cover object-[50%_38%] opacity-85 lg:object-[50%_58%]"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-ink/15" aria-hidden="true" />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-main/10" aria-hidden="true" />
+                  </motion.div>
+
                   <motion.div
                     initial={reduceMotion ? { scaleX: 1 } : { scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: reduceMotion ? 0 : 0.5, delay: 0.5 }}
-                    className="my-8 h-px w-16 origin-left bg-main/20 md:my-10"
+                    className="mb-4 h-px w-16 origin-left bg-main/20 md:mb-7"
                   />
-
-                  {/* Call us + socials */}
                   <motion.div
                     initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: reduceMotion ? 0 : 0.4, delay: 0.6 }}
-                    className="flex flex-col gap-5"
+                    className="flex flex-col gap-3 md:gap-4"
                   >
                     <a
                       href={PHONE_HREF}
@@ -446,85 +419,8 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                         </Link>
                       </li>
                     </ul>
-                  </motion.div>
-                </div>
 
-                {/* RIGHT COLUMN — horizontal image strip */}
-                <div className="relative -mx-6 mt-2 h-44 shrink-0 md:mx-0 md:mt-0 md:h-auto md:flex-1">
-                  <motion.div
-                    ref={stripRef}
-                    initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: reduceMotion ? 0 : 0.5, delay: 0.2 }}
-                    className="flex h-full gap-5 overflow-x-auto scroll-smooth px-6 pb-2 md:gap-6 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                    role="list"
-                  >
-                    {mainNavItems.map((item) => {
-                      const label = isMn ? item.label.mn : item.label.en;
-                      const meta = isMn ? item.meta.mn : item.meta.en;
-
-                      const card = (
-                        <figure
-                          data-card={item.id}
-                          role="listitem"
-                          className="group flex w-[62vw] shrink-0 flex-col sm:w-[40vw] md:w-[clamp(16rem,28vw,22rem)]"
-                        >
-                          <div className="relative aspect-[3/4] w-full overflow-hidden bg-main/5">
-                            <SiteImage
-                              src={item.image}
-                              alt={label}
-                              fill
-                              sizes="(min-width: 768px) 30vw, 65vw"
-                              className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
-                              priority={item.id === "stay"}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
-                            {!item.available && (
-                              <span className="absolute right-3 top-3 bg-ink/70 px-2 py-1 font-cta text-[9px] font-medium uppercase tracking-[0.22em] text-main/80 backdrop-blur-sm">
-                                {isMn ? "Тун удахгүй" : "Coming soon"}
-                              </span>
-                            )}
-                          </div>
-                          <figcaption className="mt-5 flex items-baseline justify-between gap-4">
-                            <span
-                              className={[
-                                "text-main",
-                                isMn
-                                  ? "font-editorial-mn italic text-xl md:text-2xl"
-                                  : "font-editorial-en italic text-xl md:text-2xl",
-                              ].join(" ")}
-                            >
-                              {label}
-                            </span>
-                            <span className="font-cta text-[10px] font-medium uppercase tracking-[0.24em] text-main/50">
-                              {meta}
-                            </span>
-                          </figcaption>
-                        </figure>
-                      );
-
-                      if (!item.available) {
-                        return (
-                          <div key={item.id} className="shrink-0">
-                            {card}
-                          </div>
-                        );
-                      }
-
-                      return (
-                        <Link
-                          key={item.id}
-                          href={getNavItemHref(locale, item.href)}
-                          onClick={handleNavClick(item.href)}
-                          className="shrink-0"
-                        >
-                          {card}
-                        </Link>
-                      );
-                    })}
-
-                    {/* Trailing spacer so the last card can sit flush with the padding */}
-                    <div aria-hidden="true" className="w-2 shrink-0 md:w-4" />
+                    <WeatherWidget className="pt-1 md:pt-3 [@media(max-height:700px)_and_(max-width:767px)]:hidden" />
                   </motion.div>
                 </div>
               </div>
