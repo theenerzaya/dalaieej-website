@@ -70,7 +70,7 @@ export default function Footer() {
 
   const experienceLinks: Array<{ key: string; href: string; active: boolean }> = [
     { key: "stay", href: "/cabins", active: true },
-    { key: "dining", href: "/restaurant", active: true },
+    { key: "dining", href: "/gallery?filter=dining", active: true },
     { key: "wellness", href: "/wellness", active: false },
     { key: "adventures", href: "/experiences", active: true },
     { key: "stories", href: "/almanac", active: true },

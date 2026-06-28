@@ -50,14 +50,14 @@ const personas = [
       description:
         "For those who have been everywhere. Experience the untamed Taiga and the raw beauty of the Blue Pearl.",
       image: assetUrl("/images/personas/frontier-en.jpg"),
-      href: "/restaurant",
+      href: "/gallery?filter=dining",
     },
     mn: {
       title: "ХЯЗГААР НУТАГ",
       description:
         "Хаа сайгүй аялж үзсэн хүмүүст зориулав. Хөндөгдөөгүй онгон тайга болон Хөх сувдын байгалийн сайхныг нээх аялал.",
       image: assetUrl("/images/personas/frontier-mn.jpg"),
-      href: "/restaurant",
+      href: "/gallery?filter=dining",
     },
   },
   {
@@ -86,14 +86,14 @@ const personas = [
       description:
         "Intimate escapes designed for two. Private dining, sunset wine, and zero interruptions.",
       image: assetUrl("/images/personas/seclusion.jpg"),
-      href: "/restaurant",
+      href: "/gallery?filter=dining",
     },
     mn: {
       title: "ХОЁУЛАХНАА",
       description:
         "Зөвхөн та хоёрт зориулсан онцгой орон зай. Үдшийн зоог, жаргах наран, хэний ч үл саад болох амар амгалан.",
       image: assetUrl("/images/personas/seclusion.jpg"),
-      href: "/restaurant",
+      href: "/gallery?filter=dining",
     },
   },
 ];

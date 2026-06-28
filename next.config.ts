@@ -58,6 +58,10 @@ const nextConfig: NextConfig = {
       { source: '/mn/accommodation', destination: '/mn/booking', permanent: false },
       { source: '/en/cabins', destination: '/en/booking', permanent: false },
       { source: '/mn/cabins', destination: '/mn/booking', permanent: false },
+      { source: '/en/restaurant', destination: '/en/gallery?filter=dining', permanent: false },
+      { source: '/mn/restaurant', destination: '/mn/gallery?filter=dining', permanent: false },
+      { source: '/en/dining', destination: '/en/gallery?filter=dining', permanent: false },
+      { source: '/mn/dining', destination: '/mn/gallery?filter=dining', permanent: false },
       { source: '/mongolia-itinerary-planner', destination: '/', permanent: true },
       { source: '/mongolia-itinerary-planner-gobi-khuvsgul', destination: '/', permanent: true },
     ];
