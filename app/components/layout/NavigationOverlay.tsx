@@ -8,6 +8,7 @@ import WeatherWidget from "@/app/components/WeatherWidget";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import { withLocalePath } from "@/lib/localePath";
+import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
 import { formatLowestCabinPriceFrom } from "@/lib/cabinCatalog";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
@@ -61,7 +62,7 @@ const mainNavItems: MainNavItem[] = [
   },
   {
     id: "dining",
-    href: "/gallery?filter=dining",
+    href: RESTAURANT_DINING_GALLERY_PATH,
     image: "/images/gallery/restaurant/DBR_6767.jpg",
     label: { en: "Dining", mn: "Зоог" },
     meta: { en: "Lakeside kitchen", mn: "Нуурын эрэг дэх амтат зоог" },
@@ -323,7 +324,12 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           {item.available ? (
                             <Link
                               href={getNavItemHref(locale, item.href)}
-                              onClick={handleNavClick(item.href)}
+                              onClick={(event) => {
+                                if (isDiningGalleryHref(item.href)) {
+                                  openRestaurantMenuPdf();
+                                }
+                                handleNavClick(item.href)(event);
+                              }}
                               className={linkClass}
                             >
                               <span>{label}</span>

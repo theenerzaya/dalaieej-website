@@ -12,6 +12,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
 import { assetUrl } from "@/lib/assetUrl";
+import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
 import FadeInWhenVisible from "./FadeInWhenVisible";
 import { BodyText, CTALink, Eyebrow, Headline } from "../ui/Typography";
 
@@ -50,14 +51,14 @@ const personas = [
       description:
         "For those who have been everywhere. Experience the untamed Taiga and the raw beauty of the Blue Pearl.",
       image: assetUrl("/images/personas/frontier-en.jpg"),
-      href: "/gallery?filter=dining",
+      href: RESTAURANT_DINING_GALLERY_PATH,
     },
     mn: {
       title: "ХЯЗГААР НУТАГ",
       description:
         "Хаа сайгүй аялж үзсэн хүмүүст зориулав. Хөндөгдөөгүй онгон тайга болон Хөх сувдын байгалийн сайхныг нээх аялал.",
       image: assetUrl("/images/personas/frontier-mn.jpg"),
-      href: "/gallery?filter=dining",
+      href: RESTAURANT_DINING_GALLERY_PATH,
     },
   },
   {
@@ -86,14 +87,14 @@ const personas = [
       description:
         "Intimate escapes designed for two. Private dining, sunset wine, and zero interruptions.",
       image: assetUrl("/images/personas/seclusion.jpg"),
-      href: "/gallery?filter=dining",
+      href: RESTAURANT_DINING_GALLERY_PATH,
     },
     mn: {
       title: "ХОЁУЛАХНАА",
       description:
         "Зөвхөн та хоёрт зориулсан онцгой орон зай. Үдшийн зоог, жаргах наран, хэний ч үл саад болох амар амгалан.",
       image: assetUrl("/images/personas/seclusion.jpg"),
-      href: "/gallery?filter=dining",
+      href: RESTAURANT_DINING_GALLERY_PATH,
     },
   },
 ];
@@ -394,7 +395,14 @@ export default function PersonaSlider() {
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
-                  <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
+                  <CTALink
+                    href={`${localePrefix}${content.href}`}
+                    onClick={
+                      isDiningGalleryHref(content.href) ? openRestaurantMenuPdf : undefined
+                    }
+                    tone="dark"
+                    arrow={false}
+                  >
                     {locale === "mn" ? "Сонирхох" : "Explore"}
                   </CTALink>
                 </div>
@@ -460,7 +468,14 @@ export default function PersonaSlider() {
                 </AnimatePresence>
               </div>
 
-              <CTALink href={`${localePrefix}${content.href}`} tone="dark" arrow={false}>
+              <CTALink
+                href={`${localePrefix}${content.href}`}
+                onClick={
+                  isDiningGalleryHref(content.href) ? openRestaurantMenuPdf : undefined
+                }
+                tone="dark"
+                arrow={false}
+              >
                 {locale === "mn" ? "Сонирхох" : "Explore"}
               </CTALink>
 

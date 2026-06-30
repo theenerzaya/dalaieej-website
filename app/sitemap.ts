@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getCanonicalCabinHrefs } from '@/lib/cabinCatalog';
+import { RESTAURANT_MENU_PDF_PATH } from '@/lib/restaurantMenuPdf';
 import { SITE_URL_EN, SITE_URL_MN, hreflangLanguages } from '@/lib/site-urls';
 
 const routes = [
@@ -17,8 +18,6 @@ const routes = [
   '/almanac/borders-and-industry',
   '/almanac/forest-and-steppe',
   '/almanac/khovsgol-and-baikal',
-  '/dining',
-  '/restaurant',
   '/experiences',
   '/wellness',
   '/offers',
@@ -32,7 +31,7 @@ const routes = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const hosts = [SITE_URL_EN, SITE_URL_MN] as const;
 
-  return routes.flatMap((route) =>
+  const pageEntries = routes.flatMap((route) =>
     hosts.map((origin) => ({
       url: `${origin}${route}`,
       lastModified: new Date(),
@@ -43,4 +42,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     }))
   );
+
+  const menuPdfEntries = hosts.map((origin) => ({
+    url: `${origin}${RESTAURANT_MENU_PDF_PATH}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
+  return [...pageEntries, ...menuPdfEntries];
 }

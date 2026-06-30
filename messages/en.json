@@ -562,6 +562,16 @@
     "breakfast": "Daily breakfast is included in your room rate.",
     "lunchDinner": "Available at our lakefront restaurant. Choose from our Chef's Daily Special or A La Carte selection."
   },
+  "restaurant": {
+    "menu": {
+      "eyebrow": "À la carte & bar",
+      "title": "Our Menu",
+      "subtitle": "Full à la carte and drinks list — prices in Mongolian tögrög. Dietary requirements? Let us know when you book or arrive.",
+      "pdfNote": "Salads, Mongolian & European mains, desserts, wines, and bar — all in one document.",
+      "viewPdf": "View menu (PDF)",
+      "downloadPdf": "Download PDF"
+    }
+  },
   "included": {
     "title": "Included Experiences",
     "subtitle": "Your rate includes one complimentary session of:",

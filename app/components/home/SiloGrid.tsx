@@ -13,6 +13,7 @@ import {
 } from "framer-motion";
 import { Headline } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
+import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
 
 const silos = [
   {
@@ -24,7 +25,7 @@ const silos = [
   },
   {
     id: "dining",
-    href: "/gallery?filter=dining",
+    href: RESTAURANT_DINING_GALLERY_PATH,
     en: "Restaurant",
     mn: "Ресторан",
     image: "/images/silogrid/hearth.webp"
@@ -61,6 +62,31 @@ function resolveSiloHref(silo: SiloEntry, locale: string): string {
     return "#";
   }
   return silo.href;
+}
+
+function resolveSiloLinkHref(href: string, locale: string): string {
+  if (href === "#") return href;
+  return withLocalePath(locale, href);
+}
+
+function SiloLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={className}
+      onClick={isDiningGalleryHref(href) ? openRestaurantMenuPdf : undefined}
+    >
+      {children}
+    </Link>
+  );
 }
 
 /** Shared tile copy block used on both mobile and desktop. */
@@ -187,8 +213,8 @@ function MobileSilo({
           </motion.div>
         </a>
       ) : (
-        <Link
-          href={withLocalePath(locale, silo.href)}
+        <SiloLink
+          href={resolveSiloLinkHref(silo.href, locale)}
           className="group relative block w-full h-full"
         >
           <div className="absolute inset-0 z-0">
@@ -215,7 +241,7 @@ function MobileSilo({
               positionClassName="top-1/2 -translate-y-1/2"
             />
           </motion.div>
-        </Link>
+        </SiloLink>
       )}
     </motion.div>
   );
@@ -282,8 +308,8 @@ export default function SiloGrid() {
                 <SiloOverlay silo={resolvedSilo} isMongolian={isMongolian} size="hero" />
               </a>
             ) : (
-              <Link
-                href={withLocalePath(locale, resolvedSilo.href)}
+              <SiloLink
+                href={resolveSiloLinkHref(resolvedSilo.href, locale)}
                 className="relative block w-full h-full"
               >
                 <img
@@ -293,7 +319,7 @@ export default function SiloGrid() {
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
                 <SiloOverlay silo={resolvedSilo} isMongolian={isMongolian} size="hero" />
-              </Link>
+              </SiloLink>
             )}
           </motion.div>
           );

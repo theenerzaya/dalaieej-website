@@ -11,6 +11,7 @@ import { Eyebrow } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
 import { FOOTER_PARTNERS } from "@/lib/footerPartners";
 import { withLocalePath } from "@/lib/localePath";
+import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
 
 /** Shared row height — logos scale to fill this box (vertical centres align). */
 const PARTNER_ROW_HEIGHT = "h-7 md:h-8";
@@ -70,7 +71,7 @@ export default function Footer() {
 
   const experienceLinks: Array<{ key: string; href: string; active: boolean }> = [
     { key: "stay", href: "/cabins", active: true },
-    { key: "dining", href: "/gallery?filter=dining", active: true },
+    { key: "dining", href: RESTAURANT_DINING_GALLERY_PATH, active: true },
     { key: "wellness", href: "/wellness", active: false },
     { key: "adventures", href: "/experiences", active: true },
     { key: "stories", href: "/almanac", active: true },
@@ -154,6 +155,9 @@ export default function Footer() {
                   {item.active ? (
                     <Link
                       href={withLocalePath(locale, item.href)}
+                      onClick={
+                        isDiningGalleryHref(item.href) ? openRestaurantMenuPdf : undefined
+                      }
                       className="text-sm text-main/80 hover:text-white transition-colors"
                     >
                       {t(item.key)}

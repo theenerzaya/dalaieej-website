@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useTranslations, useLocale } from 'next-intl';
 import { ArrowLeft, Check, ChevronDown, Quote } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { withLocalePath } from '@/lib/localePath';
+import { RESTAURANT_DINING_GALLERY_PATH, openRestaurantMenuPdf } from '@/lib/restaurantMenuPdf';
 
 const amenityKeys = ['yurts', 'shoreline', 'restaurant', 'sauna', 'tours'];
 const inclusionKeys = ['breakfast', 'firewood', 'parking', 'security', 'concierge', 'wifi', 'water', 'luggage'];
@@ -101,9 +104,13 @@ export default function AmenitiesPage() {
               <p className="font-body text-slate-600 text-lg leading-relaxed mb-8">
                 {t('amenities.dining.desc')}
               </p>
-              <button className="px-6 py-3 bg-amber-600 text-white font-body font-semibold rounded-lg hover:bg-amber-700 transition-colors uppercase tracking-wide text-sm">
+              <Link
+                href={withLocalePath(locale, RESTAURANT_DINING_GALLERY_PATH)}
+                onClick={openRestaurantMenuPdf}
+                className="inline-block px-6 py-3 bg-amber-600 text-white font-body font-semibold rounded-lg hover:bg-amber-700 transition-colors uppercase tracking-wide text-sm"
+              >
                 {t('amenities.dining.cta')}
-              </button>
+              </Link>
             </div>
           </div>
         </div>
