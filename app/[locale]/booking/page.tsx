@@ -1794,11 +1794,15 @@ function BookingContent() {
                   const includedText =
                     mappedSlug === "camping"
                       ? currentLocale === "mn"
-                        ? "Саун, иог, алхалт, завь"
-                        : "Sauna, yoga, hiking, kayaking"
-                      : currentLocale === "mn"
-                        ? "Өглөөний цай, саун, иог, алхалт, завь"
-                        : "Breakfast, sauna, yoga, hiking, kayaking";
+                        ? "Иогийн хичээл, явган аялал, сэлүүрт завь, саун (нийтийн цагаар, 1 удаа үнэгүй)"
+                        : "Yoga class, guided hike, kayaking, sauna (during public hours, 1st time free)"
+                      : mappedSlug === "signature-cabin"
+                        ? currentLocale === "mn"
+                          ? "Өглөөний цай, мөн иогийн хичээл, явган аялал, сэлүүрт завь, саун (нийтийн цагаар, 1 удаа үнэгүй)"
+                          : "Breakfast, plus yoga class, guided hike, kayaking, sauna (during public hours, 1st time free)"
+                        : currentLocale === "mn"
+                          ? "Өглөөний цай, мөн иогийн хичээл, явган аялал, сэлүүрт завь, саун (1 удаа үнэгүй)"
+                          : "Breakfast, plus yoga class, guided hike, kayaking, sauna (1st time free)";
 
                   const perNightValues = group.rates
                     .filter((r) => r.totalRate > 0)

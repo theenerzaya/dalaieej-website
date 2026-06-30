@@ -41,16 +41,16 @@ const EQUIPMENT = {
 } satisfies Record<string, Localized>;
 
 const INCLUDED_SERVICES =
-  "Өглөөний цай, саун, сэлүүрт завь ашиглах эрх, өглөөний иог болон Далай Ээжийн хойгт нэвтрэх эрх багтана.";
+  "Өглөөний цай багтсан. Мөн иогийн хичээл, явган аялал, сэлүүрт завь, саун (1 удаа үнэгүй). Далай Ээжийн хойгт нэвтрэх эрхтэй.";
 
 const INCLUDED_SERVICES_EN =
-  "Breakfast, sauna and kayak access, morning yoga, and entry to the Dalai Eej peninsula are included.";
+  "Breakfast is included. You also get 1 free session of yoga class, guided hike, kayaking, and sauna. Entry to the Dalai Eej peninsula is included.";
 
 const CAMPING_INCLUDED_SERVICES =
-  "Саун, сэлүүрт завь ашиглах эрх, өглөөний иог болон Далай Ээжийн хойгт нэвтрэх эрх багтана.";
+  "Иогийн хичээл, явган аялал, сэлүүрт завь, саун (нийтийн цагаар, 1 удаа үнэгүй). Далай Ээжийн хойгт нэвтрэх эрхтэй.";
 
 const CAMPING_INCLUDED_SERVICES_EN =
-  "Sauna and kayak access, morning yoga, and entry to the Dalai Eej peninsula are included.";
+  "You get 1 free session of yoga class, guided hike, kayaking, and sauna (during public hours). Entry to the Dalai Eej peninsula is included.";
 
 export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
   "superior-cabin": {
@@ -81,9 +81,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Нуурын харагдац",
       "Минибар",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   "triple-traditional-cabin": {
@@ -117,9 +118,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Нуурын харагдац",
       "Минибар",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   "lakeside-cabin": {
@@ -149,9 +151,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Нуурын харагдац",
       "Минибар",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   "triple-electric-cabin": {
@@ -183,9 +186,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Телевиз",
       "Минибар",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   "signature-cabin": {
@@ -212,9 +216,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Цахилгаан халаалт",
       "Нийтийн шүршүүр ашиглана",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (нийтийн цагаар, 1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   "quad-electric-cabin": {
@@ -245,9 +250,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Нуурын харагдац",
       "Минибар",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   "grand-peninsula-suite": {
@@ -280,9 +286,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
       "Телевиз",
       "Минибар",
       "Өглөөний цай багтсан",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
   camping: {
@@ -308,9 +315,10 @@ export const CABIN_CLOUDBEDS_FACTS: Record<CabinSlug, CabinCloudbedsFact> = {
     features: [
       "\"Далай Ээж\" хойгт нэвтрэх эрх",
       "Нийтийн шүршүүр ашиглана",
-      "Саун үнэгүй",
-      "Сэлүүрт завь үнэгүй",
-      "Өглөөний иог",
+      "Саун (нийтийн цагаар, 1 удаа үнэгүй)",
+      "Сэлүүрт завь (1 удаа үнэгүй)",
+      "Иогийн хичээл (1 удаа үнэгүй)",
+      "Явган аялал (1 удаа үнэгүй)",
     ],
   },
 };
