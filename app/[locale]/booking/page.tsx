@@ -73,6 +73,7 @@ interface RoomTypeGroup {
   maxAdults?: number;
   photos: string[];
   features: string[];
+  roomSizeLabel?: { en: string; mn: string };
   bathroomLabel?: { en: string; mn: string };
   showerLabel?: { en: string; mn: string };
   currency: string;
@@ -488,6 +489,7 @@ function BookingContent() {
           maxAdults: localFact?.maxAdults,
           photos: room.photos,
           features: localEquipment.length ? localEquipment : toPlainProviderTextList(room.features),
+          roomSizeLabel: localFact?.roomSizeLabel,
           bathroomLabel: localFact?.bathroomLabel,
           showerLabel: localFact?.showerLabel,
           currency: room.currency,
@@ -1867,6 +1869,17 @@ function BookingContent() {
                               {currentLocale === 'mn' ? `${maxGuests} хүн хүртэл${group.maxAdults ? ` (${group.maxAdults} хүртэлх том хүн)` : ''}` : `Up to ${maxGuests}${group.maxAdults ? ` (max ${group.maxAdults} adults)` : ''}`}
                             </span>
                           </li>
+                          {group.roomSizeLabel && (
+                            <li className="flex items-start gap-2">
+                              <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
+                              <span>
+                                <span className="text-main/50">
+                                  {currentLocale === 'mn' ? 'Хэмжээ:' : 'Size:'}
+                                </span>{' '}
+                                {group.roomSizeLabel[currentLocale]}
+                              </span>
+                            </li>
+                          )}
                           {group.bathroomLabel && group.showerLabel && (
                             <li className="flex items-start gap-2">
                               <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0 text-bark" />
