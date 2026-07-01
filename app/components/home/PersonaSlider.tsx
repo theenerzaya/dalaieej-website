@@ -8,7 +8,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
 import { assetUrl } from "@/lib/assetUrl";
@@ -27,7 +27,6 @@ const REVEAL_SCALE_MIN = 0.6;
 const personas = [
   {
     id: 1,
-    quoteKey: "review1",
     en: {
       title: "THE SANCTUARY",
       description:
@@ -45,7 +44,6 @@ const personas = [
   },
   {
     id: 2,
-    quoteKey: "review3",
     en: {
       title: "THE FRONTIER",
       description:
@@ -63,7 +61,6 @@ const personas = [
   },
   {
     id: 3,
-    quoteKey: "review2",
     en: {
       title: "DISCONNECT TO RECONNECT",
       description:
@@ -81,7 +78,6 @@ const personas = [
   },
   {
     id: 4,
-    quoteKey: "review4",
     en: {
       title: "THE SECLUSION",
       description:
@@ -100,6 +96,78 @@ const personas = [
 ];
 
 type PersonaEntry = (typeof personas)[number];
+
+type PersonaTestimonial = {
+  id: string;
+  text: string;
+  author: string;
+  meta?: string;
+};
+
+const personaTestimonials: Record<"en" | "mn", PersonaTestimonial[]> = {
+  en: [
+    {
+      id: "michael-quiet-lake",
+      text: "A peaceful, lovely stay on the quieter side of the lake. Family-run, with walking trails, a private sauna at the water's edge, and great food.",
+      author: "Michael R.",
+    },
+    {
+      id: "werner-maria",
+      text: "Maria was overwhelmed. Had a wonderful time with you and the family. Bless you.",
+      author: "Werner & Maria",
+    },
+    {
+      id: "makoto-hospitality",
+      text: "The hospitality of the owner and staff was the most wonderful thing. I spent a quiet, peaceful time, a wonderful memory of Mongolia.",
+      author: "Makoto M.",
+    },
+    {
+      id: "billy-partner-trip",
+      text: "Three unforgettable days with my partner. The setting beside the lake, the warmth of the owners, the quiet afternoons, easily the most memorable trip we've ever had.",
+      author: "Billy P.",
+    },
+    {
+      id: "saruul-family",
+      text: "This is a place to bring your parents.",
+      author: "Saruul",
+      meta: "Mongolia · August 2025",
+    },
+    {
+      id: "ankita-silence",
+      text: "There's pin-drop silence, and that's what we come for.",
+      author: "Ankita P.",
+      meta: "Mumbai, India · Cuddles Foundation · June 2026",
+    },
+    {
+      id: "andrii-jankhai",
+      text: "This is the best resort for us in Jankhai. The atmosphere here is great.",
+      author: "Andrii L.",
+      meta: "Ukraine · Booking.com · June 2026",
+    },
+  ],
+  mn: [
+    {
+      id: "urankholboo-energy",
+      text: "Хөвсгөл далай дээрээ ирж л хүсээд байдаг цэвэр тунгалаг энерги, эрчимээ мэдэрдэг дээ 💙 @dalaieejresort",
+      author: "Дуучин Уранхолбоо",
+    },
+    {
+      id: "guest-blessing",
+      text: "Буцаад ирэхэд булаг шиг, дайраад ирэхэд далай шиг байх болтугай гэж ээж маань ерөөгөөд бид хөдөллөө. Сайхан амарлаа.",
+      author: "Зочин",
+    },
+    {
+      id: "enkhee-sauna",
+      text: "Гэр бүлээрээ ирж сайхан амарлаа. Хоол болгон амттай, хангалттай цадна. Далайн эрэг дээр байрлах саунд суугаад далай руу үсэрч ороод сэлэх үнэн тасархай мэдрэмж, кайф авлаа.",
+      author: "Энхээ Э.",
+    },
+    {
+      id: "azzaya-couple",
+      text: "Эзэд нь маш халуун дулаанаар угтан авч, яг л гэртээ байгаа мэт тухтай мэдрэмж төрүүлсэн. Үзэсгэлэнт байгаль, тухлаг байр гээд бүх зүйл нь амар амгалан байлаа. Хосоороо жинхэнэ утгаар нь амрахыг хүссэн хүн бүрд санал болгож байна!",
+      author: "Аззаяа Г.",
+    },
+  ],
+};
 
 /** CapCut-style “Left”: next pushes current off to the left; prev is the reverse. */
 const pushVariants = {
@@ -161,7 +229,6 @@ export default function PersonaSlider() {
   const localePrefix = locale === "mn" ? "/mn" : "";
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
-  const tTestimonials = useTranslations("amenities.testimonials");
   const isMn = locale === "mn";
 
   const { scrollYProgress } = useScroll({
@@ -215,6 +282,11 @@ export default function PersonaSlider() {
 
   const currentPersona = personas[normalizedIndex];
   const content = locale === "mn" ? currentPersona.mn : currentPersona.en;
+  const testimonialPool = isMn ? personaTestimonials.mn : personaTestimonials.en;
+  const quoteIndex =
+    ((activeIndex % testimonialPool.length) + testimonialPool.length) %
+    testimonialPool.length;
+  const currentTestimonial = testimonialPool[quoteIndex];
   const sideFrameClass =
     "relative w-[20vw] max-w-[260px] shrink-0 aspect-[3/4] overflow-hidden shadow-2xl ring-1 ring-white/10";
   const centerFrameClass =
@@ -409,7 +481,7 @@ export default function PersonaSlider() {
 
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.figure
-                    key={`${currentPersona.id}-${locale}-quote`}
+                    key={`${currentTestimonial.id}-${locale}-quote`}
                     custom={direction}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -434,11 +506,18 @@ export default function PersonaSlider() {
                       ].join(" ")}
                     >
                       <span>
-                        &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                        &ldquo;{currentTestimonial.text}&rdquo;
                       </span>
                     </blockquote>
-                    <figcaption className="mt-5 font-cta text-main/70 text-xs tracking-[0.3em] uppercase">
-                      &mdash;&nbsp;{tTestimonials(`${currentPersona.quoteKey}.author`)}
+                    <figcaption className="mt-5 flex flex-col items-center gap-2">
+                      <span className="font-cta text-main/70 text-xs tracking-[0.3em] uppercase">
+                        &mdash;&nbsp;{currentTestimonial.author}
+                      </span>
+                      {currentTestimonial.meta ? (
+                        <span className="font-body text-xs text-main/45">
+                          {currentTestimonial.meta}
+                        </span>
+                      ) : null}
                     </figcaption>
                   </motion.figure>
                 </AnimatePresence>
@@ -496,11 +575,18 @@ export default function PersonaSlider() {
                   ].join(" ")}
                 >
                   <span>
-                    &ldquo;{tTestimonials(`${currentPersona.quoteKey}.text`)}&rdquo;
+                    &ldquo;{currentTestimonial.text}&rdquo;
                   </span>
                 </blockquote>
-                <figcaption className="mt-5 font-cta text-main/70 text-xs tracking-[0.3em] uppercase">
-                  &mdash;&nbsp;{tTestimonials(`${currentPersona.quoteKey}.author`)}
+                <figcaption className="mt-5 flex flex-col items-center gap-2">
+                  <span className="font-cta text-main/70 text-xs tracking-[0.3em] uppercase">
+                    &mdash;&nbsp;{currentTestimonial.author}
+                  </span>
+                  {currentTestimonial.meta ? (
+                    <span className="font-body text-xs text-main/45">
+                      {currentTestimonial.meta}
+                    </span>
+                  ) : null}
                 </figcaption>
               </figure>
             </div>
@@ -522,9 +608,6 @@ export default function PersonaSlider() {
           </svg>
         </motion.div>
       </div>
-
-      {/* Visually hidden heritage line — kept for SEO/screen readers */}
-      <p className="sr-only">{tTestimonials("heritage")}</p>
     </section>
   );
 }

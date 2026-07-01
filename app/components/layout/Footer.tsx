@@ -161,7 +161,7 @@ export default function Footer() {
                   {item.active ? (
                     isWellnessInteractionHref(item.href) ? (
                       <a
-                        href="#"
+                        href={item.href}
                         onClick={handleWellnessInteraction}
                         className="text-sm text-main/80 hover:text-white transition-colors"
                       >
@@ -183,9 +183,9 @@ export default function Footer() {
                     </Link>
                     )
                   ) : (
-                    <a href="#" aria-disabled="true" className="text-sm text-main/80 hover:text-white transition-colors">
+                    <span role="link" aria-disabled="true" className="text-sm text-main/40">
                       {t(item.key)}
-                    </a>
+                    </span>
                   )}
                 </li>
               ))}

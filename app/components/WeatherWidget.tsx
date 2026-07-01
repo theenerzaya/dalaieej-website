@@ -56,7 +56,7 @@ export default function WeatherWidget({ className, label }: WeatherWidgetProps) 
 
   return (
     <section
-      className={["w-fit text-left", className].filter(Boolean).join(" ")}
+      className={["w-fit", className].filter(Boolean).join(" ")}
       aria-label={isMn ? "Хатгалын цаг агаар" : "Khatgal weather conditions"}
     >
       <p className="font-cta text-[10px] font-medium uppercase leading-none tracking-[0.24em] text-main/55 md:text-[11px]">

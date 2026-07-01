@@ -22,6 +22,7 @@ import { absoluteSiteUrl } from "@/lib/site-urls";
  *   │  ✕  EN | MN                LOGO              BOOK YOUR STAY  │
  *   │ ──────────────────────────────────────────────────────────── │
  *   │                                                              │
+ *   │  Weather Conditions                                          │
  *   │  Our Rooms                                                   │
  *   │  Dining                                                      │
  *   │  Adventures                                                  │
@@ -29,7 +30,6 @@ import { absoluteSiteUrl } from "@/lib/site-urls";
  *   │                                                              │
  *   │  Call us: +976 …                                             │
  *   │  [f] [ig] [@]                                                │
- *   │  Weather Conditions                                          │
  *   └──────────────────────────────────────────────────────────────┘
  *
  * Typography mirrors the rest of the site:
@@ -294,6 +294,15 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
             <div className="min-h-0 flex-1 overflow-hidden">
               <div className="mx-auto grid min-h-full w-full max-w-7xl grid-cols-1 gap-5 px-5 py-6 md:grid-cols-[minmax(0,1fr)_minmax(17rem,22rem)] md:items-end md:gap-12 md:px-12 md:py-10 lg:gap-16 xl:py-14">
                 <div className="flex min-w-0 flex-col md:self-center">
+                  <motion.div
+                    initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.45, delay: 0.08 }}
+                    className="mb-5 flex justify-center text-center md:mb-7"
+                  >
+                    <WeatherWidget className="mx-auto text-center [&>p:last-child]:text-[1.75rem] md:[&>p:last-child]:text-[2rem] lg:[&>p:last-child]:text-[2.35rem]" />
+                  </motion.div>
+
                   <nav
                     aria-label="Primary"
                     className="flex flex-col gap-2 md:gap-3.5"
@@ -426,7 +435,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       </li>
                     </ul>
 
-                    <WeatherWidget className="pt-1 md:pt-3 [@media(max-height:700px)_and_(max-width:767px)]:hidden" />
                   </motion.div>
                 </div>
               </div>
