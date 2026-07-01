@@ -6,6 +6,7 @@ import EditorialIntro from "../components/home/EditorialIntro";
 import SiloGrid from "../components/home/SiloGrid";
 // import OffersCarousel from "../components/home/OffersCarousel";
 const PersonaSlider = dynamic(() => import("../components/home/PersonaSlider"));
+const Testimonials = dynamic(() => import("../components/home/Testimonials"));
 const InteractiveMap = dynamic(() => import("../components/InteractiveMap"));
 const AddressSection = dynamic(() => import("../components/home/AddressSection"));
 const AvailabilityBar = dynamic(() => import("../components/AvailabilityBar"));
@@ -30,6 +31,7 @@ export default function Home() {
       </div>
       {/* <OffersCarousel /> */}
       <PersonaSlider />
+      <Testimonials />
       <InteractiveMap />
       <AddressSection />
       <AvailabilityBar />

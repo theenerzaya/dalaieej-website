@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
 import PageShell from "@/app/components/layout/PageShell";
 import {
   BodyText,
@@ -16,8 +15,7 @@ import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import MediaPlaceholder from "@/app/components/getting-here/MediaPlaceholder";
 import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
 import { ArchivalCard } from "@/app/components/almanac/AlmanacArticlePrimitives";
-import { ALMANAC_CHAPTERS as EN_CHAPTERS } from "@/app/data/almanacChapters";
-import { ALMANAC_CHAPTERS as MN_CHAPTERS } from "@/app/data/almanacChapters.mn";
+import { SUGGESTED_PROGRAMME_PDF_PATH } from "@/lib/suggestedProgrammePdf";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -184,8 +182,6 @@ export default function ExperiencesPage() {
   const locale = useLocale();
   const t = useTranslations("experiencesPage");
   const localePrefix = locale === "mn" ? "/mn" : "";
-  const chapters = locale === "mn" ? MN_CHAPTERS : EN_CHAPTERS;
-  const prevChapter = chapters.find((c) => c.id === "chapter-v");
   const reduceMotion = useReducedMotion();
 
   const experienceRichTags = {
@@ -294,13 +290,16 @@ export default function ExperiencesPage() {
 
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto max-w-6xl">
-          <FadeInBlock className="mb-12 md:mb-16">
+          <FadeInBlock className="mb-12 md:mb-16 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <CTALink
               href={`${localePrefix}/almanac`}
               arrow={false}
               className="!text-ink/50 hover:!text-water-deep [&>span]:!border-ink/20 [&>span]:group-hover:!border-water-deep/40"
             >
               {t("backToAlmanac")}
+            </CTALink>
+            <CTALink href={SUGGESTED_PROGRAMME_PDF_PATH} external>
+              {t("programmePdf")}
             </CTALink>
           </FadeInBlock>
 
@@ -514,28 +513,6 @@ export default function ExperiencesPage() {
               </SectionBlock>
             </div>
           </article>
-        </div>
-      </section>
-
-      <section className="px-6 pb-4 md:pb-6">
-        <div className="mx-auto max-w-6xl">
-          <FadeInBlock>
-            <div className="flex justify-start border-t border-ink/10 pt-12">
-              {prevChapter ? (
-                <Link
-                  href={`${localePrefix}${prevChapter.href}`}
-                  className="group font-body text-sm text-ink/60 transition-colors hover:text-water-deep"
-                >
-                  <span className="font-cta text-[10px] uppercase tracking-[0.25em] text-ink/40">
-                    {locale === "mn" ? "Өмнөх" : "Previous"}
-                  </span>
-                  <span className="mt-1 block text-base text-ink group-hover:text-water-deep">
-                    {prevChapter.eyebrow} — {prevChapter.title}
-                  </span>
-                </Link>
-              ) : null}
-            </div>
-          </FadeInBlock>
         </div>
       </section>
 

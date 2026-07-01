@@ -164,7 +164,7 @@
       "cardEyebrow": "Testimonials",
       "heritage": "Trusted by leaders, executives, and families since 1998.",
       "ratingLabel": "Exceptional",
-      "reviewCount": "Based on 35 reviews",
+      "reviewCount": "Based on 35+ reviews",
       "review1": {
         "text": "A peaceful, lovely stay on the quieter side of the lake. Family-run, with walking trails, a private sauna at the water's edge, and great food.",
         "author": "Michael R."
@@ -817,6 +817,7 @@
       "subtitle": "Beyond the quiet sanctuary of the resort, the Mergen Peninsula and the broader shores of Lake Khuvsgul offer both untamed wilderness and deep cultural heritage. Whether you seek active exploration or absolute stillness, here is how to spend your days with us."
     },
     "backToAlmanac": "← The Almanac",
+    "programmePdf": "View Suggested Programme",
     "tocTitle": "Quick Navigation",
     "toc": {
       "boatExpeditions": "Chartered Boat Expeditions",

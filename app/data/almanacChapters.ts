@@ -85,16 +85,4 @@ export const ALMANAC_CHAPTERS: AlmanacChapter[] = [
     href: "/almanac/khovsgol-and-baikal",
     ctaLabel: "Read",
   },
-  {
-    id: "chapter-vi",
-    eyebrow: "Chapter VI",
-    title: "Discover Khatgal & The Mergen Peninsula",
-    description:
-      "Kayaking at dawn, peninsula hikes, Khatgal's market, sauna restoration, and the quiet rituals of the eastern shore — a visitor's companion beyond the resort.",
-    imageSrc: "/images/gallery/adventures/DBR_4391.webp",
-    imageAlt: "Lake Khövsgöl viewed from the Mergen Peninsula near Dalai Eej Resort.",
-    imageFit: "contain",
-    href: "/experiences",
-    ctaLabel: "Read",
-  },
 ];

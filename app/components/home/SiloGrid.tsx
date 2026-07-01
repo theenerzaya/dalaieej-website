@@ -14,6 +14,7 @@ import {
 import { Headline } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
 import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
+import { isExperiencesHref, openSuggestedProgrammePdf } from "@/lib/suggestedProgrammePdf";
 
 const silos = [
   {
@@ -40,7 +41,6 @@ const silos = [
   {
     id: "adventure",
     href: "/experiences",
-    enOnly: true,
     en: "Experiences",
     mn: "Аялал",
     image: "/images/silogrid/wilderness.webp"
@@ -57,16 +57,15 @@ const storiesSilo = {
 
 type SiloEntry = (typeof silos)[number];
 
-function resolveSiloHref(silo: SiloEntry, locale: string): string {
-  if (silo.enOnly && locale !== "en") {
-    return "#";
-  }
-  return silo.href;
-}
-
 function resolveSiloLinkHref(href: string, locale: string): string {
   if (href === "#") return href;
   return withLocalePath(locale, href);
+}
+
+function resolveSiloOnClick(href: string): (() => void) | undefined {
+  if (isDiningGalleryHref(href)) return openRestaurantMenuPdf;
+  if (isExperiencesHref(href)) return openSuggestedProgrammePdf;
+  return undefined;
 }
 
 function SiloLink({
@@ -82,7 +81,7 @@ function SiloLink({
     <Link
       href={href}
       className={className}
-      onClick={isDiningGalleryHref(href) ? openRestaurantMenuPdf : undefined}
+      onClick={resolveSiloOnClick(href)}
     >
       {children}
     </Link>
@@ -259,7 +258,7 @@ export default function SiloGrid() {
         {silos.map((silo, i) => (
           <MobileSilo
             key={silo.id}
-            silo={{ ...silo, href: resolveSiloHref(silo, locale) }}
+            silo={silo}
             isMongolian={isMongolian}
             index={i}
           />
@@ -277,10 +276,7 @@ export default function SiloGrid() {
         className="hidden md:grid grid-cols-2 w-full bg-surface gap-x-px gap-y-px"
         style={{ columnGap: "1px", rowGap: "1px" }}
       >
-        {silos.map((silo, i) => {
-          const resolvedSilo = { ...silo, href: resolveSiloHref(silo, locale) };
-
-          return (
+        {silos.map((silo, i) => (
           <motion.div
             key={silo.id}
             className="relative h-[80vh] w-full bg-gray-900 overflow-hidden group"
@@ -297,33 +293,32 @@ export default function SiloGrid() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            {resolvedSilo.href === "#" ? (
+            {resolveSiloLinkHref(silo.href, locale) === "#" ? (
               <a href="#" className="relative block w-full h-full">
                 <img
-                  src={assetUrl(resolvedSilo.image)}
-                  alt={isMongolian ? resolvedSilo.mn : resolvedSilo.en}
+                  src={assetUrl(silo.image)}
+                  alt={isMongolian ? silo.mn : silo.en}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-                <SiloOverlay silo={resolvedSilo} isMongolian={isMongolian} size="hero" />
+                <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
               </a>
             ) : (
               <SiloLink
-                href={resolveSiloLinkHref(resolvedSilo.href, locale)}
+                href={resolveSiloLinkHref(silo.href, locale)}
                 className="relative block w-full h-full"
               >
                 <img
-                  src={assetUrl(resolvedSilo.image)}
-                  alt={isMongolian ? resolvedSilo.mn : resolvedSilo.en}
+                  src={assetUrl(silo.image)}
+                  alt={isMongolian ? silo.mn : silo.en}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-                <SiloOverlay silo={resolvedSilo} isMongolian={isMongolian} size="hero" />
+                <SiloOverlay silo={silo} isMongolian={isMongolian} size="hero" />
               </SiloLink>
             )}
           </motion.div>
-          );
-        })}
+        ))}
 
         {/* Stories — full-width row */}
         <motion.div

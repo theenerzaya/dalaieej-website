@@ -5,11 +5,16 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { Star } from "lucide-react";
 import { BodyText, Eyebrow } from "../ui/Typography";
+import { testimonials, type LocalizedText } from "../../data/testimonials";
 
-const REVIEW_IDS = ["review1", "review2", "review3"] as const;
 const AUTO_ADVANCE_MS = 5000;
 const RATING = 4.9;
 const FULL_STARS = 4;
+
+function localize(text: LocalizedText | undefined, locale: string) {
+  if (!text) return undefined;
+  return locale === "mn" ? text.mn : text.en;
+}
 
 export default function Testimonials() {
   const locale = useLocale();
@@ -22,7 +27,7 @@ export default function Testimonials() {
   const startAutoPlay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % REVIEW_IDS.length);
+      setActiveIndex((prev) => (prev + 1) % testimonials.length);
     }, AUTO_ADVANCE_MS);
   }, []);
 
@@ -43,15 +48,23 @@ export default function Testimonials() {
     startAutoPlay();
   };
 
-  const reviewId = REVIEW_IDS[activeIndex];
-  const author = t(`${reviewId}.author`);
+  const activeTestimonial = testimonials[activeIndex] ?? testimonials[0];
+  const quote = localize(activeTestimonial.quote, locale);
+  const metaParts = [
+    localize(activeTestimonial.location, locale),
+    localize(activeTestimonial.source, locale),
+    localize(activeTestimonial.date, locale),
+  ].filter(Boolean);
 
   const slideTransition = prefersReducedMotion
     ? { duration: 0.2, ease: "easeOut" as const }
     : { duration: 0.55, ease: "easeInOut" as const };
 
   return (
-    <section className="relative bg-surface overflow-hidden">
+    <section
+      id="reviews"
+      className="relative scroll-mt-24 bg-surface overflow-hidden md:scroll-mt-28"
+    >
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 py-16 md:py-24 flex flex-col items-center">
         {/* Section eyebrow */}
         <motion.div
@@ -124,7 +137,7 @@ export default function Testimonials() {
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
-              key={reviewId}
+              key={activeTestimonial.id}
               className="flex w-full flex-col items-center justify-start px-2 text-center"
               initial={
                 prefersReducedMotion
@@ -147,7 +160,7 @@ export default function Testimonials() {
                   "leading-snug md:leading-[1.35]",
                 ].join(" ")}
               >
-                &ldquo;{t(`${reviewId}.text`)}&rdquo;
+                &ldquo;{quote}&rdquo;
               </blockquote>
 
               <div className="mt-8 md:mt-10 flex flex-col items-center gap-1">
@@ -157,8 +170,13 @@ export default function Testimonials() {
                     locale === "mn" ? "text-sm font-light" : "text-sm font-medium",
                   ].join(" ")}
                 >
-                  {author}
+                  {activeTestimonial.author}
                 </p>
+                {metaParts.length > 0 ? (
+                  <p className="font-body text-xs text-ink/55">
+                    {metaParts.join(" · ")}
+                  </p>
+                ) : null}
               </div>
             </motion.div>
           </AnimatePresence>
@@ -176,11 +194,11 @@ export default function Testimonials() {
           }}
           className="flex items-center justify-center gap-2 mt-10 md:mt-12"
         >
-          {REVIEW_IDS.map((_, index) => {
+          {testimonials.map((testimonial, index) => {
             const isActive = index === activeIndex;
             return (
               <button
-                key={index}
+                key={testimonial.id}
                 type="button"
                 onClick={() => handleDotClick(index)}
                 className={[
@@ -190,7 +208,11 @@ export default function Testimonials() {
                     ? "w-6 bg-water-deep"
                     : "w-2 bg-water-deep/15 hover:bg-water-deep/30",
                 ].join(" ")}
-                aria-label={`Go to review ${index + 1}`}
+                aria-label={
+                  locale === "mn"
+                    ? `${index + 1}-р сэтгэгдэл рүү очих`
+                    : `Go to review ${index + 1}`
+                }
                 aria-current={isActive ? "true" : undefined}
               />
             );
