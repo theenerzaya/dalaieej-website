@@ -298,9 +298,13 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: reduceMotion ? 0 : 0.45, delay: 0.08 }}
-                    className="mb-5 flex justify-center text-center md:mb-7"
+                    className="mb-5 flex flex-col items-center justify-center text-center md:mb-7"
                   >
                     <WeatherWidget className="mx-auto text-center [&>p:last-child]:text-[1.75rem] md:[&>p:last-child]:text-[2rem] lg:[&>p:last-child]:text-[2.35rem]" />
+                    <span
+                      aria-hidden="true"
+                      className="mt-4 h-px w-12 bg-gradient-to-r from-transparent via-main/35 to-transparent md:mt-5 md:w-16"
+                    />
                   </motion.div>
 
                   <nav
