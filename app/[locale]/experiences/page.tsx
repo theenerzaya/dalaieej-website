@@ -24,7 +24,7 @@ const EXPERIENCE_LINKS = {
   tumenEkh:
     "https://www.facebook.com/p/Tumen-Ekh-ensembleofficial-page-100090139782969/",
   tsagaanLavai: "https://tsagaanlavai.mn/?lang=en",
-  khyasaaMountain:
+  chuchoMountain:
     "https://www.wikiloc.com/hiking-trails/mongolia-khyasaayaa-uul-5154270",
   sukhbaatarMuseum: "https://maps.app.goo.gl/Gpk4Ab9zjAQ6DchU9",
   localMarket: "https://maps.app.goo.gl/8hhA5upPR6Y28aKGA",
@@ -196,8 +196,8 @@ export default function ExperiencesPage() {
         {chunks}
       </ExternalProseLink>
     ),
-    khyasaa: (chunks: ReactNode) => (
-      <ExternalProseLink href={EXPERIENCE_LINKS.khyasaaMountain}>
+    chucho: (chunks: ReactNode) => (
+      <ExternalProseLink href={EXPERIENCE_LINKS.chuchoMountain}>
         {chunks}
       </ExternalProseLink>
     ),
@@ -410,9 +410,9 @@ export default function ExperiencesPage() {
                   />
                 </FadeInBlock>
                 <FadeInBlock delay={0.1}>
-                  <Subhead>{t("khatgalWesternShore.khyasaaTitle")}</Subhead>
+                  <Subhead>{t("khatgalWesternShore.chuchoTitle")}</Subhead>
                   <Prose>
-                    {t.rich("khatgalWesternShore.khyasaa", experienceRichTags)}
+                    {t.rich("khatgalWesternShore.chucho", experienceRichTags)}
                   </Prose>
                   <Subhead>{t("khatgalWesternShore.museumTitle")}</Subhead>
                   <Prose>{t("khatgalWesternShore.museumBody")}</Prose>

@@ -12,6 +12,7 @@ import { assetUrl } from "@/lib/assetUrl";
 import { FOOTER_PARTNERS } from "@/lib/footerPartners";
 import { withLocalePath } from "@/lib/localePath";
 import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
+import { isExperiencesHref, openSuggestedProgrammePdf } from "@/lib/suggestedProgrammePdf";
 import {
   WELLNESS_INTERACTION_HREF,
   handleWellnessInteraction,
@@ -170,7 +171,11 @@ export default function Footer() {
                     <Link
                       href={withLocalePath(locale, item.href)}
                       onClick={
-                        isDiningGalleryHref(item.href) ? openRestaurantMenuPdf : undefined
+                        isDiningGalleryHref(item.href)
+                          ? openRestaurantMenuPdf
+                          : isExperiencesHref(item.href)
+                            ? openSuggestedProgrammePdf
+                            : undefined
                       }
                       className="text-sm text-main/80 hover:text-white transition-colors"
                     >
