@@ -12,6 +12,11 @@ import { assetUrl } from "@/lib/assetUrl";
 import { FOOTER_PARTNERS } from "@/lib/footerPartners";
 import { withLocalePath } from "@/lib/localePath";
 import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
+import {
+  WELLNESS_INTERACTION_HREF,
+  handleWellnessInteraction,
+  isWellnessInteractionHref,
+} from "@/lib/wellnessPromo";
 
 /** Shared row height — logos scale to fill this box (vertical centres align). */
 const PARTNER_ROW_HEIGHT = "h-7 md:h-8";
@@ -72,7 +77,7 @@ export default function Footer() {
   const experienceLinks: Array<{ key: string; href: string; active: boolean }> = [
     { key: "stay", href: "/cabins", active: true },
     { key: "dining", href: RESTAURANT_DINING_GALLERY_PATH, active: true },
-    { key: "wellness", href: "/wellness", active: false },
+    { key: "wellness", href: WELLNESS_INTERACTION_HREF, active: true },
     { key: "adventures", href: "/experiences", active: true },
     { key: "stories", href: "/almanac", active: true },
   ];
@@ -153,6 +158,15 @@ export default function Footer() {
               {experienceLinks.map((item) => (
                 <li key={item.key}>
                   {item.active ? (
+                    isWellnessInteractionHref(item.href) ? (
+                      <a
+                        href="#"
+                        onClick={handleWellnessInteraction}
+                        className="text-sm text-main/80 hover:text-white transition-colors"
+                      >
+                        {t(item.key)}
+                      </a>
+                    ) : (
                     <Link
                       href={withLocalePath(locale, item.href)}
                       onClick={
@@ -162,6 +176,7 @@ export default function Footer() {
                     >
                       {t(item.key)}
                     </Link>
+                    )
                   ) : (
                     <a href="#" aria-disabled="true" className="text-sm text-main/80 hover:text-white transition-colors">
                       {t(item.key)}

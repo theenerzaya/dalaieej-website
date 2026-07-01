@@ -15,6 +15,7 @@ import FadeInBlock from "@/app/components/getting-here/FadeInBlock";
 import MediaPlaceholder from "@/app/components/getting-here/MediaPlaceholder";
 import FrostedMapSection from "@/app/components/getting-here/FrostedMapSection";
 import { ArchivalCard } from "@/app/components/almanac/AlmanacArticlePrimitives";
+import ContextualTestimonial from "@/app/components/testimonials/ContextualTestimonial";
 import { SUGGESTED_PROGRAMME_PDF_PATH } from "@/lib/suggestedProgrammePdf";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -466,6 +467,15 @@ export default function ExperiencesPage() {
                   <Prose>{t("peninsulaLeisure.picnics")}</Prose>
                 </FadeInBlock>
               </SectionBlock>
+
+              <ContextualTestimonial
+                testimonialId="ankita-silence"
+                eyebrow={{
+                  en: "Guest reflection",
+                  mn: "Зочны үгээр",
+                }}
+                className="py-8 md:py-12"
+              />
 
               <SectionBlock id="sauna" title={t("sauna.title")}>
                 <FadeInBlock delay={0.05}>

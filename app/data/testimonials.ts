@@ -3,6 +3,13 @@ export type LocalizedText = {
   mn: string;
 };
 
+export type TestimonialTag =
+  | "homepage"
+  | "booking"
+  | "experiences"
+  | "wellness"
+  | "dining";
+
 export type Testimonial = {
   id: string;
   quote: LocalizedText;
@@ -10,6 +17,7 @@ export type Testimonial = {
   location?: LocalizedText;
   source?: LocalizedText;
   date?: LocalizedText;
+  tags?: readonly TestimonialTag[];
 };
 
 export const testimonials: readonly Testimonial[] = [
@@ -32,6 +40,7 @@ export const testimonials: readonly Testimonial[] = [
       en: "August 2025",
       mn: "2025 оны 8-р сар",
     },
+    tags: ["homepage", "booking"],
   },
   {
     id: "ankita-silence",
@@ -39,7 +48,7 @@ export const testimonials: readonly Testimonial[] = [
       en: "There's pin-drop silence, and that's what we come for.",
       mn: "Энд зүү унахад ч сонсогдохоор нам гүм. Бид яг үүний төлөө ирдэг.",
     },
-    author: "Ankita",
+    author: "Ankita P.",
     location: {
       en: "Mumbai, India",
       mn: "Мумбай, Энэтхэг",
@@ -52,14 +61,15 @@ export const testimonials: readonly Testimonial[] = [
       en: "June 2026",
       mn: "2026 оны 6-р сар",
     },
+    tags: ["homepage", "experiences", "wellness"],
   },
   {
     id: "andrii-jankhai",
     quote: {
-      en: "For us, this is the best resort in Jankhai. The atmosphere here is wonderful.",
-      mn: "Жанхайд бидний хувьд хамгийн сайхан ресорт нь энэ. Эндхийн уур амьсгал үнэхээр гайхалтай.",
+      en: "Far superior to the commercialised tourist camps in Jankhai. This is essentially the best spot on Lake Khövsgöl—authentic, peaceful, and truly welcoming.",
+      mn: "Жанхайн хэт худалдаажсан жуулчны баазуудтай харьцуулашгүй. Энэ бол Хөвсгөл нуурын хамгийн сайхан газар—жинхэнэ, амар тайван, маш зочломтгой.",
     },
-    author: "Andrii",
+    author: "Andrii L.",
     location: {
       en: "Ukraine",
       mn: "Украин",
@@ -72,6 +82,7 @@ export const testimonials: readonly Testimonial[] = [
       en: "June 2026",
       mn: "2026 оны 6-р сар",
     },
+    tags: ["homepage", "booking"],
   },
   {
     id: "michael-quiet-lake",
@@ -84,6 +95,7 @@ export const testimonials: readonly Testimonial[] = [
       en: "Guest review",
       mn: "Зочны үнэлгээ",
     },
+    tags: ["homepage", "dining", "wellness"],
   },
   {
     id: "makoto-hospitality",
@@ -91,11 +103,12 @@ export const testimonials: readonly Testimonial[] = [
       en: "The hospitality of the owner and staff was the most wonderful thing. I spent a quiet, peaceful time, a wonderful memory of Mongolia.",
       mn: "Эзэн болон ажилтнуудын зочломтгой байдал хамгийн гайхалтай нь байлаа. Нам гүм, амар тайван цагийг өнгөрүүлж, Монголын тухай сайхан дурсамжтай боллоо.",
     },
-    author: "Makoto",
+    author: "Makoto M.",
     source: {
       en: "Guest review",
       mn: "Зочны үнэлгээ",
     },
+    tags: ["homepage", "experiences"],
   },
   {
     id: "werner-maria",
@@ -108,6 +121,7 @@ export const testimonials: readonly Testimonial[] = [
       en: "Guest note",
       mn: "Зочны сэтгэгдэл",
     },
+    tags: ["homepage"],
   },
   {
     id: "billy-partner-trip",
@@ -120,5 +134,6 @@ export const testimonials: readonly Testimonial[] = [
       en: "Guest review",
       mn: "Зочны үнэлгээ",
     },
+    tags: ["homepage", "booking"],
   },
 ];

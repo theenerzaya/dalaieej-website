@@ -11,6 +11,7 @@ import { BodyText, CTAButton, Eyebrow, Headline } from "@/app/components/ui/Typo
 import { useHeroPastForNav } from "@/hooks/useHeroPastForNav";
 import { CABIN_CATALOG } from "@/lib/cabinCatalog";
 import { withLocalePath } from "@/lib/localePath";
+import { WELLNESS_PROMO_OPEN_EVENT } from "@/lib/wellnessPromo";
 import {
   araboto,
   cormorantGaramondItalic,
@@ -103,8 +104,9 @@ export default function WellnessPromoModal() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setPortalMounted(true), 0);
-    return () => window.clearTimeout(timer);
+    const onOpen = () => setOpen(true);
+    window.addEventListener(WELLNESS_PROMO_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(WELLNESS_PROMO_OPEN_EVENT, onOpen);
   }, []);
 
   useEffect(() => {
@@ -113,6 +115,11 @@ export default function WellnessPromoModal() {
     const timer = window.setTimeout(() => setOpen(true), SHOW_DELAY_MS);
     return () => window.clearTimeout(timer);
   }, [canShowPromo]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setPortalMounted(true), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (canShowPromo) return;
@@ -146,7 +153,7 @@ export default function WellnessPromoModal() {
     dismiss();
   };
 
-  if (!portalMounted || suppressPromo) return null;
+  if (!portalMounted) return null;
 
   const editorialHeadlineClass =
     locale === "mn" ? "font-editorial-mn" : "font-editorial-en";

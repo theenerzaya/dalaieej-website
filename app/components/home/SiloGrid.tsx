@@ -15,6 +15,11 @@ import { Headline } from "../ui/Typography";
 import { assetUrl } from "@/lib/assetUrl";
 import { RESTAURANT_DINING_GALLERY_PATH, isDiningGalleryHref, openRestaurantMenuPdf } from "@/lib/restaurantMenuPdf";
 import { isExperiencesHref, openSuggestedProgrammePdf } from "@/lib/suggestedProgrammePdf";
+import {
+  WELLNESS_INTERACTION_HREF,
+  handleWellnessInteraction,
+  isWellnessInteractionHref,
+} from "@/lib/wellnessPromo";
 
 const silos = [
   {
@@ -33,7 +38,7 @@ const silos = [
   },
   {
     id: "wellness",
-    href: "/wellness",
+    href: WELLNESS_INTERACTION_HREF,
     en: "Wellness",
     mn: "Алжаал тайлах",
     image: "/images/silogrid/wellness.webp"
@@ -62,10 +67,23 @@ function resolveSiloLinkHref(href: string, locale: string): string {
   return withLocalePath(locale, href);
 }
 
-function resolveSiloOnClick(href: string): (() => void) | undefined {
-  if (isDiningGalleryHref(href)) return openRestaurantMenuPdf;
-  if (isExperiencesHref(href)) return openSuggestedProgrammePdf;
+function resolveSiloOnClick(
+  href: string,
+): ((event: React.MouseEvent<HTMLAnchorElement>) => void) | undefined {
+  if (isWellnessInteractionHref(href)) {
+    return handleWellnessInteraction;
+  }
+  if (isDiningGalleryHref(href)) {
+    return () => openRestaurantMenuPdf();
+  }
+  if (isExperiencesHref(href)) {
+    return () => openSuggestedProgrammePdf();
+  }
   return undefined;
+}
+
+function isNonNavigatingSiloHref(href: string): boolean {
+  return href === "#" || isWellnessInteractionHref(href);
 }
 
 function SiloLink({
@@ -184,8 +202,12 @@ function MobileSilo({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-      {silo.href === "#" ? (
-        <a href="#" className="group relative block w-full h-full">
+      {isNonNavigatingSiloHref(silo.href) ? (
+        <a
+          href="#"
+          className="group relative block w-full h-full"
+          onClick={resolveSiloOnClick(silo.href)}
+        >
           <div className="absolute inset-0 z-0">
             <img
               src={assetUrl(silo.image)}
@@ -293,8 +315,12 @@ export default function SiloGrid() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            {resolveSiloLinkHref(silo.href, locale) === "#" ? (
-              <a href="#" className="relative block w-full h-full">
+            {isNonNavigatingSiloHref(silo.href) ? (
+              <a
+                href="#"
+                className="relative block w-full h-full"
+                onClick={resolveSiloOnClick(silo.href)}
+              >
                 <img
                   src={assetUrl(silo.image)}
                   alt={isMongolian ? silo.mn : silo.en}

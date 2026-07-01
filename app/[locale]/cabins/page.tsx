@@ -34,6 +34,7 @@ import SiteImage from "@/app/components/SiteImage";
 import { assetUrl } from "@/lib/assetUrl";
 import { getCabinCloudbedsFact } from "@/lib/cabinCloudbedsSnapshot";
 import { getCabinDetailHref, type CabinSlug } from "@/lib/cabinCatalog";
+import { navigateExperienceCardHref } from "@/lib/wellnessPromo";
 import DateInput from "@/app/components/ui/DateInput";
 
 // Client-only: bundles ~150 LOC of WebGL, dynamically loaded so /cabins SSR
@@ -864,7 +865,7 @@ function ExperienceCard({
   headlineFont: string;
 }) {
   const navigate = () => {
-    if (typeof window !== "undefined") window.location.href = href;
+    navigateExperienceCardHref(href);
   };
 
   return (

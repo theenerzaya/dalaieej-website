@@ -37,6 +37,7 @@ import {
   type CabinSlug,
 } from "@/lib/cabinCatalog";
 import { withLocalePath } from "@/lib/localePath";
+import { navigateExperienceCardHref } from "@/lib/wellnessPromo";
 
 const MirageImage = dynamic(
   () => import("@/app/components/cabins/MirageImage"),
@@ -648,7 +649,7 @@ function ExperienceCard({
   headlineFont: string;
 }) {
   const navigate = () => {
-    if (typeof window !== "undefined") window.location.href = href;
+    navigateExperienceCardHref(href);
   };
 
   return (

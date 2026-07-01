@@ -62,6 +62,7 @@ import DateInput from "@/app/components/ui/DateInput";
 import { withLocalePath } from "@/lib/localePath";
 import { getCabinCloudbedsFact } from "@/lib/cabinCloudbedsSnapshot";
 import { getCabinDetailHref, type CabinSlug } from "@/lib/cabinCatalog";
+import { navigateExperienceCardHref } from "@/lib/wellnessPromo";
 
 /** Jul 1–5 for the upcoming summer window (matches the booking page's default). */
 function getDefaultJulyStayDates(): { checkin: string; checkout: string } {
@@ -927,7 +928,7 @@ function ExperienceCard({
   headlineFont: string;
 }) {
   const navigate = () => {
-    if (typeof window !== "undefined") window.location.href = href;
+    navigateExperienceCardHref(href);
   };
 
   return (

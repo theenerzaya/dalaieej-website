@@ -19,7 +19,6 @@ const routes = [
   '/almanac/forest-and-steppe',
   '/almanac/khovsgol-and-baikal',
   '/experiences',
-  '/wellness',
   '/offers',
   '/route-finder',
   '/fam-tour-application',
