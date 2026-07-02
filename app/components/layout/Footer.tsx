@@ -206,7 +206,7 @@ export default function Footer() {
                   {item.key === "naadam" ? (
                     <a
                       href="#"
-                      onClick={handleNaadamScheduleInteraction}
+                      onClick={(event) => handleNaadamScheduleInteraction(event, locale)}
                       className="text-sm text-main/80 hover:text-white transition-colors"
                     >
                       {t(item.key)}

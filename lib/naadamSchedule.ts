@@ -1,18 +1,26 @@
+const KHATGAL_NAADAM_2026_IMAGE_VERSIONS = {
+  en: "20260702-1518",
+  mn: "20260702-1555",
+} as const;
+
 export const KHATGAL_NAADAM_2026_SCHEDULE_PATHS = {
-  en: "/images/events/naadam/khatgal-naadam-2026-en.jpg",
-  mn: "/images/events/naadam/khatgal-naadam-2026-mn.jpg",
+  en: `/images/events/naadam/khatgal-naadam-2026-en.jpg?v=${KHATGAL_NAADAM_2026_IMAGE_VERSIONS.en}`,
+  mn: `/images/events/naadam/khatgal-naadam-2026-mn.jpg?v=${KHATGAL_NAADAM_2026_IMAGE_VERSIONS.mn}`,
 } as const;
 
 export const NAADAM_SCHEDULE_OPEN_EVENT = "dalaieej:open-naadam-schedule";
+export type NaadamScheduleLocale = keyof typeof KHATGAL_NAADAM_2026_SCHEDULE_PATHS;
 
 export type NaadamScheduleOpenDetail = {
   locale?: string;
 };
 
-export function getKhatgalNaadam2026SchedulePath(locale: string): string {
-  return locale === "mn"
-    ? KHATGAL_NAADAM_2026_SCHEDULE_PATHS.mn
-    : KHATGAL_NAADAM_2026_SCHEDULE_PATHS.en;
+export function normalizeNaadamScheduleLocale(locale?: string): NaadamScheduleLocale {
+  return locale === "mn" ? "mn" : "en";
+}
+
+export function getKhatgalNaadam2026SchedulePath(locale?: string): string {
+  return KHATGAL_NAADAM_2026_SCHEDULE_PATHS[normalizeNaadamScheduleLocale(locale)];
 }
 
 export function isNaadam2026Active(): boolean {

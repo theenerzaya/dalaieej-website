@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { Facebook, Images, Instagram, Mail } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
@@ -142,11 +142,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
   const pathWithoutLocale = getPathWithoutLocale(pathname);
   const reduceMotion = useReducedMotion();
 
-  const [naadamActive, setNaadamActive] = useState(false);
-
-  useEffect(() => {
-    setNaadamActive(isNaadam2026Active());
-  }, []);
+  const naadamActive = isNaadam2026Active();
 
   useEffect(() => {
     if (isOpen) {
@@ -299,8 +295,8 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
             </div>
 
             {/* ───────── Main body ───────── */}
-            <div className="min-h-0 flex-1 overflow-hidden">
-              <div className="mx-auto grid min-h-full w-full max-w-7xl grid-cols-1 gap-5 px-5 py-6 md:grid-cols-[minmax(0,1fr)_minmax(17rem,22rem)] md:items-end md:gap-12 md:px-12 md:py-10 lg:gap-16 xl:py-14">
+            <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+              <div className="mx-auto grid min-h-full w-full max-w-7xl grid-cols-1 gap-5 px-5 py-6 md:px-12 md:py-10 lg:grid-cols-[minmax(0,1fr)_minmax(17rem,22rem)] lg:items-end lg:gap-16 xl:py-12">
                 <div className="flex min-w-0 flex-col md:self-center">
                   <motion.div
                     initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
@@ -319,21 +315,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     aria-label="Primary"
                     className="flex flex-col gap-2 md:gap-3.5"
                   >
-                    {[
-                      ...mainNavItems,
-                      ...(naadamActive
-                        ? [
-                            {
-                              id: "naadam",
-                              href: "#naadam-schedule",
-                              image: "",
-                              label: { en: "Naadam Schedule", mn: "Наадмын хөтөлбөр" },
-                              meta: { en: "", mn: "" },
-                              available: true,
-                            },
-                          ]
-                        : []),
-                    ].map((item, i) => {
+                    {mainNavItems.map((item, i) => {
                       const label = isMn ? item.label.mn : item.label.en;
                       const linkClass = [
                         "group inline-flex items-center gap-3",
@@ -357,18 +339,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           }}
                         >
                           {item.available ? (
-                            item.id === "naadam" ? (
-                              <a
-                                href="#"
-                                className={linkClass}
-                                onClick={(event) => {
-                                  handleNaadamScheduleInteraction(event);
-                                  onClose();
-                                }}
-                              >
-                                <span>{label}</span>
-                              </a>
-                            ) : (
                             <Link
                               href={getNavItemHref(locale, item.href)}
                               onClick={(event) => {
@@ -381,7 +351,6 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                             >
                               <span>{label}</span>
                             </Link>
-                            )
                           ) : (
                             <span role="link" aria-disabled="true" className={linkClass}>
                               <span>{label}</span>
@@ -394,6 +363,26 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                       );
                     })}
                   </nav>
+
+                  {naadamActive ? (
+                    <motion.div
+                      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: reduceMotion ? 0 : 0.4, delay: 0.5 }}
+                      className="mt-5 md:mt-6"
+                    >
+                      <a
+                        href="#naadam-schedule"
+                        onClick={(event) => {
+                          handleNaadamScheduleInteraction(event, locale);
+                          onClose();
+                        }}
+                        className="inline-flex max-w-full items-center justify-center border border-main/20 px-4 py-2.5 text-left font-cta text-[10px] font-medium uppercase leading-relaxed tracking-[0.18em] text-main/70 transition-colors hover:border-main/45 hover:text-main focus:outline-none focus-visible:ring-2 focus-visible:ring-surface/50 sm:text-[11px]"
+                      >
+                        {isMn ? "Наадмын хөтөлбөр" : "Naadam Schedule"}
+                      </a>
+                    </motion.div>
+                  ) : null}
 
                   <motion.div
                     initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -8,6 +9,8 @@ import {
   getKhatgalNaadam2026SchedulePath,
   isNaadam2026Active,
   NAADAM_SCHEDULE_OPEN_EVENT,
+  normalizeNaadamScheduleLocale,
+  type NaadamScheduleLocale,
   type NaadamScheduleOpenDetail,
 } from "@/lib/naadamSchedule";
 
@@ -16,7 +19,9 @@ export default function NaadamScheduleOverlay() {
   const [portalMounted, setPortalMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
-  const [scheduleLocale, setScheduleLocale] = useState(locale);
+  const [scheduleLocale, setScheduleLocale] = useState<NaadamScheduleLocale>(
+    normalizeNaadamScheduleLocale(locale),
+  );
 
   const schedulePath = getKhatgalNaadam2026SchedulePath(scheduleLocale);
   const scheduleAlt =
@@ -39,7 +44,7 @@ export default function NaadamScheduleOverlay() {
     const onOpen = (event: Event) => {
       if (!isNaadam2026Active()) return;
       const detail = (event as CustomEvent<NaadamScheduleOpenDetail>).detail;
-      setScheduleLocale(detail?.locale ?? locale);
+      setScheduleLocale(normalizeNaadamScheduleLocale(detail?.locale ?? locale));
       setZoomed(false);
       setOpen(true);
     };

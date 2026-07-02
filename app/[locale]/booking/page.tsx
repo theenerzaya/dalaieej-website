@@ -2,11 +2,11 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef, type MouseEvent } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Check, Loader2, Plus, Minus, AlertTriangle, ChevronRight, ChevronLeft, ChevronDown, Trash2, Moon, ArrowRight, ShieldCheck, Info } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { isNonRefundableRate, sumDepositDueForRoomLines } from "@/lib/deposit-policy";
 import { parseBoundedInteger, validateStayDates } from "@/lib/booking-guards";
 import { formatIsoDateAsDots } from "@/lib/dateFormat";
@@ -354,10 +354,10 @@ const bookingFaqs = [
 
 function BookingContent() {
   const t = useTranslations('booking');
+  const locale = useLocale();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
 
-  const currentLocale = pathname.startsWith('/mn') ? 'mn' : 'en';
+  const currentLocale = locale === 'mn' ? 'mn' : 'en';
   const localePrefix = withLocalePath(currentLocale, "/");
   const editorialFont = currentLocale === 'mn' ? 'font-editorial-mn' : 'font-editorial-en';
 
