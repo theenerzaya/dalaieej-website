@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Facebook, Images, Instagram, Mail } from "lucide-react";
 import SiteImage from "@/app/components/SiteImage";
@@ -13,6 +13,8 @@ import { formatLowestCabinPriceFrom } from "@/lib/cabinCatalog";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "../ui/Typography";
 import { absoluteSiteUrl } from "@/lib/site-urls";
+
+import { handleNaadamScheduleInteraction, isNaadam2026Active } from "@/lib/naadamSchedule";
 
 /**
  * NavigationOverlay — Hoteller-styled fullscreen menu.
@@ -139,6 +141,12 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
   const isMn = locale === "mn";
   const pathWithoutLocale = getPathWithoutLocale(pathname);
   const reduceMotion = useReducedMotion();
+
+  const [naadamActive, setNaadamActive] = useState(false);
+
+  useEffect(() => {
+    setNaadamActive(isNaadam2026Active());
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -311,7 +319,21 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                     aria-label="Primary"
                     className="flex flex-col gap-2 md:gap-3.5"
                   >
-                    {mainNavItems.map((item, i) => {
+                    {[
+                      ...mainNavItems,
+                      ...(naadamActive
+                        ? [
+                            {
+                              id: "naadam",
+                              href: "#naadam-schedule",
+                              image: "",
+                              label: { en: "Naadam Schedule", mn: "Наадмын хөтөлбөр" },
+                              meta: { en: "", mn: "" },
+                              available: true,
+                            },
+                          ]
+                        : []),
+                    ].map((item, i) => {
                       const label = isMn ? item.label.mn : item.label.en;
                       const linkClass = [
                         "group inline-flex items-center gap-3",
@@ -335,6 +357,18 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                           }}
                         >
                           {item.available ? (
+                            item.id === "naadam" ? (
+                              <a
+                                href="#"
+                                className={linkClass}
+                                onClick={(event) => {
+                                  handleNaadamScheduleInteraction(event);
+                                  onClose();
+                                }}
+                              >
+                                <span>{label}</span>
+                              </a>
+                            ) : (
                             <Link
                               href={getNavItemHref(locale, item.href)}
                               onClick={(event) => {
@@ -347,6 +381,7 @@ export default function NavigationOverlay({ isOpen, onClose }: NavigationOverlay
                             >
                               <span>{label}</span>
                             </Link>
+                            )
                           ) : (
                             <span role="link" aria-disabled="true" className={linkClass}>
                               <span>{label}</span>

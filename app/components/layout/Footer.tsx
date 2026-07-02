@@ -19,6 +19,8 @@ import {
   isWellnessInteractionHref,
 } from "@/lib/wellnessPromo";
 
+import { handleNaadamScheduleInteraction, isNaadam2026Active } from "@/lib/naadamSchedule";
+
 /** Shared row height — logos scale to fill this box (vertical centres align). */
 const PARTNER_ROW_HEIGHT = "h-7 md:h-8";
 
@@ -93,6 +95,7 @@ export default function Footer() {
     { key: "catalogue", href: "/catalogue" },
     { key: "gallery", href: "/gallery" },
     { key: "gettingHere", href: "/getting-here" },
+    ...(isNaadam2026Active() ? [{ key: "naadam", href: "#naadam-schedule" }] : []),
     { key: "policies", href: "#" },
   ];
 
@@ -200,7 +203,15 @@ export default function Footer() {
             <ul className="space-y-2 md:space-y-3">
               {resortLinks.filter((item) => !item.enOnly || locale === 'en').map((item) => (
                 <li key={item.key}>
-                  {item.external ? (
+                  {item.key === "naadam" ? (
+                    <a
+                      href="#"
+                      onClick={handleNaadamScheduleInteraction}
+                      className="text-sm text-main/80 hover:text-white transition-colors"
+                    >
+                      {t(item.key)}
+                    </a>
+                  ) : item.external ? (
                     <a
                       href={item.href}
                       target="_blank"

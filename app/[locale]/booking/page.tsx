@@ -12,6 +12,7 @@ import { parseBoundedInteger, validateStayDates } from "@/lib/booking-guards";
 import { formatIsoDateAsDots } from "@/lib/dateFormat";
 import DateInput from "@/app/components/ui/DateInput";
 import { withLocalePath } from "@/lib/localePath";
+import { openNaadamSchedule } from "@/lib/naadamSchedule";
 import {
   MAX_BOOKING_ADULTS,
   MAX_BOOKING_CHILDREN,
@@ -341,8 +342,12 @@ const bookingFaqs = [
       mn: "Амарч байх хугацаандаа Наадам үзэх боломжтой юу?",
     },
     answer: {
-      en: "If you're visiting in mid-July, yes. The local Khatgal village Naadam takes place outdoors on July 11th and 12th. We can arrange a boat transfer (50,000 MNT) so you can experience the traditional wrestling, horse racing, and festival foods.",
-      mn: "Боломжтой. Хатгал сумын наадам 7-р сарын 11, 12-нд ил задгай зүлгэн дээр болдог. Бид наадам үзэх зочдод зориулан завь (50,000 төгрөг) гаргадаг бөгөөд та бөх, хурдан морь үзэж, наадмын хуушуур амтлах боломжтой.",
+      en: "If you're visiting in mid-July, yes. In 2026, the local Khatgal village Naadam is scheduled for July 10th and 11th. We can arrange a boat transfer (50,000 MNT) so you can experience the traditional wrestling, horse racing, and festival foods.",
+      mn: "Боломжтой. 2026 онд Хатгал тосгоны Наадам 7-р сарын 10, 11-нд зохион байгуулагдана. Бид наадам үзэх зочдод зориулан завь (50,000 төгрөг) гаргадаг бөгөөд та бөх, хурдан морь үзэж, наадмын хуушуур амтлах боломжтой.",
+    },
+    scheduleLinkLabel: {
+      en: "View the 2026 Khatgal Naadam schedule",
+      mn: "2026 оны Хатгалын Наадмын хөтөлбөр үзэх",
     },
   },
 ] as const;
@@ -1216,6 +1221,7 @@ function BookingContent() {
   }, [rooms, numberOfNights]);
 
   return (
+    <>
     <main id="main-content" className="min-h-screen bg-ink pt-24 md:pt-20 pb-32 lg:pb-20 text-main">
       {/* Results header band */}
       <div className="px-6 pt-6 md:pt-10 pb-8 border-b border-main/10">
@@ -1468,7 +1474,18 @@ function BookingContent() {
                             id={`booking-faq-panel-${index}`}
                             className="px-3 pb-3 -mt-1 text-xs text-main/60 font-body leading-relaxed"
                           >
-                            {faq.answer[currentLocale]}
+                            <p>{faq.answer[currentLocale]}</p>
+                            {"scheduleLinkLabel" in faq ? (
+                              <button
+                                type="button"
+                                onClick={() => openNaadamSchedule(currentLocale)}
+                                className="mt-3 flex w-full cursor-pointer items-center justify-center bg-main px-3 py-2 text-center font-cta text-[9px] uppercase leading-relaxed tracking-[0.16em] text-ink transition-colors hover:bg-main/90"
+                              >
+                                <span className="min-w-0">
+                                  {faq.scheduleLinkLabel[currentLocale]}
+                                </span>
+                              </button>
+                            ) : null}
                           </div>
                         )}
                       </div>
@@ -2018,6 +2035,7 @@ function BookingContent() {
         </div>
       )}
     </main>
+    </>
   );
 }
 

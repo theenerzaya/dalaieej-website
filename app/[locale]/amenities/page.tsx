@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useTranslations, useLocale } from 'next-intl';
-import { ArrowLeft, Check, ChevronDown, Quote } from 'lucide-react';
+import { ArrowLeft, Check, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { withLocalePath } from '@/lib/localePath';
@@ -183,27 +183,6 @@ export default function AmenitiesPage() {
                 <span className="font-body text-white text-left">
                   {t(`amenities.inclusions.${key}`)}
                 </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-4 bg-stone-100">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-heading text-3xl md:text-4xl text-sky-900 text-center mb-12">
-            {t('amenities.testimonials.title')}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {['review1', 'review2', 'review3'].map((review) => (
-              <div key={review} className="bg-white rounded-xl p-8 shadow-lg relative">
-                <Quote className="w-10 h-10 text-sky-200 absolute top-6 right-6" />
-                <p className="font-body text-slate-600 italic mb-6 leading-relaxed">
-                  &quot;{t(`amenities.testimonials.${review}.text`)}&quot;
-                </p>
-                <p className="font-body text-sky-900 font-semibold">
-                  — {t(`amenities.testimonials.${review}.author`)}
-                </p>
               </div>
             ))}
           </div>
